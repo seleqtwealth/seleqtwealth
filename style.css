@@ -3120,27 +3120,33 @@ html.intro-running .hero-scroll-hint {
   html.intro-running .hero-intro-stage {
     animation-delay: 2100ms;
   }
+  /* On mobile the masthead and the settled wordmark occupy the SAME vertical
+     position (both at top:47%), so any timing overlap between them reads as
+     two SELEQTs crossfading on top of each other. We push the wordmark to
+     start AFTER the masthead has fully faded out (stage fade ends at 2700ms,
+     watermark begins at 2800ms with a 100ms breath). Downstream cascade
+     pushed by 400ms to maintain rhythm. */
   html.intro-running .hero-wordmark {
-    animation-delay: 2400ms;
+    animation-delay: 2800ms;
   }
   html.intro-running .hero-glow,
   html.intro-running .hero-glow-2 {
-    animation-delay: 2500ms;
-  }
-  html.intro-running .hero-grid {
-    animation-delay: 2600ms;
-  }
-  html.intro-running #navbar {
-    animation-delay: 2750ms;
-  }
-  html.intro-running .hero-title {
     animation-delay: 2900ms;
   }
+  html.intro-running .hero-grid {
+    animation-delay: 3000ms;
+  }
+  html.intro-running #navbar {
+    animation-delay: 3150ms;
+  }
+  html.intro-running .hero-title {
+    animation-delay: 3300ms;
+  }
   html.intro-running .hero-actions {
-    animation-delay: 3050ms;
+    animation-delay: 3450ms;
   }
   html.intro-running .hero-scroll-hint {
-    animation-delay: 3200ms;
+    animation-delay: 3600ms;
   }
 }
 
@@ -3222,7 +3228,10 @@ html.intro-running .hero-scroll-hint {
   transition: transform 0.95s var(--ease-out);
   will-change: transform;
 }
-.reveal.visible .split-word-inner {
+.reveal.visible .split-word-inner,
+.is-text-revealed .split-word-inner {
+  /* Released by either the natural .reveal parent OR the host title itself
+     (fallback for parents whose box is removed by display:contents). */
   transform: translateY(0);
 }
 

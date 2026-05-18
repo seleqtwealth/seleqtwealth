@@ -523,9 +523,26 @@ function isInViewport(el) {
     return wrappers;
   }
   if (!reducedMotion) {
-    document.querySelectorAll(
+    const splitTargets = document.querySelectorAll(
       '.about-title, .sc-title, .contact-section .section-title'
-    ).forEach(splitElement);
+    );
+    // Fallback observer: releases the split-words when the title itself enters
+    // the viewport. Needed because some natural .reveal parents (e.g.
+    // .contact-left on mobile, which uses display:contents to reorder children)
+    // have no bounding box, so the main reveal observer never fires for them
+    // and the words would stay translated below their clip mask forever.
+    const splitFallbackObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-text-revealed');
+          splitFallbackObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+    splitTargets.forEach(el => {
+      splitElement(el);
+      splitFallbackObs.observe(el);
+    });
   }
 
   /* ── 4. Stat counters wired to scroll ───────────────────────────────
