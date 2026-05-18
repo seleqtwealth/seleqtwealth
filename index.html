@@ -81,30 +81,6 @@
               stroke="rgba(244, 241, 234, 0.92)" stroke-width="1.4">SELEQT</text>
       </svg>
 
-      <!-- Minimal jet + contrail. A distant private jet crosses the hero
-           diagonally during the intro, leaving a fading gold contrail.
-           Evokes wealth/travel without being literal. -->
-      <svg class="hero-jet" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="jetContrail" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"   stop-color="rgba(200, 169, 110, 0)" />
-            <stop offset="55%"  stop-color="rgba(200, 169, 110, 0.18)" />
-            <stop offset="92%"  stop-color="rgba(232, 201, 138, 0.78)" />
-            <stop offset="100%" stop-color="rgba(244, 224, 178, 0.95)" />
-          </linearGradient>
-          <filter id="jetGlow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="3" />
-          </filter>
-        </defs>
-        <!-- The trail: a long line that draws across via stroke-dasharray. -->
-        <line class="hero-jet-trail" x1="-40" y1="320" x2="1240" y2="40"
-              stroke="url(#jetContrail)" stroke-width="1.1" stroke-linecap="round" />
-        <!-- The jet itself: a tiny luminous mark at the head of the trail. -->
-        <g class="hero-jet-craft">
-          <circle cx="0" cy="0" r="2.4" fill="rgba(244, 224, 178, 1)" filter="url(#jetGlow)" />
-          <circle cx="0" cy="0" r="1.1" fill="rgba(255, 250, 240, 1)" />
-        </g>
-      </svg>
     </div>
     <div class="hero-content hero-content-center">
       <h1 class="hero-title hero-title-center hero-title-oneline reveal">

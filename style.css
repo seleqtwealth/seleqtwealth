@@ -2927,11 +2927,20 @@ html:not(.intro-active) .hero-intro-svg {
   display: none;
 }
 
-/* Default position aligns with the desktop watermark; mobile adjusted below */
+/* Default position aligns with the desktop watermark; mobile adjusted below.
+   On mobile we MATCH the wordmark's final position (top: 47%) so the outline
+   and the settled wordmark land in the same place — eliminates the visible
+   "jump" between intro phases. Width is also tightened to better match the
+   wordmark's visual width on a portrait screen. */
 @media (max-width: 900px) {
   .hero-intro-svg {
-    top: 36%;
-    width: min(86vw, 600px);
+    top: 47%;
+    width: min(94vw, 540px);
+  }
+}
+@media (max-width: 540px) {
+  .hero-intro-svg {
+    width: min(96vw, 460px);
   }
 }
 
@@ -3060,21 +3069,30 @@ html.intro-running .hero-scroll-hint {
   transform: none;
 }
 
-/* 2 — Wordmark breathing. Animates both scale AND the stroke colour so the
-   pulse is actually noticeable. The stroke fades between dim and brighter to
-   suggest a slow heartbeat. During intro the more-specific html.intro-running
-   rule still wins, so the settle animation is unaffected. */
+/* 2 — Wordmark breathing. Pulses both scale AND stroke colour for visible
+   motion. Stroke colours are stored in CSS variables so mobile (which uses
+   a brighter base stroke at rgba(244,241,234,0.42)) can override and pulse
+   from bright to brighter, not from dim to bright. */
 .hero-wordmark {
+  --breathe-dim: rgba(244, 241, 234, 0.10);
+  --breathe-lit: rgba(244, 241, 234, 0.26);
   animation: wordmarkBreathe 6s ease-in-out 2.5s infinite;
+}
+@media (max-width: 900px) {
+  .hero-wordmark {
+    /* Mobile wordmark has stroke 0.42 by default — pulse stays in that range */
+    --breathe-dim: rgba(244, 241, 234, 0.42);
+    --breathe-lit: rgba(244, 241, 234, 0.66);
+  }
 }
 @keyframes wordmarkBreathe {
   0%, 100% {
     transform: translate(-50%, -50%) scale(1);
-    -webkit-text-stroke-color: rgba(244, 241, 234, 0.10);
+    -webkit-text-stroke-color: var(--breathe-dim);
   }
   50% {
     transform: translate(-50%, -50%) scale(1.035);
-    -webkit-text-stroke-color: rgba(244, 241, 234, 0.26);
+    -webkit-text-stroke-color: var(--breathe-lit);
   }
 }
 
@@ -3282,81 +3300,11 @@ html.intro-running .hero-wordmark-spotlight {
   }
 }
 
-/* 9 — Hero jet + contrail. A distant private jet crosses the hero during the
-   intro, leaving a luminous gold trail. Two animated parts:
-     a) the line (stroke-dasharray draw)
-     b) the jet head (translate along the same diagonal)
-   Both start off-screen and run only while the intro is playing. */
-.hero-jet {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-}
-.hero-jet-trail {
-  /* Total path length is ~1336 across the diagonal. Start fully offset so
-     nothing is visible, then animate dashoffset down to 0 (drawing in). */
-  stroke-dasharray: 1336;
-  stroke-dashoffset: 1336;
-  opacity: 0.95;
-}
-.hero-jet-craft {
-  /* Default position: just off the bottom-left of the viewBox.
-     Animated translate moves it along the same diagonal as the trail. */
-  transform: translate(-40px, 320px);
-}
-
-/* Intro state: jet sits invisible, ready to fly */
-html.intro-active .hero-jet { opacity: 0; }
-
-/* Running state: fade jet container in, draw the trail, fly the head */
-html.intro-running .hero-jet {
-  animation: jetFade 600ms ease-out 1900ms forwards;
-}
-html.intro-running .hero-jet-trail {
-  animation: jetDraw 1700ms cubic-bezier(0.22, 1, 0.36, 1) 2000ms forwards,
-             jetFadeOut 700ms ease-out 3500ms forwards;
-}
-html.intro-running .hero-jet-craft {
-  animation: jetFly 1700ms cubic-bezier(0.22, 1, 0.36, 1) 2000ms forwards,
-             jetFadeOut 700ms ease-out 3500ms forwards;
-}
-/* When the intro has finished, hide the jet completely so it doesn't linger */
-html:not(.intro-active):not(.intro-running) .hero-jet {
-  display: none;
-}
-
-@keyframes jetFade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes jetFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-@keyframes jetDraw {
-  from { stroke-dashoffset: 1336; }
-  to   { stroke-dashoffset: 0; }
-}
-@keyframes jetFly {
-  from { transform: translate(-40px, 320px); }
-  to   { transform: translate(1240px, 40px); }
-}
-
-/* On small screens the jet still flies but along a slightly tighter arc */
-@media (max-width: 900px) {
-  .hero-jet { height: 60%; top: 12%; }
-}
-
-/* 10 — Reduced-motion accommodations for everything added above. */
+/* 9 — Reduced-motion accommodations for everything added above. */
 @media (prefers-reduced-motion: reduce) {
   .hero-wordmark { animation: none !important; }
   .hero-wordmark-spotlight { display: none !important; }
   .hero-glow, .hero-glow-2 { transition: none !important; }
-  .hero-jet { display: none !important; }
   .split-word-inner { transform: none !important; transition: none !important; }
   .marquee-track { animation-duration: 0s !important; animation: none !important; }
   .page-transition-panel { transition: none !important; }
