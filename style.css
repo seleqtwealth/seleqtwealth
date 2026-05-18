@@ -2431,14 +2431,20 @@ body > footer.footer .footer-bottom {
   }
 
   /* WATERMARK — sits above title with comfortable but not excessive gap.
-     Centered horizontally, anchored higher up the viewport. */
+     Centered horizontally, anchored higher up the viewport.
+     Note: opacity intentionally has NO !important so the intro-active rule
+     (html.intro-active .hero-wordmark { opacity: 0 }) can hide the watermark
+     during the masthead intro, and the wordmarkSettle animation can fade it
+     in afterwards. --wordmark-end-opacity sets the settle animation's end
+     value to match the mobile resting state. */
   .hero-wordmark {
     top: 36% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
     font-size: 18vw !important;
     letter-spacing: 0.12em !important;
-    opacity: 0.85 !important;
+    opacity: 0.85;
+    --wordmark-end-opacity: 0.85;
     -webkit-text-stroke-width: 1px !important;
     -webkit-text-stroke-color: rgba(244, 241, 234, 0.42) !important;
     white-space: nowrap !important;
