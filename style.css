@@ -2907,71 +2907,156 @@ html.intro-active .hero-scroll-hint {
   transform: translateY(8px);
 }
 
-/* The intro SVG sits in the middle of the hero, at the watermark's eventual position */
-.hero-intro-svg {
+/* Editorial-masthead intro stage. A flex column containing eyebrow + top rule
+   + SELEQT SVG outline + bottom rule. All four pieces animate in sequence
+   then fade together as the watermark settles in behind them. */
+.hero-intro-stage {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: min(72vw, 1100px);
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
   pointer-events: none;
   z-index: 3;
   opacity: 0;
 }
-/* When intro is active, the SVG starts fully visible */
-html.intro-active .hero-intro-svg {
-  opacity: 1;
-}
-html:not(.intro-active) .hero-intro-svg {
-  display: none;
+html.intro-active .hero-intro-stage { opacity: 1; }
+html:not(.intro-active) .hero-intro-stage { display: none; }
+
+/* SVG inside the stage — overrides the legacy absolute positioning */
+.hero-intro-stage .hero-intro-svg {
+  position: static;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  display: block;
 }
 
-/* Default position aligns with the desktop watermark; mobile adjusted below.
-   On mobile we MATCH the wordmark's final position (top: 47%) so the outline
-   and the settled wordmark land in the same place — eliminates the visible
-   "jump" between intro phases. Width is also tightened to better match the
-   wordmark's visual width on a portrait screen. */
+/* Eyebrow — small caps, gold, wide tracking, like the cover of a private
+   banking annual report. Starts invisible & slightly translated, slides in. */
+.hero-intro-eyebrow {
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 1.1vw, 0.92rem);
+  font-weight: 400;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(200, 169, 110, 0.92);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Hairlines flanking the wordmark. Each is a thin gold line with a soft
+   gradient fade at both ends. Scales horizontally from 0 to 1 during the
+   intro to give the impression of being drawn out from the centre. */
+.hero-intro-rule {
+  width: min(320px, 60%);
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(200, 169, 110, 0.35) 12%,
+    rgba(232, 201, 138, 0.85) 50%,
+    rgba(200, 169, 110, 0.35) 88%,
+    transparent 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+  flex-shrink: 0;
+}
+
+/* Mobile: anchor the entire stage at top:47% (where the watermark will end
+   up), shrink hairlines, and ensure the eyebrow stays legible. */
 @media (max-width: 900px) {
-  .hero-intro-svg {
+  .hero-intro-stage {
     top: 47%;
     width: min(94vw, 540px);
+    gap: 14px;
+  }
+  .hero-intro-eyebrow {
+    font-size: clamp(0.55rem, 2.2vw, 0.72rem);
+    letter-spacing: 0.32em;
+  }
+  .hero-intro-rule {
+    width: min(220px, 70%);
   }
 }
 @media (max-width: 540px) {
-  .hero-intro-svg {
+  .hero-intro-stage {
     width: min(96vw, 460px);
+    gap: 12px;
+  }
+  .hero-intro-eyebrow {
+    font-size: clamp(0.5rem, 2.4vw, 0.66rem);
+    letter-spacing: 0.28em;
+  }
+  .hero-intro-rule {
+    width: min(180px, 70%);
   }
 }
 
-/* When the intro is RUNNING (body has .intro-running), play the sequence */
-html.intro-running .intro-wipe-rect {
-  animation: introWipe 1100ms cubic-bezier(0.55, 0.05, 0.35, 1) 100ms forwards;
+/* When the intro is RUNNING (body has .intro-running), play the sequence.
+   Choreography (desktop, all delays from page-load):
+     0.10-0.55s  eyebrow fades in + slides up
+     0.50-1.05s  top hairline draws from centre (scaleX 0 -> 1)
+     0.90-2.00s  SELEQT outline wipes left -> right
+     1.80-2.35s  bottom hairline draws (mirror)
+     2.30-2.55s  brief hold so the composition reads
+     2.55-3.10s  whole masthead fades out (introFade on the stage)
+     2.85-3.65s  filled wordmark settles into position
+     2.95-3.55s+ remaining hero pieces (glow, grid, nav, title, etc.) cascade in
+     4.30s       cleanup (main.js removes intro classes) */
+html.intro-running .hero-intro-eyebrow {
+  animation: introEyebrowIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 100ms forwards;
 }
-html.intro-running .hero-intro-svg {
-  animation: introFade 500ms cubic-bezier(0.4, 0, 0.6, 1) 1400ms forwards;
+html.intro-running .hero-intro-rule-top {
+  animation: introRuleDraw 600ms cubic-bezier(0.22, 1, 0.36, 1) 500ms forwards;
+}
+html.intro-running .intro-wipe-rect {
+  animation: introWipe 1100ms cubic-bezier(0.55, 0.05, 0.35, 1) 900ms forwards;
+}
+html.intro-running .hero-intro-rule-bottom {
+  animation: introRuleDraw 600ms cubic-bezier(0.22, 1, 0.36, 1) 1800ms forwards;
+}
+html.intro-running .hero-intro-stage {
+  animation: introFade 600ms cubic-bezier(0.4, 0, 0.6, 1) 2550ms forwards;
 }
 html.intro-running .hero-wordmark {
-  animation: wordmarkSettle 800ms cubic-bezier(0.4, 0, 0.2, 1) 1700ms forwards;
+  animation: wordmarkSettle 800ms cubic-bezier(0.4, 0, 0.2, 1) 2850ms forwards;
 }
 html.intro-running .hero-glow,
 html.intro-running .hero-glow-2 {
-  animation: glowIn 800ms ease-out 1800ms forwards;
+  animation: glowIn 800ms ease-out 2950ms forwards;
 }
 html.intro-running .hero-grid {
-  animation: gridIn 800ms ease-out 1900ms forwards;
+  animation: gridIn 800ms ease-out 3050ms forwards;
 }
 html.intro-running #navbar {
-  animation: navIn 600ms ease-out 2100ms forwards;
+  animation: navIn 600ms ease-out 3200ms forwards;
 }
 html.intro-running .hero-title {
-  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 2300ms forwards;
+  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 3350ms forwards;
 }
 html.intro-running .hero-actions {
-  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 2500ms forwards;
+  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 3500ms forwards;
 }
 html.intro-running .hero-scroll-hint {
-  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 2700ms forwards;
+  animation: heroPartIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 3650ms forwards;
+}
+
+/* New keyframes for the masthead pieces */
+@keyframes introEyebrowIn {
+  from { opacity: 0; transform: translateY(8px); letter-spacing: 0.6em; }
+  to   { opacity: 1; transform: translateY(0);   letter-spacing: 0.42em; }
+}
+@keyframes introRuleDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 
 /* Keyframes */
@@ -3012,35 +3097,50 @@ html.intro-running .hero-scroll-hint {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Mobile — slightly faster intro */
+/* Mobile — tightened intro choreography. Same composition (eyebrow + rules +
+   SELEQT), ~25% faster so phone users aren't waiting through a desktop-paced
+   sequence on a small screen. Final cleanup at ~3700ms (main.js). */
 @media (max-width: 900px) {
+  html.intro-running .hero-intro-eyebrow {
+    animation-duration: 500ms;
+    animation-delay: 100ms;
+  }
+  html.intro-running .hero-intro-rule-top {
+    animation-duration: 500ms;
+    animation-delay: 400ms;
+  }
   html.intro-running .intro-wipe-rect {
     animation-duration: 900ms;
+    animation-delay: 700ms;
   }
-  html.intro-running .hero-intro-svg {
-    animation-delay: 1100ms;
+  html.intro-running .hero-intro-rule-bottom {
+    animation-duration: 500ms;
+    animation-delay: 1500ms;
+  }
+  html.intro-running .hero-intro-stage {
+    animation-delay: 2100ms;
   }
   html.intro-running .hero-wordmark {
-    animation-delay: 1400ms;
+    animation-delay: 2400ms;
   }
   html.intro-running .hero-glow,
   html.intro-running .hero-glow-2 {
-    animation-delay: 1500ms;
+    animation-delay: 2500ms;
   }
   html.intro-running .hero-grid {
-    animation-delay: 1600ms;
+    animation-delay: 2600ms;
   }
   html.intro-running #navbar {
-    animation-delay: 1800ms;
+    animation-delay: 2750ms;
   }
   html.intro-running .hero-title {
-    animation-delay: 2000ms;
+    animation-delay: 2900ms;
   }
   html.intro-running .hero-actions {
-    animation-delay: 2200ms;
+    animation-delay: 3050ms;
   }
   html.intro-running .hero-scroll-hint {
-    animation-delay: 2400ms;
+    animation-delay: 3200ms;
   }
 }
 

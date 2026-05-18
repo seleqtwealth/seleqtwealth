@@ -15,13 +15,15 @@
     void document.body.offsetHeight;
     html.classList.add('intro-running');
 
-    // Mark as played so subsequent navigations skip the intro
-    try { sessionStorage.setItem('seleqt_intro_played', '1'); } catch (e) {}
+    // (Note: the intro now plays on every refresh — the legacy
+    // seleqt_intro_played flag was retired with the editorial masthead.)
 
-    // Clean up after the full sequence finishes (~3.6s)
+    // Clean up after the full sequence finishes. Desktop choreography ends at
+    // roughly 4350ms (scroll-hint at 3650ms + 700ms duration); mobile is ~3900ms.
+    // 4400ms covers both with a small margin before reverting to the steady state.
     setTimeout(() => {
       html.classList.remove('intro-active', 'intro-running');
-    }, 3600);
+    }, 4400);
   }
 
   // Wait for the fonts to load before kicking off — otherwise the stroked SELEQT

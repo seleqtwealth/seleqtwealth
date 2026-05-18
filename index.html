@@ -67,19 +67,29 @@
       <div class="hero-glow"></div>
       <div class="hero-glow-2"></div>
 
-      <!-- Intro animation overlay — drawn letters that fade out after the wordmark settles -->
-      <svg class="hero-intro-svg" id="heroIntroSvg" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-        <defs>
-          <clipPath id="introWipe">
-            <rect class="intro-wipe-rect" x="0" y="0" width="0" height="200" />
-          </clipPath>
-        </defs>
-        <!-- Stroked outline of SELEQT, revealed via the clip wipe -->
-        <text x="500" y="148" text-anchor="middle" clip-path="url(#introWipe)"
-              font-family="'Cormorant Garamond', serif" font-weight="500"
-              font-size="160" letter-spacing="0.08em" fill="none"
-              stroke="rgba(244, 241, 234, 0.92)" stroke-width="1.4">SELEQT</text>
-      </svg>
+      <!-- Intro animation: editorial masthead composition that fades together
+           as the watermark settles. Stack (top → bottom):
+             a) eyebrow — Private Wealth Management
+             b) thin gold hairline
+             c) stroked SELEQT outline (drawn via clip-path wipe)
+             d) thin gold hairline
+           Each piece has its own delayed animation; see style.css. -->
+      <div class="hero-intro-stage" id="heroIntroStage" aria-hidden="true">
+        <span class="hero-intro-eyebrow">Private Wealth Management</span>
+        <span class="hero-intro-rule hero-intro-rule-top"></span>
+        <svg class="hero-intro-svg" id="heroIntroSvg" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <clipPath id="introWipe">
+              <rect class="intro-wipe-rect" x="0" y="0" width="0" height="200" />
+            </clipPath>
+          </defs>
+          <text x="500" y="148" text-anchor="middle" clip-path="url(#introWipe)"
+                font-family="'Cormorant Garamond', serif" font-weight="500"
+                font-size="160" letter-spacing="0.08em" fill="none"
+                stroke="rgba(244, 241, 234, 0.92)" stroke-width="1.4">SELEQT</text>
+        </svg>
+        <span class="hero-intro-rule hero-intro-rule-bottom"></span>
+      </div>
 
     </div>
     <div class="hero-content hero-content-center">
