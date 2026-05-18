@@ -9,6 +9,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <!-- Page-transition pre-paint: applies entering-curtain class if the user
+       just clicked through from another page on the site. Cleared by main.js. -->
+  <script>
+    (function() {
+      if (sessionStorage.getItem('seleqt_transitioning')) {
+        document.documentElement.classList.add('is-page-entering');
+        sessionStorage.removeItem('seleqt_transitioning');
+      }
+    })();
+  </script>
 </head>
 <body>
   <a href="index.html#services" class="floating-back" aria-label="Back to Services"><span class="fb-arrow">&larr;</span><span class="fb-text">Back to Services</span></a>

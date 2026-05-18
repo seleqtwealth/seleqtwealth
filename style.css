@@ -3060,21 +3060,30 @@ html.intro-running .hero-scroll-hint {
   transform: none;
 }
 
-/* 2 — Wordmark breathing. The base .hero-wordmark rule earlier in this file
-   has no animation; we attach the breathing here. During intro the more-specific
-   html.intro-running selector still wins, so the settle animation is unaffected. */
+/* 2 — Wordmark breathing. Animates both scale AND the stroke colour so the
+   pulse is actually noticeable. The stroke fades between dim and brighter to
+   suggest a slow heartbeat. During intro the more-specific html.intro-running
+   rule still wins, so the settle animation is unaffected. */
 .hero-wordmark {
-  animation: wordmarkBreathe 9s ease-in-out 2s infinite;
+  animation: wordmarkBreathe 6s ease-in-out 2.5s infinite;
 }
 @keyframes wordmarkBreathe {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50%      { transform: translate(-50%, -50%) scale(1.018); }
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    -webkit-text-stroke-color: rgba(244, 241, 234, 0.10);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.035);
+    -webkit-text-stroke-color: rgba(244, 241, 234, 0.26);
+  }
 }
 
-/* 3 — Hero glow ease so JS-driven offsets feel like floating light, not jitter. */
+/* 3 — Hero glow ease. Smooth transition so JS-driven translates feel like
+   floating light. JS now uses larger offsets (see main.js) so the parallax
+   is properly visible. */
 .hero-glow,
 .hero-glow-2 {
-  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* 4 — Split-text reveal. Each word is wrapped into .split-word > .split-word-inner.
@@ -3108,31 +3117,39 @@ html.intro-running .hero-scroll-hint {
   animation-play-state: paused;
 }
 
-/* 6 — Outbound page-transition curtain. Overlay injected by main.js on every
-   page load. Default state is invisible (panel scaleY 0). When .is-leaving is
-   added on link click, the panel sweeps in from the top. */
+/* 6 — Page-transition curtain. A single continuous downward wipe spans the
+   navigation boundary: outbound panel slides DOWN from above to cover, then
+   inbound a pseudo-::before slides DOWN further off the bottom of the screen.
+   To the eye, one navy panel wipes through the viewport without seam.
+
+   Outbound side uses a JS-injected .page-transition overlay (panel starts
+   above the viewport, translates down to cover). Inbound side uses an
+   html::before pseudo so the covering layer exists at first paint — no flash
+   while waiting for main.js. */
+
+/* --- Outbound overlay (built by main.js) --- */
 .page-transition {
   position: fixed;
   inset: 0;
   z-index: 99999;
   pointer-events: none;
+  overflow: hidden;
 }
 .page-transition-panel {
   position: absolute;
   inset: 0;
   background: var(--ink);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+  transform: translateY(-100%);
+  will-change: transform;
+  transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1);
 }
 .page-transition.is-leaving .page-transition-panel {
-  transform: scaleY(1);
-  transform-origin: top;
+  transform: translateY(0);
 }
 .page-transition-glyph {
   position: absolute;
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateY(20px);
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
@@ -3140,11 +3157,62 @@ html.intro-running .hero-scroll-hint {
   letter-spacing: 0.22em;
   color: var(--gold);
   opacity: 0;
-  transition: opacity 0.3s 0.2s ease;
+  transition: opacity 0.4s 0.25s ease, transform 0.6s 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   white-space: nowrap;
+  pointer-events: none;
 }
 .page-transition.is-leaving .page-transition-glyph {
   opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+}
+
+/* --- Inbound curtain (no JS dependency for first paint) ---
+   Pre-paint script in <head> adds .is-page-entering to <html> if the user
+   arrived via the outbound curtain. The pseudo-::before below appears
+   immediately, covering the new page. main.js then adds .is-page-entered,
+   which animates the pseudo down off the screen. */
+html.is-page-entering {
+  /* Lock scroll so the entering page can't jump around behind the curtain. */
+  overflow: hidden;
+}
+html.is-page-entering body {
+  /* Block input until the curtain has lifted */
+  pointer-events: none;
+}
+html.is-page-entering::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: var(--ink);
+  transform: translateY(0);
+  will-change: transform;
+  pointer-events: none;
+}
+html.is-page-entering::after {
+  /* Brand glyph riding the curtain */
+  content: 'SELEQT';
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+}
+html.is-page-entering.is-page-entered::before {
+  transform: translateY(100%);
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+html.is-page-entering.is-page-entered::after {
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
 
 /* 7 — Carousel number flip. The number inside .sc-index-current is rewrapped
@@ -3166,13 +3234,134 @@ html.intro-running .hero-scroll-hint {
   100% { transform: translateY(0); opacity: 1; }
 }
 
-/* 8 — Reduced-motion accommodations for everything added above. */
+/* 8 — Hero wordmark spotlight. A gold-stroked twin of the wordmark sits over
+   the original, hidden behind a radial mask. JS updates --spot-x / --spot-y
+   on mousemove to follow the cursor, so the part of the wordmark under the
+   cursor 'lights up' in gold while the rest stays dim white. */
+.hero-wordmark-spotlight {
+  position: absolute;
+  /* Match the base .hero-wordmark positioning byte-for-byte */
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22vw;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(232, 201, 138, 0.92);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-radius: 240px;
+  -webkit-mask-image: radial-gradient(circle var(--spot-radius) at var(--spot-x) var(--spot-y), black 0%, rgba(0,0,0,0.7) 35%, transparent 75%);
+          mask-image: radial-gradient(circle var(--spot-radius) at var(--spot-x) var(--spot-y), black 0%, rgba(0,0,0,0.7) 35%, transparent 75%);
+}
+/* Reveal the spotlight overlay only after the intro has settled, and only on
+   pointer-equipped devices that are actively hovering the hero. */
+.hero:hover .hero-wordmark-spotlight {
+  opacity: 1;
+}
+html.intro-active .hero-wordmark-spotlight,
+html.intro-running .hero-wordmark-spotlight {
+  opacity: 0 !important;
+}
+@media (max-width: 900px) {
+  .hero-wordmark-spotlight {
+    top: 47%;
+    font-size: 16vw;
+    letter-spacing: 0.12em;
+    /* Disable spotlight on small touch screens — there's no cursor to follow. */
+    display: none;
+  }
+}
+
+/* 9 — Hero jet + contrail. A distant private jet crosses the hero during the
+   intro, leaving a luminous gold trail. Two animated parts:
+     a) the line (stroke-dasharray draw)
+     b) the jet head (translate along the same diagonal)
+   Both start off-screen and run only while the intro is playing. */
+.hero-jet {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+.hero-jet-trail {
+  /* Total path length is ~1336 across the diagonal. Start fully offset so
+     nothing is visible, then animate dashoffset down to 0 (drawing in). */
+  stroke-dasharray: 1336;
+  stroke-dashoffset: 1336;
+  opacity: 0.95;
+}
+.hero-jet-craft {
+  /* Default position: just off the bottom-left of the viewBox.
+     Animated translate moves it along the same diagonal as the trail. */
+  transform: translate(-40px, 320px);
+}
+
+/* Intro state: jet sits invisible, ready to fly */
+html.intro-active .hero-jet { opacity: 0; }
+
+/* Running state: fade jet container in, draw the trail, fly the head */
+html.intro-running .hero-jet {
+  animation: jetFade 600ms ease-out 1900ms forwards;
+}
+html.intro-running .hero-jet-trail {
+  animation: jetDraw 1700ms cubic-bezier(0.22, 1, 0.36, 1) 2000ms forwards,
+             jetFadeOut 700ms ease-out 3500ms forwards;
+}
+html.intro-running .hero-jet-craft {
+  animation: jetFly 1700ms cubic-bezier(0.22, 1, 0.36, 1) 2000ms forwards,
+             jetFadeOut 700ms ease-out 3500ms forwards;
+}
+/* When the intro has finished, hide the jet completely so it doesn't linger */
+html:not(.intro-active):not(.intro-running) .hero-jet {
+  display: none;
+}
+
+@keyframes jetFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes jetFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes jetDraw {
+  from { stroke-dashoffset: 1336; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes jetFly {
+  from { transform: translate(-40px, 320px); }
+  to   { transform: translate(1240px, 40px); }
+}
+
+/* On small screens the jet still flies but along a slightly tighter arc */
+@media (max-width: 900px) {
+  .hero-jet { height: 60%; top: 12%; }
+}
+
+/* 10 — Reduced-motion accommodations for everything added above. */
 @media (prefers-reduced-motion: reduce) {
   .hero-wordmark { animation: none !important; }
+  .hero-wordmark-spotlight { display: none !important; }
   .hero-glow, .hero-glow-2 { transition: none !important; }
+  .hero-jet { display: none !important; }
   .split-word-inner { transform: none !important; transition: none !important; }
   .marquee-track { animation-duration: 0s !important; animation: none !important; }
   .page-transition-panel { transition: none !important; }
+  html.is-page-entering::before { display: none !important; }
+  html.is-page-entering::after  { display: none !important; }
   .sc-index-flip { animation: none !important; }
   .btn-primary.magnetic, .btn-ghost.magnetic { transform: none !important; }
 }

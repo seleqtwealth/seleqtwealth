@@ -439,20 +439,33 @@ function isInViewport(el) {
     });
   }
 
-  /* ── 2. Hero glow follows the cursor ────────────────────────────────
-     The two halos under the SELEQT watermark drift a small amount toward
-     the pointer, giving the dark hero a sense of depth and aliveness. */
+  /* ── 2. Hero glow + wordmark spotlight follow the cursor ────────────
+     Three layers move with the pointer for visible parallax depth:
+       a) .hero-glow      drifts up to 95px toward the cursor
+       b) .hero-glow-2    drifts up to 140px (further = more parallax)
+       c) .hero-wordmark-spotlight gets --spot-x / --spot-y updated so the
+          radial mask follows the cursor and 'illuminates' a gold variant
+          of the wordmark under it.
+     All wrapped in a single mousemove for efficiency. */
   if (!isCoarse && !reducedMotion) {
     const hero = document.getElementById('hero');
     const glow = document.querySelector('.hero-glow');
     const glow2 = document.querySelector('.hero-glow-2');
-    if (hero && (glow || glow2)) {
+    const spotlight = document.getElementById('heroWordmarkSpotlight');
+    if (hero && (glow || glow2 || spotlight)) {
       hero.addEventListener('mousemove', (e) => {
         const r = hero.getBoundingClientRect();
         const cx = (e.clientX - r.left - r.width / 2) / r.width;
         const cy = (e.clientY - r.top - r.height / 2) / r.height;
-        if (glow)  glow.style.transform  = `translate(calc(-50% + ${cx * 40}px), calc(-50% + ${cy * 40}px))`;
-        if (glow2) glow2.style.transform = `translate(calc(-50% + ${cx * 64}px), calc(-50% + ${cy * 64}px))`;
+        if (glow)  glow.style.transform  = `translate(calc(-50% + ${cx * 95}px), calc(-50% + ${cy * 95}px))`;
+        if (glow2) glow2.style.transform = `translate(calc(-50% + ${cx * 140}px), calc(-50% + ${cy * 140}px))`;
+        if (spotlight) {
+          const sr = spotlight.getBoundingClientRect();
+          const sx = e.clientX - sr.left;
+          const sy = e.clientY - sr.top;
+          spotlight.style.setProperty('--spot-x', sx + 'px');
+          spotlight.style.setProperty('--spot-y', sy + 'px');
+        }
       });
       hero.addEventListener('mouseleave', () => {
         if (glow)  glow.style.transform = '';
@@ -575,10 +588,38 @@ function isInViewport(el) {
     }, { passive: true });
   })();
 
-  /* ── 6. Page transition curtain ─────────────────────────────────────
-     Outbound only — clicking an internal .html link drops a navy curtain
-     from the top before navigating. Inbound is left to the browser so the
-     new page (which already has its own intro/reveals) appears naturally. */
+  /* ── 6. Page transition curtain — continuous downward wipe ─────────
+     The curtain spans the navigation boundary as one continuous motion:
+       • Outbound: a panel slides DOWN from above the viewport to cover the
+         screen, then we navigate while it's still covering.
+       • Inbound: pre-paint CSS already shows the new page's curtain in the
+         covering state (via html.is-page-entering ::before in style.css).
+         We add .is-page-entered after a beat so the curtain slides DOWN off
+         the bottom — the eye reads it as the same panel continuing through.
+
+     The handoff is carried by sessionStorage flag 'seleqt_transitioning',
+     set just before navigation and read by the pre-paint script in <head>. */
+
+  // ── Inbound: if we arrived via the curtain, drop it off the bottom ──
+  if (document.documentElement.classList.contains('is-page-entering')) {
+    // Hold the curtain visible for one paint, then trigger the slide-out.
+    // The double rAF guarantees the browser has rendered the entering state
+    // before we add the entered state, so the transition actually animates.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.documentElement.classList.add('is-page-entered');
+          // After the CSS transition finishes, clear both flags so the page
+          // is back to its normal state (scroll unlocked, no pseudo curtain).
+          setTimeout(() => {
+            document.documentElement.classList.remove('is-page-entering', 'is-page-entered');
+          }, 1000);
+        }, 120);
+      });
+    });
+  }
+
+  // ── Outbound: drop the curtain on internal link clicks ──
   (function() {
     if (reducedMotion) return;
     const overlay = document.createElement('div');
@@ -612,13 +653,20 @@ function isInViewport(el) {
 
       e.preventDefault();
       leaving = true;
+      // Hand-off flag for the entering page's pre-paint script
+      try { sessionStorage.setItem('seleqt_transitioning', '1'); } catch (err) {}
       overlay.classList.add('is-leaving');
-      setTimeout(() => { window.location.href = href; }, 520);
+      // 750ms = the panel's transform transition (see .page-transition-panel)
+      // plus a tiny breath so the curtain fully covers before we navigate.
+      setTimeout(() => { window.location.href = href; }, 770);
     });
 
-    // If user returns via bfcache, drop the curtain that was left mid-animation
+    // bfcache: if user comes back via back/forward, drop the curtain instantly
     window.addEventListener('pageshow', (e) => {
-      if (e.persisted) overlay.classList.remove('is-leaving');
+      if (e.persisted) {
+        overlay.classList.remove('is-leaving');
+        try { sessionStorage.removeItem('seleqt_transitioning'); } catch (err) {}
+      }
     });
   })();
 
