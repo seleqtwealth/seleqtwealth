@@ -783,7 +783,13 @@ a, button { cursor: none; }
 }
 .marquee-track {
   display: flex;
-  gap: 56px;
+  /* NB: do NOT use flex `gap` here. `gap` only inserts space BETWEEN items,
+     not after the last one, which makes the two copies of the track
+     asymmetrical (an internal gap between copies but no trailing gap after
+     copy 2). The animation translates 0 -> -50% of track width and that ends
+     up half-a-gap off from the start of copy 2, causing a visible jump on
+     each loop. Using margin-right on every item makes the spacing symmetric
+     so -50% lands exactly at the start of copy 2. */
   white-space: nowrap;
   animation: marqueeScroll 14s linear infinite;
 }
@@ -794,6 +800,7 @@ a, button { cursor: none; }
   text-transform: uppercase;
   color: var(--ink-soft);
   display: inline-block;
+  margin-right: 56px;
   /* Smoothed for the JS-driven cursor parallax (see main.js).
      Short so the trailing edge doesn't feel sluggish under continuous updates. */
   transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out);
@@ -2769,8 +2776,12 @@ body > footer.footer .footer-bottom {
 
   /* ── MARQUEE ─────────────────────────────────────────────────────────── */
   .marquee-wrap { padding: 20px 0 !important; }
-  .marquee-track span { font-size: 0.88rem !important; letter-spacing: 0.26em !important; }
-  .marquee-track { gap: 36px !important; }
+  .marquee-track span {
+    font-size: 0.88rem !important;
+    letter-spacing: 0.26em !important;
+    margin-right: 36px !important;
+  }
+  /* gap removed (see desktop rule's comment for why) */
 
   /* ── FOOTER ──────────────────────────────────────────────────────────── */
   .footer { padding: 80px 0 40px !important; }
