@@ -3323,21 +3323,23 @@ html.intro-running .hero-scroll-hint {
 .page-transition-panel {
   position: absolute;
   inset: 0;
-  /* Layered: navy base, then jali (palace-wall lattice) in clear brand gold,
-     then a radial warm-light glow toward the centre so the SELEQT glyph sits
-     in a pool of light rather than flat against the texture.
+  /* Layered: navy base, then a single centred floral mandala (8-petal lotus
+     ashtadala kamal) in soft gold — inspired by Hindu/Buddhist lotus
+     iconography, classic in Indian palace ornament. The SELEQT glyph sits
+     in the central circle (the bindu) so the brand mark reads as the heart
+     of the lotus. Subtle radial warm glow brightens that centre.
 
-     SVG inlined as a data URL so there's no separate HTTP request and no
-     dependency on GitHub Pages picking up an external file. Bumped intensity
-     (stroke 1.0 px @ 0.55 alpha, dots @ 0.6-0.9 alpha) so the pattern reads
-     clearly during the brief ~750 ms curtain reveal. */
+     Single ornament, not tiled — background-repeat no-repeat, sized
+     responsively via clamp() so it scales with viewport height. Intensity
+     pulled back from the previous jali (strokes 0.42 alpha; was 0.55) to
+     read as ornamental, not loud. */
   background-color: var(--ink);
   background-image:
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.20) 0%, transparent 55%),
-    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.55)' stroke-width='1' stroke-linecap='round'%3E%3Crect x='22' y='22' width='16' height='16'/%3E%3Crect x='22' y='22' width='16' height='16' transform='rotate(45 30 30)'/%3E%3Cline x1='0' y1='0' x2='22' y2='22'/%3E%3Cline x1='60' y1='0' x2='38' y2='22'/%3E%3Cline x1='0' y1='60' x2='22' y2='38'/%3E%3Cline x1='60' y1='60' x2='38' y2='38'/%3E%3C/g%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(200,169,110,0.9)'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='0' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, repeat;
-  background-size: auto, 60px 60px;
-  background-position: center, 0 0;
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 55%),
+    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.42)' stroke-width='1' stroke-linejoin='round'%3E%3Ccircle cx='200' cy='200' r='186'/%3E%3Ccircle cx='200' cy='200' r='70'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(45 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(90 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(135 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(180 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(225 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(270 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(315 200 200)'/%3E%3C/g%3E%3Cg fill='rgba(200,169,110,0.55)'%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(22.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(67.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(112.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(157.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(202.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(247.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(292.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(337.5 200 200)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-size: auto, clamp(320px, 60vh, 620px);
+  background-position: center, center;
   transform: translateY(-100%);
   will-change: transform;
   transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1);
@@ -3383,16 +3385,16 @@ html.is-page-entering::before {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  /* Same inlined jali + glow treatment as the outbound panel (see
+  /* Same floral mandala + glow treatment as the outbound panel (see
      .page-transition-panel) so the curtain reads as one continuous
-     patterned surface across the navigation boundary. */
+     ornamental surface across the navigation boundary. */
   background-color: var(--ink);
   background-image:
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.20) 0%, transparent 55%),
-    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.55)' stroke-width='1' stroke-linecap='round'%3E%3Crect x='22' y='22' width='16' height='16'/%3E%3Crect x='22' y='22' width='16' height='16' transform='rotate(45 30 30)'/%3E%3Cline x1='0' y1='0' x2='22' y2='22'/%3E%3Cline x1='60' y1='0' x2='38' y2='22'/%3E%3Cline x1='0' y1='60' x2='22' y2='38'/%3E%3Cline x1='60' y1='60' x2='38' y2='38'/%3E%3C/g%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(200,169,110,0.9)'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='0' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, repeat;
-  background-size: auto, 60px 60px;
-  background-position: center, 0 0;
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 55%),
+    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.42)' stroke-width='1' stroke-linejoin='round'%3E%3Ccircle cx='200' cy='200' r='186'/%3E%3Ccircle cx='200' cy='200' r='70'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(45 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(90 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(135 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(180 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(225 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(270 200 200)'/%3E%3Cpath d='M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z' transform='rotate(315 200 200)'/%3E%3C/g%3E%3Cg fill='rgba(200,169,110,0.55)'%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(22.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(67.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(112.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(157.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(202.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(247.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(292.5 200 200)'/%3E%3Ccircle cx='200' cy='130' r='1.8' transform='rotate(337.5 200 200)'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-size: auto, clamp(320px, 60vh, 620px);
+  background-position: center, center;
   transform: translateY(0);
   will-change: transform;
   pointer-events: none;

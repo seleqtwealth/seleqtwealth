@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  SELEQT — Jali lattice pattern.
+  SELEQT — Floral mandala (ashtadala kamal / eight-petal lotus).
 
-  Mughal/Indo-Islamic 8-pointed star (sitara) inside a square tile,
-  connected to the tile corners by hairline diagonals so adjacent tiles
-  form a continuous jali grid when repeated. Painted in soft brand gold
-  so it reads as palace-wall texture, not a foreground graphic.
+  A single centred ornament used behind the SELEQT glyph in the page-
+  transition curtain. Inspired by Hindu/Buddhist lotus iconography and
+  classic Indian palace ornament. Hollow outline form so the navy base
+  reads through; soft brand gold so it reads as decorative texture.
 
-  Tile is 60x60 in viewBox units; the consumer (CSS background-size) can
-  scale it to any size. Tested with background-size: 60px 60px on top
-  of var(--ink) — sits softly behind the SELEQT glyph during page
-  transitions without competing with it.
+  The CSS (style.css) inlines the same artwork as a data URL for the
+  curtain — this file is kept as a standalone asset that can be reused
+  for letterhead, social profile artwork, or print collateral.
 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
-  <g fill="none" stroke="rgba(200, 169, 110, 0.22)" stroke-width="0.6" stroke-linecap="round">
-    <!-- 8-pointed star: two 16x16 squares centred at (30,30), one rotated 45deg. -->
-    <rect x="22" y="22" width="16" height="16"/>
-    <rect x="22" y="22" width="16" height="16" transform="rotate(45 30 30)"/>
-    <!-- Lattice hairlines: tile corners reach in toward the star, so adjacent
-         tiles meet at the corners and form a continuous diagonal grid. -->
-    <line x1="0"  y1="0"  x2="22" y2="22"/>
-    <line x1="60" y1="0"  x2="38" y2="22"/>
-    <line x1="0"  y1="60" x2="22" y2="38"/>
-    <line x1="60" y1="60" x2="38" y2="38"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <g fill="none" stroke="rgba(200, 169, 110, 0.42)" stroke-width="1" stroke-linejoin="round">
+    <!-- Outer thin circle — the lotus boundary -->
+    <circle cx="200" cy="200" r="186"/>
+    <!-- Inner circle — the bindu, where the SELEQT glyph sits -->
+    <circle cx="200" cy="200" r="70"/>
+    <!-- Eight petals (ashta dala = eight petals), each rotated 45deg around centre -->
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(45 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(90 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(135 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(180 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(225 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(270 200 200)"/>
+    <path d="M 200,200 C 180,160 180,100 200,80 C 220,100 220,160 200,200 Z" transform="rotate(315 200 200)"/>
   </g>
-  <!-- Small accent dots: at star centre and at each tile corner. The corner
-       dots from four adjacent tiles meet at intersections, creating slightly
-       brighter "nodes" in the lattice. -->
-  <circle cx="30" cy="30" r="0.8" fill="rgba(200, 169, 110, 0.45)"/>
-  <circle cx="0"  cy="0"  r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
-  <circle cx="60" cy="0"  r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
-  <circle cx="0"  cy="60" r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
-  <circle cx="60" cy="60" r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
+  <!-- Eight accent dots between petals (anti-cardinal angles, 22.5deg offsets) -->
+  <g fill="rgba(200, 169, 110, 0.55)">
+    <circle cx="200" cy="130" r="1.8" transform="rotate(22.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(67.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(112.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(157.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(202.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(247.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(292.5 200 200)"/>
+    <circle cx="200" cy="130" r="1.8" transform="rotate(337.5 200 200)"/>
+  </g>
 </svg>
