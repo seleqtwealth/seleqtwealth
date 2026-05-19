@@ -3323,7 +3323,16 @@ html.intro-running .hero-scroll-hint {
 .page-transition-panel {
   position: absolute;
   inset: 0;
-  background: var(--ink);
+  /* Layered: navy base, then jali (palace-wall lattice) in soft gold, then a
+     subtle radial warm-light glow toward the centre so the SELEQT glyph sits
+     in a pool of light rather than against a flat texture. */
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.10) 0%, transparent 55%),
+    url("pattern-jali.svg");
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 60px 60px;
+  background-position: center, 0 0;
   transform: translateY(-100%);
   will-change: transform;
   transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1);
@@ -3369,7 +3378,16 @@ html.is-page-entering::before {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  background: var(--ink);
+  /* Same layered treatment as the outbound panel (see .page-transition-panel)
+     so the curtain feels like one continuous patterned surface across the
+     navigation boundary, not two different layers. */
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.10) 0%, transparent 55%),
+    url("pattern-jali.svg");
+  background-repeat: no-repeat, repeat;
+  background-size: auto, 60px 60px;
+  background-position: center, 0 0;
   transform: translateY(0);
   will-change: transform;
   pointer-events: none;

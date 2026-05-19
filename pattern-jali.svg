@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SELEQT — Jali lattice pattern.
+
+  Mughal/Indo-Islamic 8-pointed star (sitara) inside a square tile,
+  connected to the tile corners by hairline diagonals so adjacent tiles
+  form a continuous jali grid when repeated. Painted in soft brand gold
+  so it reads as palace-wall texture, not a foreground graphic.
+
+  Tile is 60x60 in viewBox units; the consumer (CSS background-size) can
+  scale it to any size. Tested with background-size: 60px 60px on top
+  of var(--ink) — sits softly behind the SELEQT glyph during page
+  transitions without competing with it.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" width="60" height="60">
+  <g fill="none" stroke="rgba(200, 169, 110, 0.22)" stroke-width="0.6" stroke-linecap="round">
+    <!-- 8-pointed star: two 16x16 squares centred at (30,30), one rotated 45deg. -->
+    <rect x="22" y="22" width="16" height="16"/>
+    <rect x="22" y="22" width="16" height="16" transform="rotate(45 30 30)"/>
+    <!-- Lattice hairlines: tile corners reach in toward the star, so adjacent
+         tiles meet at the corners and form a continuous diagonal grid. -->
+    <line x1="0"  y1="0"  x2="22" y2="22"/>
+    <line x1="60" y1="0"  x2="38" y2="22"/>
+    <line x1="0"  y1="60" x2="22" y2="38"/>
+    <line x1="60" y1="60" x2="38" y2="38"/>
+  </g>
+  <!-- Small accent dots: at star centre and at each tile corner. The corner
+       dots from four adjacent tiles meet at intersections, creating slightly
+       brighter "nodes" in the lattice. -->
+  <circle cx="30" cy="30" r="0.8" fill="rgba(200, 169, 110, 0.45)"/>
+  <circle cx="0"  cy="0"  r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
+  <circle cx="60" cy="0"  r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
+  <circle cx="0"  cy="60" r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
+  <circle cx="60" cy="60" r="0.9" fill="rgba(200, 169, 110, 0.32)"/>
+</svg>
