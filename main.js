@@ -598,10 +598,10 @@ function isInViewport(el) {
       lastY = window.scrollY;
       lastT = now;
       if (v > 0.45) {
-        track.style.setProperty('--marquee-duration', '20s');
+        track.style.setProperty('--marquee-duration', '14s');
         clearTimeout(fastTimer);
         fastTimer = setTimeout(() => {
-          track.style.setProperty('--marquee-duration', '48s');
+          track.style.setProperty('--marquee-duration', '26s');
         }, 700);
       }
     }, { passive: true });

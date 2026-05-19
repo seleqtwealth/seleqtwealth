@@ -785,7 +785,7 @@ a, button { cursor: none; }
   display: flex;
   gap: 56px;
   white-space: nowrap;
-  animation: marqueeScroll 48s linear infinite;
+  animation: marqueeScroll 26s linear infinite;
 }
 .marquee-track span {
   font-size: 1.05rem;
@@ -794,20 +794,7 @@ a, button { cursor: none; }
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-/* Separator "Q" — borrowed from the SELEQT logo, set in Cormorant Garamond so
-   it reads as a typographic ornament rather than punctuation. Slightly larger
-   than the surrounding labels and untracked so the letterform sits cleanly. */
-.marquee-track .dot {
-  color: var(--gold);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.5rem;
-  letter-spacing: 0;
-  text-transform: none;
-  line-height: 1;
-  position: relative;
-  top: 0.05em;
-}
+.marquee-track .dot { color: var(--gold); }
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -2773,11 +2760,6 @@ body > footer.footer .footer-bottom {
   /* ── MARQUEE ─────────────────────────────────────────────────────────── */
   .marquee-wrap { padding: 20px 0 !important; }
   .marquee-track span { font-size: 0.88rem !important; letter-spacing: 0.26em !important; }
-  .marquee-track .dot {
-    font-size: 1.3rem !important;
-    letter-spacing: 0 !important;
-    line-height: 1 !important;
-  }
   .marquee-track { gap: 36px !important; }
 
   /* ── FOOTER ──────────────────────────────────────────────────────────── */
@@ -3262,7 +3244,7 @@ html.intro-running .hero-scroll-hint {
 /* 5 — Marquee tuning. Hover pauses; JS retunes --marquee-duration to speed up
    during fast scroll. */
 .marquee-track {
-  animation-duration: var(--marquee-duration, 48s);
+  animation-duration: var(--marquee-duration, 26s);
 }
 .marquee-wrap:hover .marquee-track {
   animation-play-state: paused;
