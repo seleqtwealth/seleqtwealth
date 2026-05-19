@@ -788,13 +788,26 @@ a, button { cursor: none; }
   animation: marqueeScroll 48s linear infinite;
 }
 .marquee-track span {
-  font-size: 0.7rem;
+  font-size: 1.05rem;
   font-weight: 300;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-.marquee-track .dot { color: var(--gold); }
+/* Separator "Q" — borrowed from the SELEQT logo, set in Cormorant Garamond so
+   it reads as a typographic ornament rather than punctuation. Slightly larger
+   than the surrounding labels and untracked so the letterform sits cleanly. */
+.marquee-track .dot {
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.5rem;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1;
+  position: relative;
+  top: 0.05em;
+}
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -2759,8 +2772,13 @@ body > footer.footer .footer-bottom {
 
   /* ── MARQUEE ─────────────────────────────────────────────────────────── */
   .marquee-wrap { padding: 20px 0 !important; }
-  .marquee-track span { font-size: 0.64rem !important; letter-spacing: 0.26em !important; }
-  .marquee-track { gap: 44px !important; }
+  .marquee-track span { font-size: 0.88rem !important; letter-spacing: 0.26em !important; }
+  .marquee-track .dot {
+    font-size: 1.3rem !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+  }
+  .marquee-track { gap: 36px !important; }
 
   /* ── FOOTER ──────────────────────────────────────────────────────────── */
   .footer { padding: 80px 0 40px !important; }
