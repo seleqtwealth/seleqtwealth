@@ -3323,13 +3323,18 @@ html.intro-running .hero-scroll-hint {
 .page-transition-panel {
   position: absolute;
   inset: 0;
-  /* Layered: navy base, then jali (palace-wall lattice) in soft gold, then a
-     subtle radial warm-light glow toward the centre so the SELEQT glyph sits
-     in a pool of light rather than against a flat texture. */
+  /* Layered: navy base, then jali (palace-wall lattice) in clear brand gold,
+     then a radial warm-light glow toward the centre so the SELEQT glyph sits
+     in a pool of light rather than flat against the texture.
+
+     SVG inlined as a data URL so there's no separate HTTP request and no
+     dependency on GitHub Pages picking up an external file. Bumped intensity
+     (stroke 1.0 px @ 0.55 alpha, dots @ 0.6-0.9 alpha) so the pattern reads
+     clearly during the brief ~750 ms curtain reveal. */
   background-color: var(--ink);
   background-image:
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.10) 0%, transparent 55%),
-    url("pattern-jali.svg");
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.20) 0%, transparent 55%),
+    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.55)' stroke-width='1' stroke-linecap='round'%3E%3Crect x='22' y='22' width='16' height='16'/%3E%3Crect x='22' y='22' width='16' height='16' transform='rotate(45 30 30)'/%3E%3Cline x1='0' y1='0' x2='22' y2='22'/%3E%3Cline x1='60' y1='0' x2='38' y2='22'/%3E%3Cline x1='0' y1='60' x2='22' y2='38'/%3E%3Cline x1='60' y1='60' x2='38' y2='38'/%3E%3C/g%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(200,169,110,0.9)'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='0' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3C/svg%3E");
   background-repeat: no-repeat, repeat;
   background-size: auto, 60px 60px;
   background-position: center, 0 0;
@@ -3378,13 +3383,13 @@ html.is-page-entering::before {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  /* Same layered treatment as the outbound panel (see .page-transition-panel)
-     so the curtain feels like one continuous patterned surface across the
-     navigation boundary, not two different layers. */
+  /* Same inlined jali + glow treatment as the outbound panel (see
+     .page-transition-panel) so the curtain reads as one continuous
+     patterned surface across the navigation boundary. */
   background-color: var(--ink);
   background-image:
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.10) 0%, transparent 55%),
-    url("pattern-jali.svg");
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.20) 0%, transparent 55%),
+    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60' width='60' height='60'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.55)' stroke-width='1' stroke-linecap='round'%3E%3Crect x='22' y='22' width='16' height='16'/%3E%3Crect x='22' y='22' width='16' height='16' transform='rotate(45 30 30)'/%3E%3Cline x1='0' y1='0' x2='22' y2='22'/%3E%3Cline x1='60' y1='0' x2='38' y2='22'/%3E%3Cline x1='0' y1='60' x2='22' y2='38'/%3E%3Cline x1='60' y1='60' x2='38' y2='38'/%3E%3C/g%3E%3Ccircle cx='30' cy='30' r='1.5' fill='rgba(200,169,110,0.9)'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='0' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='0' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3Ccircle cx='60' cy='60' r='1.5' fill='rgba(200,169,110,0.6)'/%3E%3C/svg%3E");
   background-repeat: no-repeat, repeat;
   background-size: auto, 60px 60px;
   background-position: center, 0 0;
