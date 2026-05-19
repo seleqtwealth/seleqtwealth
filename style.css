@@ -785,7 +785,7 @@ a, button { cursor: none; }
   display: flex;
   gap: 56px;
   white-space: nowrap;
-  animation: marqueeScroll 26s linear infinite;
+  animation: marqueeScroll 14s linear infinite;
 }
 .marquee-track span {
   font-size: 1.05rem;
@@ -793,8 +793,18 @@ a, button { cursor: none; }
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--ink-soft);
+  display: inline-block;
+  /* Smoothed for the JS-driven cursor parallax (see main.js).
+     Short so the trailing edge doesn't feel sluggish under continuous updates. */
+  transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out);
+  will-change: transform;
 }
-.marquee-track .dot { color: var(--gold); }
+.marquee-track .dot {
+  color: var(--gold);
+  /* The dot doesn't participate in the cursor parallax — leaves it as a steady
+     anchor between the moving labels. */
+  transition: none;
+}
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -3244,7 +3254,7 @@ html.intro-running .hero-scroll-hint {
 /* 5 — Marquee tuning. Hover pauses; JS retunes --marquee-duration to speed up
    during fast scroll. */
 .marquee-track {
-  animation-duration: var(--marquee-duration, 26s);
+  animation-duration: var(--marquee-duration, 14s);
 }
 .marquee-wrap:hover .marquee-track {
   animation-play-state: paused;

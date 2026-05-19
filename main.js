@@ -598,13 +598,81 @@ function isInViewport(el) {
       lastY = window.scrollY;
       lastT = now;
       if (v > 0.45) {
-        track.style.setProperty('--marquee-duration', '14s');
+        track.style.setProperty('--marquee-duration', '9s');
         clearTimeout(fastTimer);
         fastTimer = setTimeout(() => {
-          track.style.setProperty('--marquee-duration', '26s');
+          track.style.setProperty('--marquee-duration', '14s');
         }, 700);
       }
     }, { passive: true });
+  })();
+
+  /* ── 5b. Marquee cursor parallax ────────────────────────────────────
+     As the cursor moves across the strip, service labels within a 240px
+     radius lift slightly and tint toward gold. Closer = bigger lift +
+     stronger tint. Skipped on touch and reduced-motion (no cursor to
+     follow). Pause-on-hover (CSS) plus this effect means: hovering the
+     strip stops the scroll AND highlights items under the pointer.
+
+     Performance: caches each label's static offsetLeft once at startup,
+     then reads only the track's bounding rect per frame (single layout
+     read) to compute each label's current screen position. Cheaper than
+     getBoundingClientRect() on every label. */
+  (function() {
+    const wrap = document.querySelector('.marquee-wrap');
+    const track = document.querySelector('.marquee-track');
+    if (!wrap || !track || reducedMotion || isCoarse) return;
+    const items = Array.from(track.querySelectorAll('span:not(.dot)'));
+    if (!items.length) return;
+
+    // Wait one frame so the marquee has its final layout before caching.
+    requestAnimationFrame(() => {
+      const itemOffsets = items.map(item => item.offsetLeft + item.offsetWidth / 2);
+      let mouseX = null;
+      let raf = null;
+      const threshold = 240;
+      const maxLift = 10;
+      // ink-soft (resting) -> gold (peak) lerp endpoints
+      const fromR = 10,  fromG = 26,  fromB = 53,  fromA = 0.62;
+      const toR   = 184, toG   = 146, toB   = 78,  toA   = 1;
+
+      function tick() {
+        if (mouseX === null) { raf = null; return; }
+        const trackLeft = track.getBoundingClientRect().left;
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const itemX = trackLeft + itemOffsets[i];
+          const dx = Math.abs(mouseX - itemX);
+          if (dx < threshold) {
+            const t = 1 - dx / threshold; // 0..1
+            const lift = -maxLift * t;
+            const r = Math.round(fromR + (toR - fromR) * t);
+            const g = Math.round(fromG + (toG - fromG) * t);
+            const b = Math.round(fromB + (toB - fromB) * t);
+            const a = (fromA + (toA - fromA) * t).toFixed(2);
+            item.style.transform = `translateY(${lift.toFixed(1)}px)`;
+            item.style.color = `rgba(${r}, ${g}, ${b}, ${a})`;
+          } else if (item.style.transform) {
+            item.style.transform = '';
+            item.style.color = '';
+          }
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      wrap.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        if (raf === null) raf = requestAnimationFrame(tick);
+      });
+      wrap.addEventListener('mouseleave', () => {
+        mouseX = null;
+        // Clear immediately so CSS transition smooths the return to rest.
+        items.forEach(item => {
+          item.style.transform = '';
+          item.style.color = '';
+        });
+      });
+    });
   })();
 
   /* ── 6. Page transition curtain — continuous downward wipe ─────────
