@@ -709,16 +709,129 @@ function isInViewport(el) {
   // ── Outbound: drop the curtain on internal link clicks ──
   (function() {
     if (reducedMotion) return;
+
+    // The same abstract floral artwork that style.css inlines as a static
+    // background-image on the inbound side. Here it lives as a real SVG in
+    // the DOM so its paths can animate via stroke-dasharray.
+    const CURTAIN_SVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="rgba(200,169,110,0.3)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M -20,80 Q 100,40 180,100 Q 250,150 280,220 Q 310,290 380,300 Q 460,310 540,280 Q 600,260 620,260"/>
+          <path d="M -20,380 Q 80,360 140,300 Q 200,240 260,250 Q 320,260 380,200 Q 440,140 520,140 Q 580,140 620,120"/>
+          <path d="M 620,40 Q 560,80 540,140 Q 520,180 480,180"/>
+          <g transform="translate(180 100)">
+            <circle r="2.5"/>
+            <path d="M 0,-7 C -4,-6 -6,-3 -6,1"/><path d="M 6,1 C 6,-3 4,-6 0,-7"/>
+            <path d="M -6,1 C -5,4 -2,7 1,7"/><path d="M 1,7 C 4,6 6,4 6,1"/>
+            <path d="M -9,-2 C -10,-7 -5,-11 0,-11"/><path d="M 0,-11 C 5,-11 10,-7 9,-2"/>
+            <path d="M 9,-2 C 10,3 6,9 1,10"/><path d="M 1,10 C -4,11 -10,8 -9,-2"/>
+          </g>
+          <g transform="translate(440 320)">
+            <circle r="2.2"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(45)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(90)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(135)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(180)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(225)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(270)"/>
+            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(315)"/>
+          </g>
+          <g transform="translate(300 240)">
+            <path d="M 0,0 C -10,-3 -11,-22 0,-26 C 11,-22 10,-3 0,0 Z"/>
+            <path d="M -7,-15 C -3,-19 0,-19 0,-19"/>
+            <path d="M 7,-15 C 3,-19 0,-19 0,-19"/>
+          </g>
+          <g transform="translate(380 200)">
+            <circle r="3"/>
+            <path d="M -5,-3 C -5,-7 -2,-10 2,-10 C 6,-9 7,-5 5,-2"/>
+            <path d="M 5,-2 C 9,-4 12,-1 11,3 C 9,7 5,7 3,5"/>
+            <path d="M 3,5 C 6,9 3,12 -1,11 C -5,9 -5,4 -3,3"/>
+            <path d="M -3,3 C -7,4 -10,1 -8,-3 C -6,-6 -3,-6 -5,-3"/>
+            <ellipse cx="0" cy="-13" rx="3" ry="5"/>
+            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(72)"/>
+            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(144)"/>
+            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(216)"/>
+            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(288)"/>
+          </g>
+          <path d="M 100,70 C 80,60 70,75 75,85 C 90,82 102,80 100,70 Z"/>
+          <path d="M 240,180 C 220,170 205,180 210,195 C 230,192 245,188 240,180 Z"/>
+          <path d="M 360,260 C 340,250 325,260 330,275 C 350,272 365,268 360,260 Z"/>
+          <path d="M 480,300 C 460,290 445,300 450,315 C 470,312 485,308 480,300 Z"/>
+          <path d="M 120,290 C 100,280 85,290 90,305 C 110,302 125,298 120,290 Z"/>
+          <path d="M 220,260 C 240,255 255,265 250,278 C 232,275 220,272 220,260 Z"/>
+          <path d="M 360,150 C 380,145 393,155 388,168 C 370,165 358,160 360,150 Z"/>
+          <path d="M 540,210 C 520,200 505,210 510,225 C 530,222 545,218 540,210 Z"/>
+          <ellipse cx="60" cy="120" rx="2" ry="3" transform="rotate(20 60 120)"/>
+          <ellipse cx="540" cy="200" rx="2" ry="3" transform="rotate(-15 540 200)"/>
+          <ellipse cx="160" cy="350" rx="2" ry="3" transform="rotate(45 160 350)"/>
+        </g>
+        <g fill="rgba(200,169,110,0.42)">
+          <circle cx="500" cy="80" r="2"/>
+          <circle cx="80" cy="340" r="2"/>
+          <circle cx="350" cy="350" r="1.5"/>
+          <circle cx="50" cy="220" r="1.5"/>
+          <circle cx="580" cy="350" r="1.5"/>
+        </g>
+      </svg>`;
+
     const overlay = document.createElement('div');
     overlay.className = 'page-transition';
     const panel = document.createElement('div');
     panel.className = 'page-transition-panel';
+
+    // Floral artwork as a real DOM SVG so we can animate the paths.
+    const art = document.createElement('div');
+    art.className = 'page-transition-art';
+    art.innerHTML = CURTAIN_SVG;
+    panel.appendChild(art);
+
     const glyph = document.createElement('span');
     glyph.className = 'page-transition-glyph';
     glyph.textContent = 'SELEQT';
     panel.appendChild(glyph);
+
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
+
+    // Live-drawing animation. Sets each strokeable element to its full
+    // stroke-dashoffset (= invisible), forces a reflow, then transitions
+    // back to 0 with a small stagger per element so the artwork paints
+    // on across the duration of the curtain slide.
+    function animateCurtainDraw(svgEl) {
+      const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
+      if (!items.length) return;
+      const lastIdx = Math.max(1, items.length - 1);
+      const drawMs = 520;
+      const staggerMs = 240;
+
+      // Snap every element to its initial invisible state with NO transition.
+      items.forEach(el => {
+        let len = 0;
+        try { len = el.getTotalLength ? el.getTotalLength() : 0; } catch (e) {}
+        if (len > 0) {
+          el.style.strokeDasharray = len;
+          el.style.strokeDashoffset = len;
+        }
+        el.style.opacity = '0';
+        el.style.transition = 'none';
+      });
+
+      // Force a reflow so the browser commits the initial state before we
+      // change it again — otherwise it would just see the final state and
+      // skip the animation.
+      void svgEl.getBoundingClientRect();
+
+      // Enable transitions with per-element delay, then set final values.
+      items.forEach((el, i) => {
+        const delay = (i / lastIdx) * staggerMs;
+        el.style.transition =
+          'stroke-dashoffset ' + drawMs + 'ms cubic-bezier(0.22, 1, 0.36, 1) ' + delay + 'ms, ' +
+          'opacity ' + Math.round(drawMs * 0.55) + 'ms ease ' + delay + 'ms';
+        el.style.strokeDashoffset = '0';
+        el.style.opacity = '1';
+      });
+    }
 
     let leaving = false;
     document.addEventListener('click', (e) => {
@@ -743,6 +856,12 @@ function isInViewport(el) {
       // Hand-off flag for the entering page's pre-paint script
       try { sessionStorage.setItem('seleqt_transitioning', '1'); } catch (err) {}
       overlay.classList.add('is-leaving');
+      // Trigger the live drawing of the floral artwork in parallel with
+      // the panel slide. The curtain takes ~750ms to cover; the drawing
+      // completes in ~520ms + ~240ms stagger ≈ 760ms, so the artwork
+      // finishes painting right as the curtain finishes sliding in.
+      const svgEl = art.querySelector('svg');
+      if (svgEl) animateCurtainDraw(svgEl);
       // 750ms = the panel's transform transition (see .page-transition-panel)
       // plus a tiny breath so the curtain fully covers before we navigate.
       setTimeout(() => { window.location.href = href; }, 770);
