@@ -582,32 +582,7 @@ function isInViewport(el) {
     stats.forEach(el => obs.observe(el));
   })();
 
-  /* ── 5. Marquee tunes to scroll velocity ────────────────────────────
-     Fast scrolling temporarily shortens the marquee duration so the
-     bottom-strip feels reactive. Reverts on scroll idle. Pause-on-hover
-     is handled in CSS. */
-  (function() {
-    const track = document.querySelector('.marquee-track');
-    if (!track || reducedMotion) return;
-    let lastY = window.scrollY;
-    let lastT = performance.now();
-    let fastTimer;
-    window.addEventListener('scroll', () => {
-      const now = performance.now();
-      const v = Math.abs(window.scrollY - lastY) / Math.max(now - lastT, 1);
-      lastY = window.scrollY;
-      lastT = now;
-      if (v > 0.45) {
-        track.style.setProperty('--marquee-duration', '9s');
-        clearTimeout(fastTimer);
-        fastTimer = setTimeout(() => {
-          track.style.setProperty('--marquee-duration', '14s');
-        }, 700);
-      }
-    }, { passive: true });
-  })();
-
-  /* ── 5b. Marquee cursor parallax ────────────────────────────────────
+  /* ── 5. Marquee cursor parallax ─────────────────────────────────────
      As the cursor moves across the strip, service labels within a 240px
      radius lift slightly and tint toward gold. Closer = bigger lift +
      stronger tint. Skipped on touch and reduced-motion (no cursor to

@@ -801,9 +801,10 @@ a, button { cursor: none; }
   color: var(--ink-soft);
   display: inline-block;
   margin-right: 56px;
-  /* Smoothed for the JS-driven cursor parallax (see main.js).
-     Short so the trailing edge doesn't feel sluggish under continuous updates. */
-  transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out);
+  /* Short transition for the JS-driven cursor parallax (see main.js). Was
+     previously 0.28s — felt sluggish at high cursor velocities. 0.16s keeps
+     the smoothing without lag. */
+  transition: transform 0.16s var(--ease-out), color 0.16s var(--ease-out);
   will-change: transform;
 }
 .marquee-track .dot {
@@ -2810,7 +2811,12 @@ body > footer.footer .footer-bottom {
     letter-spacing: 0.26em !important;
     margin-right: 36px !important;
   }
-  /* gap removed (see desktop rule's comment for why) */
+  /* Mobile track is narrower (smaller fonts + smaller margins) than desktop,
+     so the same 14s duration reads visibly slower. Shorter duration on
+     mobile keeps the apparent scroll speed comparable to desktop. */
+  .marquee-track {
+    animation-duration: 9s !important;
+  }
 
   /* ── FOOTER ──────────────────────────────────────────────────────────── */
   .footer { padding: 80px 0 40px !important; }
@@ -3293,13 +3299,18 @@ html.intro-running .hero-scroll-hint {
   transform: translateY(0);
 }
 
-/* 5 — Marquee tuning. Hover pauses; JS retunes --marquee-duration to speed up
-   during fast scroll. */
+/* 5 — Marquee tuning. Constant duration (no JS speed changes — those caused
+   visible loop jumps when the duration ping-ponged mid-animation). Hover-
+   pause is guarded by @media (hover: hover) so it only fires on devices
+   that have a real hover state — prevents the sticky pause that touch
+   devices can produce when :hover lingers after a tap. */
 .marquee-track {
-  animation-duration: var(--marquee-duration, 14s);
+  animation-duration: 14s;
 }
-.marquee-wrap:hover .marquee-track {
-  animation-play-state: paused;
+@media (hover: hover) {
+  .marquee-wrap:hover .marquee-track {
+    animation-play-state: paused;
+  }
 }
 
 /* 6 — Page-transition curtain. A single continuous downward wipe spans the
