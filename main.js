@@ -142,25 +142,84 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ── Contact Form ───────────────────────────
+// Submits the form to Web3Forms (https://web3forms.com) via fetch so the
+// user stays on the page. Shows three states on the submit button:
+//   - "Sending…"    while the request is in-flight
+//   - "Message Sent ✓" only on confirmed 200 OK from Web3Forms
+//   - "Couldn't send — please email us" if anything fails
+// On success the form is reset; on failure it's preserved so the visitor
+// can copy their message and email it directly.
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = contactForm.querySelector('button[type="submit"]');
     const original = btn.textContent;
-    btn.textContent = 'Message Sent ✓';
-    btn.style.background = 'rgba(200,169,110,0.3)';
-    btn.style.color = 'var(--gold)';
-    btn.style.border = '1px solid var(--gold-dim)';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = original;
-      btn.style.background = '';
-      btn.style.color = '';
-      btn.style.border = '';
-      btn.disabled = false;
-      contactForm.reset();
-    }, 3500);
+
+    const setState = (label, accent) => {
+      btn.textContent = label;
+      btn.disabled = true;
+      if (accent === 'success') {
+        btn.style.background = 'rgba(200,169,110,0.3)';
+        btn.style.color = 'var(--gold)';
+        btn.style.border = '1px solid var(--gold-dim)';
+      } else if (accent === 'error') {
+        btn.style.background = 'rgba(180,60,60,0.2)';
+        btn.style.color = '#e8a4a4';
+        btn.style.border = '1px solid rgba(180,60,60,0.4)';
+      } else {
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.border = '';
+      }
+    };
+    const resetButton = (delay) => {
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.border = '';
+        btn.disabled = false;
+      }, delay);
+    };
+
+    setState('Sending…', null);
+
+    try {
+      const formData = new FormData(contactForm);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok && data.success !== false) {
+        setState('Message Sent ✓', 'success');
+        contactForm.reset();
+        // Reset the custom-select labels back to placeholder state
+        contactForm.querySelectorAll('.custom-select').forEach(sel => {
+          const v = sel.querySelector('.cs-value');
+          const hidden = sel.querySelector('input[type="hidden"]');
+          if (v) {
+            v.classList.add('cs-placeholder');
+            const original = sel.dataset.name === 'focus' ? 'Select a focus area' : 'Select';
+            v.textContent = original;
+          }
+          if (hidden) hidden.value = '';
+          sel.querySelectorAll('.cs-menu li').forEach(o => o.classList.remove('is-selected'));
+        });
+        resetButton(3500);
+      } else {
+        console.error('Web3Forms error', data);
+        setState("Couldn't send — please email us", 'error');
+        resetButton(5000);
+      }
+    } catch (err) {
+      console.error('Contact form network error', err);
+      setState("Couldn't send — please email us", 'error');
+      resetButton(5000);
+    }
   });
 }
 

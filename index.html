@@ -313,21 +313,29 @@
         </div>
 
         <div class="contact-right reveal delay-1">
-          <form class="contact-form" id="contactForm">
+          <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+            <!-- Web3Forms wiring: access_key authenticates the submission, subject
+                 sets the email subject line we receive, from_name labels the sender,
+                 and the botcheck honeypot blocks bots that auto-fill every field. -->
+            <input type="hidden" name="access_key" value="cd27fa7f-b356-4eba-859d-079f15cd3f40">
+            <input type="hidden" name="subject" value="New enquiry from seleqtwealth.in">
+            <input type="hidden" name="from_name" value="SELEQT Website">
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
             <div class="form-row">
               <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" placeholder="Your name" required />
+                <input type="text" name="name" placeholder="Your name" required />
               </div>
               <div class="form-group">
                 <label>Email</label>
-                <input type="email" placeholder="your@email.com" required />
+                <input type="email" name="email" placeholder="your@email.com" required />
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label>Phone</label>
-                <input type="tel" placeholder="With country code" />
+                <input type="tel" name="phone" placeholder="With country code" />
               </div>
               <div class="form-group">
                 <label>Residency</label>
@@ -355,7 +363,7 @@
                 </button>
                 <ul class="cs-menu" role="listbox" tabindex="-1">
                   <li role="option" data-value="Investments">Investments</li>
-                  <li role="option" data-value="Taxation">Taxation</li>
+                  <li role="option" data-value="Tax Structuring">Tax Structuring</li>
                   <li role="option" data-value="Insurance">Insurance</li>
                   <li role="option" data-value="Succession Planning">Succession Planning</li>
                   <li role="option" data-value="A full review across all areas">A full review across all areas</li>
@@ -365,7 +373,7 @@
             </div>
             <div class="form-group">
               <label>Tell us a little more</label>
-              <textarea placeholder="A few lines on what you're working through. Current setup, goals, or specific questions." rows="3"></textarea>
+              <textarea name="message" placeholder="A few lines on what you're working through. Current setup, goals, or specific questions." rows="3"></textarea>
             </div>
             <div class="form-footer">
               <p class="privacy-note">Your details remain strictly confidential and are reviewed only by the SELEQT team.</p>
