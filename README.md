@@ -1,40 +1,66 @@
 # SELEQT — Private Wealth Management Website
 
-A futuristic, Apple-inspired website for SELEQT, a private wealth management company.
+Live: **[seleqtwealth.in](https://seleqtwealth.in)**
 
-## Files
+A static HTML/CSS/JS site for SELEQT, a boutique private wealth firm based in Ahmedabad. Deployed via GitHub Pages on every push to `main`.
+
+## File structure
 
 ```
-seleqt/
-├── index.html        ← Main homepage
-├── style.css         ← Global stylesheet
-├── main.js           ← Scroll animations, cursor, interactions
-├── pms.html          ← Portfolio Management Services
-├── aif.html          ← Alternative Investment Funds
-├── taxation.html     ← Taxation
-├── advisory.html     ← Personal Wealth Advisory
-├── insurance.html    ← Insurance
-├── succession.html   ← Succession Planning
+seleqtwealth/
+├── index.html         ← Homepage (hero, services carousel, contact form)
+├── about.html         ← About the firm + team section
+├── investments.html   ← Investments practice page
+├── taxation.html      ← Taxation practice page
+├── insurance.html     ← Insurance practice page
+├── succession.html    ← Succession planning practice page
+├── 404.html           ← Custom not-found page (served by GitHub Pages)
+├── style.css          ← All styles
+├── main.js            ← Interactions, animations, cookie consent, GA4 loader
+├── favicon.svg        ← Site favicon
+├── sitemap.xml        ← For search engines (Google Search Console submission)
+├── robots.txt         ← Crawler instructions
+├── pattern-floral.svg ← Decorative asset
+├── CNAME              ← Custom domain mapping for GitHub Pages
 └── README.md
 ```
 
-## Deploy to GitHub Pages
+## Deployment
 
-1. Create a new GitHub repository (e.g. `seleqt-website`)
-2. Upload all files to the repository root
-3. Go to **Settings → Pages**
-4. Under **Source**, select `main` branch and `/ (root)`
-5. Click **Save**
-6. Your site will be live at `https://yourusername.github.io/seleqt-website/`
+The site is hosted on GitHub Pages with the custom domain `seleqtwealth.in` (configured via the `CNAME` file).
+
+Any push to `main` triggers a rebuild — the live site updates within ~1 minute.
+
+## Configuration TODOs
+
+- **Google Analytics 4**: replace `G-XXXXXXXXXX` in `main.js` (search for `GA_MEASUREMENT_ID`) with your real Measurement ID once you've created the GA4 property.
+- **Open Graph image**: drop a 1200×630 PNG named `og-image.png` at the repo root for richer link previews on WhatsApp / LinkedIn / Twitter.
+- **Team section** in `about.html`: replace the 4 placeholder cards with real names, roles, and bios.
+
+## Tech notes
+
+- No build step. Edit HTML/CSS/JS directly, commit, push.
+- Contact form submits via [Web3Forms](https://web3forms.com). Form access key is in `index.html`; lock it to `seleqtwealth.in` in the Web3Forms dashboard to prevent off-domain spam.
+- WhatsApp click-to-chat number and the GA4 Measurement ID live in `main.js` so they can be updated in one place.
+- Cookie consent banner gates GA4 loading — no tracking fires until the user clicks Accept (DPDP Act 2023 safe).
 
 ## Features
 
-- Custom animated cursor (gold dot + ring)
+- Animated hero with cursor-tracking gold spotlight
 - Scroll-triggered reveal animations
-- Parallax floating orbs in hero section
-- Animated marquee ticker
-- 6 clickable service cards → individual sub-pages
+- Vertical services carousel with active-state index
+- Marquee strip of service categories with cursor parallax
+- Custom dropdowns with full keyboard navigation
+- Page-to-page transition curtain with live SVG drawing
+- Custom animated cursor (gold dot + ring) on desktop
 - Mobile responsive with hamburger menu
-- Contact form with success state
-- Navy blue / white / gold colour palette
-- Cormorant Garamond (display) + Outfit (body) typography
+- WhatsApp click-to-chat floating button
+- Cookie consent banner + GA4 (when configured)
+- `prefers-reduced-motion` honored throughout
+
+## Brand palette
+
+- Navy: `#0a1a35`
+- Gold: `#b8924e`
+- Paper (cream background): `#f5f1e8`
+- Typography: Cormorant Garamond (display) + Outfit (body)

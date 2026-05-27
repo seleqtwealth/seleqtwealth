@@ -932,3 +932,87 @@ function isInViewport(el) {
     mo.observe(indexEl, { childList: true, characterData: true, subtree: true });
   })();
 })();
+
+// ── Auto-year copyright ─────────────────────
+// Every footer has <span class="footer-year">2026</span> — keep the year
+// fresh automatically so it doesn't go stale on Jan 1.
+(function() {
+  const year = new Date().getFullYear();
+  document.querySelectorAll('.footer-year').forEach(el => { el.textContent = year; });
+})();
+
+// ── WhatsApp floating button ────────────────
+// Injected here rather than in HTML so we only have to update the number /
+// default message in one place. Hidden by CSS in reduced-motion print views.
+(function() {
+  const phone = '919998139596'; // E.164 without +
+  const message = encodeURIComponent("Hi SELEQT, I'd like to learn more about your services.");
+  const a = document.createElement('a');
+  a.className = 'whatsapp-fab';
+  a.href = `https://wa.me/${phone}?text=${message}`;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.setAttribute('aria-label', 'Chat with us on WhatsApp');
+  a.innerHTML = `
+    <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true">
+      <path d="M16.001 3C9.373 3 3.998 8.375 3.998 15c0 2.385.7 4.605 1.9 6.482L3 29l7.78-2.04A12.94 12.94 0 0 0 16.001 27C22.628 27 28 21.626 28 15S22.628 3 16.001 3zm0 21.818c-1.97 0-3.81-.54-5.382-1.476l-.385-.226-4.616 1.21 1.232-4.5-.252-.395A9.79 9.79 0 0 1 6.18 15c0-5.42 4.4-9.82 9.82-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.818-9.82 9.818zm5.39-7.36c-.295-.148-1.748-.862-2.018-.96-.27-.099-.467-.148-.664.148-.196.295-.762.96-.934 1.157-.172.197-.345.222-.64.074-.295-.148-1.245-.46-2.371-1.467-.876-.78-1.467-1.745-1.64-2.04-.172-.296-.018-.456.13-.604.133-.132.295-.345.443-.517.148-.173.197-.296.295-.493.099-.197.05-.37-.025-.518-.074-.148-.664-1.6-.91-2.193-.24-.576-.484-.498-.664-.508-.172-.008-.369-.01-.566-.01a1.087 1.087 0 0 0-.787.37c-.27.296-1.034 1.01-1.034 2.46s1.058 2.852 1.206 3.05c.148.197 2.084 3.18 5.05 4.46.706.305 1.257.487 1.687.624.708.225 1.353.193 1.863.117.568-.085 1.748-.715 1.994-1.405.246-.69.246-1.282.172-1.406-.073-.123-.27-.197-.566-.345z"/>
+    </svg>
+  `;
+  document.body.appendChild(a);
+})();
+
+// ── Cookie consent + Google Analytics 4 loader ──────────────────────
+// GA4 only fires AFTER the user clicks Accept (DPDP Act 2023 safe).
+// To turn on tracking: replace GA_MEASUREMENT_ID below with your real
+// "G-XXXXXXXXXX" Measurement ID from Google Analytics → Admin → Data
+// Streams → your web stream.
+(function() {
+  const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // TODO: paste your real GA4 Measurement ID here
+  const CONSENT_KEY = 'seleqt_consent';
+
+  function loadGA() {
+    if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') return;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  const stored = localStorage.getItem(CONSENT_KEY);
+  if (stored === 'granted') { loadGA(); return; }
+  if (stored === 'denied') return;
+
+  // First-visit banner
+  const banner = document.createElement('div');
+  banner.className = 'cookie-banner';
+  banner.setAttribute('role', 'dialog');
+  banner.setAttribute('aria-label', 'Cookie consent');
+  banner.innerHTML = `
+    <p class="cookie-text">
+      We use a single analytics cookie to understand how visitors use the site. No personal data is sold or shared.
+    </p>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-btn cookie-decline">Decline</button>
+      <button type="button" class="cookie-btn cookie-accept">Accept</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+  requestAnimationFrame(() => banner.classList.add('is-visible'));
+
+  banner.querySelector('.cookie-accept').addEventListener('click', () => {
+    localStorage.setItem(CONSENT_KEY, 'granted');
+    banner.classList.remove('is-visible');
+    loadGA();
+    setTimeout(() => banner.remove(), 400);
+  });
+  banner.querySelector('.cookie-decline').addEventListener('click', () => {
+    localStorage.setItem(CONSENT_KEY, 'denied');
+    banner.classList.remove('is-visible');
+    setTimeout(() => banner.remove(), 400);
+  });
+})();

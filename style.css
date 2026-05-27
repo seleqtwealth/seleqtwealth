@@ -3527,3 +3527,149 @@ html.intro-running .hero-wordmark-spotlight {
   .sc-index-flip { animation: none !important; }
   .btn-primary.magnetic, .btn-ghost.magnetic { transform: none !important; }
 }
+
+/* ============================================
+   WHATSAPP FLOATING BUTTON
+   Injected by main.js. Fixed bottom-right, doesn't conflict with the
+   .floating-back link (top-left). Uses WhatsApp brand green.
+   ============================================ */
+.whatsapp-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 998;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background 0.25s;
+  cursor: pointer;
+}
+.whatsapp-fab:hover {
+  background: #20bd5a;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.45), 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+.whatsapp-fab:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+.whatsapp-fab svg { display: block; }
+@media (max-width: 540px) {
+  .whatsapp-fab { width: 50px; height: 50px; bottom: 18px; right: 18px; }
+  .whatsapp-fab svg { width: 24px; height: 24px; }
+}
+@media print {
+  .whatsapp-fab { display: none; }
+}
+
+/* ============================================
+   COOKIE CONSENT BANNER
+   Injected by main.js on first visit. One row on desktop, stacks on mobile.
+   ============================================ */
+.cookie-banner {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1100;
+  background: var(--navy);
+  color: var(--white);
+  border: 1px solid var(--border-gold);
+  border-radius: 4px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 12px 36px rgba(6, 14, 28, 0.35);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+  max-width: 920px;
+  margin: 0 auto;
+}
+.cookie-banner.is-visible { opacity: 1; transform: translateY(0); }
+.cookie-text {
+  flex: 1;
+  margin: 0;
+  color: var(--white-dim);
+}
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cookie-btn {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--white-faint);
+}
+.cookie-btn:hover {
+  border-color: var(--white-dim);
+}
+.cookie-btn.cookie-accept {
+  background: var(--gold);
+  color: var(--navy-deep);
+  border-color: var(--gold);
+}
+.cookie-btn.cookie-accept:hover {
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+}
+.cookie-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 16px 18px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+  .cookie-actions { justify-content: flex-end; }
+}
+
+/* ============================================
+   ACCESSIBILITY — keyboard focus rings
+   Restores visible focus indication that the legacy `outline: none`
+   rules suppressed. Only fires for keyboard navigation, not mouse clicks.
+   ============================================ */
+.form-group input:focus-visible,
+.form-group textarea:focus-visible,
+.cs-trigger:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.cs-menu li:focus-visible,
+.cs-menu li.is-highlighted {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}

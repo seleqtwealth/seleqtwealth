@@ -1,41 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
- <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Succession Planning, SELEQT</title>
- <link rel="stylesheet" href="style.css" />
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
- <!-- Page-transition pre-paint: applies entering-curtain class if the user
-      just clicked through from another page on the site. Cleared by main.js. -->
- <script>
-   (function() {
-     if (sessionStorage.getItem('seleqt_transitioning')) {
-       document.documentElement.classList.add('is-page-entering');
-       sessionStorage.removeItem('seleqt_transitioning');
-     }
-   })();
- </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Succession Planning · SELEQT</title>
+  <meta name="description" content="Thoughtful succession structures designed to preserve continuity, clarity, and family intent across generations. Trusts, wills, and cross-border estate considerations tailored to modern family wealth." />
+  <link rel="canonical" href="https://seleqtwealth.in/succession.html" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SELEQT" />
+  <meta property="og:title" content="Succession Planning · SELEQT" />
+  <meta property="og:description" content="Thoughtful succession structures designed to preserve continuity, clarity, and family intent across generations." />
+  <meta property="og:url" content="https://seleqtwealth.in/succession.html" />
+  <meta property="og:image" content="https://seleqtwealth.in/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Succession Planning · SELEQT" />
+  <meta name="twitter:description" content="Thoughtful succession structures designed to preserve continuity, clarity, and family intent across generations." />
+  <meta name="twitter:image" content="https://seleqtwealth.in/og-image.png" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <!-- Page-transition pre-paint: applies entering-curtain class if the user
+       just clicked through from another page on the site. Cleared by main.js. -->
+  <script>
+    (function() {
+      if (sessionStorage.getItem('seleqt_transitioning')) {
+        document.documentElement.classList.add('is-page-entering');
+        sessionStorage.removeItem('seleqt_transitioning');
+      }
+    })();
+  </script>
 </head>
 <body>
   <a href="index.html#services" class="floating-back" aria-label="Back to Services"><span class="fb-arrow">&larr;</span><span class="fb-text">Back to Services</span></a>
- <nav id="navbar">
- <div class="nav-inner">
- <a href="index.html" class="logo">SELEQT</a>
- <div class="nav-links">
- <a href="index.html#services">Services</a>
- <a href="about.html">About</a>
- <a href="index.html#contact" class="nav-cta">Speak With Us</a>
- </div>
- <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
- </div>
- <div class="mobile-menu" id="mobileMenu">
- <a href="index.html#services">Services</a>
- <a href="about.html">About</a>
- <a href="index.html#contact">Speak With Us</a>
- </div>
- </nav>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">SELEQT</a>
+      <div class="nav-links">
+        <a href="index.html#services">Services</a>
+        <a href="about.html">About</a>
+        <a href="index.html#contact" class="nav-cta">Speak With Us</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html#services">Services</a>
+      <a href="about.html">About</a>
+      <a href="index.html#contact">Speak With Us</a>
+    </div>
+  </nav>
 
  <section class="sub-hero">
  <div class="sub-hero-orb"></div>
@@ -97,14 +117,45 @@
  </div>
  </section>
 
- <footer class="footer">
- <div class="container">
- <div class="footer-bottom">
- <p>© 2025 SELEQT. All rights reserved.</p>
- <p>Succession and estate planning involves legal considerations. We work in coordination with qualified legal professionals.</p>
- </div>
- </div>
- </footer>
- <script src="main.js"></script>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">SELEQT</a>
+          <p>Private wealth, considered from every angle.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Practice</h5>
+          <a href="investments.html">Investments</a>
+          <a href="taxation.html">Taxation</a>
+          <a href="insurance.html">Insurance</a>
+          <a href="succession.html">Succession Planning</a>
+        </div>
+        <div class="footer-col">
+          <h5>Firm</h5>
+          <a href="about.html">About</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Reach</h5>
+          <span>contact@seleqtwealth.in</span>
+          <span>+91 99981 39596</span>
+          <span>313, Arista Business Space, Ahmedabad, Gujarat, 380059</span>
+        </div>
+      </div>
+
+      <div class="footer-wordmark">SELEQT</div>
+
+      <div class="footer-bottom">
+        <p>&copy; <span class="footer-year">2026</span> SELEQT Private Wealth. All rights reserved.</p>
+        <p class="disclaimer">
+          Succession and estate planning involves legal considerations; we work in coordination with qualified legal professionals. SELEQT operates on a fee-only advisory basis; all material conflicts of interest are disclosed in writing prior to engagement.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>
