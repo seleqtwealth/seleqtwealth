@@ -33,9 +33,10 @@ Any push to `main` triggers a rebuild — the live site updates within ~1 minute
 
 ## Configuration TODOs
 
-- **Google Analytics 4**: replace `G-XXXXXXXXXX` in `main.js` (search for `GA_MEASUREMENT_ID`) with your real Measurement ID once you've created the GA4 property.
 - **Open Graph image**: drop a 1200×630 PNG named `og-image.png` at the repo root for richer link previews on WhatsApp / LinkedIn / Twitter.
 - **Team section** in `about.html`: replace the 4 placeholder cards with real names, roles, and bios.
+
+Google Analytics 4 is wired up (Measurement ID `G-FF6XR4Q4P1` in `main.js`) and gated by the cookie consent banner.
 
 ## Tech notes
 

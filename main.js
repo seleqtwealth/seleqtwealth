@@ -967,7 +967,7 @@ function isInViewport(el) {
 // "G-XXXXXXXXXX" Measurement ID from Google Analytics → Admin → Data
 // Streams → your web stream.
 (function() {
-  const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // TODO: paste your real GA4 Measurement ID here
+  const GA_MEASUREMENT_ID = 'G-FF6XR4Q4P1';
   const CONSENT_KEY = 'seleqt_consent';
 
   function loadGA() {
