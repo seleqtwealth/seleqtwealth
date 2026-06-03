@@ -838,8 +838,16 @@ function isInViewport(el) {
       if (MONUMENTS.length > 1 && idx === last) {
         idx = (idx + 1) % MONUMENTS.length;
       }
-      try { sessionStorage.setItem('seleqt_last_monument', String(idx)); } catch (e) {}
-      return MONUMENTS[idx];
+      const svg = MONUMENTS[idx];
+      try {
+        sessionStorage.setItem('seleqt_last_monument', String(idx));
+        // Hand the chosen SVG to the entering page so its inbound curtain
+        // can render the same monument as a background-image until the
+        // curtain slides off (otherwise the art would visibly vanish at
+        // the moment of navigation).
+        sessionStorage.setItem('seleqt_monument', svg);
+      } catch (e) {}
+      return svg;
     }
 
     const overlay = document.createElement('div');
@@ -860,41 +868,56 @@ function isInViewport(el) {
     // stroke-dashoffset (= invisible), forces a reflow, then transitions
     // back to 0 with a small stagger per element so the artwork paints
     // on across the duration of the curtain slide.
-    // Tuned so total draw time (drawMs + staggerMs) ≈ 570ms — finishes
-    // about 180ms BEFORE the 750ms curtain finishes covering, so the
-    // monument sits "completed" for a beat before navigation fires.
+    //
+    // Tuned so total draw time (drawMs + staggerMs) ≈ 800ms — finishes
+    // ~300ms BEFORE the 1100ms curtain finishes covering, so the monument
+    // sits "completed" for a beat before navigation fires.
+    //
+    // We wrap the final-state writes in requestAnimationFrame because
+    // freshly-injected SVG paths (innerHTML happens on every click) need
+    // the browser to commit the initial "invisible" state in its own paint
+    // before we can transition to the visible state — otherwise the engine
+    // collapses both writes into one frame and the path appears already
+    // drawn with no animation.
     function animateCurtainDraw(svgEl) {
       const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
       if (!items.length) return;
       const lastIdx = Math.max(1, items.length - 1);
-      const drawMs = 350;
-      const staggerMs = 220;
+      const drawMs = 500;
+      const staggerMs = 300;
 
       // Snap every element to its initial invisible state with NO transition.
       items.forEach(el => {
         let len = 0;
         try { len = el.getTotalLength ? el.getTotalLength() : 0; } catch (e) {}
-        if (len > 0) {
-          el.style.strokeDasharray = len;
-          el.style.strokeDashoffset = len;
-        }
+        // Fallback for elements where getTotalLength returns 0 (rare, but
+        // possible on degenerate paths). 2000 is longer than any path in
+        // our monument set, so the dash still fully covers it.
+        if (!len || len <= 0) len = 2000;
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
         el.style.opacity = '0';
         el.style.transition = 'none';
       });
 
-      // Force a reflow so the browser commits the initial state before we
-      // change it again — otherwise it would just see the final state and
-      // skip the animation.
+      // Force the browser to commit the initial state before we change it
+      // again. getBoundingClientRect forces synchronous layout.
       void svgEl.getBoundingClientRect();
 
-      // Enable transitions with per-element delay, then set final values.
-      items.forEach((el, i) => {
-        const delay = (i / lastIdx) * staggerMs;
-        el.style.transition =
-          'stroke-dashoffset ' + drawMs + 'ms cubic-bezier(0.22, 1, 0.36, 1) ' + delay + 'ms, ' +
-          'opacity ' + Math.round(drawMs * 0.55) + 'ms ease ' + delay + 'ms';
-        el.style.strokeDashoffset = '0';
-        el.style.opacity = '1';
+      // Two rAFs: first commits the layout/paint of the initial state,
+      // second writes the final state which then animates via the new
+      // transition.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          items.forEach((el, i) => {
+            const delay = (i / lastIdx) * staggerMs;
+            el.style.transition =
+              'stroke-dashoffset ' + drawMs + 'ms cubic-bezier(0.22, 1, 0.36, 1) ' + delay + 'ms, ' +
+              'opacity ' + Math.round(drawMs * 0.6) + 'ms ease ' + delay + 'ms';
+            el.style.strokeDashoffset = '0';
+            el.style.opacity = '1';
+          });
+        });
       });
     }
 
@@ -921,18 +944,19 @@ function isInViewport(el) {
       // Hand-off flag for the entering page's pre-paint script
       try { sessionStorage.setItem('seleqt_transitioning', '1'); } catch (err) {}
       // Inject a fresh random monument SVG into the art container so each
-      // transition shows a different piece.
+      // transition shows a different piece. pickMonument also persists
+      // the chosen SVG to sessionStorage so the entering page can render
+      // the same monument on its inbound curtain.
       art.innerHTML = pickMonument();
       overlay.classList.add('is-leaving');
-      // Trigger the live drawing of the monument in parallel with the
-      // panel slide. The curtain takes ~750ms to cover; the drawing
-      // completes in ~350ms + ~220ms stagger ≈ 570ms, so the monument
-      // finishes painting before the curtain finishes sliding in.
+      // Trigger the live drawing in parallel with the panel slide.
+      // Curtain slide: 1100ms. Drawing: ~800ms (500ms draw + 300ms stagger).
+      // So the monument finishes ~300ms before the curtain fully covers.
       const svgEl = art.querySelector('svg');
       if (svgEl) animateCurtainDraw(svgEl);
-      // 750ms = the panel's transform transition (see .page-transition-panel)
-      // plus a tiny breath so the curtain fully covers before we navigate.
-      setTimeout(() => { window.location.href = href; }, 770);
+      // 1100ms slide + 50ms breath so the curtain fully covers before we
+      // navigate. Inbound page picks up the same monument as background.
+      setTimeout(() => { window.location.href = href; }, 1150);
     });
 
     // bfcache: if user comes back via back/forward, drop the curtain instantly

@@ -3415,7 +3415,7 @@ html.intro-running .hero-scroll-hint {
   background-position: center;
   transform: translateY(-100%);
   will-change: transform;
-  transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* Container for the live-drawn monument SVG. Centred within the panel
@@ -3457,21 +3457,28 @@ html.is-page-entering::before {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  /* Inbound curtain — solid navy with a soft centred gold glow. No
-     line art on this side; the monument lives only on the outbound
-     "drawing in" moment. The inbound curtain is just the panel leaving
-     stage, so it stays quiet. */
+  /* Inbound curtain — solid navy + the SAME monument that was drawn on
+     the outbound side, passed across the navigation as a CSS custom
+     property (--curtain-monument) by the pre-paint script in <head>.
+     This keeps the monument visible until the curtain finishes sliding
+     off the bottom — otherwise the art would vanish at the moment of
+     navigation. Falls back to no monument on direct landings. */
   background-color: var(--ink);
-  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 60%);
-  background-repeat: no-repeat;
-  background-position: center;
+  background-image:
+    var(--curtain-monument, none),
+    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 60%);
+  background-size:
+    clamp(280px, 42vw, 560px) auto,
+    auto;
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, center;
   transform: translateY(0);
   will-change: transform;
   pointer-events: none;
 }
 html.is-page-entering.is-page-entered::before {
   transform: translateY(100%);
-  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 /* 7 — Carousel number flip. The number inside .sc-index-current is rewrapped

@@ -31,6 +31,14 @@
       if (sessionStorage.getItem('seleqt_transitioning')) {
         document.documentElement.classList.add('is-page-entering');
         sessionStorage.removeItem('seleqt_transitioning');
+        var svg = sessionStorage.getItem('seleqt_monument');
+        if (svg) {
+          try {
+            document.documentElement.style.setProperty('--curtain-monument',
+              'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")');
+          } catch (e) {}
+          sessionStorage.removeItem('seleqt_monument');
+        }
       }
     })();
   </script>
