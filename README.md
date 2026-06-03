@@ -41,9 +41,9 @@ seleqtwealth/
 
 ## Deployment
 
-The site is hosted on GitHub Pages with the custom domain `seleqtwealth.in` (configured via the `CNAME` file).
+The site is hosted on **Vercel** with the custom domain `seleqtwealth.in`.
 
-Any push to `main` triggers a rebuild — the live site updates within ~1 minute.
+Any push to `main` triggers a Vercel build — the live site updates within ~30 seconds. The `CNAME` file is a leftover from the previous GitHub Pages hosting and can be removed once the DNS transition is fully complete.
 
 ## Configuration TODOs
 
