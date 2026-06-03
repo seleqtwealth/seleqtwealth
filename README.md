@@ -8,22 +8,36 @@ A static HTML/CSS/JS site for SELEQT, a boutique private wealth firm based in Ah
 
 ```
 seleqtwealth/
-├── index.html         ← Homepage (hero, services carousel, contact form)
-├── about.html         ← About the firm + team section
-├── investments.html   ← Investments practice page
-├── taxation.html      ← Taxation practice page
-├── insurance.html     ← Insurance practice page
-├── succession.html    ← Succession planning practice page
-├── 404.html           ← Custom not-found page (served by GitHub Pages)
-├── style.css          ← All styles
-├── main.js            ← Interactions, animations, cookie consent, GA4 loader
-├── favicon.svg        ← Site favicon
-├── sitemap.xml        ← For search engines (Google Search Console submission)
-├── robots.txt         ← Crawler instructions
-├── pattern-floral.svg ← Decorative asset
-├── CNAME              ← Custom domain mapping for GitHub Pages
+├── index.html             ← Homepage (hero, services carousel, contact form)
+├── about.html             ← About the firm + team section
+├── investments.html       ← Investments practice page
+├── taxation.html          ← Taxation practice page
+├── insurance.html         ← Insurance practice page
+├── succession.html        ← Succession planning practice page
+├── insights.html          ← Editorial / blog listing page
+├── insights/              ← Individual long-form articles
+│   └── fee-only-advisory.html
+├── 404.html               ← Custom not-found page (served by GitHub Pages)
+├── style.css              ← All styles
+├── main.js                ← Interactions, animations, cookie consent, GA4 loader
+├── favicon.svg            ← Site favicon
+├── sitemap.xml            ← For search engines (Google Search Console)
+├── robots.txt             ← Crawler instructions
+├── images/team/           ← Team member photos (webp)
+├── pattern-floral.svg     ← Decorative asset
+├── CNAME                  ← Custom domain mapping for GitHub Pages
+├── SEO.md                 ← SEO playbook / checklist
 └── README.md
 ```
+
+## Adding a new Insights article
+
+1. Copy `insights/fee-only-advisory.html` to `insights/your-article-slug.html`.
+2. Update title, meta description, canonical URL, OG tags, JSON-LD schema, and date.
+3. Write the article body inside `<div class="article-body">`. Use `<h2>` for sections, `<blockquote>` for pull quotes, `<ol class="article-ol">` for numbered lists.
+4. Add the article to `insights.html` listing (replace one of the "in development" cards with a real entry, or add a new section).
+5. Add the URL to `sitemap.xml`.
+6. Commit + push.
 
 ## Deployment
 
