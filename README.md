@@ -14,8 +14,8 @@ seleqtwealth/
 ├── taxation.html          ← Taxation practice page
 ├── insurance.html         ← Insurance practice page
 ├── succession.html        ← Succession planning practice page
-├── insights.html          ← Editorial / blog listing page
-├── insights/              ← Individual long-form articles
+├── blogs.html          ← Editorial / blog listing page
+├── blogs/              ← Individual long-form articles
 │   └── fee-only-advisory.html
 ├── 404.html               ← Custom not-found page (served by GitHub Pages)
 ├── style.css              ← All styles
@@ -30,12 +30,12 @@ seleqtwealth/
 └── README.md
 ```
 
-## Adding a new Insights article
+## Adding a new Blog article
 
-1. Copy `insights/fee-only-advisory.html` to `insights/your-article-slug.html`.
+1. Copy `blogs/fee-only-advisory.html` to `blogs/your-article-slug.html`.
 2. Update title, meta description, canonical URL, OG tags, JSON-LD schema, and date.
 3. Write the article body inside `<div class="article-body">`. Use `<h2>` for sections, `<blockquote>` for pull quotes, `<ol class="article-ol">` for numbered lists.
-4. Add the article to `insights.html` listing (replace one of the "in development" cards with a real entry, or add a new section).
+4. Add the article to `blogs.html` listing (replace one of the "in development" cards with a real entry, or add a new section).
 5. Add the URL to `sitemap.xml`.
 6. Commit + push.
 
