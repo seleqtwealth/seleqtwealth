@@ -2284,7 +2284,7 @@ a, button { cursor: none; }
    chest-up; Aditya/Mihir are wider with body visible). These overrides
    normalize the face size + eye-line position across all four. */
 .team-card[data-member="ishit"]  { --photo-scale: 1.00; --photo-y: 18%; --photo-origin: center top; }
-.team-card[data-member="kalash"] { --photo-scale: 1.00; --photo-y: 20%; --photo-origin: center top; }
+.team-card[data-member="kalash"] { --photo-scale: 1.12; --photo-y: 18%; --photo-origin: center top; }
 .team-card[data-member="aditya"] { --photo-scale: 1.22; --photo-y: 18%; --photo-origin: center top; }
 .team-card[data-member="mihir"]  { --photo-scale: 1.14; --photo-y: 18%; --photo-origin: center top; }
 .team-card-body { position: relative; }
