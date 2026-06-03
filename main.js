@@ -880,7 +880,9 @@ function isInViewport(el) {
       const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
       if (!items.length) return;
       const lastIdx = Math.max(1, items.length - 1);
-      const drawMs = 500;
+      // Total draw window = drawMs + staggerMs. Slowed deliberately so the
+      // strokes paint on with a clearly visible rhythm.
+      const drawMs = 600;
       const staggerMs = 300;
 
       items.forEach((el, i) => {
@@ -958,14 +960,21 @@ function isInViewport(el) {
       // the same monument on its inbound curtain.
       art.innerHTML = pickMonument();
       overlay.classList.add('is-leaving');
-      // Trigger the live drawing in parallel with the panel slide.
-      // Curtain slide: 1100ms. Drawing: ~800ms (500ms draw + 300ms stagger).
-      // So the monument finishes ~300ms before the curtain fully covers.
+      // Choreography:
+      //   0ms    — panel begins sliding down (transition: 600ms)
+      //   600ms  — panel fully covers screen
+      //   650ms  — drawing animation starts on the fully-static panel
+      //   1550ms — drawing animation completes (650ms + ~900ms)
+      //   1850ms — navigate (300ms hold so the completed monument breathes
+      //            on screen before the page changes)
+      // Total before navigation: 1850ms. This makes the drawing the focal
+      // moment of the transition — happens on a stable, fully-visible
+      // stage rather than competing with the slide motion.
       const svgEl = art.querySelector('svg');
-      if (svgEl) animateCurtainDraw(svgEl);
-      // 1100ms slide + 50ms breath so the curtain fully covers before we
-      // navigate. Inbound page picks up the same monument as background.
-      setTimeout(() => { window.location.href = href; }, 1150);
+      setTimeout(() => {
+        if (svgEl) animateCurtainDraw(svgEl);
+      }, 650);
+      setTimeout(() => { window.location.href = href; }, 1850);
     });
 
     // bfcache: if user comes back via back/forward, drop the curtain instantly
