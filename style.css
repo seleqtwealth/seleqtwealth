@@ -3405,12 +3405,12 @@ html.intro-running .hero-scroll-hint {
 .page-transition-panel {
   position: absolute;
   inset: 0;
-  /* Outbound panel = navy base + a soft radial gold glow that frames the
-     SELEQT glyph. The floral artwork lives as a child SVG element
-     (.page-transition-art) so its paths can animate live via
+  /* Outbound panel = solid navy with a soft radial glow at centre that
+     gently haloes the monument line art. The monument SVG itself lives
+     as a child element (.page-transition-art) and animates in via
      stroke-dasharray — see main.js animateCurtainDraw(). */
   background-color: var(--ink);
-  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.18) 0%, transparent 55%);
+  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.16) 0%, transparent 60%);
   background-repeat: no-repeat;
   background-position: center;
   transform: translateY(-100%);
@@ -3418,43 +3418,25 @@ html.intro-running .hero-scroll-hint {
   transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* Container for the live-drawn floral SVG inside the outbound panel.
-   Sits behind the SELEQT glyph (z-index 0 vs glyph default). */
+/* Container for the live-drawn monument SVG. Centred within the panel
+   at a comfortable size — large enough to read as architecture, not so
+   large it dominates the curtain. */
 .page-transition-art {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
-  z-index: 0;
 }
 .page-transition-art svg {
-  width: 100%;
-  height: 100%;
+  width: clamp(280px, 42vw, 560px);
+  height: auto;
+  max-height: 60vh;
   display: block;
-}
-.page-transition-glyph {
-  z-index: 1;
 }
 .page-transition.is-leaving .page-transition-panel {
   transform: translateY(0);
-}
-.page-transition-glyph {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) translateY(20px);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  letter-spacing: 0.22em;
-  color: var(--gold);
-  opacity: 0;
-  transition: opacity 0.4s 0.25s ease, transform 0.6s 0.2s cubic-bezier(0.22, 1, 0.36, 1);
-  white-space: nowrap;
-  pointer-events: none;
-}
-.page-transition.is-leaving .page-transition-glyph {
-  opacity: 1;
-  transform: translate(-50%, -50%) translateY(0);
 }
 
 /* --- Inbound curtain (no JS dependency for first paint) ---
@@ -3475,47 +3457,21 @@ html.is-page-entering::before {
   position: fixed;
   inset: 0;
   z-index: 99998;
-  /* Inbound curtain = same abstract floral composition as the outbound
-     panel (see main.js), but rendered statically as a background image.
-     We can't animate path drawing on a pseudo-element, so the inbound
-     side shows the artwork already fully drawn — as if the same painting
-     stayed in place across the navigation. Soft radial gold glow at
-     centre frames the SELEQT glyph. */
+  /* Inbound curtain — solid navy with a soft centred gold glow. No
+     line art on this side; the monument lives only on the outbound
+     "drawing in" moment. The inbound curtain is just the panel leaving
+     stage, so it stays quiet. */
   background-color: var(--ink);
-  background-image:
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.18) 0%, transparent 55%),
-    url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke='rgba(200,169,110,0.3)' stroke-width='0.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M -20,80 Q 100,40 180,100 Q 250,150 280,220 Q 310,290 380,300 Q 460,310 540,280 Q 600,260 620,260'/%3E%3Cpath d='M -20,380 Q 80,360 140,300 Q 200,240 260,250 Q 320,260 380,200 Q 440,140 520,140 Q 580,140 620,120'/%3E%3Cpath d='M 620,40 Q 560,80 540,140 Q 520,180 480,180'/%3E%3Cg transform='translate(180 100)'%3E%3Ccircle r='2.5'/%3E%3Cpath d='M 0,-7 C -4,-6 -6,-3 -6,1'/%3E%3Cpath d='M 6,1 C 6,-3 4,-6 0,-7'/%3E%3Cpath d='M -6,1 C -5,4 -2,7 1,7'/%3E%3Cpath d='M 1,7 C 4,6 6,4 6,1'/%3E%3Cpath d='M -9,-2 C -10,-7 -5,-11 0,-11'/%3E%3Cpath d='M 0,-11 C 5,-11 10,-7 9,-2'/%3E%3Cpath d='M 9,-2 C 10,3 6,9 1,10'/%3E%3Cpath d='M 1,10 C -4,11 -10,8 -9,-2'/%3E%3C/g%3E%3Cg transform='translate(440 320)'%3E%3Ccircle r='2.2'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(45)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(90)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(135)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(180)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(225)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(270)'/%3E%3Cellipse cx='0' cy='-7' rx='1.4' ry='4.5' transform='rotate(315)'/%3E%3C/g%3E%3Cg transform='translate(300 240)'%3E%3Cpath d='M 0,0 C -10,-3 -11,-22 0,-26 C 11,-22 10,-3 0,0 Z'/%3E%3Cpath d='M -7,-15 C -3,-19 0,-19 0,-19'/%3E%3Cpath d='M 7,-15 C 3,-19 0,-19 0,-19'/%3E%3C/g%3E%3Cg transform='translate(380 200)'%3E%3Ccircle r='3'/%3E%3Cpath d='M -5,-3 C -5,-7 -2,-10 2,-10 C 6,-9 7,-5 5,-2'/%3E%3Cpath d='M 5,-2 C 9,-4 12,-1 11,3 C 9,7 5,7 3,5'/%3E%3Cpath d='M 3,5 C 6,9 3,12 -1,11 C -5,9 -5,4 -3,3'/%3E%3Cpath d='M -3,3 C -7,4 -10,1 -8,-3 C -6,-6 -3,-6 -5,-3'/%3E%3Cellipse cx='0' cy='-13' rx='3' ry='5'/%3E%3Cellipse cx='0' cy='-13' rx='3' ry='5' transform='rotate(72)'/%3E%3Cellipse cx='0' cy='-13' rx='3' ry='5' transform='rotate(144)'/%3E%3Cellipse cx='0' cy='-13' rx='3' ry='5' transform='rotate(216)'/%3E%3Cellipse cx='0' cy='-13' rx='3' ry='5' transform='rotate(288)'/%3E%3C/g%3E%3Cpath d='M 100,70 C 80,60 70,75 75,85 C 90,82 102,80 100,70 Z'/%3E%3Cpath d='M 240,180 C 220,170 205,180 210,195 C 230,192 245,188 240,180 Z'/%3E%3Cpath d='M 360,260 C 340,250 325,260 330,275 C 350,272 365,268 360,260 Z'/%3E%3Cpath d='M 480,300 C 460,290 445,300 450,315 C 470,312 485,308 480,300 Z'/%3E%3Cpath d='M 120,290 C 100,280 85,290 90,305 C 110,302 125,298 120,290 Z'/%3E%3Cpath d='M 220,260 C 240,255 255,265 250,278 C 232,275 220,272 220,260 Z'/%3E%3Cpath d='M 360,150 C 380,145 393,155 388,168 C 370,165 358,160 360,150 Z'/%3E%3Cpath d='M 540,210 C 520,200 505,210 510,225 C 530,222 545,218 540,210 Z'/%3E%3Cellipse cx='60' cy='120' rx='2' ry='3' transform='rotate(20 60 120)'/%3E%3Cellipse cx='540' cy='200' rx='2' ry='3' transform='rotate(-15 540 200)'/%3E%3Cellipse cx='160' cy='350' rx='2' ry='3' transform='rotate(45 160 350)'/%3E%3C/g%3E%3Cg fill='rgba(200,169,110,0.42)'%3E%3Ccircle cx='500' cy='80' r='2'/%3E%3Ccircle cx='80' cy='340' r='2'/%3E%3Ccircle cx='350' cy='350' r='1.5'/%3E%3Ccircle cx='50' cy='220' r='1.5'/%3E%3Ccircle cx='580' cy='350' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat;
-  background-size: auto, cover;
-  background-position: center, center;
+  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 60%);
+  background-repeat: no-repeat;
+  background-position: center;
   transform: translateY(0);
   will-change: transform;
   pointer-events: none;
 }
-html.is-page-entering::after {
-  /* Brand glyph riding the curtain */
-  content: 'SELEQT';
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 99999;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  letter-spacing: 0.22em;
-  color: var(--gold);
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.45s ease;
-}
 html.is-page-entering.is-page-entered::before {
   transform: translateY(100%);
   transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
-}
-html.is-page-entering.is-page-entered::after {
-  opacity: 0;
-  transition: opacity 0.35s ease;
 }
 
 /* 7 — Carousel number flip. The number inside .sc-index-current is rewrapped
@@ -3594,7 +3550,6 @@ html.intro-running .hero-wordmark-spotlight {
   .marquee-track { animation-duration: 0s !important; animation: none !important; }
   .page-transition-panel { transition: none !important; }
   html.is-page-entering::before { display: none !important; }
-  html.is-page-entering::after  { display: none !important; }
   .sc-index-flip { animation: none !important; }
   .btn-primary.magnetic, .btn-ghost.magnetic { transform: none !important; }
 }

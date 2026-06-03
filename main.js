@@ -744,86 +744,114 @@ function isInViewport(el) {
   (function() {
     if (reducedMotion) return;
 
-    // The same abstract floral artwork that style.css inlines as a static
-    // background-image on the inbound side. Here it lives as a real SVG in
-    // the DOM so its paths can animate via stroke-dasharray.
-    const CURTAIN_SVG = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
-        <g fill="none" stroke="rgba(200,169,110,0.3)" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M -20,80 Q 100,40 180,100 Q 250,150 280,220 Q 310,290 380,300 Q 460,310 540,280 Q 600,260 620,260"/>
-          <path d="M -20,380 Q 80,360 140,300 Q 200,240 260,250 Q 320,260 380,200 Q 440,140 520,140 Q 580,140 620,120"/>
-          <path d="M 620,40 Q 560,80 540,140 Q 520,180 480,180"/>
-          <g transform="translate(180 100)">
-            <circle r="2.5"/>
-            <path d="M 0,-7 C -4,-6 -6,-3 -6,1"/><path d="M 6,1 C 6,-3 4,-6 0,-7"/>
-            <path d="M -6,1 C -5,4 -2,7 1,7"/><path d="M 1,7 C 4,6 6,4 6,1"/>
-            <path d="M -9,-2 C -10,-7 -5,-11 0,-11"/><path d="M 0,-11 C 5,-11 10,-7 9,-2"/>
-            <path d="M 9,-2 C 10,3 6,9 1,10"/><path d="M 1,10 C -4,11 -10,8 -9,-2"/>
-          </g>
-          <g transform="translate(440 320)">
-            <circle r="2.2"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(45)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(90)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(135)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(180)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(225)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(270)"/>
-            <ellipse cx="0" cy="-7" rx="1.4" ry="4.5" transform="rotate(315)"/>
-          </g>
-          <g transform="translate(300 240)">
-            <path d="M 0,0 C -10,-3 -11,-22 0,-26 C 11,-22 10,-3 0,0 Z"/>
-            <path d="M -7,-15 C -3,-19 0,-19 0,-19"/>
-            <path d="M 7,-15 C 3,-19 0,-19 0,-19"/>
-          </g>
-          <g transform="translate(380 200)">
-            <circle r="3"/>
-            <path d="M -5,-3 C -5,-7 -2,-10 2,-10 C 6,-9 7,-5 5,-2"/>
-            <path d="M 5,-2 C 9,-4 12,-1 11,3 C 9,7 5,7 3,5"/>
-            <path d="M 3,5 C 6,9 3,12 -1,11 C -5,9 -5,4 -3,3"/>
-            <path d="M -3,3 C -7,4 -10,1 -8,-3 C -6,-6 -3,-6 -5,-3"/>
-            <ellipse cx="0" cy="-13" rx="3" ry="5"/>
-            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(72)"/>
-            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(144)"/>
-            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(216)"/>
-            <ellipse cx="0" cy="-13" rx="3" ry="5" transform="rotate(288)"/>
-          </g>
-          <path d="M 100,70 C 80,60 70,75 75,85 C 90,82 102,80 100,70 Z"/>
-          <path d="M 240,180 C 220,170 205,180 210,195 C 230,192 245,188 240,180 Z"/>
-          <path d="M 360,260 C 340,250 325,260 330,275 C 350,272 365,268 360,260 Z"/>
-          <path d="M 480,300 C 460,290 445,300 450,315 C 470,312 485,308 480,300 Z"/>
-          <path d="M 120,290 C 100,280 85,290 90,305 C 110,302 125,298 120,290 Z"/>
-          <path d="M 220,260 C 240,255 255,265 250,278 C 232,275 220,272 220,260 Z"/>
-          <path d="M 360,150 C 380,145 393,155 388,168 C 370,165 358,160 360,150 Z"/>
-          <path d="M 540,210 C 520,200 505,210 510,225 C 530,222 545,218 540,210 Z"/>
-          <ellipse cx="60" cy="120" rx="2" ry="3" transform="rotate(20 60 120)"/>
-          <ellipse cx="540" cy="200" rx="2" ry="3" transform="rotate(-15 540 200)"/>
-          <ellipse cx="160" cy="350" rx="2" ry="3" transform="rotate(45 160 350)"/>
+    /* ── Indian monuments — line-art SVGs ─────────────────────────────
+       Each transition picks one at random from this set. Single-stroke
+       paths drawn live via stroke-dasharray as the curtain covers the
+       screen. Designed at viewBox 600x400 with the architecture
+       centred so the line art sits at the middle of the curtain. */
+    const MONUMENTS = [
+      // 1 — Taj Mahal
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 70,355 L 530,355"/>
+          <path d="M 100,335 L 500,335"/>
+          <path d="M 144,335 L 144,182 L 166,182 L 166,335 Z"/>
+          <path d="M 141,182 Q 155,145 169,182"/>
+          <path d="M 155,142 L 155,120"/>
+          <path d="M 434,335 L 434,182 L 456,182 L 456,335 Z"/>
+          <path d="M 431,182 Q 445,145 459,182"/>
+          <path d="M 445,142 L 445,120"/>
+          <path d="M 200,335 L 200,248 L 400,248 L 400,335"/>
+          <path d="M 260,335 L 260,278 Q 260,255 300,255 Q 340,255 340,278 L 340,335"/>
+          <path d="M 245,248 L 245,228 L 355,228 L 355,248"/>
+          <path d="M 245,228 Q 245,148 300,105 Q 355,148 355,228"/>
+          <path d="M 300,105 L 300,72"/>
+          <path d="M 192,248 Q 192,212 213,202 Q 234,212 234,248"/>
+          <path d="M 213,202 L 213,188"/>
+          <path d="M 366,248 Q 366,212 387,202 Q 408,212 408,248"/>
+          <path d="M 387,202 L 387,188"/>
         </g>
-        <g fill="rgba(200,169,110,0.42)">
-          <circle cx="500" cy="80" r="2"/>
-          <circle cx="80" cy="340" r="2"/>
-          <circle cx="350" cy="350" r="1.5"/>
-          <circle cx="50" cy="220" r="1.5"/>
-          <circle cx="580" cy="350" r="1.5"/>
+      </svg>`,
+
+      // 2 — India Gate
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 80,358 L 520,358"/>
+          <path d="M 128,358 L 128,338 L 472,338 L 472,358"/>
+          <path d="M 150,338 L 150,313 L 450,313 L 450,338"/>
+          <path d="M 178,313 L 178,180"/>
+          <path d="M 422,313 L 422,180"/>
+          <path d="M 228,313 L 228,180"/>
+          <path d="M 372,313 L 372,180"/>
+          <path d="M 228,180 Q 228,108 300,108 Q 372,108 372,180"/>
+          <path d="M 168,180 L 432,180 L 432,162 L 168,162 Z"/>
+          <path d="M 193,162 L 407,162 L 407,140 L 193,140 Z"/>
+          <path d="M 210,140 L 210,118 L 390,118 L 390,140"/>
+          <path d="M 286,118 L 286,95 L 314,95 L 314,118"/>
+          <path d="M 300,95 L 300,75"/>
         </g>
-      </svg>`;
+      </svg>`,
+
+      // 3 — Qutub Minar
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 170,365 L 430,365"/>
+          <path d="M 210,365 L 210,342 L 390,342 L 390,365"/>
+          <path d="M 232,342 L 244,275 L 356,275 L 368,342 Z"/>
+          <path d="M 240,275 L 360,275"/>
+          <path d="M 244,265 L 356,265"/>
+          <path d="M 250,265 L 258,202 L 342,202 L 350,265"/>
+          <path d="M 254,202 L 346,202"/>
+          <path d="M 258,193 L 342,193"/>
+          <path d="M 262,193 L 268,145 L 332,145 L 338,193"/>
+          <path d="M 265,145 L 335,145"/>
+          <path d="M 269,136 L 331,136"/>
+          <path d="M 272,136 L 278,92 L 322,92 L 328,136"/>
+          <path d="M 278,92 Q 278,70 300,60 Q 322,70 322,92"/>
+          <path d="M 300,60 L 300,40"/>
+        </g>
+      </svg>`,
+
+      // 4 — Lotus Temple
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M 60,358 L 540,358"/>
+          <path d="M 100,335 L 500,335"/>
+          <path d="M 132,335 L 132,313 L 468,313 L 468,335"/>
+          <path d="M 282,305 Q 268,205 300,128 Q 332,205 318,305"/>
+          <path d="M 252,313 Q 232,225 272,140 Q 295,225 282,305"/>
+          <path d="M 348,313 Q 368,225 328,140 Q 305,225 318,305"/>
+          <path d="M 215,320 Q 170,250 222,158 Q 254,238 252,313"/>
+          <path d="M 385,320 Q 430,250 378,158 Q 346,238 348,313"/>
+          <path d="M 178,325 Q 125,270 162,198"/>
+          <path d="M 422,325 Q 475,270 438,198"/>
+          <path d="M 148,328 Q 138,318 144,308"/>
+          <path d="M 452,328 Q 462,318 456,308"/>
+        </g>
+      </svg>`
+    ];
+
+    function pickMonument() {
+      // Avoid repeating the same one back-to-back if we can help it.
+      const last = parseInt(sessionStorage.getItem('seleqt_last_monument') || '-1', 10);
+      let idx = Math.floor(Math.random() * MONUMENTS.length);
+      if (MONUMENTS.length > 1 && idx === last) {
+        idx = (idx + 1) % MONUMENTS.length;
+      }
+      try { sessionStorage.setItem('seleqt_last_monument', String(idx)); } catch (e) {}
+      return MONUMENTS[idx];
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'page-transition';
     const panel = document.createElement('div');
     panel.className = 'page-transition-panel';
 
-    // Floral artwork as a real DOM SVG so we can animate the paths.
+    // The art div is empty at startup; a fresh monument SVG is injected
+    // on each click so each transition shows a different one.
     const art = document.createElement('div');
     art.className = 'page-transition-art';
-    art.innerHTML = CURTAIN_SVG;
     panel.appendChild(art);
-
-    const glyph = document.createElement('span');
-    glyph.className = 'page-transition-glyph';
-    glyph.textContent = 'SELEQT';
-    panel.appendChild(glyph);
 
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
@@ -832,12 +860,15 @@ function isInViewport(el) {
     // stroke-dashoffset (= invisible), forces a reflow, then transitions
     // back to 0 with a small stagger per element so the artwork paints
     // on across the duration of the curtain slide.
+    // Tuned so total draw time (drawMs + staggerMs) ≈ 570ms — finishes
+    // about 180ms BEFORE the 750ms curtain finishes covering, so the
+    // monument sits "completed" for a beat before navigation fires.
     function animateCurtainDraw(svgEl) {
       const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
       if (!items.length) return;
       const lastIdx = Math.max(1, items.length - 1);
-      const drawMs = 520;
-      const staggerMs = 240;
+      const drawMs = 350;
+      const staggerMs = 220;
 
       // Snap every element to its initial invisible state with NO transition.
       items.forEach(el => {
@@ -889,11 +920,14 @@ function isInViewport(el) {
       leaving = true;
       // Hand-off flag for the entering page's pre-paint script
       try { sessionStorage.setItem('seleqt_transitioning', '1'); } catch (err) {}
+      // Inject a fresh random monument SVG into the art container so each
+      // transition shows a different piece.
+      art.innerHTML = pickMonument();
       overlay.classList.add('is-leaving');
-      // Trigger the live drawing of the floral artwork in parallel with
-      // the panel slide. The curtain takes ~750ms to cover; the drawing
-      // completes in ~520ms + ~240ms stagger ≈ 760ms, so the artwork
-      // finishes painting right as the curtain finishes sliding in.
+      // Trigger the live drawing of the monument in parallel with the
+      // panel slide. The curtain takes ~750ms to cover; the drawing
+      // completes in ~350ms + ~220ms stagger ≈ 570ms, so the monument
+      // finishes painting before the curtain finishes sliding in.
       const svgEl = art.querySelector('svg');
       if (svgEl) animateCurtainDraw(svgEl);
       // 750ms = the panel's transform transition (see .page-transition-panel)
