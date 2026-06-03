@@ -864,21 +864,18 @@ function isInViewport(el) {
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
 
-    // Live-drawing animation. Sets each strokeable element to its full
-    // stroke-dashoffset (= invisible), forces a reflow, then transitions
-    // back to 0 with a small stagger per element so the artwork paints
-    // on across the duration of the curtain slide.
+    // Live-drawing animation. Uses Web Animations API (Element.animate)
+    // rather than CSS transitions — necessary because the SVG is injected
+    // via innerHTML on every click. CSS transitions on freshly-inserted
+    // elements suffer from the "initial state never paints" problem where
+    // the browser collapses the invisible→visible writes into one frame,
+    // skipping the animation. Element.animate sidesteps that entirely:
+    // the animation is registered with the compositor and runs regardless
+    // of style commit ordering.
     //
-    // Tuned so total draw time (drawMs + staggerMs) ≈ 800ms — finishes
-    // ~300ms BEFORE the 1100ms curtain finishes covering, so the monument
-    // sits "completed" for a beat before navigation fires.
-    //
-    // We wrap the final-state writes in requestAnimationFrame because
-    // freshly-injected SVG paths (innerHTML happens on every click) need
-    // the browser to commit the initial "invisible" state in its own paint
-    // before we can transition to the visible state — otherwise the engine
-    // collapses both writes into one frame and the path appears already
-    // drawn with no animation.
+    // Total draw time (drawMs + staggerMs) ≈ 800ms — finishes ~300ms
+    // BEFORE the 1100ms curtain finishes covering, so the monument sits
+    // "completed" for a beat before navigation fires.
     function animateCurtainDraw(svgEl) {
       const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
       if (!items.length) return;
@@ -886,38 +883,43 @@ function isInViewport(el) {
       const drawMs = 500;
       const staggerMs = 300;
 
-      // Snap every element to its initial invisible state with NO transition.
-      items.forEach(el => {
+      items.forEach((el, i) => {
         let len = 0;
         try { len = el.getTotalLength ? el.getTotalLength() : 0; } catch (e) {}
-        // Fallback for elements where getTotalLength returns 0 (rare, but
-        // possible on degenerate paths). 2000 is longer than any path in
-        // our monument set, so the dash still fully covers it.
+        // Fallback for elements where getTotalLength returns 0. 2000 is
+        // longer than any path in our monument set, so the dash still
+        // fully hides it at full offset.
         if (!len || len <= 0) len = 2000;
-        el.style.strokeDasharray = len;
-        el.style.strokeDashoffset = len;
-        el.style.opacity = '0';
-        el.style.transition = 'none';
-      });
 
-      // Force the browser to commit the initial state before we change it
-      // again. getBoundingClientRect forces synchronous layout.
-      void svgEl.getBoundingClientRect();
+        // Set the dash-pattern as a presentation attribute (not inline style).
+        // The attribute defines the dash sizing; the animation modulates
+        // dashoffset to "draw" the path on by sliding the dash pattern.
+        el.setAttribute('stroke-dasharray', String(len));
 
-      // Two rAFs: first commits the layout/paint of the initial state,
-      // second writes the final state which then animates via the new
-      // transition.
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          items.forEach((el, i) => {
-            const delay = (i / lastIdx) * staggerMs;
-            el.style.transition =
-              'stroke-dashoffset ' + drawMs + 'ms cubic-bezier(0.22, 1, 0.36, 1) ' + delay + 'ms, ' +
-              'opacity ' + Math.round(drawMs * 0.6) + 'ms ease ' + delay + 'ms';
-            el.style.strokeDashoffset = '0';
-            el.style.opacity = '1';
-          });
-        });
+        const delay = (i / lastIdx) * staggerMs;
+
+        // fill: 'both' makes the FIRST keyframe apply during the delay
+        // window (so the path stays invisible until its turn) AND the LAST
+        // keyframe stick after the animation ends (so the path stays drawn).
+        try {
+          el.animate(
+            [
+              { strokeDashoffset: len, opacity: 0 },
+              { strokeDashoffset: 0,   opacity: 1 }
+            ],
+            {
+              duration: drawMs,
+              delay: delay,
+              easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              fill: 'both'
+            }
+          );
+        } catch (e) {
+          // Last-resort fallback for ancient browsers without
+          // Element.animate — just show the path.
+          el.style.opacity = '1';
+          el.style.strokeDashoffset = '0';
+        }
       });
     }
 
