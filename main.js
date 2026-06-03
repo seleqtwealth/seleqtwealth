@@ -744,193 +744,21 @@ function isInViewport(el) {
   (function() {
     if (reducedMotion) return;
 
-    /* ── Indian monuments — line-art SVGs ─────────────────────────────
-       Each transition picks one at random from this set. Single-stroke
-       paths drawn live via stroke-dasharray as the curtain covers the
-       screen. Designed at viewBox 600x400 with the architecture
-       centred so the line art sits at the middle of the curtain. */
-    const MONUMENTS = [
-      // 1 — Taj Mahal
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 70,355 L 530,355"/>
-          <path d="M 100,335 L 500,335"/>
-          <path d="M 144,335 L 144,182 L 166,182 L 166,335 Z"/>
-          <path d="M 141,182 Q 155,145 169,182"/>
-          <path d="M 155,142 L 155,120"/>
-          <path d="M 434,335 L 434,182 L 456,182 L 456,335 Z"/>
-          <path d="M 431,182 Q 445,145 459,182"/>
-          <path d="M 445,142 L 445,120"/>
-          <path d="M 200,335 L 200,248 L 400,248 L 400,335"/>
-          <path d="M 260,335 L 260,278 Q 260,255 300,255 Q 340,255 340,278 L 340,335"/>
-          <path d="M 245,248 L 245,228 L 355,228 L 355,248"/>
-          <path d="M 245,228 Q 245,148 300,105 Q 355,148 355,228"/>
-          <path d="M 300,105 L 300,72"/>
-          <path d="M 192,248 Q 192,212 213,202 Q 234,212 234,248"/>
-          <path d="M 213,202 L 213,188"/>
-          <path d="M 366,248 Q 366,212 387,202 Q 408,212 408,248"/>
-          <path d="M 387,202 L 387,188"/>
-        </g>
-      </svg>`,
-
-      // 2 — India Gate
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 80,358 L 520,358"/>
-          <path d="M 128,358 L 128,338 L 472,338 L 472,358"/>
-          <path d="M 150,338 L 150,313 L 450,313 L 450,338"/>
-          <path d="M 178,313 L 178,180"/>
-          <path d="M 422,313 L 422,180"/>
-          <path d="M 228,313 L 228,180"/>
-          <path d="M 372,313 L 372,180"/>
-          <path d="M 228,180 Q 228,108 300,108 Q 372,108 372,180"/>
-          <path d="M 168,180 L 432,180 L 432,162 L 168,162 Z"/>
-          <path d="M 193,162 L 407,162 L 407,140 L 193,140 Z"/>
-          <path d="M 210,140 L 210,118 L 390,118 L 390,140"/>
-          <path d="M 286,118 L 286,95 L 314,95 L 314,118"/>
-          <path d="M 300,95 L 300,75"/>
-        </g>
-      </svg>`,
-
-      // 3 — Qutub Minar
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 170,365 L 430,365"/>
-          <path d="M 210,365 L 210,342 L 390,342 L 390,365"/>
-          <path d="M 232,342 L 244,275 L 356,275 L 368,342 Z"/>
-          <path d="M 240,275 L 360,275"/>
-          <path d="M 244,265 L 356,265"/>
-          <path d="M 250,265 L 258,202 L 342,202 L 350,265"/>
-          <path d="M 254,202 L 346,202"/>
-          <path d="M 258,193 L 342,193"/>
-          <path d="M 262,193 L 268,145 L 332,145 L 338,193"/>
-          <path d="M 265,145 L 335,145"/>
-          <path d="M 269,136 L 331,136"/>
-          <path d="M 272,136 L 278,92 L 322,92 L 328,136"/>
-          <path d="M 278,92 Q 278,70 300,60 Q 322,70 322,92"/>
-          <path d="M 300,60 L 300,40"/>
-        </g>
-      </svg>`,
-
-      // 4 — Lotus Temple
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
-        <g fill="none" stroke="rgba(200,169,110,0.92)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M 60,358 L 540,358"/>
-          <path d="M 100,335 L 500,335"/>
-          <path d="M 132,335 L 132,313 L 468,313 L 468,335"/>
-          <path d="M 282,305 Q 268,205 300,128 Q 332,205 318,305"/>
-          <path d="M 252,313 Q 232,225 272,140 Q 295,225 282,305"/>
-          <path d="M 348,313 Q 368,225 328,140 Q 305,225 318,305"/>
-          <path d="M 215,320 Q 170,250 222,158 Q 254,238 252,313"/>
-          <path d="M 385,320 Q 430,250 378,158 Q 346,238 348,313"/>
-          <path d="M 178,325 Q 125,270 162,198"/>
-          <path d="M 422,325 Q 475,270 438,198"/>
-          <path d="M 148,328 Q 138,318 144,308"/>
-          <path d="M 452,328 Q 462,318 456,308"/>
-        </g>
-      </svg>`
-    ];
-
-    function pickMonument() {
-      // Avoid repeating the same one back-to-back if we can help it.
-      const last = parseInt(sessionStorage.getItem('seleqt_last_monument') || '-1', 10);
-      let idx = Math.floor(Math.random() * MONUMENTS.length);
-      if (MONUMENTS.length > 1 && idx === last) {
-        idx = (idx + 1) % MONUMENTS.length;
-      }
-      const svg = MONUMENTS[idx];
-      try {
-        sessionStorage.setItem('seleqt_last_monument', String(idx));
-        // Hand the chosen SVG to the entering page so its inbound curtain
-        // can render the same monument as a background-image until the
-        // curtain slides off (otherwise the art would visibly vanish at
-        // the moment of navigation).
-        sessionStorage.setItem('seleqt_monument', svg);
-      } catch (e) {}
-      return svg;
-    }
-
+    /* Outbound curtain — a deep-navy panel with a centred SELEQT wordmark
+       that travels as one piece with the panel (no separate fade-in for
+       the logo; it inherits the panel's transform). Inbound curtain on
+       the entering page is a CSS pseudo-element (see is-page-entering
+       ::before) that mirrors the same layout. */
     const overlay = document.createElement('div');
     overlay.className = 'page-transition';
     const panel = document.createElement('div');
     panel.className = 'page-transition-panel';
-
-    // The art div is empty at startup; a fresh monument SVG is injected
-    // on each click so each transition shows a different one.
-    const art = document.createElement('div');
-    art.className = 'page-transition-art';
-    panel.appendChild(art);
-
+    const logo = document.createElement('span');
+    logo.className = 'page-transition-logo';
+    logo.textContent = 'SELEQT';
+    panel.appendChild(logo);
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
-
-    // Live-drawing animation. Uses Web Animations API (Element.animate)
-    // rather than CSS transitions — necessary because the SVG is injected
-    // via innerHTML on every click. CSS transitions on freshly-inserted
-    // elements suffer from the "initial state never paints" problem where
-    // the browser collapses the invisible→visible writes into one frame,
-    // skipping the animation. Element.animate sidesteps that entirely:
-    // the animation is registered with the compositor and runs regardless
-    // of style commit ordering.
-    //
-    // Total draw time (drawMs + staggerMs) ≈ 800ms — finishes ~300ms
-    // BEFORE the 1100ms curtain finishes covering, so the monument sits
-    // "completed" for a beat before navigation fires.
-    function animateCurtainDraw(svgEl) {
-      const items = Array.from(svgEl.querySelectorAll('path, circle, ellipse'));
-      if (!items.length) return;
-      const lastIdx = Math.max(1, items.length - 1);
-      // Total draw window = drawMs + staggerMs. Slowed deliberately so the
-      // strokes paint on with a clearly visible rhythm.
-      const drawMs = 600;
-      const staggerMs = 300;
-
-      items.forEach((el, i) => {
-        let len = 0;
-        try { len = el.getTotalLength ? el.getTotalLength() : 0; } catch (e) {}
-        // Fallback for elements where getTotalLength returns 0. 2000 is
-        // longer than any path in our monument set, so the dash still
-        // fully hides it at full offset.
-        if (!len || len <= 0) len = 2000;
-
-        // CRITICAL: set BOTH dasharray AND dashoffset as presentation
-        // attributes. dasharray alone (with default dashoffset=0) leaves
-        // the path fully visible — the dash pattern starts at the beginning
-        // of the stroke. Setting dashoffset=len shifts the visible portion
-        // out into the gap, making the path invisible from the very first
-        // paint frame. Inline opacity=0 belt-and-braces.
-        el.setAttribute('stroke-dasharray', String(len));
-        el.setAttribute('stroke-dashoffset', String(len));
-        el.style.opacity = '0';
-
-        const delay = (i / lastIdx) * staggerMs;
-
-        // Animate from invisible to fully drawn. fill: 'forwards' keeps the
-        // last keyframe (dashoffset=0, opacity=1) applied after the
-        // animation ends, so the path stays drawn. Before delay elapses,
-        // there's no fill, so the attribute / inline-style initial state
-        // (invisible) applies.
-        try {
-          el.animate(
-            [
-              { strokeDashoffset: len, opacity: 0 },
-              { strokeDashoffset: 0,   opacity: 1 }
-            ],
-            {
-              duration: drawMs,
-              delay: delay,
-              easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-              fill: 'forwards'
-            }
-          );
-        } catch (e) {
-          // Last-resort fallback for ancient browsers without
-          // Element.animate — just show the path.
-          el.style.opacity = '1';
-          el.removeAttribute('stroke-dashoffset');
-        }
-      });
-    }
 
     let leaving = false;
     document.addEventListener('click', (e) => {
@@ -954,27 +782,13 @@ function isInViewport(el) {
       leaving = true;
       // Hand-off flag for the entering page's pre-paint script
       try { sessionStorage.setItem('seleqt_transitioning', '1'); } catch (err) {}
-      // Inject a fresh random monument SVG into the art container so each
-      // transition shows a different piece. pickMonument also persists
-      // the chosen SVG to sessionStorage so the entering page can render
-      // the same monument on its inbound curtain.
-      art.innerHTML = pickMonument();
       overlay.classList.add('is-leaving');
       // Choreography:
-      //   0ms    — panel begins sliding down (transition: 600ms)
-      //   600ms  — panel fully covers screen
-      //   650ms  — drawing animation starts on the fully-static panel
-      //   1550ms — drawing animation completes (650ms + ~900ms)
-      //   1850ms — navigate (300ms hold so the completed monument breathes
-      //            on screen before the page changes)
-      // Total before navigation: 1850ms. This makes the drawing the focal
-      // moment of the transition — happens on a stable, fully-visible
-      // stage rather than competing with the slide motion.
-      const svgEl = art.querySelector('svg');
-      setTimeout(() => {
-        if (svgEl) animateCurtainDraw(svgEl);
-      }, 650);
-      setTimeout(() => { window.location.href = href; }, 1850);
+      //   0ms    — panel begins sliding down (transition: 750ms)
+      //   750ms  — panel fully covers screen
+      //   900ms  — navigate (150ms hold so the panel settles before the
+      //            new page takes over and inbound slide-off begins)
+      setTimeout(() => { window.location.href = href; }, 900);
     });
 
     // bfcache: if user comes back via back/forward, drop the curtain instantly

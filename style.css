@@ -3405,40 +3405,38 @@ html.intro-running .hero-scroll-hint {
 .page-transition-panel {
   position: absolute;
   inset: 0;
-  /* Outbound panel = solid navy with a soft radial glow at centre that
-     gently haloes the monument line art. The monument SVG itself lives
-     as a child element (.page-transition-art) and animates in via
-     stroke-dasharray — see main.js animateCurtainDraw(). */
+  /* Outbound panel — deep navy with a soft radial gold glow at centre to
+     halo the SELEQT wordmark. Centres the wordmark with flex so it sits
+     dead-centre regardless of viewport size. The wordmark is a child of
+     the panel, so it inherits the panel's transform and slides as one
+     piece — no separate fade-in. */
   background-color: var(--ink);
-  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.16) 0%, transparent 60%);
+  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.22) 0%, transparent 65%);
   background-repeat: no-repeat;
   background-position: center;
-  transform: translateY(-100%);
-  will-change: transform;
-  /* Fast slide so the panel is fully covering by the time the monument
-     starts drawing (see main.js — drawing is delayed until ~650ms).
-     That makes the drawing happen on a static, fully-visible stage
-     instead of competing with the slide motion. */
-  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
-}
-
-/* Container for the live-drawn monument SVG. Centred within the panel
-   at a comfortable size — large enough to read as architecture, not so
-   large it dominates the curtain. */
-.page-transition-art {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateY(-100%);
+  will-change: transform;
+  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* SELEQT wordmark — bold Cormorant, generous letter-spacing for the
+   editorial brand voice, warm gold against the navy. Sized to feel like
+   a credit page or chapter break, not a watermark. */
+.page-transition-logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: 0.24em;
+  color: var(--gold-light);
+  /* The letter-spacing nudges visual centre to the right; this offsets it. */
+  padding-left: 0.24em;
+  user-select: none;
   pointer-events: none;
 }
-.page-transition-art svg {
-  width: clamp(280px, 42vw, 560px);
-  height: auto;
-  max-height: 60vh;
-  display: block;
-}
+
 .page-transition.is-leaving .page-transition-panel {
   transform: translateY(0);
 }
@@ -3457,32 +3455,34 @@ html.is-page-entering body {
   pointer-events: none;
 }
 html.is-page-entering::before {
-  content: '';
+  /* Inbound curtain — visually identical to the outbound panel, including
+     the SELEQT wordmark, so the navigation reads as one continuous moment.
+     'content' renders the wordmark; flex centres it; the rest mirrors the
+     outbound .page-transition-panel styling. */
+  content: 'SELEQT';
   position: fixed;
   inset: 0;
   z-index: 99998;
-  /* Inbound curtain — solid navy + the SAME monument that was drawn on
-     the outbound side, passed across the navigation as a CSS custom
-     property (--curtain-monument) by the pre-paint script in <head>.
-     This keeps the monument visible until the curtain finishes sliding
-     off the bottom — otherwise the art would vanish at the moment of
-     navigation. Falls back to no monument on direct landings. */
   background-color: var(--ink);
-  background-image:
-    var(--curtain-monument, none),
-    radial-gradient(ellipse at center, rgba(200, 169, 110, 0.14) 0%, transparent 60%);
-  background-size:
-    clamp(280px, 42vw, 560px) auto,
-    auto;
-  background-repeat: no-repeat, no-repeat;
-  background-position: center, center;
+  background-image: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.22) 0%, transparent 65%);
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: 0.24em;
+  padding-left: 0.24em;
+  color: var(--gold-light);
   transform: translateY(0);
   will-change: transform;
   pointer-events: none;
 }
 html.is-page-entering.is-page-entered::before {
   transform: translateY(100%);
-  transition: transform 1.1s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 0.75s cubic-bezier(0.7, 0, 0.2, 1);
 }
 
 /* 7 — Carousel number flip. The number inside .sc-index-current is rewrapped

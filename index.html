@@ -72,23 +72,12 @@
   </script>
   <!-- Page-transition pre-paint: if we arrived via the outbound curtain, mark
        the document so CSS can show the curtain in its 'covering' state from
-       first paint, with no flash. Also pulls the chosen monument SVG out of
-       sessionStorage (set by the outbound page) and exposes it as the
-       --curtain-monument CSS custom property so the inbound curtain renders
-       the same artwork as a background-image until it slides off. -->
+       first paint, with no flash. Cleared again by main.js once it exits. -->
   <script>
     (function() {
       if (sessionStorage.getItem('seleqt_transitioning')) {
         document.documentElement.classList.add('is-page-entering');
         sessionStorage.removeItem('seleqt_transitioning');
-        var svg = sessionStorage.getItem('seleqt_monument');
-        if (svg) {
-          try {
-            document.documentElement.style.setProperty('--curtain-monument',
-              'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")');
-          } catch (e) {}
-          sessionStorage.removeItem('seleqt_monument');
-        }
       }
     })();
   </script>
