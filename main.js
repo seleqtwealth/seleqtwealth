@@ -891,16 +891,23 @@ function isInViewport(el) {
         // fully hides it at full offset.
         if (!len || len <= 0) len = 2000;
 
-        // Set the dash-pattern as a presentation attribute (not inline style).
-        // The attribute defines the dash sizing; the animation modulates
-        // dashoffset to "draw" the path on by sliding the dash pattern.
+        // CRITICAL: set BOTH dasharray AND dashoffset as presentation
+        // attributes. dasharray alone (with default dashoffset=0) leaves
+        // the path fully visible — the dash pattern starts at the beginning
+        // of the stroke. Setting dashoffset=len shifts the visible portion
+        // out into the gap, making the path invisible from the very first
+        // paint frame. Inline opacity=0 belt-and-braces.
         el.setAttribute('stroke-dasharray', String(len));
+        el.setAttribute('stroke-dashoffset', String(len));
+        el.style.opacity = '0';
 
         const delay = (i / lastIdx) * staggerMs;
 
-        // fill: 'both' makes the FIRST keyframe apply during the delay
-        // window (so the path stays invisible until its turn) AND the LAST
-        // keyframe stick after the animation ends (so the path stays drawn).
+        // Animate from invisible to fully drawn. fill: 'forwards' keeps the
+        // last keyframe (dashoffset=0, opacity=1) applied after the
+        // animation ends, so the path stays drawn. Before delay elapses,
+        // there's no fill, so the attribute / inline-style initial state
+        // (invisible) applies.
         try {
           el.animate(
             [
@@ -911,14 +918,14 @@ function isInViewport(el) {
               duration: drawMs,
               delay: delay,
               easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-              fill: 'both'
+              fill: 'forwards'
             }
           );
         } catch (e) {
           // Last-resort fallback for ancient browsers without
           // Element.animate — just show the path.
           el.style.opacity = '1';
-          el.style.strokeDashoffset = '0';
+          el.removeAttribute('stroke-dashoffset');
         }
       });
     }
