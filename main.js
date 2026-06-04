@@ -919,52 +919,60 @@ function isInViewport(el) {
 })();
 
 /* ============================================================================
-   CROSS-BORDER CONSTELLATION — full-viewport hero background
-   A custom vanilla-canvas particle network for the sub-page heroes. Gold
-   nodes drift in loose clusters arranged like a world map (Americas, Europe,
-   Gulf, India, SE Asia — India densest as "home"), linked by faint threads.
-   The cursor draws bright filaments to nearby nodes and gently attracts
-   them — the network "reaches" for you. Evokes wealth connected across
-   borders. No library; ~60-80 nodes; pauses when scrolled out of view.
-   Bails on prefers-reduced-motion.
+   ARMILLARY SPHERE — 3D hero instrument
+   A real-3D gold wireframe armillary sphere (three interlocking great-circle
+   rings + an inner ring, with markers orbiting each) rendered on canvas with
+   perspective projection. It rotates slowly on its own; moving the cursor
+   "turns" the whole instrument in space (eased rotation offset). Depth is
+   conveyed by per-segment opacity — rings nearer the viewer glow brighter.
+   Evokes precision, navigation and global reach for "Wealth, Structured."
+   No library. Pauses when scrolled out of view. Bails on reduced-motion.
    ============================================================================ */
-(function constellation() {
+(function armillaryHero() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) return;
 
   const hosts = Array.from(document.querySelectorAll('.sub-hero'));
   if (!hosts.length) return;
 
-  // Fewer nodes on small screens to keep the O(n^2) link pass cheap.
-  const small = window.matchMedia('(max-width: 720px)').matches;
+  hosts.forEach(initArmillary);
 
-  // Loose world-map cluster centres (normalised 0-1). India densest.
-  const CLUSTERS = small
-    ? [ {x:0.22,y:0.42,n:4}, {x:0.5,y:0.5,n:5}, {x:0.74,y:0.55,n:7} ]
-    : [
-        { x: 0.15, y: 0.44, n: 9 },   // Americas
-        { x: 0.39, y: 0.33, n: 8 },   // Europe / UK
-        { x: 0.55, y: 0.54, n: 7 },   // Gulf
-        { x: 0.70, y: 0.50, n: 13 },  // India (home — densest)
-        { x: 0.87, y: 0.62, n: 7 }    // SE Asia / Singapore
-      ];
-  const FREE = small ? 8 : 16;        // scattered fill nodes
-  const LINK_DIST = small ? 90 : 130; // node↔node link distance (px)
-  const MOUSE_DIST = 200;             // cursor link distance (px)
-
-  hosts.forEach(initConstellation);
-
-  function initConstellation(host) {
+  function initArmillary(host) {
     const canvas = document.createElement('canvas');
-    canvas.className = 'constellation-canvas';
+    canvas.className = 'hero-3d-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     host.insertBefore(canvas, host.firstChild);
     const ctx = canvas.getContext('2d');
 
-    let W = 0, H = 0, dpr = 1;
-    let nodes = [];
-    const mouse = { x: -9999, y: -9999, active: false };
+    let W = 0, H = 0, dpr = 1, R = 200;
     let raf = null;
+    let autoRot = 0;
+    const target = { rx: 0, ry: 0 };    // cursor-driven rotation offset
+    const current = { rx: 0, ry: 0 };   // eased toward target
+
+    // Each ring is a closed loop of unit-3D points on a great circle in a
+    // given plane. Three orthogonal rings read as a sphere; the inner ring
+    // adds depth. Markers travel along each ring at their own pace.
+    const N = 80;
+    function ring(radius, plane) {
+      const pts = [];
+      for (let i = 0; i <= N; i++) {
+        const a = (i / N) * Math.PI * 2;
+        const c = Math.cos(a) * radius, s = Math.sin(a) * radius;
+        if (plane === 'xz') pts.push({ x: c, y: 0, z: s });
+        else if (plane === 'xy') pts.push({ x: c, y: s, z: 0 });
+        else pts.push({ x: 0, y: c, z: s }); // 'yz'
+      }
+      return pts;
+    }
+    const rings = [
+      { pts: ring(1.00, 'xz'), phase: 0.0, speed: 0.0042 },
+      { pts: ring(1.00, 'xy'), phase: 2.1, speed: -0.0034 },
+      { pts: ring(1.00, 'yz'), phase: 4.2, speed: 0.0038 },
+      { pts: ring(0.60, 'xz'), phase: 1.0, speed: -0.0055 }
+    ];
+
+    const FOV = 3.2; // perspective strength, in ring-radius units
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -975,97 +983,81 @@ function isInViewport(el) {
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      build();
+      R = Math.min(W, H) * 0.34;
     }
 
-    function makeNode(x, y) {
-      return {
-        x, y,
-        vx: (Math.random() - 0.5) * 0.16,
-        vy: (Math.random() - 0.5) * 0.16,
-        r: Math.random() * 1.3 + 0.7
-      };
+    // Rotate a point around Y then X.
+    function rot(p, rx, ry) {
+      const cy = Math.cos(ry), sy = Math.sin(ry);
+      const x1 = p.x * cy + p.z * sy;
+      const z1 = -p.x * sy + p.z * cy;
+      const cx = Math.cos(rx), sx = Math.sin(rx);
+      const y1 = p.y * cx - z1 * sx;
+      const z2 = p.y * sx + z1 * cx;
+      return { x: x1, y: y1, z: z2 };
     }
-
-    function build() {
-      nodes = [];
-      const spread = 0.085;
-      CLUSTERS.forEach(c => {
-        for (let i = 0; i < c.n; i++) {
-          const x = (c.x + (Math.random() - 0.5) * spread * 2) * W;
-          const y = (c.y + (Math.random() - 0.5) * spread * 2) * H;
-          nodes.push(makeNode(x, y));
-        }
-      });
-      for (let i = 0; i < FREE; i++) nodes.push(makeNode(Math.random() * W, Math.random() * H));
+    function project(p) {
+      const scale = FOV / (FOV - p.z);
+      return { x: W / 2 + p.x * R * scale, y: H / 2 + p.y * R * scale, z: p.z };
     }
 
     function frame() {
       ctx.clearRect(0, 0, W, H);
+      autoRot += 0.0026;
+      current.rx += (target.rx - current.rx) * 0.06;
+      current.ry += (target.ry - current.ry) * 0.06;
 
-      // Drift + soft edge wrap
-      for (const n of nodes) {
-        n.x += n.vx; n.y += n.vy;
-        if (n.x < -24) n.x = W + 24; else if (n.x > W + 24) n.x = -24;
-        if (n.y < -24) n.y = H + 24; else if (n.y > H + 24) n.y = -24;
-      }
+      const rx = -0.32 + current.rx;       // slight forward tilt + cursor
+      const ry = autoRot + current.ry;
 
-      // Node-to-node threads
-      for (let i = 0; i < nodes.length; i++) {
-        const a = nodes[i];
-        for (let j = i + 1; j < nodes.length; j++) {
-          const b = nodes[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < LINK_DIST * LINK_DIST) {
-            const op = (1 - Math.sqrt(d2) / LINK_DIST) * 0.24;
-            ctx.strokeStyle = 'rgba(200, 169, 110, ' + op.toFixed(3) + ')';
-            ctx.lineWidth = 0.6;
+      ctx.lineWidth = 1;
+      for (const rg of rings) {
+        let prev = null, prevZ = 0;
+        for (let i = 0; i < rg.pts.length; i++) {
+          const rp = rot(rg.pts[i], rx, ry);
+          const pr = project(rp);
+          if (prev) {
+            const d = ((rp.z + prevZ) / 2 + 1) / 2;     // 0 (far) .. 1 (near)
+            const op = 0.10 + d * 0.52;
+            ctx.strokeStyle = 'rgba(200,169,110,' + op.toFixed(3) + ')';
             ctx.beginPath();
-            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            ctx.moveTo(prev.x, prev.y);
+            ctx.lineTo(pr.x, pr.y);
+            ctx.stroke();
           }
+          prev = pr; prevZ = rp.z;
         }
+        // Orbiting marker
+        rg.phase += rg.speed;
+        let t = (((rg.phase % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) / (2 * Math.PI);
+        const mi = Math.floor(t * N) % N;
+        const mp = rot(rg.pts[mi], rx, ry);
+        const mpr = project(mp);
+        const md = (mp.z + 1) / 2;
+        ctx.fillStyle = 'rgba(212,176,106,' + (0.45 + md * 0.55).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(mpr.x, mpr.y, 2 + md * 1.8, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      // Cursor filaments + gentle attraction
-      if (mouse.active) {
-        for (const n of nodes) {
-          const dx = n.x - mouse.x, dy = n.y - mouse.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < MOUSE_DIST * MOUSE_DIST) {
-            const d = Math.sqrt(d2) || 1;
-            const t = 1 - d / MOUSE_DIST;
-            ctx.strokeStyle = 'rgba(212, 176, 106, ' + (t * 0.6).toFixed(3) + ')';
-            ctx.lineWidth = 0.85;
-            ctx.beginPath();
-            ctx.moveTo(n.x, n.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
-            n.x -= (dx / d) * t * 0.35;
-            n.y -= (dy / d) * t * 0.35;
-          }
-        }
-        // Soft node at the cursor itself
-        ctx.fillStyle = 'rgba(212, 176, 106, 0.9)';
-        ctx.beginPath(); ctx.arc(mouse.x, mouse.y, 2.2, 0, Math.PI * 2); ctx.fill();
-      }
-
-      // Nodes
-      ctx.fillStyle = 'rgba(200, 169, 110, 0.72)';
-      for (const n of nodes) {
-        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
-      }
+      // Faint core
+      ctx.fillStyle = 'rgba(212,176,106,0.45)';
+      ctx.beginPath();
+      ctx.arc(W / 2, H / 2, 2, 0, Math.PI * 2);
+      ctx.fill();
 
       raf = requestAnimationFrame(frame);
     }
 
     host.addEventListener('mousemove', (e) => {
       const rect = host.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-      mouse.active = true;
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 .. 0.5
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      target.ry = nx * 1.1;
+      target.rx = ny * 0.8;
     });
-    host.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; });
+    host.addEventListener('mouseleave', () => { target.rx = 0; target.ry = 0; });
 
-    // Pause the loop when the hero is scrolled out of view (perf + battery).
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) { if (raf === null) raf = requestAnimationFrame(frame); }

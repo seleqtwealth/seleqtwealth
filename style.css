@@ -4044,12 +4044,12 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
-   CROSS-BORDER CONSTELLATION — full-viewport sub-page heroes
-   The sub-hero becomes a true full-screen landing with the JS-driven
-   constellation canvas (see main.js) behind the centred title. A scroll
+   ARMILLARY SPHERE — full-viewport sub-page heroes
+   The sub-hero becomes a true full-screen landing with the JS-driven 3D
+   armillary-sphere canvas (see main.js) behind the centred title. A scroll
    cue at the bottom signals there's more below the fold.
    ============================================ */
-.constellation-canvas {
+.hero-3d-canvas {
   position: absolute;
   inset: 0;
   z-index: 1;          /* above the grid/glow pseudos, below the content */
