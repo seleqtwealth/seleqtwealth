@@ -977,7 +977,35 @@ function isInViewport(el) {
       sq.style.top = (row * CELL) + 'px';
       hero.appendChild(sq);
       sq.addEventListener('animationend', () => sq.remove());
-      setTimeout(() => { if (sq.parentNode) sq.remove(); }, 1100);
+      setTimeout(() => { if (sq.parentNode) sq.remove(); }, 2000);
+    });
+  });
+})();
+
+/* ── Hero grid shooting-star streaks ─────────────────────
+   Injects a handful of thin gold "comet" lines that drift diagonally across
+   the grid on a continuous loop. Staggered tops, angles, lengths, durations
+   and delays keep the movement abstract and asymmetric rather than a tidy
+   parallel sweep. Disabled under prefers-reduced-motion (CSS hides them too). */
+(function heroGridStreaks() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
+  const configs = [
+    { top: '16%', angle: '-22deg', len: 200, dur: 7.5, delay: 0 },
+    { top: '44%', angle: '-7deg',  len: 150, dur: 6,   delay: 2.4 },
+    { top: '66%', angle: '-34deg', len: 230, dur: 9,   delay: 4.2 },
+    { top: '82%', angle: '11deg',  len: 130, dur: 5.5, delay: 1.2 }
+  ];
+  document.querySelectorAll('.sub-hero').forEach(hero => {
+    configs.forEach(c => {
+      const s = document.createElement('div');
+      s.className = 'grid-streak';
+      s.style.top = c.top;
+      s.style.setProperty('--angle', c.angle);
+      s.style.setProperty('--len', c.len + 'px');
+      s.style.animationDuration = c.dur + 's';
+      s.style.animationDelay = c.delay + 's';
+      hero.appendChild(s);
     });
   });
 })();
