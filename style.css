@@ -4020,6 +4020,146 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
+   PREMIUM 3D — universal card tilt + section cursor glow
+   The JS in main.js (premium3D IIFE) writes inline transforms on tilted
+   cards and updates --glow-x / --glow-y on glow sections. This block
+   sets up the supporting CSS — perspective, transitions, pseudo-element
+   glow render — without overriding the existing component styling.
+   ============================================ */
+
+/* Tilted cards need preserve-3d so the rotation actually feels 3D
+   (children sit in the rotated plane) and overflow doesn't clip the
+   subtle elevation shadow during tilt. */
+.team-card,
+.feature-item,
+.about-principle,
+.insight-card--featured,
+.insight-upcoming,
+.stat {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Cursor-following gold radial glow. The host section gets
+   `.has-cursor-glow` from JS; the ::after pseudo paints a soft radial
+   gradient at the JS-tracked cursor position. Fades in on hover. */
+.has-cursor-glow {
+  position: relative;
+  isolation: isolate;
+}
+.has-cursor-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    640px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(200, 169, 110, 0.075),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.55s var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+.has-cursor-glow:hover::after { opacity: 1; }
+/* Keep direct children above the glow so their content stays crisp. */
+.has-cursor-glow > * { position: relative; z-index: 1; }
+
+/* ============================================
+   FEATURED BLOG CARD — magazine cover restyle
+   Bumps the otherwise-minimal featured card into a "this is the cover
+   piece of this issue" presentation: paper card, soft floating shadow,
+   gold left rail, generous padding, decorative issue marker top-right.
+   Tilt + lift come from the universal premium3D tilt above.
+   ============================================ */
+.insight-card--featured {
+  background: var(--paper);
+  padding: 56px 56px 48px;
+  margin-bottom: 84px;
+  border-bottom: none;
+  box-shadow:
+    0 32px 64px -34px rgba(10, 26, 53, 0.22),
+    0 12px 32px -18px rgba(10, 26, 53, 0.12);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.5s var(--ease-out);
+}
+/* Gold left rail — a sharper version of the existing top-left accent
+   that runs the full height of the card. */
+.insight-card--featured::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--gold);
+}
+/* "No. 01" issue marker top-right. Auto-counted via CSS so future
+   articles get No. 02, 03, … without manual updating. */
+.insights-inner { counter-reset: featured-counter; }
+.insight-card--featured::after {
+  counter-increment: featured-counter;
+  content: 'No. ' counter(featured-counter, decimal-leading-zero);
+  position: absolute;
+  top: 32px; right: 36px;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.62;
+  z-index: 2;
+}
+.insight-card--featured:hover {
+  box-shadow:
+    0 44px 96px -34px rgba(10, 26, 53, 0.28),
+    0 18px 48px -20px rgba(10, 26, 53, 0.18);
+}
+@media (max-width: 768px) {
+  .insight-card--featured { padding: 36px 28px 32px; }
+  .insight-card--featured::after { top: 20px; right: 24px; }
+}
+
+/* ============================================
+   ARTICLE BODY — editorial polish
+   Drop cap on the first body paragraph (classic editorial flourish),
+   row-hover on tables, slightly more dramatic blockquote.
+   ============================================ */
+
+/* Drop cap — large gold Cormorant initial on the first body paragraph.
+   :first-of-type targets the first <p> child of .article-body's
+   container, ignoring any preceding non-paragraph elements. */
+.article-body .container > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 4.6em;
+  float: left;
+  line-height: 0.86;
+  margin: 0.08em 0.14em 0 -0.04em;
+  color: var(--gold);
+  padding: 0;
+}
+
+/* Table rows tint subtly toward gold on hover */
+.article-body table tbody tr {
+  transition: background 0.25s var(--ease-out);
+}
+.article-body table tbody tr:hover {
+  background: rgba(200, 169, 110, 0.05);
+}
+
+/* Slightly deeper blockquote — the gold rule grows on hover to telegraph
+   that it's a notable pull-quote. */
+.article-body blockquote {
+  transition: border-left-width 0.4s var(--ease-out), padding-left 0.4s var(--ease-out);
+}
+.article-body blockquote:hover {
+  border-left-width: 4px;
+  padding-left: 2em;
+}
+
+/* ============================================
    WHATSAPP FLOATING BUTTON
    Injected by main.js. Fixed bottom-right, doesn't conflict with the
    .floating-back link (top-left). Uses WhatsApp brand green.

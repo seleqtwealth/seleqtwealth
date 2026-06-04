@@ -823,6 +823,136 @@ function isInViewport(el) {
   })();
 })();
 
+/* ============================================================================
+   PREMIUM 3D — site-wide depth & cursor interactivity
+   Subtle 3D tilt on cards, cursor-following gold glow on section headers,
+   and a parallax shadow on sub-page H1s. Designed to feel "luxury brand"
+   rather than "gimmick" — small angles, soft glows, smooth easing.
+   Bails on touch and prefers-reduced-motion.
+   ============================================================================ */
+(function premium3D() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  if (reducedMotion || isCoarse) return;
+
+  /* ── Universal card tilt ────────────────────────────────────────────
+     Cards across the site get a subtle 3D rotation following the cursor,
+     plus a small lift. Max ~5–6° feels refined; anything more reads as
+     a toy. Combined inline transform keeps the existing hover lift while
+     adding the rotation on top. */
+  function applyTilt(card, maxTilt, liftPx) {
+    let rect = null;
+    let rafId = null;
+    let cx = 0, cy = 0;
+
+    function update() {
+      const rotY = (cx - 0.5) * maxTilt * 2;
+      const rotX = -(cy - 0.5) * maxTilt * 2;
+      card.style.transform =
+        'perspective(1200px) rotateX(' + rotX.toFixed(2) + 'deg)' +
+        ' rotateY(' + rotY.toFixed(2) + 'deg)' +
+        ' translateY(' + liftPx + 'px) translateZ(0)';
+      rafId = null;
+    }
+
+    card.addEventListener('mouseenter', () => {
+      rect = card.getBoundingClientRect();
+      // Faster transition when entering so the tilt tracks the cursor
+      // tightly; slower transition on leave so the reset feels smooth.
+      card.style.transition = 'transform 0.16s var(--ease-out), box-shadow 0.4s var(--ease-out)';
+    });
+    card.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      cx = (e.clientX - rect.left) / rect.width;
+      cy = (e.clientY - rect.top) / rect.height;
+      if (rafId === null) rafId = requestAnimationFrame(update);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.55s var(--ease-out), box-shadow 0.55s var(--ease-out)';
+      card.style.transform = '';
+      rect = null;
+      if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+    });
+  }
+
+  // Each tilt-target gets a tuned maxTilt (degrees) and liftPx (-px to lift).
+  [
+    ['.team-card',                 5, -4],
+    ['.feature-item',              5, -3],
+    ['.about-principle',           5, -3],
+    ['.insight-card--featured',    4, -6],
+    ['.insight-upcoming',          4, -2],
+    ['.stat',                      4, -2]
+  ].forEach(([selector, maxTilt, liftPx]) => {
+    document.querySelectorAll(selector).forEach(card => applyTilt(card, maxTilt, liftPx));
+  });
+
+  /* ── Cursor-following gold glow on major section blocks ─────────────
+     A soft radial gold gradient that follows the cursor inside each
+     major section. Same family as the hero's parallax glow but tuned
+     subtler — ornamental rather than focal. CSS does the actual
+     rendering via a pseudo-element; JS just writes --glow-x/--glow-y. */
+  const glowSelectors = [
+    '.sub-hero',
+    '.about-strip',
+    '.stats-strip',
+    '.services-carousel',
+    '.team-section',
+    '.contact-section',
+    '.insights-list',
+    '.article-header'
+  ].join(', ');
+
+  document.querySelectorAll(glowSelectors).forEach(sec => {
+    sec.classList.add('has-cursor-glow');
+    let rafId = null;
+    let lx = 50, ly = 50;
+
+    function commit() {
+      sec.style.setProperty('--glow-x', lx + '%');
+      sec.style.setProperty('--glow-y', ly + '%');
+      rafId = null;
+    }
+
+    sec.addEventListener('mousemove', (e) => {
+      const r = sec.getBoundingClientRect();
+      lx = ((e.clientX - r.left) / r.width) * 100;
+      ly = ((e.clientY - r.top) / r.height) * 100;
+      if (rafId === null) rafId = requestAnimationFrame(commit);
+    });
+  });
+
+  /* ── Sub-hero H1 depth shadow ───────────────────────────────────────
+     The home hero already has a cursor-tracking spotlight on its
+     wordmark. Sub-page H1s (about, investments, etc.) get a softer
+     version — a gold drop-shadow whose offset shifts subtly with the
+     cursor. Adds depth without competing with the heading itself. */
+  document.querySelectorAll('.sub-hero').forEach(hero => {
+    const h1 = hero.querySelector('h1');
+    if (!h1) return;
+    let rafId = null;
+    let tx = 0, ty = 0;
+
+    function commit() {
+      h1.style.textShadow =
+        tx.toFixed(1) + 'px ' + ty.toFixed(1) + 'px 36px rgba(184, 146, 78, 0.18)';
+      rafId = null;
+    }
+
+    hero.addEventListener('mousemove', (e) => {
+      const r = hero.getBoundingClientRect();
+      const cx = ((e.clientX - r.left) - r.width / 2) / r.width;   // -0.5..0.5
+      const cy = ((e.clientY - r.top) - r.height / 2) / r.height;
+      tx = cx * 14;
+      ty = cy * 14;
+      if (rafId === null) rafId = requestAnimationFrame(commit);
+    });
+    hero.addEventListener('mouseleave', () => {
+      h1.style.textShadow = '';
+    });
+  });
+})();
+
 // ── Auto-year copyright ─────────────────────
 // Every footer has <span class="footer-year">2026</span> — keep the year
 // fresh automatically so it doesn't go stale on Jan 1.
