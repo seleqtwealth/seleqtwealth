@@ -1903,9 +1903,9 @@ a, button { cursor: none; }
   min-height: 100svh;      /* full viewport — the only thing visible on load */
   display: flex;
   align-items: center;
-  /* Large bottom padding lifts the centred heading into the upper area so it
-     sits clear above the corporate building that occupies the lower band. */
-  padding: 110px 0 40vh;
+  /* Heading sits centred in the full-viewport hero; the tracking hairline
+     plays across the whole space behind it. */
+  padding: 130px 0 120px;
   position: relative;
   overflow: hidden;
   background: var(--ink);
@@ -2905,7 +2905,7 @@ body > footer.footer .footer-bottom {
   /* ── SUB-PAGE HEROES (about, services) ───────────────────────────────── */
   /* Keep the full-viewport landing on mobile too (100svh accounts for the
      browser chrome so the hero isn't cut off behind the URL bar). */
-  .sub-hero { padding: 96px 24px 40vh !important; min-height: 100svh !important; }
+  .sub-hero { padding: 110px 24px 90px !important; min-height: 100svh !important; }
   .sub-hero-content { padding: 0 !important; }
   .sub-hero h1 { font-size: clamp(2.4rem, 9.5vw, 3.4rem) !important; line-height: 1.08 !important; }
   .sub-hero p.lead { font-size: 1.05rem !important; max-width: 100% !important; margin-top: 32px !important; line-height: 1.65 !important; }
@@ -4046,18 +4046,45 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
-   CORPORATE PAVILION — full-viewport sub-page heroes
-   The sub-hero becomes a true full-screen landing with the JS-driven
-   interactive architectural-elevation canvas (see main.js) grounded in the
-   lower band, the heading lifted clear above it. A scroll cue at the bottom
-   signals there's more below the fold.
+   HERO HAIRLINE — minimal cursor interaction on full-viewport heroes
+   A thin gold vertical line (with a small leading node dot) glides across
+   the sub-page hero following the cursor, like a precision ruler. The line
+   trails slightly behind the dot for a quiet sense of motion. Injected by
+   main.js (heroHairline). z-index 1 keeps it below the heading content (2).
    ============================================ */
-.hero-3d-canvas {
+.hero-hairline {
   position: absolute;
-  inset: 0;
-  z-index: 1;          /* above the grid/glow pseudos, below the content */
+  top: 0; bottom: 0; left: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(200, 169, 110, 0.42) 22%,
+    rgba(200, 169, 110, 0.42) 78%,
+    transparent
+  );
+  opacity: 0;
+  z-index: 1;
   pointer-events: none;
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s var(--ease-out);
+  will-change: transform;
 }
+.hero-hairline-dot {
+  position: absolute;
+  top: 0; left: 0;
+  width: 5px; height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  box-shadow: 0 0 14px 2px rgba(212, 176, 106, 0.5);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s var(--ease-out);
+  will-change: transform;
+}
+.sub-hero.hairline-on .hero-hairline,
+.sub-hero.hairline-on .hero-hairline-dot { opacity: 1; }
 
 /* Scroll cue at the bottom of each full-viewport hero */
 .sub-hero-scroll {
