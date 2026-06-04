@@ -1,0 +1,28 @@
+# SELEQT
+
+> SELEQT is a boutique private wealth management firm based in Ahmedabad, India, serving Indian residents, NRIs, and globally mobile families. It operates on a fee-only, relationship-led basis and integrates investments, taxation, insurance, and succession planning under one platform, with particular focus on cross-border and NRI wealth.
+
+## About
+SELEQT is a private wealth advisory firm working with a deliberately small number of families and individuals. It combines investments, tax structuring, insurance, and succession planning into a single coordinated relationship, designed for clients whose ambitions, businesses, and assets span generations and geographies. SELEQT operates on a fee-only advisory basis; all material conflicts of interest are disclosed in writing prior to engagement.
+
+## Services
+- Investments: portfolio management, mutual funds, PMS (Portfolio Management Services, ₹50 lakh minimum per SEBI), AIFs (Alternative Investment Funds), and curated global opportunities. Research-led and concentrated.
+- Taxation: personal and promoter tax structuring, NRI and global taxation, capital gains planning, cross-border structuring, and compliance coordination across jurisdictions.
+- Insurance: life, health, business and key-person protection, NRI protection planning, and legacy/liquidity planning, advised independently rather than sold.
+- Succession Planning: private family trusts, wills and estate planning, business succession, cross-border estate planning, family governance, and philanthropic structuring.
+
+## Key pages
+- Home: https://seleqtwealth.in/
+- Investments: https://seleqtwealth.in/investments.html
+- Taxation: https://seleqtwealth.in/taxation.html
+- Insurance: https://seleqtwealth.in/insurance.html
+- Succession Planning: https://seleqtwealth.in/succession.html
+- About the firm and team: https://seleqtwealth.in/about.html
+- Blog: https://seleqtwealth.in/blogs.html
+- Article — Electronic Gold Receipts (EGRs) for Indian HNIs: https://seleqtwealth.in/blogs/electronic-gold-receipts.html
+
+## Contact
+- Email: contact@seleqtwealth.in
+- Phone: +91 99981 39596
+- Office: 313, Arista Business Space, Ahmedabad, Gujarat 380059, India
+- LinkedIn: https://in.linkedin.com/company/seleqtwealth
