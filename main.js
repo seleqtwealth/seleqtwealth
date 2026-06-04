@@ -887,41 +887,6 @@ function isInViewport(el) {
     document.querySelectorAll(selector).forEach(card => applyTilt(card, maxTilt, liftPx));
   });
 
-  /* ── Cursor-following gold glow on major section blocks ─────────────
-     A soft radial gold gradient that follows the cursor inside each
-     major section. Same family as the hero's parallax glow but tuned
-     subtler — ornamental rather than focal. CSS does the actual
-     rendering via a pseudo-element; JS just writes --glow-x/--glow-y. */
-  const glowSelectors = [
-    '.sub-hero',
-    '.about-strip',
-    '.stats-strip',
-    '.services-carousel',
-    '.team-section',
-    '.contact-section',
-    '.insights-list',
-    '.article-header'
-  ].join(', ');
-
-  document.querySelectorAll(glowSelectors).forEach(sec => {
-    sec.classList.add('has-cursor-glow');
-    let rafId = null;
-    let lx = 50, ly = 50;
-
-    function commit() {
-      sec.style.setProperty('--glow-x', lx + '%');
-      sec.style.setProperty('--glow-y', ly + '%');
-      rafId = null;
-    }
-
-    sec.addEventListener('mousemove', (e) => {
-      const r = sec.getBoundingClientRect();
-      lx = ((e.clientX - r.left) / r.width) * 100;
-      ly = ((e.clientY - r.top) / r.height) * 100;
-      if (rafId === null) rafId = requestAnimationFrame(commit);
-    });
-  });
-
   /* ── Sub-hero H1 depth shadow ───────────────────────────────────────
      The home hero already has a cursor-tracking spotlight on its
      wordmark. Sub-page H1s (about, investments, etc.) get a softer
@@ -950,6 +915,183 @@ function isInViewport(el) {
     hero.addEventListener('mouseleave', () => {
       h1.style.textShadow = '';
     });
+  });
+})();
+
+/* ============================================================================
+   CROSS-BORDER CONSTELLATION — full-viewport hero background
+   A custom vanilla-canvas particle network for the sub-page heroes. Gold
+   nodes drift in loose clusters arranged like a world map (Americas, Europe,
+   Gulf, India, SE Asia — India densest as "home"), linked by faint threads.
+   The cursor draws bright filaments to nearby nodes and gently attracts
+   them — the network "reaches" for you. Evokes wealth connected across
+   borders. No library; ~60-80 nodes; pauses when scrolled out of view.
+   Bails on prefers-reduced-motion.
+   ============================================================================ */
+(function constellation() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return;
+
+  const hosts = Array.from(document.querySelectorAll('.sub-hero'));
+  if (!hosts.length) return;
+
+  // Fewer nodes on small screens to keep the O(n^2) link pass cheap.
+  const small = window.matchMedia('(max-width: 720px)').matches;
+
+  // Loose world-map cluster centres (normalised 0-1). India densest.
+  const CLUSTERS = small
+    ? [ {x:0.22,y:0.42,n:4}, {x:0.5,y:0.5,n:5}, {x:0.74,y:0.55,n:7} ]
+    : [
+        { x: 0.15, y: 0.44, n: 9 },   // Americas
+        { x: 0.39, y: 0.33, n: 8 },   // Europe / UK
+        { x: 0.55, y: 0.54, n: 7 },   // Gulf
+        { x: 0.70, y: 0.50, n: 13 },  // India (home — densest)
+        { x: 0.87, y: 0.62, n: 7 }    // SE Asia / Singapore
+      ];
+  const FREE = small ? 8 : 16;        // scattered fill nodes
+  const LINK_DIST = small ? 90 : 130; // node↔node link distance (px)
+  const MOUSE_DIST = 200;             // cursor link distance (px)
+
+  hosts.forEach(initConstellation);
+
+  function initConstellation(host) {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'constellation-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    host.insertBefore(canvas, host.firstChild);
+    const ctx = canvas.getContext('2d');
+
+    let W = 0, H = 0, dpr = 1;
+    let nodes = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+    let raf = null;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = host.getBoundingClientRect();
+      W = rect.width; H = rect.height;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      build();
+    }
+
+    function makeNode(x, y) {
+      return {
+        x, y,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16,
+        r: Math.random() * 1.3 + 0.7
+      };
+    }
+
+    function build() {
+      nodes = [];
+      const spread = 0.085;
+      CLUSTERS.forEach(c => {
+        for (let i = 0; i < c.n; i++) {
+          const x = (c.x + (Math.random() - 0.5) * spread * 2) * W;
+          const y = (c.y + (Math.random() - 0.5) * spread * 2) * H;
+          nodes.push(makeNode(x, y));
+        }
+      });
+      for (let i = 0; i < FREE; i++) nodes.push(makeNode(Math.random() * W, Math.random() * H));
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Drift + soft edge wrap
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < -24) n.x = W + 24; else if (n.x > W + 24) n.x = -24;
+        if (n.y < -24) n.y = H + 24; else if (n.y > H + 24) n.y = -24;
+      }
+
+      // Node-to-node threads
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < LINK_DIST * LINK_DIST) {
+            const op = (1 - Math.sqrt(d2) / LINK_DIST) * 0.24;
+            ctx.strokeStyle = 'rgba(200, 169, 110, ' + op.toFixed(3) + ')';
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+
+      // Cursor filaments + gentle attraction
+      if (mouse.active) {
+        for (const n of nodes) {
+          const dx = n.x - mouse.x, dy = n.y - mouse.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < MOUSE_DIST * MOUSE_DIST) {
+            const d = Math.sqrt(d2) || 1;
+            const t = 1 - d / MOUSE_DIST;
+            ctx.strokeStyle = 'rgba(212, 176, 106, ' + (t * 0.6).toFixed(3) + ')';
+            ctx.lineWidth = 0.85;
+            ctx.beginPath();
+            ctx.moveTo(n.x, n.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+            n.x -= (dx / d) * t * 0.35;
+            n.y -= (dy / d) * t * 0.35;
+          }
+        }
+        // Soft node at the cursor itself
+        ctx.fillStyle = 'rgba(212, 176, 106, 0.9)';
+        ctx.beginPath(); ctx.arc(mouse.x, mouse.y, 2.2, 0, Math.PI * 2); ctx.fill();
+      }
+
+      // Nodes
+      ctx.fillStyle = 'rgba(200, 169, 110, 0.72)';
+      for (const n of nodes) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      }
+
+      raf = requestAnimationFrame(frame);
+    }
+
+    host.addEventListener('mousemove', (e) => {
+      const rect = host.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    });
+    host.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; });
+
+    // Pause the loop when the hero is scrolled out of view (perf + battery).
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { if (raf === null) raf = requestAnimationFrame(frame); }
+        else if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+      });
+    }, { threshold: 0 });
+    io.observe(host);
+
+    let rt = null;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 200); });
+
+    resize();
+    raf = requestAnimationFrame(frame);
+  }
+})();
+
+/* ── Sub-hero scroll cue ─────────────────────
+   Injects a small "Scroll" affordance at the bottom of each full-viewport
+   sub-hero so visitors know there's more below the fold. The pulse
+   animation is defined in CSS and disabled under prefers-reduced-motion. */
+(function subHeroScrollCue() {
+  document.querySelectorAll('.sub-hero').forEach(hero => {
+    const cue = document.createElement('div');
+    cue.className = 'sub-hero-scroll';
+    cue.innerHTML = '<span>Scroll</span><span class="sub-hero-scroll-line"></span>';
+    hero.appendChild(cue);
   });
 })();
 

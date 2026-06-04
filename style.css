@@ -1899,10 +1899,11 @@ a, button { cursor: none; }
 
 /* Hero — deep navy (matches main hero) */
 .sub-hero {
-  min-height: 70vh;
+  min-height: 100vh;       /* fallback for browsers without svh */
+  min-height: 100svh;      /* full viewport — the only thing visible on load */
   display: flex;
   align-items: center;
-  padding: 200px 0 100px;
+  padding: 140px 0 120px;
   position: relative;
   overflow: hidden;
   background: var(--ink);
@@ -2900,7 +2901,9 @@ body > footer.footer .footer-bottom {
   .footer-bottom .disclaimer { font-size: 0.72rem !important; max-width: 100% !important; line-height: 1.7 !important; }
 
   /* ── SUB-PAGE HEROES (about, services) ───────────────────────────────── */
-  .sub-hero { padding: 120px 24px 100px !important; min-height: auto !important; }
+  /* Keep the full-viewport landing on mobile too (100svh accounts for the
+     browser chrome so the hero isn't cut off behind the URL bar). */
+  .sub-hero { padding: 110px 24px 90px !important; min-height: 100svh !important; }
   .sub-hero-content { padding: 0 !important; }
   .sub-hero h1 { font-size: clamp(2.4rem, 9.5vw, 3.4rem) !important; line-height: 1.08 !important; }
   .sub-hero p.lead { font-size: 1.05rem !important; max-width: 100% !important; margin-top: 32px !important; line-height: 1.65 !important; }
@@ -4040,30 +4043,60 @@ html.intro-running .hero-wordmark-spotlight {
   will-change: transform;
 }
 
-/* Cursor-following gold radial glow. The host section gets
-   `.has-cursor-glow` from JS; the ::after pseudo paints a soft radial
-   gradient at the JS-tracked cursor position. Fades in on hover. */
-.has-cursor-glow {
-  position: relative;
-  isolation: isolate;
-}
-.has-cursor-glow::after {
-  content: '';
+/* ============================================
+   CROSS-BORDER CONSTELLATION — full-viewport sub-page heroes
+   The sub-hero becomes a true full-screen landing with the JS-driven
+   constellation canvas (see main.js) behind the centred title. A scroll
+   cue at the bottom signals there's more below the fold.
+   ============================================ */
+.constellation-canvas {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    640px circle at var(--glow-x, 50%) var(--glow-y, 50%),
-    rgba(200, 169, 110, 0.075),
-    transparent 65%
-  );
-  opacity: 0;
-  transition: opacity 0.55s var(--ease-out);
+  z-index: 1;          /* above the grid/glow pseudos, below the content */
   pointer-events: none;
-  z-index: 0;
 }
-.has-cursor-glow:hover::after { opacity: 1; }
-/* Keep direct children above the glow so their content stays crisp. */
-.has-cursor-glow > * { position: relative; z-index: 1; }
+
+/* Scroll cue at the bottom of each full-viewport hero */
+.sub-hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+.sub-hero-scroll span:first-child {
+  font-family: var(--font-body);
+  font-size: 0.56rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--white-dim);
+}
+.sub-hero-scroll-line {
+  width: 1px;
+  height: 46px;
+  background: rgba(244, 241, 234, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+.sub-hero-scroll-line::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, var(--gold-light));
+  animation: subHeroScrollPulse 2.1s var(--ease-in-out) infinite;
+}
+@keyframes subHeroScrollPulse {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  35%  { opacity: 1; }
+  100% { transform: translateY(200%); opacity: 0; }
+}
 
 /* ============================================
    FEATURED BLOG CARD — magazine cover restyle
