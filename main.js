@@ -919,15 +919,15 @@ function isInViewport(el) {
 })();
 
 /* ============================================================================
-   FINANCIAL CITYSCAPE — 3D hero scene
-   A wireframe skyline rendered on canvas with real perspective projection:
-   layered towers (far / mid / near) receding to a horizon with depth-fog,
-   plus one prominent foreground landmark tower. Lit windows glow and a few
-   twinkle. Moving the cursor pans the camera across the city (near towers
-   slide faster than far ones — true parallax) and tilts the view up/down.
-   A gentle ambient sway keeps it alive without the cursor. Corporate,
-   atmospheric, unmistakably finance. No library; pauses off-screen; bails
-   on prefers-reduced-motion.
+   FINANCIAL CITYSCAPE — 3D hero scene (v2, decluttered)
+   A clean wireframe skyline on canvas with perspective. Towers are SOLID-
+   filled navy so nearer ones occlude farther ones (no see-through tangle),
+   given 3D volume by a single shaded side face (no open-box roof lids), and
+   grounded on a baseline with ground haze. The heading is lifted above the
+   skyline (CSS), and the skyline sits in the lower band so the two never
+   fight. Cursor pans the camera (near towers parallax faster) and tilts the
+   view; a gentle sway keeps it alive without a cursor. No library; painter's
+   sorted; pauses off-screen; bails on prefers-reduced-motion.
    ============================================================================ */
 (function cityscapeHero() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -952,28 +952,24 @@ function isInViewport(el) {
     let raf = null, t = 0;
     let buildings = [];
     const FOCAL = 820;
-    const CAM_Y = 130;          // eye height in world units
-    let horizonY = 0;
+    const CAM_Y = 90;            // low eye height → we look up, roofs stay hidden
+    let baseY = 0;               // ground line (screen y)
     const target = { panX: 0, lift: 0 };
     const current = { panX: 0, lift: 0 };
 
     function makeBuilding(x, z, w, h, landmark) {
-      const d = w * 0.7;        // box depth
-      const cols = Math.max(2, Math.round(w / 36));
-      const rows = Math.max(3, Math.round(h / 44));
+      const d = w * 0.55;
+      const cols = Math.max(2, Math.round(w / 44));
+      const rows = Math.max(3, Math.round(h / 54));
       const windows = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          const lit = Math.random() < (landmark ? 0.5 : 0.34);
-          // Keep all lit windows but only a few unlit, so the facade reads
-          // as scattered lights rather than a dense grid.
-          if (!lit && Math.random() > 0.18) continue;
+          if (Math.random() > (landmark ? 0.42 : 0.26)) continue; // only scattered lit windows
           windows.push({
             u: (c + 0.5) / cols,
             v: (r + 0.5) / rows,
-            lit,
-            base: lit ? rnd(0.55, 0.95) : rnd(0.06, 0.13),
-            tw: Math.random() < 0.12 ? rnd(0.5, 1.5) : 0,
+            base: rnd(0.5, 0.92),
+            tw: Math.random() < 0.14 ? rnd(0.5, 1.4) : 0,
             ph: rnd(0, 6.28)
           });
         }
@@ -983,25 +979,29 @@ function isInViewport(el) {
 
     function buildScene() {
       buildings = [];
+      // Heights kept modest so the skyline stays a lower band, clear of the
+      // lifted heading. A central "clearing" (shorter towers near x=0) keeps
+      // the area behind the heading calm.
       const layers = small
-        ? [ { zmin: 1500, zmax: 2800, count: 8, hmin: 220, hmax: 430, wmin: 120, wmax: 200 },
-            { zmin: 900,  zmax: 1250, count: 4, hmin: 300, hmax: 520, wmin: 150, wmax: 240 } ]
-        : [ { zmin: 2200, zmax: 3600, count: 12, hmin: 220, hmax: 440, wmin: 120, wmax: 210 },
-            { zmin: 1300, zmax: 1950, count: 7,  hmin: 300, hmax: 560, wmin: 150, wmax: 250 },
-            { zmin: 800,  zmax: 1080, count: 4,  hmin: 360, hmax: 600, wmin: 180, wmax: 270 } ];
+        ? [ { zmin: 1600, zmax: 2800, count: 7, hmin: 150, hmax: 300, wmin: 120, wmax: 190 },
+            { zmin: 1000, zmax: 1350, count: 4, hmin: 210, hmax: 330, wmin: 150, wmax: 220 } ]
+        : [ { zmin: 2400, zmax: 3600, count: 9, hmin: 160, hmax: 300, wmin: 120, wmax: 190 },
+            { zmin: 1550, zmax: 2150, count: 6, hmin: 220, hmax: 360, wmin: 150, wmax: 220 },
+            { zmin: 1000, zmax: 1300, count: 4, hmin: 250, hmax: 400, wmin: 175, wmax: 240 } ];
       layers.forEach(L => {
         for (let i = 0; i < L.count; i++) {
-          buildings.push(makeBuilding(
-            rnd(-1700, 1700), rnd(L.zmin, L.zmax),
-            rnd(L.wmin, L.wmax), rnd(L.hmin, L.hmax)
-          ));
+          let x = rnd(-1800, 1800);
+          let h = rnd(L.hmin, L.hmax);
+          // Lower the towers that sit directly behind the (centred) heading.
+          if (Math.abs(x) < 420) h *= 0.6;
+          buildings.push(makeBuilding(x, rnd(L.zmin, L.zmax), rnd(L.wmin, L.wmax), h));
         }
       });
-      // Foreground landmark, right of centre so the heading stays clear.
+      // Foreground landmark, pushed to the right edge so it frames, not blocks.
       buildings.push(small
-        ? makeBuilding(220, 760, 200, 470, true)
-        : makeBuilding(300, 640, 235, 560, true));
-      buildings.sort((a, b) => b.z - a.z); // painter's: far first
+        ? makeBuilding(560, 900, 200, 360, true)
+        : makeBuilding(760, 950, 250, 440, true));
+      buildings.sort((a, b) => b.z - a.z);
     }
 
     function resize() {
@@ -1013,17 +1013,17 @@ function isInViewport(el) {
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      horizonY = H * 0.80;
+      baseY = H * 0.92;          // ground near the bottom
       buildScene();
     }
 
     function proj(wx, wy, wz, camX, lift) {
       const f = FOCAL / wz;
-      return { x: W / 2 + (wx - camX) * f, y: (horizonY + lift) - (wy - CAM_Y) * f };
+      return { x: W / 2 + (wx - camX) * f, y: (baseY + lift) - (wy - CAM_Y) * f };
     }
     function fog(z) {
-      const tt = Math.max(0, Math.min(1, (z - 700) / (3600 - 700)));
-      return 0.72 - tt * 0.58;          // near ~0.72 → far ~0.14
+      const tt = Math.max(0, Math.min(1, (z - 900) / (3600 - 900)));
+      return 0.62 - tt * 0.46;   // near ~0.62 → far ~0.16
     }
 
     function frame() {
@@ -1032,49 +1032,76 @@ function isInViewport(el) {
 
       current.panX += (target.panX - current.panX) * 0.05;
       current.lift += (target.lift - current.lift) * 0.05;
-      const sway = Math.sin(t * 0.0015) * 32;     // gentle ambient drift
+      const sway = Math.sin(t * 0.0013) * 26;
       const camX = current.panX + sway;
       const lift = current.lift;
+      const ground = baseY + lift;
+
+      // Ground haze — a soft lift of light just above the baseline.
+      const hz = ctx.createLinearGradient(0, ground - 180, 0, ground + 40);
+      hz.addColorStop(0, 'rgba(26,58,107,0)');
+      hz.addColorStop(1, 'rgba(26,58,107,0.16)');
+      ctx.fillStyle = hz;
+      ctx.fillRect(0, ground - 180, W, 220);
 
       // Horizon line
-      ctx.strokeStyle = 'rgba(200,169,110,0.10)';
+      ctx.strokeStyle = 'rgba(200,169,110,0.12)';
       ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, horizonY + lift); ctx.lineTo(W, horizonY + lift); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, ground); ctx.lineTo(W, ground); ctx.stroke();
 
       for (const b of buildings) {
-        const op = fog(b.z) * (b.landmark ? 1.15 : 1);
+        const op = Math.min(1, fog(b.z) * (b.landmark ? 1.2 : 1));
         const half = b.w / 2;
-        const flb = proj(b.x - half, 0,   b.z,        camX, lift);
-        const frb = proj(b.x + half, 0,   b.z,        camX, lift);
-        const flt = proj(b.x - half, b.h, b.z,        camX, lift);
-        const frt = proj(b.x + half, b.h, b.z,        camX, lift);
-        const blt = proj(b.x - half, b.h, b.z + b.d,  camX, lift);
-        const brt = proj(b.x + half, b.h, b.z + b.d,  camX, lift);
 
-        ctx.lineWidth = b.landmark ? 1.35 : 1;
-        ctx.strokeStyle = 'rgba(200,169,110,' + Math.min(1, op).toFixed(3) + ')';
-        // Front face
+        // Front face corners
+        const flb = proj(b.x - half, 0,   b.z, camX, lift);
+        const frb = proj(b.x + half, 0,   b.z, camX, lift);
+        const flt = proj(b.x - half, b.h, b.z, camX, lift);
+        const frt = proj(b.x + half, b.h, b.z, camX, lift);
+
+        // Visible side face (the one facing the camera centre) — gives 3D
+        // volume with NO open-top roof.
+        const leftSide = b.x > camX;
+        const sx = leftSide ? (b.x - half) : (b.x + half);
+        const sfb = proj(sx, 0,   b.z,       camX, lift);
+        const sft = proj(sx, b.h, b.z,       camX, lift);
+        const sbt = proj(sx, b.h, b.z + b.d, camX, lift);
+        const sbb = proj(sx, 0,   b.z + b.d, camX, lift);
+
+        // Side face (darker)
+        ctx.fillStyle = 'rgba(4,9,20,0.96)';
+        ctx.beginPath();
+        ctx.moveTo(sfb.x, sfb.y); ctx.lineTo(sft.x, sft.y);
+        ctx.lineTo(sbt.x, sbt.y); ctx.lineTo(sbb.x, sbb.y);
+        ctx.closePath(); ctx.fill();
+
+        // Front face (solid fill so it occludes towers behind)
+        ctx.fillStyle = 'rgba(9,18,38,0.96)';
         ctx.beginPath();
         ctx.moveTo(flb.x, flb.y); ctx.lineTo(frb.x, frb.y);
         ctx.lineTo(frt.x, frt.y); ctx.lineTo(flt.x, flt.y);
-        ctx.closePath(); ctx.stroke();
-        // Roof (top face, gives the box its 3D depth)
-        ctx.beginPath();
-        ctx.moveTo(flt.x, flt.y); ctx.lineTo(blt.x, blt.y);
-        ctx.lineTo(brt.x, brt.y); ctx.lineTo(frt.x, frt.y); ctx.stroke();
+        ctx.closePath(); ctx.fill();
 
-        // Windows on the front face
-        const winSize = Math.max(0.7, 4.6 * (FOCAL / b.z));
+        // Outlines
+        ctx.lineWidth = b.landmark ? 1.3 : 1;
+        ctx.strokeStyle = 'rgba(200,169,110,' + op.toFixed(3) + ')';
+        ctx.beginPath();                       // front rectangle
+        ctx.moveTo(flb.x, flb.y); ctx.lineTo(frb.x, frb.y);
+        ctx.lineTo(frt.x, frt.y); ctx.lineTo(flt.x, flt.y);
+        ctx.closePath(); ctx.stroke();
+        ctx.beginPath();                       // side top + back edges (the 3D corner)
+        ctx.moveTo(sft.x, sft.y); ctx.lineTo(sbt.x, sbt.y); ctx.lineTo(sbb.x, sbb.y);
+        ctx.stroke();
+
+        // Lit windows on the front face
+        const winSize = Math.max(0.8, 4.2 * (FOCAL / b.z));
         for (const win of b.windows) {
           let lvl = win.base;
           if (win.tw > 0) lvl *= (0.55 + 0.45 * Math.sin(t * 0.045 * win.tw + win.ph));
-          const wop = Math.min(1, lvl * op * 1.7);
-          if (wop < 0.04) continue;
+          const wop = Math.min(1, lvl * (0.5 + op));
+          if (wop < 0.05) continue;
           const p = proj(b.x - half + win.u * b.w, win.v * b.h, b.z, camX, lift);
-          ctx.fillStyle = win.lit
-            ? 'rgba(224,188,122,' + wop.toFixed(3) + ')'
-            : 'rgba(200,169,110,' + (wop * 0.5).toFixed(3) + ')';
+          ctx.fillStyle = 'rgba(226,190,124,' + wop.toFixed(3) + ')';
           ctx.fillRect(p.x - winSize / 2, p.y - winSize / 2, winSize, winSize);
         }
       }
@@ -1084,10 +1111,10 @@ function isInViewport(el) {
 
     host.addEventListener('mousemove', (e) => {
       const rect = host.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 .. 0.5
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
       const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      target.panX = nx * 280;     // pan the camera across the city
-      target.lift = ny * -34;     // tilt view up/down slightly
+      target.panX = nx * 240;
+      target.lift = ny * -26;
     });
     host.addEventListener('mouseleave', () => { target.panX = 0; target.lift = 0; });
 
