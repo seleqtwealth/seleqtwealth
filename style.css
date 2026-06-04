@@ -4445,23 +4445,19 @@ html.intro-running .hero-wordmark-spotlight {
   100% { opacity: 0; }
 }
 
-/* Shooting-star streaks drifting across the hero grid. A few thin gold
-   comets at varied angles, lengths, speeds and delays (set per element by
-   heroGridStreaks in main.js) so the movement reads as abstract, not
-   symmetrical. z-index 1 keeps them behind the heading content. */
+/* Shooting-star streaks that travel ALONG the hero grid lines. Each comet
+   rides a single horizontal or vertical grid line (positions snapped to the
+   96px grid by heroGridStreaks in main.js) and slides the full length of it.
+   A mix of axes, lines, directions, lengths and speeds keeps the movement
+   abstract rather than a tidy parallel sweep. z-index 1 keeps them behind
+   the heading content. */
 .grid-streak {
   position: absolute;
-  left: 0;
-  top: 50%;
-  width: var(--len, 160px);
-  height: 1.5px;
-  background: linear-gradient(90deg, rgba(200, 169, 110, 0) 0%, rgba(200, 169, 110, 0) 45%, rgba(212, 176, 106, 0.7) 100%);
-  border-radius: 2px;
   z-index: 1;
   opacity: 0;
   pointer-events: none;
+  border-radius: 2px;
   will-change: transform, opacity;
-  animation-name: gridStreak;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -4469,20 +4465,68 @@ html.intro-running .hero-wordmark-spotlight {
 .grid-streak::after {
   content: '';
   position: absolute;
-  right: 0;
-  top: 50%;
   width: 3px;
   height: 3px;
-  margin-top: -1.5px;
   border-radius: 50%;
   background: var(--gold-light);
   box-shadow: 0 0 9px 1px rgba(212, 176, 106, 0.6);
 }
-@keyframes gridStreak {
-  0%   { transform: rotate(var(--angle, -20deg)) translateX(-62vw); opacity: 0; }
-  10%  { opacity: 0.7; }
-  85%  { opacity: 0.7; }
-  100% { transform: rotate(var(--angle, -20deg)) translateX(62vw); opacity: 0; }
+
+/* Horizontal: rides a horizontal grid line, left to right (or reversed) */
+.grid-streak--h {
+  left: 0;
+  width: var(--len, 180px);
+  height: 2px;
+  margin-top: -1px;
+  background: linear-gradient(90deg, rgba(212, 176, 106, 0) 0%, rgba(212, 176, 106, 0.7) 100%);
+  animation-name: streakH;
+}
+.grid-streak--h::after { right: 0; top: 50%; margin-top: -1.5px; }
+.grid-streak--h.is-rev {
+  background: linear-gradient(270deg, rgba(212, 176, 106, 0) 0%, rgba(212, 176, 106, 0.7) 100%);
+  animation-name: streakHRev;
+}
+.grid-streak--h.is-rev::after { right: auto; left: 0; }
+
+/* Vertical: rides a vertical grid line, top to bottom (or reversed) */
+.grid-streak--v {
+  top: 0;
+  width: 2px;
+  height: var(--len, 180px);
+  margin-left: -1px;
+  background: linear-gradient(180deg, rgba(212, 176, 106, 0) 0%, rgba(212, 176, 106, 0.7) 100%);
+  animation-name: streakV;
+}
+.grid-streak--v::after { bottom: 0; left: 50%; margin-left: -1.5px; }
+.grid-streak--v.is-rev {
+  background: linear-gradient(0deg, rgba(212, 176, 106, 0) 0%, rgba(212, 176, 106, 0.7) 100%);
+  animation-name: streakVRev;
+}
+.grid-streak--v.is-rev::after { bottom: auto; top: 0; }
+
+@keyframes streakH {
+  0%   { transform: translateX(-12vw); opacity: 0; }
+  8%   { opacity: 0.75; }
+  88%  { opacity: 0.75; }
+  100% { transform: translateX(112vw); opacity: 0; }
+}
+@keyframes streakHRev {
+  0%   { transform: translateX(112vw); opacity: 0; }
+  8%   { opacity: 0.75; }
+  88%  { opacity: 0.75; }
+  100% { transform: translateX(-12vw); opacity: 0; }
+}
+@keyframes streakV {
+  0%   { transform: translateY(-12vh); opacity: 0; }
+  8%   { opacity: 0.75; }
+  88%  { opacity: 0.75; }
+  100% { transform: translateY(112vh); opacity: 0; }
+}
+@keyframes streakVRev {
+  0%   { transform: translateY(112vh); opacity: 0; }
+  8%   { opacity: 0.75; }
+  88%  { opacity: 0.75; }
+  100% { transform: translateY(-12vh); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .grid-streak { display: none; }

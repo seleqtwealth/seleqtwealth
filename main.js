@@ -983,30 +983,45 @@ function isInViewport(el) {
 })();
 
 /* ── Hero grid shooting-star streaks ─────────────────────
-   Injects a handful of thin gold "comet" lines that drift diagonally across
-   the grid on a continuous loop. Staggered tops, angles, lengths, durations
-   and delays keep the movement abstract and asymmetric rather than a tidy
-   parallel sweep. Disabled under prefers-reduced-motion (CSS hides them too). */
+   Injects gold "comet" lines that travel ALONG the grid lines. Each comet
+   rides one horizontal or vertical grid line; positions are snapped to the
+   96px grid so they sit exactly on a line. A mix of axes, lines, directions,
+   lengths and speeds keeps the motion abstract, not a tidy parallel sweep.
+   Rebuilds on resize so the comets stay aligned to the grid. Disabled under
+   prefers-reduced-motion (CSS hides them too). */
 (function heroGridStreaks() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced) return;
-  const configs = [
-    { top: '16%', angle: '-22deg', len: 200, dur: 7.5, delay: 0 },
-    { top: '44%', angle: '-7deg',  len: 150, dur: 6,   delay: 2.4 },
-    { top: '66%', angle: '-34deg', len: 230, dur: 9,   delay: 4.2 },
-    { top: '82%', angle: '11deg',  len: 130, dur: 5.5, delay: 1.2 }
-  ];
+  const CELL = 96; // matches .sub-hero::before background-size
+  const snap = v => Math.round(v / CELL) * CELL;
+
   document.querySelectorAll('.sub-hero').forEach(hero => {
-    configs.forEach(c => {
-      const s = document.createElement('div');
-      s.className = 'grid-streak';
-      s.style.top = c.top;
-      s.style.setProperty('--angle', c.angle);
-      s.style.setProperty('--len', c.len + 'px');
-      s.style.animationDuration = c.dur + 's';
-      s.style.animationDelay = c.delay + 's';
-      hero.appendChild(s);
-    });
+    function build() {
+      hero.querySelectorAll('.grid-streak').forEach(n => n.remove());
+      const r = hero.getBoundingClientRect();
+      const W = r.width, H = r.height;
+      // axis: 'h' rides a horizontal line (pos = top), 'v' a vertical line (pos = left)
+      const configs = [
+        { axis: 'h', pos: snap(H * 0.22), len: 180, dur: 7.5, delay: 0,   rev: false },
+        { axis: 'h', pos: snap(H * 0.62), len: 140, dur: 6,   delay: 2.4, rev: true  },
+        { axis: 'v', pos: snap(W * 0.34), len: 200, dur: 8.5, delay: 1,   rev: false },
+        { axis: 'v', pos: snap(W * 0.66), len: 150, dur: 6.5, delay: 3.6, rev: true  },
+        { axis: 'h', pos: snap(H * 0.82), len: 120, dur: 5.5, delay: 4.5, rev: false }
+      ];
+      configs.forEach(c => {
+        const s = document.createElement('div');
+        s.className = 'grid-streak grid-streak--' + c.axis + (c.rev ? ' is-rev' : '');
+        if (c.axis === 'h') s.style.top = c.pos + 'px';
+        else s.style.left = c.pos + 'px';
+        s.style.setProperty('--len', c.len + 'px');
+        s.style.animationDuration = c.dur + 's';
+        s.style.animationDelay = c.delay + 's';
+        hero.appendChild(s);
+      });
+    }
+    build();
+    let t;
+    window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(build, 250); });
   });
 })();
 
