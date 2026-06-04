@@ -4044,9 +4044,9 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
-   ARMILLARY SPHERE — full-viewport sub-page heroes
+   FINANCIAL CITYSCAPE — full-viewport sub-page heroes
    The sub-hero becomes a true full-screen landing with the JS-driven 3D
-   armillary-sphere canvas (see main.js) behind the centred title. A scroll
+   wireframe-skyline canvas (see main.js) behind the centred title. A scroll
    cue at the bottom signals there's more below the fold.
    ============================================ */
 .hero-3d-canvas {

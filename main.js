@@ -919,60 +919,90 @@ function isInViewport(el) {
 })();
 
 /* ============================================================================
-   ARMILLARY SPHERE — 3D hero instrument
-   A real-3D gold wireframe armillary sphere (three interlocking great-circle
-   rings + an inner ring, with markers orbiting each) rendered on canvas with
-   perspective projection. It rotates slowly on its own; moving the cursor
-   "turns" the whole instrument in space (eased rotation offset). Depth is
-   conveyed by per-segment opacity — rings nearer the viewer glow brighter.
-   Evokes precision, navigation and global reach for "Wealth, Structured."
-   No library. Pauses when scrolled out of view. Bails on reduced-motion.
+   FINANCIAL CITYSCAPE — 3D hero scene
+   A wireframe skyline rendered on canvas with real perspective projection:
+   layered towers (far / mid / near) receding to a horizon with depth-fog,
+   plus one prominent foreground landmark tower. Lit windows glow and a few
+   twinkle. Moving the cursor pans the camera across the city (near towers
+   slide faster than far ones — true parallax) and tilts the view up/down.
+   A gentle ambient sway keeps it alive without the cursor. Corporate,
+   atmospheric, unmistakably finance. No library; pauses off-screen; bails
+   on prefers-reduced-motion.
    ============================================================================ */
-(function armillaryHero() {
+(function cityscapeHero() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) return;
 
   const hosts = Array.from(document.querySelectorAll('.sub-hero'));
   if (!hosts.length) return;
 
-  hosts.forEach(initArmillary);
+  const small = window.matchMedia('(max-width: 720px)').matches;
+  hosts.forEach(initCity);
 
-  function initArmillary(host) {
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  function initCity(host) {
     const canvas = document.createElement('canvas');
     canvas.className = 'hero-3d-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     host.insertBefore(canvas, host.firstChild);
     const ctx = canvas.getContext('2d');
 
-    let W = 0, H = 0, dpr = 1, R = 200;
-    let raf = null;
-    let autoRot = 0;
-    const target = { rx: 0, ry: 0 };    // cursor-driven rotation offset
-    const current = { rx: 0, ry: 0 };   // eased toward target
+    let W = 0, H = 0, dpr = 1;
+    let raf = null, t = 0;
+    let buildings = [];
+    const FOCAL = 820;
+    const CAM_Y = 130;          // eye height in world units
+    let horizonY = 0;
+    const target = { panX: 0, lift: 0 };
+    const current = { panX: 0, lift: 0 };
 
-    // Each ring is a closed loop of unit-3D points on a great circle in a
-    // given plane. Three orthogonal rings read as a sphere; the inner ring
-    // adds depth. Markers travel along each ring at their own pace.
-    const N = 80;
-    function ring(radius, plane) {
-      const pts = [];
-      for (let i = 0; i <= N; i++) {
-        const a = (i / N) * Math.PI * 2;
-        const c = Math.cos(a) * radius, s = Math.sin(a) * radius;
-        if (plane === 'xz') pts.push({ x: c, y: 0, z: s });
-        else if (plane === 'xy') pts.push({ x: c, y: s, z: 0 });
-        else pts.push({ x: 0, y: c, z: s }); // 'yz'
+    function makeBuilding(x, z, w, h, landmark) {
+      const d = w * 0.7;        // box depth
+      const cols = Math.max(2, Math.round(w / 36));
+      const rows = Math.max(3, Math.round(h / 44));
+      const windows = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const lit = Math.random() < (landmark ? 0.5 : 0.34);
+          // Keep all lit windows but only a few unlit, so the facade reads
+          // as scattered lights rather than a dense grid.
+          if (!lit && Math.random() > 0.18) continue;
+          windows.push({
+            u: (c + 0.5) / cols,
+            v: (r + 0.5) / rows,
+            lit,
+            base: lit ? rnd(0.55, 0.95) : rnd(0.06, 0.13),
+            tw: Math.random() < 0.12 ? rnd(0.5, 1.5) : 0,
+            ph: rnd(0, 6.28)
+          });
+        }
       }
-      return pts;
+      return { x, z, w, h, d, windows, landmark: !!landmark };
     }
-    const rings = [
-      { pts: ring(1.00, 'xz'), phase: 0.0, speed: 0.0042 },
-      { pts: ring(1.00, 'xy'), phase: 2.1, speed: -0.0034 },
-      { pts: ring(1.00, 'yz'), phase: 4.2, speed: 0.0038 },
-      { pts: ring(0.60, 'xz'), phase: 1.0, speed: -0.0055 }
-    ];
 
-    const FOV = 3.2; // perspective strength, in ring-radius units
+    function buildScene() {
+      buildings = [];
+      const layers = small
+        ? [ { zmin: 1500, zmax: 2800, count: 8, hmin: 220, hmax: 430, wmin: 120, wmax: 200 },
+            { zmin: 900,  zmax: 1250, count: 4, hmin: 300, hmax: 520, wmin: 150, wmax: 240 } ]
+        : [ { zmin: 2200, zmax: 3600, count: 12, hmin: 220, hmax: 440, wmin: 120, wmax: 210 },
+            { zmin: 1300, zmax: 1950, count: 7,  hmin: 300, hmax: 560, wmin: 150, wmax: 250 },
+            { zmin: 800,  zmax: 1080, count: 4,  hmin: 360, hmax: 600, wmin: 180, wmax: 270 } ];
+      layers.forEach(L => {
+        for (let i = 0; i < L.count; i++) {
+          buildings.push(makeBuilding(
+            rnd(-1700, 1700), rnd(L.zmin, L.zmax),
+            rnd(L.wmin, L.wmax), rnd(L.hmin, L.hmax)
+          ));
+        }
+      });
+      // Foreground landmark, right of centre so the heading stays clear.
+      buildings.push(small
+        ? makeBuilding(220, 760, 200, 470, true)
+        : makeBuilding(300, 640, 235, 560, true));
+      buildings.sort((a, b) => b.z - a.z); // painter's: far first
+    }
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -983,68 +1013,71 @@ function isInViewport(el) {
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      R = Math.min(W, H) * 0.34;
+      horizonY = H * 0.80;
+      buildScene();
     }
 
-    // Rotate a point around Y then X.
-    function rot(p, rx, ry) {
-      const cy = Math.cos(ry), sy = Math.sin(ry);
-      const x1 = p.x * cy + p.z * sy;
-      const z1 = -p.x * sy + p.z * cy;
-      const cx = Math.cos(rx), sx = Math.sin(rx);
-      const y1 = p.y * cx - z1 * sx;
-      const z2 = p.y * sx + z1 * cx;
-      return { x: x1, y: y1, z: z2 };
+    function proj(wx, wy, wz, camX, lift) {
+      const f = FOCAL / wz;
+      return { x: W / 2 + (wx - camX) * f, y: (horizonY + lift) - (wy - CAM_Y) * f };
     }
-    function project(p) {
-      const scale = FOV / (FOV - p.z);
-      return { x: W / 2 + p.x * R * scale, y: H / 2 + p.y * R * scale, z: p.z };
+    function fog(z) {
+      const tt = Math.max(0, Math.min(1, (z - 700) / (3600 - 700)));
+      return 0.72 - tt * 0.58;          // near ~0.72 → far ~0.14
     }
 
     function frame() {
+      t += 1;
       ctx.clearRect(0, 0, W, H);
-      autoRot += 0.0026;
-      current.rx += (target.rx - current.rx) * 0.06;
-      current.ry += (target.ry - current.ry) * 0.06;
 
-      const rx = -0.32 + current.rx;       // slight forward tilt + cursor
-      const ry = autoRot + current.ry;
+      current.panX += (target.panX - current.panX) * 0.05;
+      current.lift += (target.lift - current.lift) * 0.05;
+      const sway = Math.sin(t * 0.0015) * 32;     // gentle ambient drift
+      const camX = current.panX + sway;
+      const lift = current.lift;
 
+      // Horizon line
+      ctx.strokeStyle = 'rgba(200,169,110,0.10)';
       ctx.lineWidth = 1;
-      for (const rg of rings) {
-        let prev = null, prevZ = 0;
-        for (let i = 0; i < rg.pts.length; i++) {
-          const rp = rot(rg.pts[i], rx, ry);
-          const pr = project(rp);
-          if (prev) {
-            const d = ((rp.z + prevZ) / 2 + 1) / 2;     // 0 (far) .. 1 (near)
-            const op = 0.10 + d * 0.52;
-            ctx.strokeStyle = 'rgba(200,169,110,' + op.toFixed(3) + ')';
-            ctx.beginPath();
-            ctx.moveTo(prev.x, prev.y);
-            ctx.lineTo(pr.x, pr.y);
-            ctx.stroke();
-          }
-          prev = pr; prevZ = rp.z;
-        }
-        // Orbiting marker
-        rg.phase += rg.speed;
-        let t = (((rg.phase % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) / (2 * Math.PI);
-        const mi = Math.floor(t * N) % N;
-        const mp = rot(rg.pts[mi], rx, ry);
-        const mpr = project(mp);
-        const md = (mp.z + 1) / 2;
-        ctx.fillStyle = 'rgba(212,176,106,' + (0.45 + md * 0.55).toFixed(3) + ')';
-        ctx.beginPath();
-        ctx.arc(mpr.x, mpr.y, 2 + md * 1.8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Faint core
-      ctx.fillStyle = 'rgba(212,176,106,0.45)';
       ctx.beginPath();
-      ctx.arc(W / 2, H / 2, 2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(0, horizonY + lift); ctx.lineTo(W, horizonY + lift); ctx.stroke();
+
+      for (const b of buildings) {
+        const op = fog(b.z) * (b.landmark ? 1.15 : 1);
+        const half = b.w / 2;
+        const flb = proj(b.x - half, 0,   b.z,        camX, lift);
+        const frb = proj(b.x + half, 0,   b.z,        camX, lift);
+        const flt = proj(b.x - half, b.h, b.z,        camX, lift);
+        const frt = proj(b.x + half, b.h, b.z,        camX, lift);
+        const blt = proj(b.x - half, b.h, b.z + b.d,  camX, lift);
+        const brt = proj(b.x + half, b.h, b.z + b.d,  camX, lift);
+
+        ctx.lineWidth = b.landmark ? 1.35 : 1;
+        ctx.strokeStyle = 'rgba(200,169,110,' + Math.min(1, op).toFixed(3) + ')';
+        // Front face
+        ctx.beginPath();
+        ctx.moveTo(flb.x, flb.y); ctx.lineTo(frb.x, frb.y);
+        ctx.lineTo(frt.x, frt.y); ctx.lineTo(flt.x, flt.y);
+        ctx.closePath(); ctx.stroke();
+        // Roof (top face, gives the box its 3D depth)
+        ctx.beginPath();
+        ctx.moveTo(flt.x, flt.y); ctx.lineTo(blt.x, blt.y);
+        ctx.lineTo(brt.x, brt.y); ctx.lineTo(frt.x, frt.y); ctx.stroke();
+
+        // Windows on the front face
+        const winSize = Math.max(0.7, 4.6 * (FOCAL / b.z));
+        for (const win of b.windows) {
+          let lvl = win.base;
+          if (win.tw > 0) lvl *= (0.55 + 0.45 * Math.sin(t * 0.045 * win.tw + win.ph));
+          const wop = Math.min(1, lvl * op * 1.7);
+          if (wop < 0.04) continue;
+          const p = proj(b.x - half + win.u * b.w, win.v * b.h, b.z, camX, lift);
+          ctx.fillStyle = win.lit
+            ? 'rgba(224,188,122,' + wop.toFixed(3) + ')'
+            : 'rgba(200,169,110,' + (wop * 0.5).toFixed(3) + ')';
+          ctx.fillRect(p.x - winSize / 2, p.y - winSize / 2, winSize, winSize);
+        }
+      }
 
       raf = requestAnimationFrame(frame);
     }
@@ -1053,10 +1086,10 @@ function isInViewport(el) {
       const rect = host.getBoundingClientRect();
       const nx = (e.clientX - rect.left) / rect.width - 0.5;   // -0.5 .. 0.5
       const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      target.ry = nx * 1.1;
-      target.rx = ny * 0.8;
+      target.panX = nx * 280;     // pan the camera across the city
+      target.lift = ny * -34;     // tilt view up/down slightly
     });
-    host.addEventListener('mouseleave', () => { target.rx = 0; target.ry = 0; });
+    host.addEventListener('mouseleave', () => { target.panX = 0; target.lift = 0; });
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
