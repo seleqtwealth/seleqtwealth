@@ -955,6 +955,33 @@ function isInViewport(el) {
   });
 })();
 
+/* ── Hero grid: click a square to flash its borders gold ────────────
+   The sub-hero background grid is a CSS pattern (96px cells). We can't
+   target a cell directly, so on click we work out which cell the cursor
+   landed in from the coordinates and drop a temporary gold-bordered square
+   over it that fades out. Ignores clicks on links/buttons. */
+(function heroGridFlash() {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) return;
+  const CELL = 96; // matches .sub-hero::before background-size
+
+  document.querySelectorAll('.sub-hero').forEach(hero => {
+    hero.addEventListener('click', (e) => {
+      if (e.target.closest('a, button')) return; // don't flash on real controls
+      const r = hero.getBoundingClientRect();
+      const col = Math.floor((e.clientX - r.left) / CELL);
+      const row = Math.floor((e.clientY - r.top) / CELL);
+      const sq = document.createElement('div');
+      sq.className = 'grid-square-flash';
+      sq.style.left = (col * CELL) + 'px';
+      sq.style.top = (row * CELL) + 'px';
+      hero.appendChild(sq);
+      sq.addEventListener('animationend', () => sq.remove());
+      setTimeout(() => { if (sq.parentNode) sq.remove(); }, 1100);
+    });
+  });
+})();
+
 /* ── Sub-hero scroll cue ─────────────────────
    Injects a small "Scroll" affordance at the bottom of each full-viewport
    sub-hero so visitors know there's more below the fold. The pulse

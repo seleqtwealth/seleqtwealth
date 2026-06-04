@@ -4424,6 +4424,26 @@ html.intro-running .hero-wordmark-spotlight {
 .sub-hero.hairline-on .hero-hairline,
 .sub-hero.hairline-on .hero-hairline-dot { opacity: 1; }
 
+/* Clicked grid square — a temporary gold-bordered tile that flashes over
+   the cell you click, then fades. Injected by heroGridFlash in main.js;
+   z-index 1 keeps it above the grid pseudo but below the heading content. */
+.grid-square-flash {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  border: 1px solid var(--gold-light);
+  background: rgba(200, 169, 110, 0.05);
+  box-shadow: 0 0 18px rgba(200, 169, 110, 0.14), inset 0 0 12px rgba(200, 169, 110, 0.06);
+  z-index: 1;
+  pointer-events: none;
+  animation: gridSquareFlash 0.9s var(--ease-out) forwards;
+}
+@keyframes gridSquareFlash {
+  0%   { opacity: 0; }
+  16%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* Scroll cue at the bottom of each full-viewport hero */
 .sub-hero-scroll {
   position: absolute;
