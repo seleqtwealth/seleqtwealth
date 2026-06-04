@@ -1903,9 +1903,9 @@ a, button { cursor: none; }
   min-height: 100svh;      /* full viewport — the only thing visible on load */
   display: flex;
   align-items: center;
-  /* Large bottom padding lifts the centred heading into the upper-middle so
-     it sits clear above the cityscape skyline that occupies the lower band. */
-  padding: 120px 0 34vh;
+  /* Large bottom padding lifts the centred heading into the upper area so it
+     sits clear above the corporate building that occupies the lower band. */
+  padding: 110px 0 40vh;
   position: relative;
   overflow: hidden;
   background: var(--ink);
@@ -2905,7 +2905,7 @@ body > footer.footer .footer-bottom {
   /* ── SUB-PAGE HEROES (about, services) ───────────────────────────────── */
   /* Keep the full-viewport landing on mobile too (100svh accounts for the
      browser chrome so the hero isn't cut off behind the URL bar). */
-  .sub-hero { padding: 100px 24px 34vh !important; min-height: 100svh !important; }
+  .sub-hero { padding: 96px 24px 40vh !important; min-height: 100svh !important; }
   .sub-hero-content { padding: 0 !important; }
   .sub-hero h1 { font-size: clamp(2.4rem, 9.5vw, 3.4rem) !important; line-height: 1.08 !important; }
   .sub-hero p.lead { font-size: 1.05rem !important; max-width: 100% !important; margin-top: 32px !important; line-height: 1.65 !important; }
@@ -4046,10 +4046,11 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
-   FINANCIAL CITYSCAPE — full-viewport sub-page heroes
-   The sub-hero becomes a true full-screen landing with the JS-driven 3D
-   wireframe-skyline canvas (see main.js) behind the centred title. A scroll
-   cue at the bottom signals there's more below the fold.
+   CORPORATE PAVILION — full-viewport sub-page heroes
+   The sub-hero becomes a true full-screen landing with the JS-driven
+   interactive architectural-elevation canvas (see main.js) grounded in the
+   lower band, the heading lifted clear above it. A scroll cue at the bottom
+   signals there's more below the fold.
    ============================================ */
 .hero-3d-canvas {
   position: absolute;

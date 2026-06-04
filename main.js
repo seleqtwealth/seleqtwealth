@@ -919,204 +919,299 @@ function isInViewport(el) {
 })();
 
 /* ============================================================================
-   FINANCIAL CITYSCAPE — 3D hero scene (v2, decluttered)
-   A clean wireframe skyline on canvas with perspective. Towers are SOLID-
-   filled navy so nearer ones occlude farther ones (no see-through tangle),
-   given 3D volume by a single shaded side face (no open-box roof lids), and
-   grounded on a baseline with ground haze. The heading is lifted above the
-   skyline (CSS), and the skyline sits in the lower band so the two never
-   fight. Cursor pans the camera (near towers parallax faster) and tilts the
-   view; a gentle sway keeps it alive without a cursor. No library; painter's
-   sorted; pauses off-screen; bails on prefers-reduced-motion.
+   CORPORATE PAVILION — interactive architectural elevation
+   A detailed, near-orthographic elevation of a low-rise corporate HQ rendered
+   in gold line-art on navy: podium base, two storeys of curtain-wall glazing
+   with mullions/transoms, a cantilevered entrance canopy on columns, glass
+   doors with steps, a signage band, a rooftop parapet with plant/penthouse,
+   plus landscaping (trees, hedges, path, bollards, scale figures). The glass
+   offices light up as the cursor sweeps the facade; the whole composition
+   parallaxes gently (building one rate, foreground landscaping faster).
+   No library. Pauses off-screen. Bails on prefers-reduced-motion.
    ============================================================================ */
-(function cityscapeHero() {
+(function officeHero() {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reducedMotion) return;
 
   const hosts = Array.from(document.querySelectorAll('.sub-hero'));
   if (!hosts.length) return;
 
-  const small = window.matchMedia('(max-width: 720px)').matches;
-  hosts.forEach(initCity);
+  hosts.forEach(initOffice);
 
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
-  function initCity(host) {
+  // Design coordinate system: x from -500..500, y up from ground (0).
+  const TOP = 300;            // main parapet height
+  const POD = 52;            // podium height
+  const F1 = [52, 165];      // floor 1 glazing band
+  const SP = [165, 188];     // spandrel / signage band
+  const F2 = [188, 296];     // floor 2 glazing band
+  const ENT = 116;           // entrance half-width
+  const MULL = 47;           // mullion spacing
+
+  function initOffice(host) {
     const canvas = document.createElement('canvas');
     canvas.className = 'hero-3d-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     host.insertBefore(canvas, host.firstChild);
     const ctx = canvas.getContext('2d');
 
-    let W = 0, H = 0, dpr = 1;
+    let W = 0, H = 0, dpr = 1, scale = 1, cx = 0, groundY = 0;
     let raf = null, t = 0;
-    let buildings = [];
-    const FOCAL = 820;
-    const CAM_Y = 90;            // low eye height → we look up, roofs stay hidden
-    let baseY = 0;               // ground line (screen y)
-    const target = { panX: 0, lift: 0 };
-    const current = { panX: 0, lift: 0 };
+    let panels = [];
+    const mouse = { x: -9999, y: -9999, active: false };
+    const target = { px: 0, py: 0 };
+    const current = { px: 0, py: 0 };
 
-    function makeBuilding(x, z, w, h, landmark) {
-      const d = w * 0.55;
-      const cols = Math.max(2, Math.round(w / 44));
-      const rows = Math.max(3, Math.round(h / 54));
-      const windows = [];
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          if (Math.random() > (landmark ? 0.42 : 0.26)) continue; // only scattered lit windows
-          windows.push({
-            u: (c + 0.5) / cols,
-            v: (r + 0.5) / rows,
-            base: rnd(0.5, 0.92),
-            tw: Math.random() < 0.14 ? rnd(0.5, 1.4) : 0,
-            ph: rnd(0, 6.28)
-          });
-        }
+    function addPanels(x0, x1, y0, y1, group) {
+      const n = Math.max(1, Math.round((x1 - x0) / MULL));
+      const w = (x1 - x0) / n;
+      for (let i = 0; i < n; i++) {
+        panels.push({
+          x: x0 + i * w + 2, y: y0 + 2, w: w - 4, h: (y1 - y0) - 4,
+          amb: Math.random() < 0.18 ? rnd(0.28, 0.62) : 0,
+          tw: Math.random() < 0.1 ? rnd(0.5, 1.4) : 0, ph: rnd(0, 6.28),
+          group: group || 'wing'
+        });
       }
-      return { x, z, w, h, d, windows, landmark: !!landmark };
     }
-
-    function buildScene() {
-      buildings = [];
-      // Heights kept modest so the skyline stays a lower band, clear of the
-      // lifted heading. A central "clearing" (shorter towers near x=0) keeps
-      // the area behind the heading calm.
-      const layers = small
-        ? [ { zmin: 1600, zmax: 2800, count: 7, hmin: 150, hmax: 300, wmin: 120, wmax: 190 },
-            { zmin: 1000, zmax: 1350, count: 4, hmin: 210, hmax: 330, wmin: 150, wmax: 220 } ]
-        : [ { zmin: 2400, zmax: 3600, count: 9, hmin: 160, hmax: 300, wmin: 120, wmax: 190 },
-            { zmin: 1550, zmax: 2150, count: 6, hmin: 220, hmax: 360, wmin: 150, wmax: 220 },
-            { zmin: 1000, zmax: 1300, count: 4, hmin: 250, hmax: 400, wmin: 175, wmax: 240 } ];
-      layers.forEach(L => {
-        for (let i = 0; i < L.count; i++) {
-          let x = rnd(-1800, 1800);
-          let h = rnd(L.hmin, L.hmax);
-          // Lower the towers that sit directly behind the (centred) heading.
-          if (Math.abs(x) < 420) h *= 0.6;
-          buildings.push(makeBuilding(x, rnd(L.zmin, L.zmax), rnd(L.wmin, L.wmax), h));
-        }
-      });
-      // Foreground landmark, pushed to the right edge so it frames, not blocks.
-      buildings.push(small
-        ? makeBuilding(560, 900, 200, 360, true)
-        : makeBuilding(760, 950, 250, 440, true));
-      buildings.sort((a, b) => b.z - a.z);
+    function layout() {
+      scale = Math.min(W * 0.80, 1120) / 1000;
+      groundY = H * 0.93;
+      cx = W / 2;
+      panels = [];
+      addPanels(-500, -ENT, F1[0], F1[1]);
+      addPanels(-500, -ENT, F2[0], F2[1]);
+      addPanels(ENT, 500, F1[0], F1[1]);
+      addPanels(ENT, 500, F2[0], F2[1]);
+      addPanels(-150, 150, TOP + 10, TOP + 64, 'penthouse');
     }
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = host.getBoundingClientRect();
-      W = rect.width; H = rect.height;
-      canvas.width = Math.round(W * dpr);
-      canvas.height = Math.round(H * dpr);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
+      const r = host.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      baseY = H * 0.92;          // ground near the bottom
-      buildScene();
+      layout();
     }
 
-    function proj(wx, wy, wz, camX, lift) {
-      const f = FOCAL / wz;
-      return { x: W / 2 + (wx - camX) * f, y: (baseY + lift) - (wy - CAM_Y) * f };
+    // design -> screen, with a per-layer parallax offset
+    function T(dx, dy, p) { return { x: cx + dx * scale + p.x, y: groundY - dy * scale + p.y }; }
+    function seg(a, b, col, wd) { ctx.strokeStyle = col; ctx.lineWidth = wd || 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    // filled rect given design left x, bottom y, width, height
+    function rectF(x, yb, w, h, p, col) { const tl = T(x, yb + h, p); ctx.fillStyle = col; ctx.fillRect(tl.x, tl.y, w * scale, h * scale); }
+    function rectS(x, yb, w, h, p, col, wd) { const tl = T(x, yb + h, p); ctx.strokeStyle = col; ctx.lineWidth = wd || 1; ctx.strokeRect(tl.x, tl.y, w * scale, h * scale); }
+
+    const G = 'rgba(200,169,110,';     // gold
+    const Gw = 'rgba(228,192,126,';    // warm window gold
+
+    function drawFacadeGrid(p) {
+      // transoms (horizontal floor lines), full width
+      [F1[0], F1[1], F2[0], F2[1]].forEach(y => seg(T(-500, y, p), T(500, y, p), G + '0.34)', 1));
+      // mullions (verticals) across both wings
+      ctx.strokeStyle = G + '0.26)'; ctx.lineWidth = 1;
+      for (let x = -500 + MULL; x < -ENT; x += MULL) seg(T(x, F1[0], p), T(x, F2[1], p), G + '0.26)', 1);
+      for (let x = ENT + MULL; x < 500; x += MULL) seg(T(x, F1[0], p), T(x, F2[1], p), G + '0.26)', 1);
     }
-    function fog(z) {
-      const tt = Math.max(0, Math.min(1, (z - 900) / (3600 - 900)));
-      return 0.62 - tt * 0.46;   // near ~0.62 → far ~0.16
+    function drawPodium(p) {
+      seg(T(-500, POD, p), T(500, POD, p), G + '0.5)', 1.1);
+      seg(T(-500, 26, p), T(500, 26, p), G + '0.2)', 1);
+      for (let x = -460; x <= 460; x += 95) seg(T(x, 0, p), T(x, POD, p), G + '0.16)', 1);
+    }
+    function drawCornice(p) {
+      // slight projecting cap
+      seg(T(-512, TOP, p), T(512, TOP, p), G + '0.5)', 1.2);
+      seg(T(-512, TOP + 9, p), T(512, TOP + 9, p), G + '0.4)', 1);
+      seg(T(-512, TOP, p), T(-512, TOP + 9, p), G + '0.4)', 1);
+      seg(T(512, TOP, p), T(512, TOP + 9, p), G + '0.4)', 1);
+    }
+    function drawOutline(p) {
+      rectS(-500, 0, 1000, TOP, p, G + '0.55)', 1.2);
+      // vertical seam where wings meet entrance bay
+      seg(T(-ENT, 0, p), T(-ENT, TOP, p), G + '0.4)', 1);
+      seg(T(ENT, 0, p), T(ENT, TOP, p), G + '0.4)', 1);
+    }
+    function drawEntrance(p) {
+      // recess interior warm glow
+      const gc = T(0, 60, p);
+      const grd = ctx.createRadialGradient(gc.x, gc.y, 4, gc.x, gc.y, 150 * scale);
+      grd.addColorStop(0, 'rgba(228,192,126,0.34)');
+      grd.addColorStop(1, 'rgba(228,192,126,0)');
+      ctx.fillStyle = grd;
+      const rb = T(-ENT, F2[0], p);
+      ctx.fillRect(rb.x, rb.y, ENT * 2 * scale, F2[0] * scale);
+      // columns flanking the entry
+      [-(ENT - 16), (ENT - 16)].forEach(x => {
+        rectS(x - 5, 0, 10, F1[1], p, G + '0.5)', 1.1);
+      });
+      // cantilevered canopy slab (projecting), at floor-1 head height
+      rectF(-ENT - 26, F1[1], (ENT + 26) * 2, 12, p, 'rgba(9,18,38,0.98)');
+      rectS(-ENT - 26, F1[1], (ENT + 26) * 2, 12, p, G + '0.6)', 1.2);
+      // glass doors
+      rectS(-58, 0, 116, 120, p, G + '0.5)', 1.1);
+      for (let x = -58; x <= 58; x += 29) seg(T(x, 0, p), T(x, 120, p), G + '0.3)', 1);
+      seg(T(0, 0, p), T(0, 120, p), G + '0.42)', 1); // central door split
+      // handles
+      seg(T(-6, 58, p), T(-6, 70, p), Gw + '0.8)', 2);
+      seg(T(6, 58, p), T(6, 70, p), Gw + '0.8)', 2);
+      // steps (below ground, widening)
+      for (let i = 1; i <= 3; i++) {
+        const w = 86 + i * 22;
+        seg(T(-w, -i * 11, p), T(w, -i * 11, p), G + (0.34 - i * 0.06) + ')', 1);
+      }
+    }
+    function drawSignage(p) {
+      const s = T(0, (SP[0] + SP[1]) / 2, p);
+      ctx.save();
+      ctx.fillStyle = G + '0.85)';
+      ctx.font = '600 ' + Math.round(15 * scale) + "px 'Cormorant Garamond', serif";
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      // manual tracking
+      const txt = 'SELEQT', tr = 5 * scale;
+      ctx.font = '600 ' + Math.round(15 * scale) + "px 'Cormorant Garamond', serif";
+      let total = 0; const widths = [];
+      for (const ch of txt) { const w = ctx.measureText(ch).width + tr; widths.push(w); total += w; }
+      let xx = s.x - total / 2;
+      ctx.textAlign = 'left';
+      for (let i = 0; i < txt.length; i++) { ctx.fillText(txt[i], xx, s.y); xx += widths[i]; }
+      ctx.restore();
+    }
+    function drawRooftop(p) {
+      // penthouse box
+      rectF(-150, TOP, 300, 74, p, 'rgba(11,21,44,0.97)');
+      rectS(-150, TOP, 300, 74, p, G + '0.45)', 1);
+      // parapet railing along the main roof wings
+      [[-500, -150], [150, 500]].forEach(([a, b]) => {
+        seg(T(a, TOP + 26, p), T(b, TOP + 26, p), G + '0.3)', 1);
+        for (let x = a; x <= b; x += 30) seg(T(x, TOP + 9, p), T(x, TOP + 26, p), G + '0.2)', 1);
+      });
+      // HVAC units on wing roofs
+      [-360, -250, 300, 410].forEach((x, i) => {
+        const w = 56 + (i % 2) * 16, h = 30 + (i % 2) * 10;
+        rectF(x - w / 2, TOP + 9, w, h, p, 'rgba(7,14,30,0.98)');
+        rectS(x - w / 2, TOP + 9, w, h, p, G + '0.34)', 1);
+      });
+    }
+    function drawGround(p) {
+      const y = groundY + p.y;
+      seg({ x: 0, y }, { x: W, y }, G + '0.16)', 1);
+      // soft ground haze
+      const hz = ctx.createLinearGradient(0, y - 150, 0, y + 30);
+      hz.addColorStop(0, 'rgba(26,58,107,0)');
+      hz.addColorStop(1, 'rgba(26,58,107,0.14)');
+      ctx.fillStyle = hz; ctx.fillRect(0, y - 150, W, 180);
+    }
+    function drawPath(p) {
+      // converging entry path from bottom centre to the doors
+      const bl = T(-150, -36, p), br = T(150, -36, p);
+      const tl = T(-66, 0, p), tr = T(66, 0, p);
+      ctx.strokeStyle = G + '0.2)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(bl.x, bl.y); ctx.lineTo(tl.x, tl.y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(br.x, br.y); ctx.lineTo(tr.x, tr.y); ctx.stroke();
+    }
+    function drawHedges(p) {
+      ctx.strokeStyle = G + '0.3)'; ctx.lineWidth = 1;
+      for (const [a, b] of [[-500, -150], [150, 500]]) {
+        for (let x = a; x < b; x += 26) {
+          const c = T(x + 13, 20, p);
+          ctx.beginPath(); ctx.arc(c.x, c.y, 9 * scale, Math.PI, 0); ctx.stroke();
+        }
+      }
+    }
+    function tree(x, p) {
+      const base = T(x, 0, p);
+      // trunk
+      seg(base, T(x, 46, p), G + '0.45)', 1.4);
+      // canopy — layered fine arcs
+      const c = T(x, 96, p), R = 52 * scale;
+      ctx.strokeStyle = G + '0.32)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(c.x, c.y, R, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(c.x - R * 0.3, c.y + R * 0.15, R * 0.6, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(c.x + R * 0.32, c.y + R * 0.1, R * 0.55, 0, Math.PI * 2); ctx.stroke();
+    }
+    function drawTrees(p) { tree(-455, p); tree(458, p); }
+    function drawFigures(p) {
+      ctx.strokeStyle = G + '0.5)'; ctx.lineWidth = 1.4;
+      [[-44, 30], [34, 28]].forEach(([x, h]) => {
+        const feet = T(x, 0, p), head = T(x, h, p);
+        seg(feet, T(x, h * 0.62, p), G + '0.5)', 1.4);        // legs/torso
+        const hd = T(x, h, p);
+        ctx.fillStyle = G + '0.5)';
+        ctx.beginPath(); ctx.arc(hd.x, hd.y, 3.2 * scale, 0, Math.PI * 2); ctx.fill();
+      });
+    }
+    function drawBollards(p) {
+      [-118, 118].forEach(x => {
+        seg(T(x, 0, p), T(x, 26, p), G + '0.4)', 1.2);
+        const top = T(x, 28, p);
+        ctx.fillStyle = Gw + '0.7)';
+        ctx.beginPath(); ctx.arc(top.x, top.y, 2.6 * scale, 0, Math.PI * 2); ctx.fill();
+      });
     }
 
     function frame() {
-      t += 1;
+      t++;
       ctx.clearRect(0, 0, W, H);
+      current.px += (target.px - current.px) * 0.06;
+      current.py += (target.py - current.py) * 0.06;
+      const bp = { x: current.px * 0.4, y: current.py * 0.3 };  // building layer
+      const fp = { x: current.px * 1.0, y: current.py * 0.6 };  // foreground layer
 
-      current.panX += (target.panX - current.panX) * 0.05;
-      current.lift += (target.lift - current.lift) * 0.05;
-      const sway = Math.sin(t * 0.0013) * 26;
-      const camX = current.panX + sway;
-      const lift = current.lift;
-      const ground = baseY + lift;
+      drawGround(bp);
 
-      // Ground haze — a soft lift of light just above the baseline.
-      const hz = ctx.createLinearGradient(0, ground - 180, 0, ground + 40);
-      hz.addColorStop(0, 'rgba(26,58,107,0)');
-      hz.addColorStop(1, 'rgba(26,58,107,0.16)');
-      ctx.fillStyle = hz;
-      ctx.fillRect(0, ground - 180, W, 220);
+      // building solid fills (occlusion)
+      rectF(-500, 0, 1000, TOP, bp, 'rgba(9,18,38,0.97)');
+      rectF(-ENT, 0, ENT * 2, F2[0], bp, 'rgba(4,9,20,0.98)'); // entrance recess void
 
-      // Horizon line
-      ctx.strokeStyle = 'rgba(200,169,110,0.12)';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(0, ground); ctx.lineTo(W, ground); ctx.stroke();
-
-      for (const b of buildings) {
-        const op = Math.min(1, fog(b.z) * (b.landmark ? 1.2 : 1));
-        const half = b.w / 2;
-
-        // Front face corners
-        const flb = proj(b.x - half, 0,   b.z, camX, lift);
-        const frb = proj(b.x + half, 0,   b.z, camX, lift);
-        const flt = proj(b.x - half, b.h, b.z, camX, lift);
-        const frt = proj(b.x + half, b.h, b.z, camX, lift);
-
-        // Visible side face (the one facing the camera centre) — gives 3D
-        // volume with NO open-top roof.
-        const leftSide = b.x > camX;
-        const sx = leftSide ? (b.x - half) : (b.x + half);
-        const sfb = proj(sx, 0,   b.z,       camX, lift);
-        const sft = proj(sx, b.h, b.z,       camX, lift);
-        const sbt = proj(sx, b.h, b.z + b.d, camX, lift);
-        const sbb = proj(sx, 0,   b.z + b.d, camX, lift);
-
-        // Side face (darker)
-        ctx.fillStyle = 'rgba(4,9,20,0.96)';
-        ctx.beginPath();
-        ctx.moveTo(sfb.x, sfb.y); ctx.lineTo(sft.x, sft.y);
-        ctx.lineTo(sbt.x, sbt.y); ctx.lineTo(sbb.x, sbb.y);
-        ctx.closePath(); ctx.fill();
-
-        // Front face (solid fill so it occludes towers behind)
-        ctx.fillStyle = 'rgba(9,18,38,0.96)';
-        ctx.beginPath();
-        ctx.moveTo(flb.x, flb.y); ctx.lineTo(frb.x, frb.y);
-        ctx.lineTo(frt.x, frt.y); ctx.lineTo(flt.x, flt.y);
-        ctx.closePath(); ctx.fill();
-
-        // Outlines
-        ctx.lineWidth = b.landmark ? 1.3 : 1;
-        ctx.strokeStyle = 'rgba(200,169,110,' + op.toFixed(3) + ')';
-        ctx.beginPath();                       // front rectangle
-        ctx.moveTo(flb.x, flb.y); ctx.lineTo(frb.x, frb.y);
-        ctx.lineTo(frt.x, frt.y); ctx.lineTo(flt.x, flt.y);
-        ctx.closePath(); ctx.stroke();
-        ctx.beginPath();                       // side top + back edges (the 3D corner)
-        ctx.moveTo(sft.x, sft.y); ctx.lineTo(sbt.x, sbt.y); ctx.lineTo(sbb.x, sbb.y);
-        ctx.stroke();
-
-        // Lit windows on the front face
-        const winSize = Math.max(0.8, 4.2 * (FOCAL / b.z));
-        for (const win of b.windows) {
-          let lvl = win.base;
-          if (win.tw > 0) lvl *= (0.55 + 0.45 * Math.sin(t * 0.045 * win.tw + win.ph));
-          const wop = Math.min(1, lvl * (0.5 + op));
-          if (wop < 0.05) continue;
-          const p = proj(b.x - half + win.u * b.w, win.v * b.h, b.z, camX, lift);
-          ctx.fillStyle = 'rgba(226,190,124,' + wop.toFixed(3) + ')';
-          ctx.fillRect(p.x - winSize / 2, p.y - winSize / 2, winSize, winSize);
+      // windows
+      const R = 250;
+      for (const pn of panels) {
+        const gp = T(pn.x, pn.y + pn.h, bp);
+        const pw = pn.w * scale, ph = pn.h * scale;
+        ctx.fillStyle = 'rgba(120,150,200,0.05)';     // faint glass tint
+        ctx.fillRect(gp.x, gp.y, pw, ph);
+        let amb = pn.amb;
+        if (pn.tw > 0) amb *= (0.5 + 0.5 * Math.sin(t * 0.04 * pn.tw + pn.ph));
+        let inten = 0;
+        if (mouse.active) {
+          const c = { x: gp.x + pw / 2, y: gp.y + ph / 2 };
+          const d = Math.hypot(c.x - mouse.x, c.y - mouse.y);
+          if (d < R) inten = Math.pow(1 - d / R, 1.6);
+        }
+        const lvl = Math.max(amb, inten);
+        if (lvl > 0.03) {
+          ctx.fillStyle = Gw + Math.min(1, lvl * 0.92).toFixed(3) + ')';
+          ctx.fillRect(gp.x + 0.5, gp.y + 0.5, pw - 1, ph - 1);
         }
       }
+
+      drawFacadeGrid(bp);
+      drawPodium(bp);
+      drawOutline(bp);
+      drawCornice(bp);
+      drawRooftop(bp);
+      drawEntrance(bp);
+      drawSignage(bp);
+
+      // foreground landscaping (parallaxes more)
+      drawPath(fp);
+      drawHedges(fp);
+      drawBollards(fp);
+      drawFigures(fp);
+      drawTrees(fp);
 
       raf = requestAnimationFrame(frame);
     }
 
     host.addEventListener('mousemove', (e) => {
-      const rect = host.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      target.panX = nx * 240;
-      target.lift = ny * -26;
+      const r = host.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; mouse.active = true;
+      target.px = ((mouse.x / r.width) - 0.5) * -34;
+      target.py = ((mouse.y / r.height) - 0.5) * -20;
     });
-    host.addEventListener('mouseleave', () => { target.panX = 0; target.lift = 0; });
+    host.addEventListener('mouseleave', () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; target.px = 0; target.py = 0; });
 
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
