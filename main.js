@@ -992,6 +992,31 @@ function isInViewport(el) {
   });
 })();
 
+/* ── FAQ accordion ───────────────────────────
+   Click a question to reveal its answer; opening one closes the others in
+   the same list (single-open). Toggles .open + aria-expanded. */
+(function faqAccordion() {
+  document.querySelectorAll('.faq-list').forEach(list => {
+    const items = Array.from(list.querySelectorAll('.faq-item'));
+    items.forEach(item => {
+      const btn = item.querySelector('.faq-q');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        items.forEach(other => {
+          other.classList.remove('open');
+          const b = other.querySelector('.faq-q');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+})();
+
 // ── Auto-year copyright ─────────────────────
 // Every footer has <span class="footer-year">2026</span> — keep the year
 // fresh automatically so it doesn't go stale on Jan 1.

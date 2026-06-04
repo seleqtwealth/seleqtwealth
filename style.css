@@ -2148,52 +2148,102 @@ a, button { cursor: none; }
 @media (max-width: 600px) { .feature-item { flex: 1 1 100%; } }
 
 /* ============================================
-   SERVICE-PAGE FAQ — answers for SEO + AI extraction
-   A clean Q&A block before the CTA. Mirrored by FAQPage JSON-LD in each
-   page head so it's eligible for Google "People Also Ask" and easy for
-   answer engines to lift.
+   SERVICE-PAGE FAQ — two-column accordion
+   A distinct section after the body: a sticky heading in the left margin
+   (using the negative space) and a click-to-expand accordion on the right.
+   Text is intentionally smaller than the body so it reads as a secondary
+   section. Mirrored by FAQPage JSON-LD in each page head for SEO + AI.
    ============================================ */
 .faq-section {
-  background: var(--paper);
-  padding: 100px 0 120px;
+  background: var(--paper-soft);
+  padding: 150px 0 140px;
   border-top: 1px solid var(--ink-line);
   position: relative;
 }
-.faq-section .container { max-width: 860px; }
+/* Wide two-column layout uses the side space; heading sits left, list right */
+.faq-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.faq-head { position: sticky; top: 120px; }
+.faq-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
 .faq-heading {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
   font-weight: 300;
   color: var(--navy);
-  margin-bottom: 44px;
   letter-spacing: -0.01em;
+  line-height: 1.12;
+  margin: 0;
 }
 .faq-heading em { font-style: italic; color: var(--gold); font-weight: 300; }
-.faq-list { margin: 0; }
-.faq-list dt {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 400;
-  color: var(--navy);
-  margin: 0 0 10px;
-  letter-spacing: -0.005em;
-  line-height: 1.3;
-}
-.faq-list dd {
-  margin: 0 0 30px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid var(--ink-line);
+
+.faq-list { border-top: 1px solid var(--ink-line); }
+.faq-item { border-bottom: 1px solid var(--ink-line); }
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 22px 2px;
   font-family: var(--font-body);
-  font-size: 1.02rem;
-  font-weight: 300;
-  line-height: 1.8;
-  color: var(--ink-soft);
+  font-size: 0.98rem;            /* smaller than body (1.04rem) */
+  font-weight: 500;
+  color: var(--navy);
+  transition: color 0.3s var(--ease-out);
 }
-.faq-list dd:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-@media (max-width: 768px) {
-  .faq-section { padding: 80px 0 90px; }
-  .faq-heading { margin-bottom: 32px; }
-  .faq-list dt { font-size: 1.15rem; }
+.faq-q:hover { color: var(--gold); }
+/* + / − toggle icon */
+.faq-icon {
+  position: relative;
+  flex: 0 0 14px;
+  width: 14px; height: 14px;
+}
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  background: var(--gold);
+  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out);
+}
+.faq-icon::before { top: 6.25px; left: 0; width: 14px; height: 1.5px; }
+.faq-icon::after  { left: 6.25px; top: 0; width: 1.5px; height: 14px; }
+.faq-item.open .faq-icon::after { transform: scaleY(0); opacity: 0; }
+.faq-a {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.45s var(--ease-out);
+}
+.faq-item.open .faq-a { max-height: 600px; }
+.faq-a p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;             /* smaller than body */
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin: 0;
+  padding: 0 2px 26px;
+  max-width: 64ch;
+}
+@media (max-width: 860px) {
+  .faq-section { padding: 100px 0 90px; }
+  .faq-container { grid-template-columns: 1fr; gap: 30px; }
+  .faq-head { position: static; }
 }
 
 /* ============================================
