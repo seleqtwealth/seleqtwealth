@@ -932,18 +932,22 @@ function isInViewport(el) {
   if (reducedMotion || isCoarse) return;
 
   document.querySelectorAll('.sub-hero').forEach(hero => {
-    const line = document.createElement('div');
-    line.className = 'hero-hairline';
+    const vline = document.createElement('div');
+    vline.className = 'hero-hairline';
+    const hline = document.createElement('div');
+    hline.className = 'hero-hairline hero-hairline--h';
     const dot = document.createElement('div');
     dot.className = 'hero-hairline-dot';
-    hero.appendChild(line);
+    hero.appendChild(vline);
+    hero.appendChild(hline);
     hero.appendChild(dot);
 
     hero.addEventListener('mousemove', (e) => {
       const r = hero.getBoundingClientRect();
       const x = e.clientX - r.left;
       const y = e.clientY - r.top;
-      line.style.transform = 'translateX(' + x + 'px)';
+      vline.style.transform = 'translateX(' + x + 'px)';
+      hline.style.transform = 'translateY(' + y + 'px)';
       dot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
       hero.classList.add('hairline-on');
     });
@@ -961,6 +965,30 @@ function isInViewport(el) {
     cue.className = 'sub-hero-scroll';
     cue.innerHTML = '<span>Scroll</span><span class="sub-hero-scroll-line"></span>';
     hero.appendChild(cue);
+  });
+})();
+
+/* ── Practice chips — signature colours + section wash ───────────────
+   Gives each capability chip a deep jewel-tone signature colour (cycled
+   from a curated palette). On hover the chip fills with its colour and the
+   whole .sub-content section background washes toward that colour. CSS
+   handles the visuals; this just assigns colours and toggles the wash. */
+(function practiceChips() {
+  const palette = ['#1f4d45', '#4a2230', '#243a6b', '#4a3618', '#3a2545', '#234a2c'];
+  document.querySelectorAll('.feature-list').forEach(list => {
+    const section = list.closest('.sub-content');
+    Array.from(list.querySelectorAll('.feature-item')).forEach((item, i) => {
+      const color = palette[i % palette.length];
+      item.style.setProperty('--chip', color);
+      item.addEventListener('mouseenter', () => {
+        if (!section) return;
+        section.style.setProperty('--wash', color);
+        section.classList.add('is-washing');
+      });
+      item.addEventListener('mouseleave', () => {
+        if (section) section.classList.remove('is-washing');
+      });
+    });
   });
 })();
 
