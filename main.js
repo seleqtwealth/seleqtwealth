@@ -936,8 +936,6 @@ function isInViewport(el) {
   const hosts = Array.from(document.querySelectorAll('.sub-hero'));
   if (!hosts.length) return;
 
-  hosts.forEach(initOffice);
-
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
   // Design coordinate system: x from -500..500, y up from ground (0).
@@ -1227,6 +1225,10 @@ function isInViewport(el) {
     resize();
     raf = requestAnimationFrame(frame);
   }
+
+  // Kick off AFTER the design constants above are initialized (initOffice
+  // reads TOP/ENT/F1/etc., so calling it earlier hit the temporal dead zone).
+  hosts.forEach(initOffice);
 })();
 
 /* ── Sub-hero scroll cue ─────────────────────
