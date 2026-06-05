@@ -153,6 +153,12 @@ const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    // Gate submission on native + custom validity (required name, real email
+    // format, etc.). reportValidity surfaces the browser's inline message.
+    if (!contactForm.checkValidity()) {
+      contactForm.reportValidity();
+      return;
+    }
     const btn = contactForm.querySelector('button[type="submit"]');
     const original = btn.textContent;
 
@@ -209,6 +215,15 @@ if (contactForm) {
           if (hidden) hidden.value = '';
           sel.querySelectorAll('.cs-menu li').forEach(o => o.classList.remove('is-selected'));
         });
+        // Reset the phone country-code label and the message word counter
+        const ccVal = contactForm.querySelector('.phone-cc-value');
+        if (ccVal) ccVal.textContent = '+91';
+        const wcWrap = document.getElementById('messageCount');
+        if (wcWrap) {
+          const wcCur = wcWrap.querySelector('.wc-current');
+          if (wcCur) wcCur.textContent = '0';
+          wcWrap.classList.remove('is-limit');
+        }
         resetButton(3500);
       } else {
         console.error('Web3Forms error', data);
@@ -432,6 +447,158 @@ function isInViewport(el) {
     const opts = Array.from(sel.querySelectorAll('.cs-menu li'));
     opts.forEach(o => o.classList.remove('is-highlighted'));
     if (opts[idx]) opts[idx].classList.add('is-highlighted');
+  }
+})();
+
+// ── Contact form field rules ────────────────────────────────────────
+// Searchable country-code dropdown, digits-only phone input, stricter email
+// validation, and a 200-word cap on the message (with a live counter).
+(function() {
+  const form = document.getElementById('contactForm');
+  if (!form) return;
+
+  // Country dialing codes. India first; the rest cover the markets our
+  // clients most often write in from, plus a broad global list.
+  const countries = [
+    ['India', '+91'], ['United States', '+1'], ['United Kingdom', '+44'],
+    ['United Arab Emirates', '+971'], ['Singapore', '+65'], ['Canada', '+1'],
+    ['Australia', '+61'], ['Saudi Arabia', '+966'], ['Qatar', '+974'],
+    ['Kuwait', '+965'], ['Bahrain', '+973'], ['Oman', '+968'],
+    ['Hong Kong', '+852'], ['Switzerland', '+41'], ['Germany', '+49'],
+    ['France', '+33'], ['Netherlands', '+31'], ['Ireland', '+353'],
+    ['New Zealand', '+64'], ['Japan', '+81'], ['Malaysia', '+60'],
+    ['Thailand', '+66'], ['Indonesia', '+62'], ['Sri Lanka', '+94'],
+    ['Nepal', '+977'], ['Bangladesh', '+880'], ['Pakistan', '+92'],
+    ['China', '+86'], ['South Korea', '+82'], ['South Africa', '+27'],
+    ['Kenya', '+254'], ['Nigeria', '+234'], ['Mauritius', '+230'],
+    ['Italy', '+39'], ['Spain', '+34'], ['Portugal', '+351'],
+    ['Belgium', '+32'], ['Sweden', '+46'], ['Norway', '+47'],
+    ['Denmark', '+45'], ['Finland', '+358'], ['Austria', '+43'],
+    ['Poland', '+48'], ['Russia', '+7'], ['Turkey', '+90'],
+    ['Israel', '+972'], ['Brazil', '+55'], ['Mexico', '+52'],
+    ['Argentina', '+54'], ['Philippines', '+63'], ['Vietnam', '+84'],
+    ['Egypt', '+20'], ['Greece', '+30'], ['Czech Republic', '+420'],
+    ['Luxembourg', '+352'], ['Monaco', '+377'], ['Taiwan', '+886']
+  ];
+
+  // ── Country-code dropdown (searchable) ──
+  const wrap = form.querySelector('.phone-country');
+  if (wrap) {
+    const trigger = wrap.querySelector('.cs-trigger');
+    const value = wrap.querySelector('.phone-cc-value');
+    const search = wrap.querySelector('.phone-cc-search');
+    const list = wrap.querySelector('.phone-cc-list');
+    const hidden = wrap.querySelector('input[type="hidden"]');
+
+    countries.forEach(([name, dial]) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.dataset.value = dial;
+      li.dataset.search = (name + ' ' + dial + ' ' + dial.replace('+', '')).toLowerCase();
+      const n = document.createElement('span');
+      n.className = 'phone-cc-name';
+      n.textContent = name;
+      const d = document.createElement('span');
+      d.className = 'phone-cc-dial';
+      d.textContent = dial;
+      li.appendChild(n);
+      li.appendChild(d);
+      li.addEventListener('click', () => {
+        value.textContent = dial;
+        hidden.value = dial;
+        closeMenu();
+        trigger.focus();
+      });
+      list.appendChild(li);
+    });
+    const items = Array.from(list.children);
+    const empty = document.createElement('li');
+    empty.className = 'is-empty';
+    empty.textContent = 'No match';
+    empty.hidden = true;
+    list.appendChild(empty);
+
+    function openMenu() {
+      wrap.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      search.value = '';
+      filter('');
+      setTimeout(() => search.focus(), 30);
+    }
+    function closeMenu() {
+      wrap.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+    function filter(q) {
+      q = q.trim().toLowerCase();
+      let any = false;
+      items.forEach(li => {
+        const show = !q || li.dataset.search.indexOf(q) !== -1;
+        li.hidden = !show;
+        if (show) any = true;
+      });
+      empty.hidden = any;
+    }
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (wrap.classList.contains('is-open')) closeMenu(); else openMenu();
+    });
+    search.addEventListener('input', () => filter(search.value));
+    search.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeMenu(); trigger.focus(); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        const first = items.find(li => !li.hidden);
+        if (first) first.click();
+      }
+    });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) closeMenu(); });
+  }
+
+  // ── Phone number: digits only ──
+  const phone = form.querySelector('.phone-number');
+  if (phone) {
+    phone.addEventListener('input', () => {
+      const cleaned = phone.value.replace(/[^0-9]/g, '');
+      if (cleaned !== phone.value) phone.value = cleaned;
+    });
+    phone.addEventListener('keypress', (e) => {
+      if (e.key.length === 1 && !/[0-9]/.test(e.key)) e.preventDefault();
+    });
+  }
+
+  // ── Email: require a real TLD (stricter than type=email default) ──
+  const email = form.querySelector('input[type="email"]');
+  if (email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const check = () => {
+      email.setCustomValidity(email.value && !re.test(email.value)
+        ? 'Please enter a valid email address.' : '');
+    };
+    email.addEventListener('input', check);
+    email.addEventListener('blur', check);
+  }
+
+  // ── Message: 200-word cap with live counter ──
+  const message = document.getElementById('contactMessage');
+  const counterWrap = document.getElementById('messageCount');
+  if (message && counterWrap) {
+    const current = counterWrap.querySelector('.wc-current');
+    const MAX = 200;
+    const countWords = (s) => { const t = s.trim(); return t ? t.split(/\s+/).length : 0; };
+    const update = () => {
+      let n = countWords(message.value);
+      if (n > MAX) {
+        const trailing = /\s$/.test(message.value) ? ' ' : '';
+        message.value = message.value.trim().split(/\s+/).slice(0, MAX).join(' ') + trailing;
+        n = countWords(message.value);
+      }
+      current.textContent = n;
+      counterWrap.classList.toggle('is-limit', n >= MAX);
+    };
+    message.addEventListener('input', update);
+    update();
   }
 })();
 

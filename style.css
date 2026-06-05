@@ -1943,6 +1943,86 @@ a, button { cursor: none; }
 .cs-menu::-webkit-scrollbar-track { background: transparent; }
 .cs-menu::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 
+/* ── Phone field: country-code dropdown + number input ── */
+.phone-field {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+.phone-country { position: relative; flex: 0 0 auto; }
+.phone-cc-trigger {
+  width: auto;
+  gap: 8px;
+  white-space: nowrap;
+  padding-right: 2px;
+}
+.phone-cc-value { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.phone-number { flex: 1 1 auto; min-width: 0; }
+/* Country menu: anchored under the code button but wider than it */
+.phone-cc-menu {
+  left: 0;
+  right: auto;
+  width: 300px;
+  max-width: calc(100vw - 48px);
+  padding-top: 0;
+}
+.phone-country.is-open .cs-trigger { border-bottom-color: var(--gold); }
+.phone-country.is-open .cs-caret { transform: rotate(180deg); }
+.phone-country.is-open .phone-cc-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0s linear 0s;
+}
+.phone-cc-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(2, 8, 18, 0.96);
+  border: none;
+  border-bottom: 1px solid rgba(184, 146, 78, 0.22);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  padding: 12px 18px;
+  outline: none;
+}
+.phone-cc-search::placeholder { color: rgba(244, 241, 234, 0.32); }
+.phone-cc-list { list-style: none; margin: 0; padding: 6px 0; }
+.phone-cc-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.phone-cc-list li .phone-cc-dial {
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.86rem;
+  flex: 0 0 auto;
+}
+.phone-cc-list li.is-empty {
+  justify-content: flex-start;
+  color: rgba(244, 241, 234, 0.4);
+  cursor: default;
+  border-left-color: transparent;
+}
+.phone-cc-list li.is-empty:hover { background: transparent; color: rgba(244, 241, 234, 0.4); border-left-color: transparent; }
+
+/* ── Message word counter ── */
+.word-counter {
+  margin: 8px 0 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: rgba(244, 241, 234, 0.4);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.word-counter.is-limit { color: var(--gold); }
+
 .form-footer {
   margin-top: 12px;
   display: flex;
