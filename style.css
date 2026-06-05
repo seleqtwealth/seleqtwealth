@@ -1958,13 +1958,19 @@ a, button { cursor: none; }
 }
 .phone-cc-value { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
 .phone-number { flex: 1 1 auto; min-width: 0; }
-/* Country menu: anchored under the code button but wider than it */
+/* Country menu: anchored under the code button but wider than it.
+   The menu itself clips (overflow:hidden) and lays out as a column so the
+   search stays put while only the list scrolls — this avoids the sticky +
+   backdrop-filter bug where scrolled-away rows bleed outside the box. */
 .phone-cc-menu {
   left: 0;
   right: auto;
   width: 300px;
   max-width: calc(100vw - 48px);
-  padding-top: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 .phone-country.is-open .cs-trigger { border-bottom-color: var(--gold); }
 .phone-country.is-open .cs-caret { transform: rotate(180deg); }
@@ -1975,9 +1981,7 @@ a, button { cursor: none; }
   transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0s linear 0s;
 }
 .phone-cc-search {
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  flex: 0 0 auto;
   width: 100%;
   box-sizing: border-box;
   background: rgba(2, 8, 18, 0.96);
@@ -1991,7 +1995,19 @@ a, button { cursor: none; }
   outline: none;
 }
 .phone-cc-search::placeholder { color: rgba(244, 241, 234, 0.32); }
-.phone-cc-list { list-style: none; margin: 0; padding: 6px 0; }
+.phone-cc-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 264px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.phone-cc-list::-webkit-scrollbar { width: 4px; }
+.phone-cc-list::-webkit-scrollbar-track { background: transparent; }
+.phone-cc-list::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
 .phone-cc-list li {
   display: flex;
   align-items: center;
