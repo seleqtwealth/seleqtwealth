@@ -2542,12 +2542,34 @@ a, button { cursor: none; }
 .about-principles-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px 64px;
+  gap: 16px;
 }
+/* Colour-reveal chips, matching the service-page practice chips: a --chip
+   top bar that fills on hover while the whole card washes to that colour
+   (main.js also tints the section background via .is-washing). */
 .about-principle {
   position: relative;
-  padding-left: 28px;
-  border-left: 1px solid var(--ink-line);
+  padding: 34px 30px 30px;
+  background: var(--paper-soft);
+  border: 1px solid var(--ink-line);
+  border-radius: 5px;
+  transition: background 0.5s var(--ease-out), border-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+}
+.about-principle::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--chip, var(--gold));
+  transform: scaleX(0.28);
+  transform-origin: left;
+  transition: transform 0.55s var(--ease-out);
+}
+.about-principle:hover::before { transform: scaleX(1); }
+.about-principle:hover {
+  background: var(--chip, var(--navy));
+  border-color: var(--chip, var(--navy));
+  box-shadow: 0 26px 54px -26px rgba(10, 26, 53, 0.45);
 }
 .about-principle .ap-num {
   font-family: var(--font-display);
@@ -2555,7 +2577,9 @@ a, button { cursor: none; }
   letter-spacing: 0.18em;
   color: var(--gold);
   margin-bottom: 18px;
+  transition: color 0.5s var(--ease-out);
 }
+.about-principle:hover .ap-num { color: var(--gold-light); }
 .about-principle h3 {
   font-family: var(--font-display);
   font-size: 1.45rem;
@@ -2564,18 +2588,23 @@ a, button { cursor: none; }
   color: var(--navy);
   margin-bottom: 14px;
   letter-spacing: -0.005em;
+  transition: color 0.5s var(--ease-out);
 }
-.about-principle h3 em { font-style: italic; color: var(--gold); font-weight: 300; }
+.about-principle h3 em { font-style: italic; color: var(--gold); font-weight: 300; transition: color 0.5s var(--ease-out); }
+.about-principle:hover h3 { color: var(--white); }
+.about-principle:hover h3 em { color: var(--gold-light); }
 .about-principle p {
   font-size: 0.94rem;
   color: var(--ink-soft);
   line-height: 1.8;
   margin: 0;
+  transition: color 0.5s var(--ease-out);
 }
+.about-principle:hover p { color: rgba(244, 241, 234, 0.82); }
 
 @media (max-width: 768px) {
   .about-principles { margin-top: 64px; padding-top: 56px; }
-  .about-principles-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-principles-grid { grid-template-columns: 1fr; gap: 14px; }
 }
 
 /* ============================================
@@ -3360,9 +3389,9 @@ body > footer.footer .footer-bottom {
   .about-principles { margin-top: 72px !important; padding-top: 72px !important; }
   .about-principles-grid {
     grid-template-columns: 1fr !important;
-    gap: 48px !important;
+    gap: 14px !important;
   }
-  .about-principle { padding-left: 24px !important; }
+  .about-principle { padding: 30px 24px 26px !important; }
   .about-principle h3 { font-size: 1.3rem !important; margin-bottom: 16px !important; }
   .about-principle p { font-size: 0.98rem !important; line-height: 1.85 !important; }
   .about-section-title { font-size: clamp(1.8rem, 7.5vw, 2.4rem) !important; margin-bottom: 56px !important; }

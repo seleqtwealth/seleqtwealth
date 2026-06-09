@@ -1277,18 +1277,27 @@ function isInViewport(el) {
    handles the visuals; this just assigns colours and toggles the wash. */
 (function practiceChips() {
   const palette = ['#1f4d45', '#4a2230', '#243a6b', '#4a3618', '#3a2545', '#234a2c'];
-  document.querySelectorAll('.feature-list').forEach(list => {
-    const section = list.closest('.sub-content');
-    Array.from(list.querySelectorAll('.feature-item')).forEach((item, i) => {
-      const color = palette[i % palette.length];
-      item.style.setProperty('--chip', color);
-      item.addEventListener('mouseenter', () => {
-        if (!section) return;
-        section.style.setProperty('--wash', color);
-        section.classList.add('is-washing');
-      });
-      item.addEventListener('mouseleave', () => {
-        if (section) section.classList.remove('is-washing');
+  // Each entry: [container selector, item selector]. The service-page feature
+  // lists and the About "What we stand for" principles share the same chip
+  // behaviour — a jewel-tone --chip per card plus a whole-section colour wash.
+  const groups = [
+    ['.feature-list', '.feature-item'],
+    ['.about-principles-grid', '.about-principle']
+  ];
+  groups.forEach(([containerSel, itemSel]) => {
+    document.querySelectorAll(containerSel).forEach(list => {
+      const section = list.closest('.sub-content');
+      Array.from(list.querySelectorAll(itemSel)).forEach((item, i) => {
+        const color = palette[i % palette.length];
+        item.style.setProperty('--chip', color);
+        item.addEventListener('mouseenter', () => {
+          if (!section) return;
+          section.style.setProperty('--wash', color);
+          section.classList.add('is-washing');
+        });
+        item.addEventListener('mouseleave', () => {
+          if (section) section.classList.remove('is-washing');
+        });
       });
     });
   });
