@@ -2,6 +2,16 @@
    SELEQT — Main JavaScript
    ============================================ */
 
+// ── Analytics event helper ──────────────────────────────────────────
+// Safe wrapper around gtag. GA only loads after the visitor accepts the
+// analytics cookie, so window.gtag is undefined until then; this becomes a
+// no-op in that case, keeping event tracking consent-respecting (DPDP-safe).
+window.seleqtTrack = function (name, params) {
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', name, params || {});
+  }
+};
+
 // ── Hero Intro (once per session) ──────────
 // The <html> element gets .intro-active if the intro should run (set pre-paint
 // in <head> based on sessionStorage + prefers-reduced-motion). We add .intro-running
@@ -202,6 +212,12 @@ if (contactForm) {
 
       if (response.ok && data.success !== false) {
         setState('Message Sent ✓', 'success');
+        // Conversion: a confirmed enquiry. formData was captured before reset.
+        window.seleqtTrack('generate_lead', {
+          form_location: 'contact',
+          focus: formData.get('focus') || '',
+          residency: formData.get('residency') || ''
+        });
         contactForm.reset();
         // Reset the custom-select labels back to placeholder state
         contactForm.querySelectorAll('.custom-select').forEach(sel => {
@@ -1323,12 +1339,29 @@ function isInViewport(el) {
   a.target = '_blank';
   a.rel = 'noopener noreferrer';
   a.setAttribute('aria-label', 'Chat with us on WhatsApp');
+  a.addEventListener('click', () => window.seleqtTrack('whatsapp_click', { location: 'fab' }));
   a.innerHTML = `
     <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true">
       <path d="M16.001 3C9.373 3 3.998 8.375 3.998 15c0 2.385.7 4.605 1.9 6.482L3 29l7.78-2.04A12.94 12.94 0 0 0 16.001 27C22.628 27 28 21.626 28 15S22.628 3 16.001 3zm0 21.818c-1.97 0-3.81-.54-5.382-1.476l-.385-.226-4.616 1.21 1.232-4.5-.252-.395A9.79 9.79 0 0 1 6.18 15c0-5.42 4.4-9.82 9.82-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.818-9.82 9.818zm5.39-7.36c-.295-.148-1.748-.862-2.018-.96-.27-.099-.467-.148-.664.148-.196.295-.762.96-.934 1.157-.172.197-.345.222-.64.074-.295-.148-1.245-.46-2.371-1.467-.876-.78-1.467-1.745-1.64-2.04-.172-.296-.018-.456.13-.604.133-.132.295-.345.443-.517.148-.173.197-.296.295-.493.099-.197.05-.37-.025-.518-.074-.148-.664-1.6-.91-2.193-.24-.576-.484-.498-.664-.508-.172-.008-.369-.01-.566-.01a1.087 1.087 0 0 0-.787.37c-.27.296-1.034 1.01-1.034 2.46s1.058 2.852 1.206 3.05c.148.197 2.084 3.18 5.05 4.46.706.305 1.257.487 1.687.624.708.225 1.353.193 1.863.117.568-.085 1.748-.715 1.994-1.405.246-.69.246-1.282.172-1.406-.073-.123-.27-.197-.566-.345z"/>
     </svg>
   `;
   document.body.appendChild(a);
+})();
+
+// ── Phone & email click tracking ────────────────────────────────────
+// Delegated so it covers every tel:/mailto: link on the page (contact
+// section, footer, etc.). Sends a GA event when consent is granted.
+(function() {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (href.startsWith('tel:')) {
+      window.seleqtTrack('phone_click', { value: href.replace('tel:', '') });
+    } else {
+      window.seleqtTrack('email_click', { value: href.replace('mailto:', '') });
+    }
+  });
 })();
 
 // ── Cookie consent + Google Analytics 4 loader ──────────────────────

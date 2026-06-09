@@ -623,11 +623,11 @@ a, button { cursor: none; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(244,241,234,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244,241,234,0.022) 1px, transparent 1px);
+    linear-gradient(rgba(244,241,234,0.013) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,241,234,0.013) 1px, transparent 1px);
   background-size: 96px 96px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 12%, transparent 64%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 12%, transparent 64%);
 }
 
 .hero-wordmark {
@@ -2192,11 +2192,11 @@ a, button { cursor: none; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(244,241,234,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244,241,234,0.025) 1px, transparent 1px);
+    linear-gradient(rgba(244,241,234,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,241,234,0.015) 1px, transparent 1px);
   background-size: 96px 96px;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, black 14%, transparent 66%);
+  -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, black 14%, transparent 66%);
 }
 .sub-hero::after {
   content: '';
