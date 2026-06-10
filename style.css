@@ -2116,7 +2116,7 @@ a, button { cursor: none; }
   font-style: italic;
 }
 .footer-col { display: flex; flex-direction: column; gap: 14px; }
-.footer-col h5 {
+.footer-col h2 {
   font-size: 0.62rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -2376,10 +2376,10 @@ a, button { cursor: none; }
   border-color: var(--chip, var(--navy));
   box-shadow: 0 26px 54px -26px rgba(10, 26, 53, 0.45);
 }
-.feature-item:hover h4 { color: var(--white); }
+.feature-item:hover h2 { color: var(--white); }
 .feature-item:hover p { color: rgba(244, 241, 234, 0.82); }
 .feature-item:hover .feat-abbr { color: var(--gold-light); }
-.feature-item h4 {
+.feature-item h2 {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 400;
@@ -2389,7 +2389,7 @@ a, button { cursor: none; }
 }
 /* Parenthetical expansion next to an abbreviation (e.g. "SIF (Specialised...)").
    Reads as a quieter qualifier than the abbreviation itself. */
-.feature-item h4 .feat-abbr {
+.feature-item h2 .feat-abbr {
   display: inline-block;
   margin-left: 6px;
   font-family: var(--font-body);
@@ -2403,7 +2403,7 @@ a, button { cursor: none; }
   top: -0.18em;
 }
 @media (max-width: 768px) {
-  .feature-item h4 .feat-abbr {
+  .feature-item h2 .feat-abbr {
     display: block;
     margin: 6px 0 0 0;
     font-size: 0.58rem;
@@ -3378,7 +3378,7 @@ body > footer.footer .footer-bottom {
     margin: 72px 0 !important;
   }
   .feature-item { padding: 36px 24px !important; }
-  .feature-item h4 { font-size: 1.15rem !important; }
+  .feature-item h2 { font-size: 1.15rem !important; }
   .feature-item p { font-size: 0.95rem !important; line-height: 1.8 !important; }
 
   .sub-cta-section { padding: 110px 24px !important; }
@@ -4137,7 +4137,7 @@ html.intro-running .hero-wordmark-spotlight {
   font-size: 0.62rem;
   letter-spacing: 0.22em;
 }
-.insight-upcoming h4 {
+.insight-upcoming h2 {
   font-family: var(--font-display);
   font-size: 1.18rem;
   font-weight: 400;
@@ -4312,7 +4312,7 @@ html.intro-running .hero-wordmark-spotlight {
   gap: 56px;
   align-items: start;
 }
-.article-footer-about h4 {
+.article-footer-about h2 {
   font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 400;
