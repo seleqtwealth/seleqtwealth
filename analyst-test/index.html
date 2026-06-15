@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SELEQT Private Wealth · Analyst Aptitude Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#101312; --bg2:#0B0D0C;
+  --card:#171B19; --card2:#1B201D;
+  --line:#262C29; --line2:#343B36;
+  --text:#EAE4D8; --muted:#9C968A; --faint:#6F6B61;
+  --gold:#C9A86A; --gold-bright:#E2C48E; --gold-dim:rgba(201,168,106,.14);
+  --green:#8DB89A; --amber:#D9A441; --red:#CD7C66;
+  --serif:'Fraunces',Georgia,serif; --sans:'Manrope',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px; scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgba(201,168,106,.05), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  background-color:var(--bg);
+  color:var(--text); font-family:var(--sans); min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1}
+
+/* ---------- header ---------- */
+header{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+  padding:30px 44px 24px; border-bottom:1px solid var(--line); max-width:1000px; margin:0 auto;
+}
+.wordmark{font-size:12px; letter-spacing:.34em; color:var(--gold); font-weight:700; text-transform:uppercase}
+.wordmark b{color:var(--gold-bright)}
+header h1{font-family:var(--serif); font-weight:600; font-size:31px; letter-spacing:.01em; margin-top:8px}
+.head-right{text-align:right; color:var(--muted); font-size:12.5px; line-height:1.7}
+.head-right .as-of{color:var(--text); font-weight:600}
+
+main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
+
+/* ---------- intro / candidate ---------- */
+.intro{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 28px; margin-bottom:30px}
+.intro p{color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:10px}
+.intro p b{color:var(--text); font-weight:600}
+.intro .note{font-size:12.5px; color:var(--faint); margin-top:14px; padding-top:14px; border-top:1px solid var(--line)}
+.cand{display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; margin-top:18px}
+.field{display:flex; flex-direction:column; gap:6px}
+.field label{font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.04em; text-transform:uppercase}
+.field input{
+  background:#121514; border:1px solid var(--line); border-radius:9px; color:var(--text);
+  font-family:var(--sans); font-weight:600; font-size:14px; padding:9px 12px; outline:none; transition:border-color .15s;
+}
+.field input:focus{border-color:var(--gold)}
+
+/* ---------- section ---------- */
+.section{margin-top:38px}
+.section-head{display:flex; align-items:baseline; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:8px}
+.section-head .sec-no{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:700}
+.section-head h2{font-family:var(--serif); font-weight:600; font-size:23px}
+.section-head .sec-sub{margin-left:auto; font-size:12px; color:var(--faint)}
+.section.flagship .section-head h2{color:var(--gold-bright)}
+
+/* ---------- question ---------- */
+.q{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:16px; transition:border-color .15s}
+.section.flagship .q{border-color:var(--line2); background:var(--card2)}
+.q-head{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.q-no{font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--gold); background:var(--gold-dim); border:1px solid rgba(201,168,106,.3); padding:3px 9px; border-radius:6px}
+.q-tag{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-type{margin-left:auto; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-text{font-size:15px; line-height:1.6; color:var(--text); font-weight:500; margin-bottom:16px}
+.q-text i{color:var(--gold-bright); font-style:italic}
+.opts{display:flex; flex-direction:column; gap:9px}
+.opt{display:flex; align-items:flex-start; gap:11px; padding:11px 14px; background:#121514; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .14s}
+.opt:hover{border-color:var(--line2)}
+.opt input{accent-color:var(--gold); margin-top:2px; width:15px; height:15px; cursor:pointer; flex:none}
+.opt span{font-size:14px; line-height:1.5; color:var(--muted)}
+.opt:has(input:checked){border-color:var(--gold); background:var(--gold-dim)}
+.opt:has(input:checked) span{color:var(--text)}
+textarea{width:100%; min-height:96px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:12px 14px; outline:none; resize:vertical; transition:border-color .15s}
+textarea:focus{border-color:var(--gold)}
+.q.locked .opt{cursor:default; opacity:.92}
+.q.locked .opt input{pointer-events:none}
+
+/* ---------- answer key (reviewer only) ---------- */
+.key{display:none; margin-top:14px; padding:13px 15px; background:#13160F; border:1px solid rgba(201,168,106,.28); border-radius:10px}
+body.reviewer .key{display:block}
+.key-label{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px}
+.key-line{font-size:13px; line-height:1.65; color:var(--muted)}
+.key-line b{color:var(--gold-bright); font-weight:700}
+.mark{display:none; margin-top:10px; font-size:12.5px; font-weight:800; letter-spacing:.04em}
+body.reviewer .mark{display:inline-block}
+.mark.right{color:var(--green)}
+.mark.wrong{color:var(--red)}
+.mark.na{color:var(--faint)}
+body.reviewer .opt.is-correct{border-color:var(--green); background:rgba(141,184,154,.1)}
+body.reviewer .opt.is-correct span{color:var(--green)}
+body.reviewer .opt.is-chosen-wrong{border-color:var(--red); background:rgba(205,124,102,.1)}
+body.reviewer .opt.is-chosen-wrong span{color:var(--red)}
+
+/* ---------- action bar ---------- */
+.actionbar{position:sticky; bottom:0; margin-top:40px; background:linear-gradient(180deg, transparent, var(--bg2) 40%);
+  padding:26px 0 8px; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.btn{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.02em; cursor:pointer;
+  border:1px solid var(--line2); border-radius:10px; padding:12px 22px; transition:all .15s; background:#121514; color:var(--text)}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold); color:#101312; border-color:var(--gold)}
+.btn.primary:hover{background:var(--gold-bright)}
+.btn.subtle{color:var(--faint); border-color:var(--line); font-size:12px; padding:10px 16px}
+.status{font-size:13px; color:var(--muted); font-weight:600}
+.status b{color:var(--gold-bright)}
+.scorebox{display:none; margin-left:auto; text-align:right}
+body.reviewer .scorebox{display:block}
+.scorebox .s-big{font-family:var(--serif); font-size:26px; font-weight:600; color:var(--gold-bright)}
+.scorebox .s-lab{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+
+.locked-banner{display:none; background:var(--gold-dim); border:1px solid rgba(201,168,106,.4); border-radius:12px;
+  padding:16px 20px; margin-bottom:24px; color:var(--gold-bright); font-size:14px; font-weight:600}
+body.submitted .locked-banner{display:block}
+
+/* ---------- interviewer chooser overlay ---------- */
+.overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px)}
+.overlay[hidden]{display:none}
+.chooser-card{width:100%; max-width:560px; max-height:86vh; overflow:auto; background:var(--card); border:1px solid var(--line2);
+  border-radius:18px; padding:24px 24px 20px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.chooser-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px}
+.ch-kicker{font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); font-weight:800}
+.ch-title{font-family:var(--serif); font-size:22px; font-weight:600; margin-top:4px}
+.ch-close{background:none; border:none; color:var(--faint); font-size:24px; line-height:1; cursor:pointer; padding:0 6px; border-radius:8px}
+.ch-close:hover{color:var(--text)}
+.ch-sec{margin-bottom:20px}
+.ch-lab{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:800; margin-bottom:10px}
+.ch-row{width:100%; display:flex; align-items:center; gap:12px; text-align:left; background:#121514; border:1px solid var(--line);
+  border-radius:11px; padding:13px 15px; cursor:pointer; transition:all .14s; color:var(--text); font-family:var(--sans); margin-bottom:8px}
+.ch-row:hover{border-color:var(--gold); background:var(--gold-dim)}
+.key-row{color:var(--gold-bright); font-weight:700; font-size:14px}
+.key-row .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+.att-list{display:flex; flex-direction:column}
+.att-main{display:flex; flex-direction:column; gap:3px; min-width:0}
+.att-row .att-name{font-weight:700; font-size:14px}
+.att-row .att-meta{color:var(--muted); font-size:11.5px}
+.att-row .att-score{margin-left:auto; font-family:var(--serif); font-weight:600; font-size:18px; color:var(--gold-bright); font-variant-numeric:tabular-nums; flex:none}
+.ch-empty{font-size:13px; color:var(--faint); padding:6px 2px}
+.ch-empty[hidden]{display:none}
+.ch-foot{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; padding-top:16px; border-top:1px solid var(--line)}
+.ch-foot .danger{color:var(--red); border-color:rgba(205,124,102,.4)}
+.ch-foot .danger:hover{border-color:var(--red)}
+.ch-hint{font-size:11.5px; color:var(--faint); flex:1 1 100%; margin-top:8px}
+body.keymode .scorebox{display:none}
+body.keymode .mark{display:none!important}
+
+@media (max-width:680px){
+  header,main{padding-left:20px; padding-right:20px}
+  .cand{grid-template-columns:1fr}
+  .head-right{display:none}
+}
+@media print{
+  body{background:#fff; color:#111}
+  .actionbar,.intro .note,.opt input{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="wordmark"><b>SELEQT</b>&nbsp;&nbsp;Private Wealth</div>
+    <h1>Analyst Aptitude · Practical Assessment</h1>
+  </div>
+  <div class="head-right">
+    <div class="as-of">Internal hiring assessment</div>
+    <div>~30 minutes · 22 questions</div>
+    <div>Practical market &amp; client judgment</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="locked-banner" id="lockedBanner">✓ Responses locked. Please hand the device back to your interviewer.</div>
+
+  <div class="intro">
+    <p><b>Welcome.</b> This is a practical assessment, not a textbook exam. We are not looking for formulas or jargon. We want to understand how you think about money, markets, and clients in real situations.</p>
+    <p>The last section, <b>On the Job</b>, puts you in everyday situations you would face on the desk. There are no trick questions and no negative marking. Answer in plain language, the way you would actually speak to a client. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
+    <div class="cand">
+      <div class="field"><label>Candidate name</label><input type="text" id="candName" placeholder="Full name"></div>
+      <div class="field"><label>Date</label><input type="text" id="candDate" placeholder="DD / MM / YYYY"></div>
+    </div>
+    <div class="note">Take your time. Aim for roughly 30 minutes. When you are done, press <b>Finish &amp; Lock</b> at the bottom.</div>
+  </div>
+
+  <!-- ============ SECTION A ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section A</span><h2>Markets &amp; Instruments</h2><span class="sec-sub">5 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A1</span><span class="q-tag">Suitability</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client has ₹10 lakh that she will need in about 8 months for a house down-payment. Where is the most suitable place to park this money?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA1" value="a"><span>A mid-cap equity mutual fund, for higher growth</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA1" value="b"><span>A liquid / short-term debt fund or a fixed deposit</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA1" value="c"><span>Direct shares of a fast-growing company</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA1" value="d"><span>A 5-year tax-saving ELSS fund</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> The money is needed very soon, so capital safety and liquidity matter more than growth. Equity (A, C) can fall in the short term; ELSS (D) is locked for 3 years. Good sign if she reasons from the short time horizon.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="c">
+      <div class="q-head"><span class="q-no">A2</span><span class="q-tag">Risk &amp; return</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Over the long term, which of these typically carries the <b>highest risk and the highest potential return</b>?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA2" value="a"><span>Bank fixed deposit</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA2" value="b"><span>Government bond</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA2" value="c"><span>Equity (stocks)</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA2" value="d"><span>Gold</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>C.</b> Equity has the highest long-term risk and return. Understanding the risk–return ladder is core.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A3</span><span class="q-tag">Applied</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client has a monthly SIP running in an equity fund. The market then falls sharply for three months. Other things being equal, what is actually happening to her SIP during that fall?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA3" value="a"><span>She is losing money every month, so pausing the SIP is the smart move</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA3" value="b"><span>Her fixed monthly amount is now buying more units at lower prices, lowering her average cost</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA3" value="c"><span>The SIP automatically switches her into debt to protect her</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA3" value="d"><span>Nothing changes; SIP returns are fixed regardless of the market level</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A falling market means the same rupee buys more units, which lowers the average cost (rupee-cost averaging). Pausing in a downturn defeats the purpose. <b>Strong sign</b> if she'd reassure the client and keep the SIP going rather than stop it.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A4</span><span class="q-tag">Bonds &amp; rates</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">When interest rates in the economy <b>rise</b>, the price of existing bonds (and the NAV of a debt fund holding them) generally:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA4" value="a"><span>Rises</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA4" value="b"><span>Falls</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA4" value="c"><span>Stays exactly the same</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA4" value="d"><span>Becomes zero</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Bond prices and interest rates move inversely, which is why even "safe" debt funds can dip when rates rise. One of the tougher ones; getting it right is a strong signal, getting it wrong is not a red flag for a non-finance background.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A5</span><span class="q-tag">Fund selection</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client wants to invest in a particular mutual fund <i>only</i> because it was the single best performer last year. What is the most sensible thing to tell her?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA5" value="a"><span>Agree and invest; last year's number-one fund is the safest bet for next year</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA5" value="b"><span>Last year's topper often doesn't repeat; better to look at consistency, risk and fit with her goals</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA5" value="c"><span>Never invest in any fund that did well last year</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA5" value="d"><span>Past returns mean nothing at all, so ignore performance entirely</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Chasing last year's winner is a classic mistake; past performance is not a guarantee. B is the balanced view (returns matter, but in the context of consistency, risk and goals). C and D are over-corrections.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION B ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section B</span><h2>Macro &amp; Economy</h2><span class="sec-sub">4 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">B1</span><span class="q-tag">Institutions</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Which institution sets the benchmark interest rate (the repo rate) in India?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB1" value="a"><span>SEBI</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB1" value="b"><span>The Reserve Bank of India (RBI)</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB1" value="c"><span>The Bombay Stock Exchange</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB1" value="d"><span>The Ministry of Corporate Affairs</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> The RBI is the central bank and sets the repo rate. (SEBI is the <i>markets</i> regulator — useful that she knows the difference.)</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">B2</span><span class="q-tag">Cause &amp; effect</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">If the RBI <b>raises</b> the repo rate, what is the most likely practical effect for clients?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB2" value="a"><span>Home-loan EMIs and other borrowing costs tend to rise; deposit rates often inch up too</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB2" value="b"><span>Fixed-deposit rates fall to zero</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB2" value="c"><span>The stock market is guaranteed to crash</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>Nothing in the economy changes at all</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Higher repo rate → costlier borrowing (loans, EMIs) and usually higher deposit rates. Tests practical cause-and-effect, not jargon.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">B3</span><span class="q-tag">Currency</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">If the rupee <b>depreciates</b> against the US dollar, it means:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB3" value="a"><span>It now takes more rupees to buy one dollar, so imports and foreign travel get costlier</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB3" value="b"><span>The rupee has become stronger</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB3" value="c"><span>Imported goods like crude oil become cheaper</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB3" value="d"><span>It has no effect on prices in India</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> A weaker rupee = more rupees per dollar, making imports (oil), foreign education and travel more expensive, and feeding into inflation.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">B4</span><span class="q-tag">Real return</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client is pleased that her fixed deposit pays 7% while inflation is running at about 6%. Roughly speaking, is her money really growing in <b>real</b> terms, and by how much?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB4" value="a"><span>Only by about 1% before tax; and after tax on the interest, even that small gain can disappear</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB4" value="b"><span>By the full 7%; inflation does not affect FD returns</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB4" value="c"><span>No, she is losing 6% every year</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB4" value="d"><span>By about 13%</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Real return ≈ return minus inflation (about 1%), and FD interest is taxable, so the post-tax real return can be near zero. This is exactly the "is an FD really safe for growing wealth?" insight she'd need to explain to clients. A tougher, applied question.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION C ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section C</span><h2>Client &amp; Personal Finance</h2><span class="sec-sub">5 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C1</span><span class="q-tag">Advisory</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text"><b>Risk profiling</b> a client is mainly about:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC1" value="a"><span>Checking the client's credit score</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC1" value="b"><span>Understanding how much risk they can afford and are comfortable with, then matching investments to it</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC1" value="c"><span>Finding out which bank the client uses</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC1" value="d"><span>Selling them the product with the highest commission</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Capacity <i>and</i> willingness to take risk, matched to suitable investments. Distinguishing "can afford" from "comfortable with" is a sophisticated answer.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C2</span><span class="q-tag">Applied allocation</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A 35-year-old client with a steady income, an emergency fund already in place, and a 15-year goal, who is comfortable with moderate ups and downs. As a <b>starting point</b>, which broad asset mix is most appropriate?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC2" value="a"><span>100% in a savings account and fixed deposits</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC2" value="b"><span>Roughly two-thirds in equity, the rest spread across debt and gold</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC2" value="c"><span>Everything in a single small-cap fund</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC2" value="d"><span>90% in gold</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Long horizon + moderate risk + emergency fund in place → an equity-tilted but diversified mix. Tests <i>applying</i> allocation to a real profile, not just defining it. A is too timid for a 15-year goal; C and D are undiversified bets.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C3</span><span class="q-tag">Compliance</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">KYC ("Know Your Customer") is required mainly to:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC3" value="a"><span>Increase the client's investment returns</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC3" value="b"><span>Verify identity and help prevent fraud and money laundering</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC3" value="c"><span>Decide the client's risk appetite</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC3" value="d"><span>Help the client avoid paying tax</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Identity verification and anti-money-laundering. She should know this cold from client servicing — a quick one that confirms her existing ground.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C4</span><span class="q-tag">Planning order</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Before putting a client's money into market-linked investments for growth, which of these should generally be in place <b>first</b>?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC4" value="a"><span>A high-return stock tip</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC4" value="b"><span>An emergency fund of a few months' expenses, in something safe and liquid</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC4" value="c"><span>A new credit card</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC4" value="d"><span>A 5-year locked-in investment</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> An emergency fund / liquidity buffer comes before investing for growth, so the client never has to sell investments at a bad time for a surprise expense. A core planning fundamental.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C5</span><span class="q-tag">Liquidity</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Which of these is generally the <b>most liquid</b> (easiest to convert into cash quickly)?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC5" value="a"><span>A residential flat</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC5" value="b"><span>Money in a savings account or a liquid fund</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC5" value="c"><span>Physical gold jewellery</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC5" value="d"><span>A 5-year locked-in fixed deposit</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Cash / liquid funds convert instantly. Real estate is the least liquid. Liquidity awareness is key for emergency-fund and goal planning.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION D ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section D</span><h2>Market Awareness</h2><span class="sec-sub">3 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">D1</span><span class="q-tag">Indices</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">The two main benchmark stock-market indices in India are:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qD1" value="a"><span>Dow Jones and Nasdaq</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD1" value="b"><span>Sensex and Nifty</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD1" value="c"><span>FTSE and DAX</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD1" value="d"><span>Hang Seng and Nikkei</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Sensex (BSE) and Nifty 50 (NSE). Anyone following Indian markets should know this instantly.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D2</span><span class="q-tag">Do you follow markets?</span><span class="q-type">Short answer</span></div>
+      <p class="q-text">Roughly, around what level is the <b>Nifty 50</b> trading these days? An approximate range is completely fine.</p>
+      <textarea name="qD2" placeholder="Your best estimate..." style="min-height:60px"></textarea>
+      <div class="key"><div class="key-label">How to grade</div><div class="key-line">The point is <b>whether she follows the market at all</b>, not pinpoint accuracy. Accept any answer in a sensible ballpark of the current level. <b>⚠ Interviewer: check the actual Nifty level on the day before administering, and grade against that.</b> A confident, roughly-right number signals genuine interest; "no idea" is honest but tells you she does not track markets yet.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Curiosity</span><span class="q-type">Written</span></div>
+      <p class="q-text">Name one <b>financial or economic news story</b> from the last few months that you found interesting, and in a sentence or two, say why it caught your attention.</p>
+      <textarea name="qD3" placeholder="Write your answer here..."></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">No fixed answer. You are testing genuine curiosity and awareness. Any real, recent, correctly-described story is a great sign. Reward someone who can explain <i>why it matters</i>, not just name it. A blank or a clearly made-up story is the signal to note.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION E — ON THE JOB ============ -->
+  <div class="section flagship">
+    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">5 real situations</span></div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Panic call · unsuitable request</span><span class="q-type">Written</span></div>
+      <p class="q-text">A long-term client with a balanced portfolio and a 10-year goal calls you during a sharp market fall, clearly anxious: <i>"Everything's crashing. Sell it all and move me to FDs today."</i> How do you handle this call?</p>
+      <textarea name="qE1" placeholder="Write your answer here, the way you'd actually speak to him..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · client judgment</div><div class="key-line">Empathy and calm <i>first</i>, acknowledge the fear rather than dismiss it. Crucially, do <b>not</b> just execute the order. Reconnect him to his goal and 10-year horizon; explain gently that selling in a panic turns a temporary, on-paper fall into a real loss and risks missing the recovery; falls are a normal part of investing. Slow things down, and offer to talk it through with the advisor before any action. <b>Strong answer</b> balances reassurance with respect for his feelings and never lectures.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Unsuitable request</span><span class="q-type">Written</span></div>
+      <p class="q-text">A 58-year-old client retiring in 2 years tells you he wants to put his <b>entire retirement corpus</b> into a small-cap fund a friend recommended, because it doubled last year. As his servicing contact, how do you respond?</p>
+      <textarea name="qE2" placeholder="Write your answer here..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · the key judgment question</div><div class="key-line">Empathy first, not a flat "no." Then the concerns: he is about to retire (very short horizon), small-caps are highly volatile and can fall sharply right when he needs the money; "doubled last year" is past performance, not a promise; putting <i>everything</i> into one fund ignores diversification. A good answer redirects gently, suggests sitting with the advisor, keeping most of the corpus safe, and at most a small allocation. <b>Reward maturity and calm over technical depth.</b></div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E3</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client notices an <b>"expense ratio"</b> on her mutual fund statement and feels she is being charged unfairly. In plain language, how would you explain what it is and why it is there?</p>
+      <textarea name="qE3" placeholder="Write your answer here..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · clarity</div><div class="key-line">It is the annual fee for running the fund (the fund manager, research, operations), charged as a small percentage. It is <i>already</i> reflected in the NAV, so she is not paying it as a separate bill. It is normal, disclosed, and regulated; lower is generally better, though some active funds cost a bit more. <b>Strong answer</b> uses a simple analogy, is jargon-free, and reassures without sounding defensive.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
+      <p class="q-text">A first-time investor asks you: <i>"Why should I put money into a mutual fund instead of just buying shares myself?"</i> Explain it simply.</p>
+      <textarea name="qE4" placeholder="Write your answer here..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · clarity &amp; balance</div><div class="key-line">A fund spreads money across many stocks (diversification, less single-stock risk), is professionally managed, can be started small through a SIP, and needs far less time and expertise than picking stocks yourself. Buying shares directly needs skill, time and carries concentration risk. <b>Strong answer</b> is balanced (not anti-stocks), plain-language, and may note it depends on the client.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client says: <i>"Gold has done nothing for years. Why should I hold any of it?"</i> In a few sentences, how would you explain the role gold plays in a portfolio?</p>
+      <textarea name="qE5" placeholder="Write your answer here..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · clarity</div><div class="key-line">Gold is for diversification and stability, not primary growth. It tends to hold up when equities or the rupee are weak (a hedge against uncertainty and inflation) and moves differently from stocks, which smooths the overall ride. Usually a small allocation, not the main engine. <b>Strong answer</b> frames gold as insurance / ballast and stays calm and educational with the client.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ ACTION BAR ============ -->
+  <div class="actionbar">
+    <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
+    <span class="status" id="status">Answered <b id="ansCount">0</b> of 22</span>
+    <button class="btn subtle" id="newBtn">New attempt</button>
+    <button class="btn subtle" id="reviewerBtn">Interviewer access</button>
+    <button class="btn subtle" id="printBtn" style="display:none">Print / Save graded copy</button>
+    <div class="scorebox">
+      <div class="s-big" id="scoreBig">—</div>
+      <div class="s-lab">Objective score (of 15 MCQs)</div>
+    </div>
+  </div>
+
+  <!-- ============ INTERVIEWER CHOOSER ============ -->
+  <div class="overlay" id="chooser" hidden>
+    <div class="chooser-card">
+      <div class="chooser-head">
+        <div>
+          <div class="ch-kicker">Interviewer</div>
+          <div class="ch-title">Choose what to view</div>
+        </div>
+        <button class="ch-close" id="chClose" title="Close">&times;</button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Answer key</div>
+        <button class="ch-row key-row" id="viewKey">
+          <span>View blank answer key &amp; rubric</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Saved attempts (<span id="attCount">0</span>)</div>
+        <div id="attList" class="att-list"></div>
+        <div class="ch-empty" id="attEmpty">No completed attempts are saved on this device yet.</div>
+      </div>
+
+      <div class="ch-foot">
+        <button class="btn subtle" id="exportBtn">Export backup</button>
+        <button class="btn subtle" id="importBtn">Import backup</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+        <button class="btn subtle danger" id="clearBtn">Clear all</button>
+        <span class="ch-hint">Tip: reload the page for a fresh blank test. Saved attempts stay here.</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+  const REVIEWER_CODE = "SELEQT2026";
+  const LS_KEY = "seleqt_analyst_attempts_v1";
+  const qs = Array.from(document.querySelectorAll('.q'));
+  const ansCountEl = document.getElementById('ansCount');
+  const candName = document.getElementById('candName');
+  const candDate = document.getElementById('candDate');
+  const scoreBig = document.getElementById('scoreBig');
+  const reviewerBtn = document.getElementById('reviewerBtn');
+  const printBtn = document.getElementById('printBtn');
+  const chooser = document.getElementById('chooser');
+  let unlocked = false;
+
+  function loadAttempts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }catch(e){ return []; } }
+  function saveAttempts(a){ try{ localStorage.setItem(LS_KEY, JSON.stringify(a)); return true; }catch(e){ return false; } }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function fmt(ts){ try{ return new Date(ts).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return ''; } }
+  function mcqName(q){ const i=q.querySelector('input[type=radio]'); return i ? i.name : null; }
+
+  function countAnswered(){
+    let n = 0;
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){ if(q.querySelector('input[type=radio]:checked')) n++; }
+      else { const ta = q.querySelector('textarea'); if(ta && ta.value.trim().length>0) n++; }
+    });
+    ansCountEl.textContent = n;
+    return n;
+  }
+  document.addEventListener('input', countAnswered);
+  document.addEventListener('change', countAnswered);
+
+  function collectAnswers(){
+    const ans = {};
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
+      else { const ta=q.querySelector('textarea'); ans[ta.name] = ta.value; }
+    });
+    return ans;
+  }
+
+  // fill the form from an answers object (or clear if null) and optionally lock it
+  function setInputs(ans, disabled){
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){
+        const nm = mcqName(q);
+        q.querySelectorAll('input[type=radio]').forEach(i=>{ i.checked = ans ? (ans[nm]===i.value) : false; i.disabled = disabled; });
+      } else {
+        const ta = q.querySelector('textarea'); ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled;
+      }
+      q.classList.toggle('locked', disabled);
+    });
+  }
+
+  // grade MCQs from current DOM; keyOnly = blank answer-key reference (no candidate marks)
+  function grade(keyOnly){
+    let correct = 0, total = 0;
+    qs.forEach(q=>{
+      if(q.dataset.type!=='mcq') return;
+      total++;
+      const want = q.dataset.correct;
+      const chosen = q.querySelector('input[type=radio]:checked');
+      const mark = q.querySelector('.mark');
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.classList.remove('is-correct','is-chosen-wrong');
+        if(opt.dataset.opt===want) opt.classList.add('is-correct');
+      });
+      if(keyOnly){ mark.className='mark'; mark.textContent=''; return; }
+      if(chosen){
+        if(chosen.value===want){ correct++; mark.className='mark right'; mark.textContent='✓ Correct'; }
+        else {
+          const w = q.querySelector('.opt[data-opt="'+chosen.value+'"]'); if(w) w.classList.add('is-chosen-wrong');
+          mark.className='mark wrong'; mark.textContent='✗ Candidate chose '+chosen.value.toUpperCase();
+        }
+      } else { mark.className='mark na'; mark.textContent='— Not answered'; }
+    });
+    scoreBig.textContent = keyOnly ? '—' : (correct + ' / ' + total);
+  }
+
+  function enterReviewer(){
+    document.body.classList.add('reviewer');
+    document.body.classList.remove('submitted');
+    printBtn.style.display='';
+    reviewerBtn.textContent='Switch view';
+  }
+
+  // ---- Finish & Lock: save the attempt ----
+  document.getElementById('finishBtn').addEventListener('click', function(){
+    countAnswered();
+    const ans = collectAnswers();
+    let correct=0, total=0;
+    qs.forEach(q=>{ if(q.dataset.type!=='mcq') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
+    const attempt = {
+      id: 'a' + Date.now() + '_' + Math.floor(Math.random()*1e6),
+      name: (candName.value.trim() || 'Unnamed candidate'),
+      date: candDate.value.trim(),
+      ts: Date.now(),
+      answers: ans,
+      score: { correct, total }
+    };
+    const arr = loadAttempts(); arr.push(attempt);
+    const saved = saveAttempts(arr);
+    qs.forEach(q=>{
+      q.classList.add('locked');
+      q.querySelectorAll('input[type=radio]').forEach(i=>{ i.disabled = true; });
+      const ta = q.querySelector('textarea'); if(ta){ ta.readOnly = true; }
+    });
+    candName.readOnly = true; candDate.readOnly = true;
+    document.body.classList.add('submitted');
+    document.getElementById('lockedBanner').scrollIntoView({behavior:'smooth', block:'start'});
+    if(!saved){
+      setTimeout(()=>alert('Heads up: this browser blocked saving the result locally (this can happen when a file is opened directly in the browser). The answers are on screen for review now, but will not be stored for later. To keep a history, open the file through a local server, or use Export backup.'), 350);
+    }
+  });
+
+  // ---- New attempt: fresh blank form in place ----
+  document.getElementById('newBtn').addEventListener('click', function(){
+    if(!confirm('Start a fresh blank test for a new candidate?\n\nThis clears the form on screen. Saved past attempts are kept.')) return;
+    setInputs(null, false);
+    candName.value=''; candDate.value=''; candName.readOnly=false; candDate.readOnly=false;
+    document.body.classList.remove('reviewer','keymode','submitted');
+    printBtn.style.display='none';
+    reviewerBtn.textContent = unlocked ? 'Switch view' : 'Interviewer access';
+    countAnswered();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // ---- Interviewer chooser ----
+  function openChooser(){ renderList(); chooser.hidden=false; }
+  function closeChooser(){ chooser.hidden=true; }
+
+  function renderList(){
+    const arr = loadAttempts().slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+    document.getElementById('attCount').textContent = arr.length;
+    const list = document.getElementById('attList'); list.innerHTML='';
+    document.getElementById('attEmpty').hidden = arr.length>0;
+    arr.forEach(att=>{
+      const sc = att.score ? (att.score.correct+'/'+att.score.total) : '';
+      const meta = (att.date ? esc(att.date)+' · ' : '') + 'submitted ' + esc(fmt(att.ts));
+      const b = document.createElement('button'); b.className='ch-row att-row';
+      b.innerHTML = '<span class="att-main"><span class="att-name">'+esc(att.name)+'</span>'
+                  + '<span class="att-meta">'+meta+'</span></span>'
+                  + '<span class="att-score">'+sc+'</span>';
+      b.addEventListener('click', ()=>viewAttempt(att));
+      list.appendChild(b);
+    });
+  }
+
+  function viewAttempt(att){
+    setInputs(att.answers, true);
+    candName.value = att.name||''; candDate.value = att.date||''; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.remove('keymode');
+    enterReviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
+  }
+  function viewKey(){
+    setInputs(null, true);
+    candName.value='Answer key'; candDate.value='reference'; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.add('keymode');
+    enterReviewer(); grade(true); closeChooser(); window.scrollTo(0,0);
+  }
+
+  reviewerBtn.addEventListener('click', function(){
+    if(!unlocked){
+      const code = prompt('Enter interviewer code to view results and the answer key:');
+      if(code===null) return;
+      if(code.trim()!==REVIEWER_CODE){ alert('Incorrect code.'); return; }
+      unlocked = true;
+    }
+    openChooser();
+  });
+
+  document.getElementById('viewKey').addEventListener('click', viewKey);
+  document.getElementById('chClose').addEventListener('click', closeChooser);
+  chooser.addEventListener('click', e=>{ if(e.target===chooser) closeChooser(); });
+
+  // ---- export / import / clear ----
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    const data = localStorage.getItem(LS_KEY) || '[]';
+    const blob = new Blob([data], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='seleqt-analyst-results.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  const importFile = document.getElementById('importFile');
+  document.getElementById('importBtn').addEventListener('click', ()=>importFile.click());
+  importFile.addEventListener('change', function(e){
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = function(){
+      try{
+        const incoming = JSON.parse(r.result);
+        if(!Array.isArray(incoming)) throw 0;
+        const byId = {};
+        loadAttempts().concat(incoming).forEach(a=>{ if(a && a.id) byId[a.id]=a; });
+        const merged = Object.keys(byId).map(k=>byId[k]);
+        saveAttempts(merged); renderList();
+        alert('Imported. Total saved attempts: ' + merged.length + '.');
+      }catch(err){ alert('Could not read that file as a results backup.'); }
+    };
+    r.readAsText(f); e.target.value='';
+  });
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if(confirm('Delete ALL saved attempts on this device?\n\nThis cannot be undone. Consider Export backup first.')){ saveAttempts([]); renderList(); }
+  });
+
+  printBtn.addEventListener('click', ()=>window.print());
+
+  countAnswered();
+})();
+</script>
+</body>
+</html>
