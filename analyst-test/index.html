@@ -175,8 +175,8 @@ body.keymode .mark{display:none!important}
   </div>
   <div class="head-right">
     <div class="as-of">Internal hiring assessment</div>
-    <div>~30 minutes · 22 questions</div>
-    <div>Practical market &amp; client judgment</div>
+    <div>~30 minutes · 23 questions</div>
+    <div>Practical market &amp; analytical judgment</div>
   </div>
 </header>
 
@@ -186,7 +186,7 @@ body.keymode .mark{display:none!important}
 
   <div class="intro">
     <p><b>Welcome.</b> This is a practical assessment, not a textbook exam. We are not looking for formulas or jargon. We want to understand how you think about money, markets, and clients in real situations.</p>
-    <p>The last section, <b>On the Job</b>, puts you in everyday situations you would face on the desk. There are no trick questions and no negative marking. Answer in plain language, the way you would actually speak to a client. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
+    <p>The last section, <b>On the Job</b>, gives you real situations and asks for your analysis: identify the underlying issue and the right course of action, not how you would word it to a client. There are no trick questions and no negative marking. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
     <div class="cand">
       <div class="field"><label>Candidate name</label><input type="text" id="candName" placeholder="Full name"></div>
       <div class="field"><label>Date</label><input type="text" id="candDate" placeholder="DD / MM / YYYY"></div>
@@ -393,7 +393,7 @@ body.keymode .mark{display:none!important}
 
   <!-- ============ SECTION D ============ -->
   <div class="section">
-    <div class="section-head"><span class="sec-no">Section D</span><h2>Market Awareness</h2><span class="sec-sub">3 questions</span></div>
+    <div class="section-head"><span class="sec-no">Section D</span><h2>Market Awareness</h2><span class="sec-sub">4 questions</span></div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">D1</span><span class="q-tag">Indices</span><span class="q-type">Multiple choice</span></div>
@@ -416,57 +416,64 @@ body.keymode .mark{display:none!important}
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Curiosity</span><span class="q-type">Written</span></div>
+      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Do you follow markets?</span><span class="q-type">Short answer</span></div>
+      <p class="q-text">And roughly where is the <b>BSE Sensex</b> trading these days? Again, an approximate range is fine.</p>
+      <textarea name="qD3" placeholder="Your best estimate..." style="min-height:60px"></textarea>
+      <div class="key"><div class="key-label">How to grade</div><div class="key-line">Same idea: it is about whether she tracks the market, not precision. The Sensex sits far above the Nifty (very roughly 3x), so a sound answer should be clearly larger than her Nifty figure. Quoting a Nifty-like number for the Sensex (or the reverse) suggests she does not really follow the indices. <b>⚠ Interviewer: check the actual Sensex level on the day and grade against it.</b> Consistency between her two figures is itself a good signal.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D4</span><span class="q-tag">Curiosity</span><span class="q-type">Written</span></div>
       <p class="q-text">Name one <b>financial or economic news story</b> from the last few months that you found interesting, and in a sentence or two, say why it caught your attention.</p>
-      <textarea name="qD3" placeholder="Write your answer here..."></textarea>
+      <textarea name="qD4" placeholder="Write your answer here..."></textarea>
       <div class="key"><div class="key-label">What to look for</div><div class="key-line">No fixed answer. You are testing genuine curiosity and awareness. Any real, recent, correctly-described story is a great sign. Reward someone who can explain <i>why it matters</i>, not just name it. A blank or a clearly made-up story is the signal to note.</div></div>
     </div>
   </div>
 
   <!-- ============ SECTION E — ON THE JOB ============ -->
   <div class="section flagship">
-    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">5 real situations</span></div>
+    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">5 to diagnose</span></div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Panic call · unsuitable request</span><span class="q-type">Written</span></div>
-      <p class="q-text">A long-term client with a balanced portfolio and a 10-year goal calls you during a sharp market fall, clearly anxious: <i>"Everything's crashing. Sell it all and move me to FDs today."</i> How do you handle this call?</p>
-      <textarea name="qE1" placeholder="Write your answer here, the way you'd actually speak to him..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for · client judgment</div><div class="key-line">Empathy and calm <i>first</i>, acknowledge the fear rather than dismiss it. Crucially, do <b>not</b> just execute the order. Reconnect him to his goal and 10-year horizon; explain gently that selling in a panic turns a temporary, on-paper fall into a real loss and risks missing the recovery; falls are a normal part of investing. Slow things down, and offer to talk it through with the advisor before any action. <b>Strong answer</b> balances reassurance with respect for his feelings and never lectures.</div></div>
+      <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Behavioural risk · diagnose</span><span class="q-type">Analysis</span></div>
+      <p class="q-text">A long-term client with a balanced portfolio and a 10-year goal wants to liquidate everything into fixed deposits during a sharp market fall. Setting the client conversation aside: <b>what is wrong with this move analytically, and what is the sound course of action?</b></p>
+      <textarea name="qE1" placeholder="Identify the underlying issue, then the right course of action..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · the issue + the fix</div><div class="key-line"><b>Issue:</b> selling into a fall turns a temporary, on-paper loss into a realised one; it is market timing, and missing the handful of best recovery days badly damages long-run returns; FDs may not beat inflation, so over a 10-year horizon he trades short-term volatility for near-certain erosion of purchasing power; the balanced portfolio already fits the goal. <b>Fix:</b> stay invested and hold the plan; if anything, rebalance to target weights (the fall may call for buying equity, not selling it); revisit the allocation only if the goal or risk profile genuinely changed, not because prices moved. Reward correct diagnosis plus a disciplined, rules-based response.</div></div>
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Unsuitable request</span><span class="q-type">Written</span></div>
-      <p class="q-text">A 58-year-old client retiring in 2 years tells you he wants to put his <b>entire retirement corpus</b> into a small-cap fund a friend recommended, because it doubled last year. As his servicing contact, how do you respond?</p>
-      <textarea name="qE2" placeholder="Write your answer here..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for · the key judgment question</div><div class="key-line">Empathy first, not a flat "no." Then the concerns: he is about to retire (very short horizon), small-caps are highly volatile and can fall sharply right when he needs the money; "doubled last year" is past performance, not a promise; putting <i>everything</i> into one fund ignores diversification. A good answer redirects gently, suggests sitting with the advisor, keeping most of the corpus safe, and at most a small allocation. <b>Reward maturity and calm over technical depth.</b></div></div>
+      <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Risk &amp; horizon · diagnose</span><span class="q-type">Analysis</span></div>
+      <p class="q-text">A 58-year-old retiring in 2 years proposes putting his <b>entire</b> retirement corpus into a small-cap fund because it doubled last year. <b>Analytically, what is wrong with this, and what allocation would actually be appropriate?</b></p>
+      <textarea name="qE2" placeholder="Identify the risks, then propose a suitable allocation..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · the key analytical question</div><div class="key-line"><b>Issues:</b> horizon mismatch (2 years is far too short for small-caps, which can fall 30&ndash;50% and take years to recover); <b>sequence-of-returns risk</b> is acute right at retirement, a big drawdown just before he starts withdrawing can permanently impair the corpus; "doubled last year" is past performance, not predictive, and small-caps are the most volatile segment; everything in one fund is extreme concentration. <b>Appropriate:</b> a capital-preservation tilt for the near-term needs (debt / short-duration / FDs), a modest diversified equity sleeve for the longer-dated portion, with small-caps at most a small satellite, if at all. Reward spotting horizon + sequence risk + concentration and proposing a sensible mix.</div></div>
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E3</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
-      <p class="q-text">A client notices an <b>"expense ratio"</b> on her mutual fund statement and feels she is being charged unfairly. In plain language, how would you explain what it is and why it is there?</p>
-      <textarea name="qE3" placeholder="Write your answer here..." style="min-height:110px"></textarea>
-      <div class="key"><div class="key-label">What to look for · clarity</div><div class="key-line">It is the annual fee for running the fund (the fund manager, research, operations), charged as a small percentage. It is <i>already</i> reflected in the NAV, so she is not paying it as a separate bill. It is normal, disclosed, and regulated; lower is generally better, though some active funds cost a bit more. <b>Strong answer</b> uses a simple analogy, is jargon-free, and reassures without sounding defensive.</div></div>
+      <div class="q-head"><span class="q-no">E3</span><span class="q-tag">Cost drag · analysis</span><span class="q-type">Analysis</span></div>
+      <p class="q-text">Two similar equity funds run effectively the same strategy; one has an expense ratio of 0.5%, the other 1.5%. <b>How much does that 1% gap actually matter over the long run, and what else would you weigh before preferring the cheaper one?</b></p>
+      <textarea name="qE3" placeholder="The impact of the cost, then the other factors..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · cost vs the full picture</div><div class="key-line">The 1% is charged every year on the <i>whole</i> corpus and compounds, so over 15&ndash;20 years it can quietly cost a large slice of the final value; cost is one of the few things known in advance and a fairly reliable predictor of relative performance, so cheaper usually wins all else equal. <b>But not cost alone:</b> weigh consistency and risk-adjusted returns, active vs index (a cheap index fund vs a genuinely skilled active manager), tracking error, fund size and liquidity, and fit with the goal. Strong answer grasps the compounding drag <i>and</i> that cheapest is not automatically best. (Exact maths not needed.)</div></div>
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
-      <p class="q-text">A first-time investor asks you: <i>"Why should I put money into a mutual fund instead of just buying shares myself?"</i> Explain it simply.</p>
-      <textarea name="qE4" placeholder="Write your answer here..." style="min-height:110px"></textarea>
-      <div class="key"><div class="key-label">What to look for · clarity &amp; balance</div><div class="key-line">A fund spreads money across many stocks (diversification, less single-stock risk), is professionally managed, can be started small through a SIP, and needs far less time and expertise than picking stocks yourself. Buying shares directly needs skill, time and carries concentration risk. <b>Strong answer</b> is balanced (not anti-stocks), plain-language, and may note it depends on the client.</div></div>
+      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Trade-offs · analysis</span><span class="q-type">Analysis</span></div>
+      <p class="q-text">For a typical retail investor, <b>what are the real trade-offs between a diversified mutual fund and a self-managed direct-stock portfolio?</b> Lay out the analytical case on each side.</p>
+      <textarea name="qE4" placeholder="The case for each side..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · a balanced case</div><div class="key-line"><b>Fund:</b> instant diversification (less single-stock / idiosyncratic risk), professional research and management, can invest small amounts via SIP, far less time and skill needed, but costs an expense ratio and you accept the manager's calls. <b>Direct:</b> no fund fee, full control, scope to outperform and to harvest tax losses, but needs real skill, time and temperament, and tends toward concentration and behavioural errors; most retail investors underperform. Strong answer weighs both honestly and concludes it depends on the investor's expertise, time and corpus, not a one-sided pitch.</div></div>
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Explaining simply</span><span class="q-type">Written</span></div>
-      <p class="q-text">A client says: <i>"Gold has done nothing for years. Why should I hold any of it?"</i> In a few sentences, how would you explain the role gold plays in a portfolio?</p>
-      <textarea name="qE5" placeholder="Write your answer here..." style="min-height:110px"></textarea>
-      <div class="key"><div class="key-label">What to look for · clarity</div><div class="key-line">Gold is for diversification and stability, not primary growth. It tends to hold up when equities or the rupee are weak (a hedge against uncertainty and inflation) and moves differently from stocks, which smooths the overall ride. Usually a small allocation, not the main engine. <b>Strong answer</b> frames gold as insurance / ballast and stays calm and educational with the client.</div></div>
+      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Diversification · analysis</span><span class="q-type">Analysis</span></div>
+      <p class="q-text">A portfolio holds no gold because <i>"it has done nothing for years."</i> <b>What role does gold actually play in a portfolio, and is a flat stretch a good reason to hold none?</b></p>
+      <textarea name="qE5" placeholder="The analytical role of gold, then the verdict..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · diversifier logic</div><div class="key-line">Gold's job is <b>diversification and risk reduction, not return generation</b>: it has low-to-negative correlation with equities and tends to hold up or rise when stocks or the rupee fall, so it cushions drawdowns and smooths the ride; it hedges inflation, currency weakness and tail / uncertainty events. A flat standalone stretch is <i>not</i> a good reason to drop it, judging a diversifier on its own return misses the point; what matters is its effect on the whole portfolio's risk-adjusted return. Usually a small allocation. Reward understanding correlation / ballast over chasing returns.</div></div>
     </div>
   </div>
 
   <!-- ============ ACTION BAR ============ -->
   <div class="actionbar">
     <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
-    <span class="status" id="status">Answered <b id="ansCount">0</b> of 22</span>
+    <span class="status" id="status">Answered <b id="ansCount">0</b> of 23</span>
     <button class="btn subtle" id="newBtn">New attempt</button>
     <button class="btn subtle" id="reviewerBtn">Interviewer access</button>
     <button class="btn subtle" id="printBtn" style="display:none">Print / Save graded copy</button>
