@@ -56,6 +56,7 @@ main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
   font-family:var(--sans); font-weight:600; font-size:14px; padding:9px 12px; outline:none; transition:border-color .15s;
 }
 .field input:focus{border-color:var(--gold)}
+.field input[type=date]{color-scheme:dark; cursor:pointer}
 
 /* ---------- section ---------- */
 .section{margin-top:38px}
@@ -181,6 +182,20 @@ body.reviewer .actionbar{display:none}
 .ch-row.newrow{color:var(--gold-bright); font-weight:700; font-size:14px}
 .ch-row.newrow .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
 
+/* ---------- candidate "attempt submitted" popup ---------- */
+.donepop{position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px)}
+.donepop[hidden]{display:none}
+.donepop-card{background:var(--card); border:1px solid var(--line2); border-radius:18px; padding:32px 36px; text-align:center;
+  max-width:400px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.donepop-tick{width:58px; height:58px; margin:0 auto 18px; border-radius:50%; background:var(--gold-dim);
+  border:1px solid rgba(201,168,106,.5); color:var(--gold-bright); font-size:28px; line-height:56px; font-weight:700}
+.donepop-title{font-family:var(--serif); font-size:23px; font-weight:600; margin-bottom:9px; color:var(--text)}
+.donepop-sub{font-size:13.5px; color:var(--muted); line-height:1.65; margin-bottom:22px}
+.donepop-ok{font-family:var(--sans); font-size:13px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:var(--gold); color:#101312; border:none; border-radius:10px; padding:11px 30px}
+.donepop-ok:hover{background:var(--gold-bright)}
+
 @media (max-width:680px){
   header,main{padding-left:20px; padding-right:20px}
   .cand{grid-template-columns:1fr}
@@ -191,7 +206,7 @@ body.reviewer .actionbar{display:none}
 }
 @media print{
   body{background:#fff; color:#111; padding-top:0!important}
-  .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn{display:none!important}
+  .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn,.donepop{display:none!important}
 }
 </style>
 </head>
@@ -232,7 +247,7 @@ body.reviewer .actionbar{display:none}
     <p>The last section, <b>On the Job</b>, gives you real situations and asks for your analysis: identify the underlying issue and the right course of action, not how you would word it to a client. There are no trick questions and no negative marking. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
     <div class="cand">
       <div class="field"><label>Candidate name</label><input type="text" id="candName" placeholder="Full name"></div>
-      <div class="field"><label>Date</label><input type="text" id="candDate" placeholder="DD / MM / YYYY"></div>
+      <div class="field"><label>Date</label><input type="date" id="candDate"></div>
     </div>
     <div class="note">Take your time. Aim for roughly 30 minutes. When you are done, press <b>Finish &amp; Lock</b> at the bottom.</div>
   </div>
@@ -563,12 +578,24 @@ body.reviewer .actionbar{display:none}
     </div>
   </div>
 
+  <!-- ============ DONE POPUP (candidate) ============ -->
+  <div class="donepop" id="donePop" hidden>
+    <div class="donepop-card">
+      <div class="donepop-tick">&#10003;</div>
+      <div class="donepop-title">Attempt submitted</div>
+      <div class="donepop-sub">Thank you. Your responses have been recorded. Please hand the device back to your interviewer.</div>
+      <button class="donepop-ok" id="donePopOk">Done</button>
+    </div>
+  </div>
+
 </main>
 
 <script>
 (function(){
   const REVIEWER_CODE = "SELEQT2026";
   const LS_KEY = "seleqt_analyst_attempts_v1";
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzZWg4HSwt7n3c4jmlQHrAh5_rp1fZGp3N52G_lY0JViWt7L9iPQ0WWkhO6Go5kCq6-zg/exec";
+  const SHEET_TOKEN = "seleqt-analyst-9X7k2p";
   const qs = Array.from(document.querySelectorAll('.q'));
   const ansCountEl = document.getElementById('ansCount');
   const candName = document.getElementById('candName');
@@ -578,6 +605,7 @@ body.reviewer .actionbar{display:none}
   const chooser = document.getElementById('chooser');
   const ivContext = document.getElementById('ivContext');
   const ivScore = document.getElementById('ivScore');
+  const donePop = document.getElementById('donePop');
 
   let unlocked = false;       // authenticated for the current interviewer session
   let mode = 'candidate';     // 'candidate' | 'interviewer'
@@ -589,6 +617,31 @@ body.reviewer .actionbar{display:none}
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   function fmt(ts){ try{ return new Date(ts).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return ''; } }
   function mcqName(q){ const i=q.querySelector('input[type=radio]'); return i ? i.name : null; }
+  function todayISO(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  function prettyDate(v){ v=String(v||''); const m=v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? (m[3]+'/'+m[2]+'/'+m[1]) : v; }
+
+  // best-effort: send each completed attempt to the Google Sheet (localStorage stays the reliable store)
+  function postToSheet(attempt){
+    if(!SHEET_ENDPOINT) return;
+    try{
+      const cols=['Submitted At','Candidate','Date','MCQ Score'];
+      const vals=[ new Date().toLocaleString(), attempt.name, prettyDate(attempt.date), attempt.score.correct+' / '+attempt.score.total ];
+      qs.forEach(q=>{
+        const no=(q.querySelector('.q-no')||{}).textContent||'';
+        const tag=(q.querySelector('.q-tag')||{}).textContent||'';
+        cols.push(tag ? (no+' · '+tag) : no);
+        if(q.dataset.type==='mcq'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
+          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+        } else {
+          const ta=q.querySelector('textarea'); vals.push(attempt.answers[ta.name]||'');
+        }
+      });
+      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ token: SHEET_TOKEN, cols: cols, vals: vals }) });
+    }catch(e){ /* ignore network errors; the local copy is already saved */ }
+  }
+  function showDonePopup(){ donePop.hidden=false; }
+  function hideDonePopup(){ donePop.hidden=true; }
 
   function countAnswered(){
     let n = 0;
@@ -666,17 +719,16 @@ body.reviewer .actionbar{display:none}
     };
     const arr = loadAttempts(); arr.push(attempt);
     const saved = saveAttempts(arr);
-    qs.forEach(q=>{
-      q.classList.add('locked');
-      q.querySelectorAll('input[type=radio]').forEach(i=>{ i.disabled = true; });
-      const ta = q.querySelector('textarea'); if(ta){ ta.readOnly = true; }
-    });
-    candName.readOnly = true; candDate.readOnly = true;
+    postToSheet(attempt);
+    // clear the candidate's filled-in answers from the screen and lock the form
+    setInputs(null, true);
+    candName.value=''; candDate.value=''; candName.readOnly = true; candDate.readOnly = true;
     finishBtn.disabled = true;
     document.body.classList.add('submitted');
-    document.getElementById('lockedBanner').scrollIntoView({behavior:'smooth', block:'start'});
+    window.scrollTo({top:0, behavior:'smooth'});
+    showDonePopup();
     if(!saved){
-      setTimeout(()=>alert('Heads up: this browser blocked saving the result locally (this can happen when a file is opened directly in the browser). The answers are on screen for review now, but will not be stored for later. To keep a history, open the file through a local server, or use Export backup.'), 350);
+      setTimeout(()=>alert('Heads up: this browser blocked saving a LOCAL copy of the result (this can happen when a file is opened directly in the browser). If online, it was still sent to the results Sheet, but it will not appear in this device\'s in-app list.'), 350);
     }
   });
 
@@ -698,7 +750,7 @@ body.reviewer .actionbar{display:none}
   function resetToBlank(){
     liveSnap = null;
     setInputs(null, false);
-    candName.value=''; candDate.value=''; candName.readOnly=false; candDate.readOnly=false;
+    candName.value=''; candDate.value=todayISO(); candName.readOnly=false; candDate.readOnly=false;
     finishBtn.disabled = false;
     document.body.classList.remove('reviewer','keymode','submitted');
     mode = 'candidate'; unlocked = false;
@@ -733,7 +785,7 @@ body.reviewer .actionbar{display:none}
     document.getElementById('attEmpty').hidden = arr.length>0;
     arr.forEach(att=>{
       const sc = att.score ? (att.score.correct+'/'+att.score.total) : '';
-      const meta = (att.date ? esc(att.date)+' · ' : '') + 'submitted ' + esc(fmt(att.ts));
+      const meta = (att.date ? esc(prettyDate(att.date))+' · ' : '') + 'submitted ' + esc(fmt(att.ts));
       const b = document.createElement('button'); b.className='ch-row att-row';
       b.innerHTML = '<span class="att-main"><span class="att-name">'+esc(att.name)+'</span>'
                   + '<span class="att-meta">'+meta+'</span></span>'
@@ -748,7 +800,7 @@ body.reviewer .actionbar{display:none}
     setInputs(att.answers, true);
     candName.value = att.name||''; candDate.value = att.date||''; candName.readOnly=true; candDate.readOnly=true;
     document.body.classList.remove('keymode');
-    ivContext.textContent = 'Viewing: ' + (att.name||'candidate') + (att.date ? '  ·  '+att.date : '');
+    ivContext.textContent = 'Viewing: ' + (att.name||'candidate') + (att.date ? '  ·  '+prettyDate(att.date) : '');
     enterInterviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
   }
   function viewKey(){
@@ -797,6 +849,10 @@ body.reviewer .actionbar{display:none}
   document.getElementById('ivPrint').addEventListener('click', ()=>window.print());
   document.getElementById('ivExit').addEventListener('click', exitInterviewer);
 
+  // ---- candidate "attempt submitted" popup ----
+  document.getElementById('donePopOk').addEventListener('click', hideDonePopup);
+  donePop.addEventListener('click', e=>{ if(e.target===donePop) hideDonePopup(); });
+
   // ---- export / import / clear ----
   document.getElementById('exportBtn').addEventListener('click', function(){
     const data = localStorage.getItem(LS_KEY) || '[]';
@@ -827,6 +883,7 @@ body.reviewer .actionbar{display:none}
     if(confirm('Delete ALL saved attempts on this device?\n\nThis cannot be undone. Consider Export backup first.')){ saveAttempts([]); renderList(); }
   });
 
+  candDate.value = todayISO();
   countAnswered();
 })();
 </script>
