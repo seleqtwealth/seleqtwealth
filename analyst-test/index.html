@@ -155,18 +155,61 @@ body.submitted .locked-banner{display:block}
 body.keymode .scorebox{display:none}
 body.keymode .mark{display:none!important}
 
+/* ---------- interviewer mode chrome (distinct top bar + accent frame) ---------- */
+.ivbar{position:fixed; top:0; left:0; right:0; z-index:40; display:none; align-items:center; justify-content:space-between;
+  gap:16px; height:52px; padding:0 20px; background:linear-gradient(90deg, var(--gold), var(--gold-bright));
+  color:#0E1110; box-shadow:0 8px 28px rgba(0,0,0,.45)}
+body.reviewer .ivbar{display:flex}
+body.reviewer{padding-top:52px}
+.ivbar-left{display:flex; align-items:center; gap:12px; min-width:0}
+.iv-badge{font-size:10.5px; font-weight:900; letter-spacing:.2em; text-transform:uppercase;
+  background:rgba(16,19,18,.18); padding:5px 10px; border-radius:6px; white-space:nowrap}
+.iv-context{font-size:13px; font-weight:800; color:#16190F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ivbar-right{display:flex; align-items:center; gap:9px; flex:none}
+.iv-score{font-family:var(--serif); font-weight:700; font-size:16px; color:#0E1110; font-variant-numeric:tabular-nums; white-space:nowrap}
+.iv-btn{font-family:var(--sans); font-size:12.5px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:rgba(16,19,18,.10); color:#0E1110; border:1px solid rgba(16,19,18,.30); border-radius:8px; padding:7px 13px; transition:all .14s}
+.iv-btn:hover{background:rgba(16,19,18,.20)}
+.iv-exit{background:#0E1110; color:var(--gold-bright); border-color:#0E1110}
+.iv-exit:hover{background:#000}
+.iv-frame{position:fixed; inset:0; z-index:39; pointer-events:none; display:none; border:4px solid var(--gold)}
+body.reviewer .iv-frame{display:block}
+body.keymode .iv-score{display:none}
+body.reviewer .actionbar{display:none}
+.lockbtn{margin-left:auto; background:transparent; border-color:var(--line); color:var(--faint); font-size:11.5px; font-weight:700; padding:9px 13px}
+.lockbtn:hover{color:var(--gold); border-color:var(--line2)}
+.ch-row.newrow{color:var(--gold-bright); font-weight:700; font-size:14px}
+.ch-row.newrow .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+
 @media (max-width:680px){
   header,main{padding-left:20px; padding-right:20px}
   .cand{grid-template-columns:1fr}
   .head-right{display:none}
+  .ivbar{position:sticky; height:auto; padding:10px 14px; flex-wrap:wrap; row-gap:8px}
+  body.reviewer{padding-top:0}
+  .iv-frame{display:none!important}
 }
 @media print{
-  body{background:#fff; color:#111}
-  .actionbar,.intro .note,.opt input{display:none}
+  body{background:#fff; color:#111; padding-top:0!important}
+  .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn{display:none!important}
 }
 </style>
 </head>
 <body>
+
+<div class="iv-frame" id="ivFrame" aria-hidden="true"></div>
+<div class="ivbar" id="ivbar">
+  <div class="ivbar-left">
+    <span class="iv-badge">Interviewer mode</span>
+    <span class="iv-context" id="ivContext">Reviewing</span>
+  </div>
+  <div class="ivbar-right">
+    <span class="iv-score" id="ivScore"></span>
+    <button class="iv-btn" id="ivSwitch">Switch view</button>
+    <button class="iv-btn" id="ivPrint">Print</button>
+    <button class="iv-btn iv-exit" id="ivExit">Exit interviewer</button>
+  </div>
+</div>
 
 <header>
   <div>
@@ -470,26 +513,20 @@ body.keymode .mark{display:none!important}
     </div>
   </div>
 
-  <!-- ============ ACTION BAR ============ -->
+  <!-- ============ ACTION BAR (candidate) ============ -->
   <div class="actionbar">
     <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
     <span class="status" id="status">Answered <b id="ansCount">0</b> of 23</span>
-    <button class="btn subtle" id="newBtn">New attempt</button>
-    <button class="btn subtle" id="reviewerBtn">Interviewer access</button>
-    <button class="btn subtle" id="printBtn" style="display:none">Print / Save graded copy</button>
-    <div class="scorebox">
-      <div class="s-big" id="scoreBig">—</div>
-      <div class="s-lab">Objective score (of 15 MCQs)</div>
-    </div>
+    <button class="btn lockbtn" id="lockBtn" title="Interviewer access (code required)">&#128274;&nbsp;Interviewer</button>
   </div>
 
   <!-- ============ INTERVIEWER CHOOSER ============ -->
-  <div class="overlay" id="chooser" hidden>
+  <div class="overlay" id="chooser" role="dialog" aria-modal="true" aria-labelledby="chTitle" hidden>
     <div class="chooser-card">
       <div class="chooser-head">
         <div>
           <div class="ch-kicker">Interviewer</div>
-          <div class="ch-title">Choose what to view</div>
+          <div class="ch-title" id="chTitle">Choose what to view</div>
         </div>
         <button class="ch-close" id="chClose" title="Close">&times;</button>
       </div>
@@ -506,6 +543,14 @@ body.keymode .mark{display:none!important}
         <div class="ch-lab">Saved attempts (<span id="attCount">0</span>)</div>
         <div id="attList" class="att-list"></div>
         <div class="ch-empty" id="attEmpty">No completed attempts are saved on this device yet.</div>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Next candidate</div>
+        <button class="ch-row newrow" id="newBtn">
+          <span>Start a fresh blank test</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
       </div>
 
       <div class="ch-foot">
@@ -528,11 +573,16 @@ body.keymode .mark{display:none!important}
   const ansCountEl = document.getElementById('ansCount');
   const candName = document.getElementById('candName');
   const candDate = document.getElementById('candDate');
-  const scoreBig = document.getElementById('scoreBig');
-  const reviewerBtn = document.getElementById('reviewerBtn');
-  const printBtn = document.getElementById('printBtn');
+  const finishBtn = document.getElementById('finishBtn');
+  const lockBtn = document.getElementById('lockBtn');
   const chooser = document.getElementById('chooser');
-  let unlocked = false;
+  const ivContext = document.getElementById('ivContext');
+  const ivScore = document.getElementById('ivScore');
+
+  let unlocked = false;       // authenticated for the current interviewer session
+  let mode = 'candidate';     // 'candidate' | 'interviewer'
+  let liveSnap = null;        // snapshot of an in-progress candidate session, taken before reviewing
+  let lastFocus = null;       // element focused before the chooser opened (for restore)
 
   function loadAttempts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }catch(e){ return []; } }
   function saveAttempts(a){ try{ localStorage.setItem(LS_KEY, JSON.stringify(a)); return true; }catch(e){ return false; } }
@@ -596,18 +646,12 @@ body.keymode .mark{display:none!important}
         }
       } else { mark.className='mark na'; mark.textContent='— Not answered'; }
     });
-    scoreBig.textContent = keyOnly ? '—' : (correct + ' / ' + total);
+    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total + ' MCQ');
   }
 
-  function enterReviewer(){
-    document.body.classList.add('reviewer');
-    document.body.classList.remove('submitted');
-    printBtn.style.display='';
-    reviewerBtn.textContent='Switch view';
-  }
-
-  // ---- Finish & Lock: save the attempt ----
-  document.getElementById('finishBtn').addEventListener('click', function(){
+  // ---- candidate: Finish & Lock (saves the attempt) ----
+  finishBtn.addEventListener('click', function(){
+    if(finishBtn.disabled) return;
     countAnswered();
     const ans = collectAnswers();
     let correct=0, total=0;
@@ -628,6 +672,7 @@ body.keymode .mark{display:none!important}
       const ta = q.querySelector('textarea'); if(ta){ ta.readOnly = true; }
     });
     candName.readOnly = true; candDate.readOnly = true;
+    finishBtn.disabled = true;
     document.body.classList.add('submitted');
     document.getElementById('lockedBanner').scrollIntoView({behavior:'smooth', block:'start'});
     if(!saved){
@@ -635,21 +680,51 @@ body.keymode .mark{display:none!important}
     }
   });
 
-  // ---- New attempt: fresh blank form in place ----
-  document.getElementById('newBtn').addEventListener('click', function(){
-    if(!confirm('Start a fresh blank test for a new candidate?\n\nThis clears the form on screen. Saved past attempts are kept.')) return;
+  function enterInterviewer(){ document.body.classList.add('reviewer'); document.body.classList.remove('submitted'); mode='interviewer'; }
+
+  // snapshot an in-progress candidate session before the interviewer overwrites the shared form
+  function snapHasContent(s){
+    if(!s) return false;
+    if((s.name||'').trim()) return true;
+    return Object.keys(s.answers||{}).some(k=>{ const v=s.answers[k]; return v!==null && String(v).trim()!==''; });
+  }
+  function captureLiveIfNeeded(){
+    if(mode==='candidate' && liveSnap===null){
+      liveSnap = { answers: collectAnswers(), name: candName.value, date: candDate.value, submitted: document.body.classList.contains('submitted') };
+    }
+  }
+
+  // ---- reset to a clean blank candidate test (and re-lock interviewer access) ----
+  function resetToBlank(){
+    liveSnap = null;
     setInputs(null, false);
     candName.value=''; candDate.value=''; candName.readOnly=false; candDate.readOnly=false;
+    finishBtn.disabled = false;
     document.body.classList.remove('reviewer','keymode','submitted');
-    printBtn.style.display='none';
-    reviewerBtn.textContent = unlocked ? 'Switch view' : 'Interviewer access';
+    mode = 'candidate'; unlocked = false;
     countAnswered();
+    closeChooser();
     window.scrollTo({top:0, behavior:'smooth'});
-  });
+  }
+
+  // ---- leave interviewer mode: restore an unfinished candidate's work, else go to a blank test ----
+  function exitInterviewer(){
+    if(liveSnap && !liveSnap.submitted && snapHasContent(liveSnap)){
+      setInputs(liveSnap.answers, false);
+      candName.value = liveSnap.name || ''; candDate.value = liveSnap.date || '';
+      candName.readOnly=false; candDate.readOnly=false; finishBtn.disabled=false;
+      document.body.classList.remove('reviewer','keymode','submitted');
+      mode='candidate'; unlocked=false; liveSnap=null;
+      countAnswered(); closeChooser();
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      resetToBlank();
+    }
+  }
 
   // ---- Interviewer chooser ----
-  function openChooser(){ renderList(); chooser.hidden=false; }
-  function closeChooser(){ chooser.hidden=true; }
+  function openChooser(){ lastFocus = document.activeElement; renderList(); chooser.hidden=false; const f=document.getElementById('viewKey'); if(f){ try{ f.focus(); }catch(e){} } }
+  function closeChooser(){ chooser.hidden=true; if(lastFocus){ try{ lastFocus.focus(); }catch(e){} } lastFocus=null; }
 
   function renderList(){
     const arr = loadAttempts().slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
@@ -669,21 +744,26 @@ body.keymode .mark{display:none!important}
   }
 
   function viewAttempt(att){
+    captureLiveIfNeeded();
     setInputs(att.answers, true);
     candName.value = att.name||''; candDate.value = att.date||''; candName.readOnly=true; candDate.readOnly=true;
     document.body.classList.remove('keymode');
-    enterReviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
+    ivContext.textContent = 'Viewing: ' + (att.name||'candidate') + (att.date ? '  ·  '+att.date : '');
+    enterInterviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
   }
   function viewKey(){
+    captureLiveIfNeeded();
     setInputs(null, true);
     candName.value='Answer key'; candDate.value='reference'; candName.readOnly=true; candDate.readOnly=true;
     document.body.classList.add('keymode');
-    enterReviewer(); grade(true); closeChooser(); window.scrollTo(0,0);
+    ivContext.textContent = 'Answer key & rubric';
+    enterInterviewer(); grade(true); closeChooser(); window.scrollTo(0,0);
   }
 
-  reviewerBtn.addEventListener('click', function(){
+  // ---- candidate: discreet interviewer lock ----
+  lockBtn.addEventListener('click', function(){
     if(!unlocked){
-      const code = prompt('Enter interviewer code to view results and the answer key:');
+      const code = prompt('Enter the interviewer code to access results and the answer key:');
       if(code===null) return;
       if(code.trim()!==REVIEWER_CODE){ alert('Incorrect code.'); return; }
       unlocked = true;
@@ -691,9 +771,31 @@ body.keymode .mark{display:none!important}
     openChooser();
   });
 
+  // ---- chooser controls ----
   document.getElementById('viewKey').addEventListener('click', viewKey);
-  document.getElementById('chClose').addEventListener('click', closeChooser);
-  chooser.addEventListener('click', e=>{ if(e.target===chooser) closeChooser(); });
+  document.getElementById('newBtn').addEventListener('click', function(){
+    if(!confirm('Start a fresh blank test for the next candidate?\n\nThis clears the form on screen. Saved past attempts are kept.')) return;
+    resetToBlank();
+  });
+  function chooserDismiss(){ closeChooser(); if(mode==='candidate') unlocked=false; }
+  document.getElementById('chClose').addEventListener('click', chooserDismiss);
+  chooser.addEventListener('click', e=>{ if(e.target===chooser) chooserDismiss(); });
+  document.addEventListener('keydown', function(e){
+    if(chooser.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); chooserDismiss(); return; }
+    if(e.key==='Tab'){
+      const f = chooser.querySelectorAll('button:not([disabled]), input:not([disabled])');
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ---- interviewer top-bar controls ----
+  document.getElementById('ivSwitch').addEventListener('click', openChooser);
+  document.getElementById('ivPrint').addEventListener('click', ()=>window.print());
+  document.getElementById('ivExit').addEventListener('click', exitInterviewer);
 
   // ---- export / import / clear ----
   document.getElementById('exportBtn').addEventListener('click', function(){
@@ -724,8 +826,6 @@ body.keymode .mark{display:none!important}
   document.getElementById('clearBtn').addEventListener('click', function(){
     if(confirm('Delete ALL saved attempts on this device?\n\nThis cannot be undone. Consider Export backup first.')){ saveAttempts([]); renderList(); }
   });
-
-  printBtn.addEventListener('click', ()=>window.print());
 
   countAnswered();
 })();
