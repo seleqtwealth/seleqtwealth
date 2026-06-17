@@ -1007,7 +1007,10 @@ function isInViewport(el) {
       try { url = new URL(href, window.location.href); } catch { return; }
       if (url.origin !== window.location.origin) return;
       // Only intercept page-to-page navigations
-      if (!/\.html?($|\?|#)/.test(url.pathname)) return;
+      // Intercept internal page navigations (clean URLs or legacy .html),
+      // but let real file links (.pdf, images, etc.) load normally.
+      const lastSeg = url.pathname.split('/').pop() || '';
+      if (lastSeg.includes('.') && !/\.html?$/.test(lastSeg)) return;
       if (url.pathname === window.location.pathname) return;
 
       e.preventDefault();
