@@ -205,7 +205,25 @@ body.reviewer .actionbar{display:none}
   .iv-frame{display:none!important}
 }
 @media print{
-  body{background:#fff; color:#111; padding-top:0!important}
+  body{background:#fff!important; color:#1a1a1a!important; padding-top:0!important}
+  header,.intro,.q,.panel,.section-head{background:#fff!important; border-color:#cfcfcb!important; box-shadow:none!important}
+  header h1,.q-text,.q-text b,.section-head h2,.intro p b{color:#111!important}
+  .wordmark,.wordmark b,.sec-no,.q-no,.key-label{color:#9c7b33!important}
+  .q-no{background:#f4eedd!important; border-color:#e0d3ad!important}
+  .q-tag,.q-type,.head-right,.sec-sub,.intro p,.preview,.field label{color:#555!important}
+  .q-text i{color:#9c7b33!important}
+  .opt{background:#fff!important; border-color:#cfcfcb!important}
+  .opt span{color:#222!important}
+  .field input,textarea{color:#222!important; background:#fff!important; border-color:#cfcfcb!important}
+  .key{background:#faf6ec!important; border-color:#e6dcc2!important}
+  .key-line{color:#4a4334!important}
+  .key-line b{color:#8a6d2c!important}
+  .mark.right{color:#1a7f37!important}
+  .mark.wrong{color:#b3261e!important}
+  .opt.is-correct{background:#eef7f0!important; border-color:#1a7f37!important}
+  .opt.is-correct span{color:#176c2f!important}
+  .opt.is-chosen-wrong{background:#fdeeec!important; border-color:#b3261e!important}
+  .opt.is-chosen-wrong span{color:#9c2017!important}
   .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn,.donepop{display:none!important}
 }
 </style>
@@ -624,20 +642,33 @@ body.reviewer .actionbar{display:none}
   function postToSheet(attempt){
     if(!SHEET_ENDPOINT) return;
     try{
+      const subAt = new Date().toLocaleString();
+      const score = attempt.score.correct + ' / ' + attempt.score.total;
       const cols=['Submitted At','Candidate','Date','MCQ Score'];
-      const vals=[ new Date().toLocaleString(), attempt.name, prettyDate(attempt.date), attempt.score.correct+' / '+attempt.score.total ];
+      const vals=[ subAt, attempt.name, prettyDate(attempt.date), score ];
+      const questions=[];
       qs.forEach(q=>{
         const no=(q.querySelector('.q-no')||{}).textContent||'';
         const tag=(q.querySelector('.q-tag')||{}).textContent||'';
+        const prompt=((q.querySelector('.q-text')||{}).textContent||'').trim();
+        const rubric=((q.querySelector('.key-line')||{}).textContent||'').trim();
         cols.push(tag ? (no+' · '+tag) : no);
         if(q.dataset.type==='mcq'){
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
+          const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
           vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
+            correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
         } else {
-          const ta=q.querySelector('textarea'); vals.push(attempt.answers[ta.name]||'');
+          const ta=q.querySelector('textarea');
+          vals.push(attempt.answers[ta.name]||'');
+          questions.push({ no, tag, type:'open', prompt, answer: (attempt.answers[ta.name]||''), rubric });
         }
       });
-      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({ token: SHEET_TOKEN, cols: cols, vals: vals }) });
+      const meta={ submittedAt:subAt, name:attempt.name, date:prettyDate(attempt.date), score };
+      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({ token: SHEET_TOKEN, cols, vals, meta, questions }) });
     }catch(e){ /* ignore network errors; the local copy is already saved */ }
   }
   function showDonePopup(){ donePop.hidden=false; }
