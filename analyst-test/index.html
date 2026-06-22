@@ -78,5 +78,16 @@ main{max-width:1000px; margin:0 auto; width:100%; padding:36px 44px 60px; flex:1
   </div>
   <p class="foot">Interviewers: open an assessment, then use the discreet lock at the bottom to review attempts and the answer key. Results for both also collect in the shared Google Sheet and Drive.</p>
 </main>
+<script>
+  // Resolve the test links correctly whether this page is opened with a trailing
+  // slash, without one, or as a local file, so the cards never 404.
+  (function(){
+    var p = location.href.split('#')[0].split('?')[0];
+    if(/\/index\.html$/i.test(p)) p = p.replace(/index\.html$/i, '');
+    else if(!/\/$/.test(p)) p = p + '/';
+    var cards = document.querySelectorAll('a.card');
+    for(var i=0;i<cards.length;i++){ cards[i].setAttribute('href', p + cards[i].getAttribute('href')); }
+  })();
+</script>
 </body>
 </html>
