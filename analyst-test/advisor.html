@@ -645,8 +645,10 @@ body.reviewer .actionbar{display:none}
         }
       });
       const meta={ submittedAt:subAt, name:attempt.name, date:prettyDate(attempt.date), score, test: TEST_NAME };
-      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions }) });
+      const body = JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions });
+      let sent = false;
+      try { if(navigator.sendBeacon){ sent = navigator.sendBeacon(SHEET_ENDPOINT, new Blob([body], {type:'text/plain;charset=utf-8'})); } } catch(e){ sent = false; }
+      if(!sent){ fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body }); }
     }catch(e){ /* ignore network errors; the local copy is already saved */ }
   }
   function showDonePopup(){ donePop.hidden=false; }

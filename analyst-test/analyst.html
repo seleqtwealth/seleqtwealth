@@ -76,6 +76,11 @@ main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
 .q-text{font-size:15px; line-height:1.6; color:var(--text); font-weight:500; margin-bottom:16px}
 .q-text i{color:var(--gold-bright); font-style:italic}
 .opts{display:flex; flex-direction:column; gap:9px}
+.opts.tf{flex-direction:row; gap:10px}
+.opts.tf .opt{flex:1; justify-content:center; font-weight:700}
+.q-why{width:100%; min-height:70px; margin-top:11px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:11px 13px; outline:none; resize:vertical; transition:border-color .15s}
+.q-why:focus{border-color:var(--gold)}
 .opt{display:flex; align-items:flex-start; gap:11px; padding:11px 14px; background:#121514; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .14s}
 .opt:hover{border-color:var(--line2)}
 .opt input{accent-color:var(--gold); margin-top:2px; width:15px; height:15px; cursor:pointer; flex:none}
@@ -652,7 +657,7 @@ body.reviewer .actionbar{display:none}
     try{
       const subAt = new Date().toLocaleString();
       const score = attempt.score.correct + ' / ' + attempt.score.total;
-      const cols=['Submitted At','Candidate','Date','MCQ Score'];
+      const cols=['Submitted At','Candidate','Date','Objective score'];
       const vals=[ subAt, attempt.name, prettyDate(attempt.date), score ];
       const questions=[];
       qs.forEach(q=>{
@@ -661,13 +666,22 @@ body.reviewer .actionbar{display:none}
         const prompt=((q.querySelector('.q-text')||{}).textContent||'').trim();
         const rubric=((q.querySelector('.key-line')||{}).textContent||'').trim();
         cols.push(tag ? (no+' · '+tag) : no);
-        if(q.dataset.type==='mcq'){
+        const tp=q.dataset.type;
+        if(tp==='mcq'){
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
           const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
           vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
           questions.push({ no, tag, type:'mcq', prompt,
             answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
             correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
+        } else if(tp==='tf'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct, ok=chosen===correct;
+          const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+          const ta=q.querySelector('textarea'); const why=(ta?(attempt.answers[ta.name]||''):'').trim();
+          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('— (→'+cap(correct)+')')) + (why? '  —  '+why : ''));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: (chosen?cap(chosen):'Not answered') + (why? ' — '+why : ''),
+            correct: cap(correct), isCorrect: ok, rubric });
         } else {
           const ta=q.querySelector('textarea');
           vals.push(attempt.answers[ta.name]||'');
@@ -675,8 +689,10 @@ body.reviewer .actionbar{display:none}
         }
       });
       const meta={ submittedAt:subAt, name:attempt.name, date:prettyDate(attempt.date), score, test: TEST_NAME };
-      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions }) });
+      const body = JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions });
+      let sent = false;
+      try { if(navigator.sendBeacon){ sent = navigator.sendBeacon(SHEET_ENDPOINT, new Blob([body], {type:'text/plain;charset=utf-8'})); } } catch(e){ sent = false; }
+      if(!sent){ fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body }); }
     }catch(e){ /* ignore network errors; the local copy is already saved */ }
   }
   function showDonePopup(){ donePop.hidden=false; }
@@ -685,7 +701,8 @@ body.reviewer .actionbar{display:none}
   function countAnswered(){
     let n = 0;
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){ if(q.querySelector('input[type=radio]:checked')) n++; }
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ if(q.querySelector('input[type=radio]:checked')) n++; }
       else { const ta = q.querySelector('textarea'); if(ta && ta.value.trim().length>0) n++; }
     });
     ansCountEl.textContent = n;
@@ -697,8 +714,9 @@ body.reviewer .actionbar{display:none}
   function collectAnswers(){
     const ans = {};
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
-      else { const ta=q.querySelector('textarea'); ans[ta.name] = ta.value; }
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
+      const ta=q.querySelector('textarea'); if(ta) ans[ta.name] = ta.value;
     });
     return ans;
   }
@@ -706,12 +724,12 @@ body.reviewer .actionbar{display:none}
   // fill the form from an answers object (or clear if null) and optionally lock it
   function setInputs(ans, disabled){
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){
         const nm = mcqName(q);
         q.querySelectorAll('input[type=radio]').forEach(i=>{ i.checked = ans ? (ans[nm]===i.value) : false; i.disabled = disabled; });
-      } else {
-        const ta = q.querySelector('textarea'); ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled;
       }
+      const ta = q.querySelector('textarea'); if(ta){ ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled; }
       q.classList.toggle('locked', disabled);
     });
   }
@@ -720,7 +738,7 @@ body.reviewer .actionbar{display:none}
   function grade(keyOnly){
     let correct = 0, total = 0;
     qs.forEach(q=>{
-      if(q.dataset.type!=='mcq') return;
+      if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return;
       total++;
       const want = q.dataset.correct;
       const chosen = q.querySelector('input[type=radio]:checked');
@@ -738,7 +756,7 @@ body.reviewer .actionbar{display:none}
         }
       } else { mark.className='mark na'; mark.textContent='— Not answered'; }
     });
-    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total + ' MCQ');
+    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total);
   }
 
   // ---- candidate: Finish & Lock (saves the attempt) ----
@@ -747,7 +765,7 @@ body.reviewer .actionbar{display:none}
     countAnswered();
     const ans = collectAnswers();
     let correct=0, total=0;
-    qs.forEach(q=>{ if(q.dataset.type!=='mcq') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
+    qs.forEach(q=>{ if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
     const attempt = {
       id: 'a' + Date.now() + '_' + Math.floor(Math.random()*1e6),
       name: (candName.value.trim() || 'Unnamed candidate'),
