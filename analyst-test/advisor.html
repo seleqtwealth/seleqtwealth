@@ -76,6 +76,11 @@ main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
 .q-text{font-size:15px; line-height:1.6; color:var(--text); font-weight:500; margin-bottom:16px}
 .q-text i{color:var(--gold-bright); font-style:italic}
 .opts{display:flex; flex-direction:column; gap:9px}
+.opts.tf{flex-direction:row; gap:10px}
+.opts.tf .opt{flex:1; justify-content:center; font-weight:700}
+.q-why{width:100%; min-height:70px; margin-top:11px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:11px 13px; outline:none; resize:vertical; transition:border-color .15s}
+.q-why:focus{border-color:var(--gold)}
 .opt{display:flex; align-items:flex-start; gap:11px; padding:11px 14px; background:#121514; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .14s}
 .opt:hover{border-color:var(--line2)}
 .opt input{accent-color:var(--gold); margin-top:2px; width:15px; height:15px; cursor:pointer; flex:none}
@@ -254,7 +259,7 @@ body.reviewer .actionbar{display:none}
   </div>
   <div class="head-right">
     <div class="as-of">Internal hiring assessment</div>
-    <div>~30 minutes · 22 questions</div>
+    <div>~35 minutes · 20 questions</div>
     <div>Applied financial-planning judgment</div>
   </div>
 </header>
@@ -277,56 +282,49 @@ body.reviewer .actionbar{display:none}
   <div class="section">
     <div class="section-head"><span class="sec-no">Section A</span><h2>Planning Fundamentals &amp; Goals</h2><span class="sec-sub">4 questions</span></div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">A1</span><span class="q-tag">Planning process</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A new client opens with <i>"just tell me which funds to buy."</i> Before recommending any product, the first thing a planner should establish is:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qA1" value="a"><span>The single best-performing fund this year</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qA1" value="b"><span>The client's goals, time horizons, cash flows and risk profile</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qA1" value="c"><span>Which fund pays the highest commission</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qA1" value="d"><span>The client's date of birth, and nothing else</span></label>
+    <div class="q" data-type="tf" data-correct="false">
+      <div class="q-head"><span class="q-no">A1</span><span class="q-tag">Suitability</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">If a client walks in already certain which fund they want, it is fine to simply act on that instruction without first assessing their goals and risk profile.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qA1" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qA1" value="false"><span>False</span></label>
       </div>
+      <textarea class="q-why" name="qA1_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Products come last. Planning starts with understanding the client, goals, horizon, capacity and cash flow, then suitability, then product. Picking a product first is the classic mistake.</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>False.</b> A planner has a duty of suitability, you still have to understand the client's goals, horizon and risk and check the product actually fits, even on a direct instruction (and document it). Acting blind on instruction is how mis-buying happens. <b>Look for:</b> picks False and names suitability / duty-of-care before acting.</div></div>
     </div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">A2</span><span class="q-tag">Risk profiling</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A client insists he is "aggressive" and wants full equity, but he needs this specific money in 2 years for a home purchase. What should govern the recommendation?</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qA2" value="a"><span>His stated aggressive comfort level</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qA2" value="b"><span>His risk capacity, a 2-year horizon can't absorb equity volatility, so capacity overrides his stated tolerance</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qA2" value="c"><span>Whatever has given the highest return recently</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qA2" value="d"><span>The current direction of the market</span></label>
-      </div>
-      <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Distinguish risk <i>capacity</i> (ability to take risk, set by horizon and finances) from <i>tolerance</i> (willingness). A short, fixed horizon means low capacity, which must win. Strong sign if the candidate names that distinction.</div></div>
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">A2</span><span class="q-tag">Risk profiling · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client insists he is an aggressive investor and wants to go fully into equity, but the money in question is for buying a home in about 2 years. What should drive your recommendation, and why?</p>
+      <textarea name="qA2" placeholder="Your recommendation and the reasoning behind it..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Risk <b>capacity</b> (set by the short, fixed 2-year horizon) overrides his stated <b>tolerance</b>, equity simply can't be relied on over 2 years, so recommend capital preservation (liquid / short-duration debt / FD). Reward naming the capacity-vs-tolerance distinction and prioritising the goal's horizon over the client's self-label.</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">A3</span><span class="q-tag">Goal-based</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A client has three goals: an emergency buffer, a car in 3 years, and retirement in 25 years. The soundest approach is:</p>
+      <p class="q-text">A client has three goals: a 6-month emergency buffer, a car in 3 years, and retirement in 25 years. Which approach fits best?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qA3" value="a"><span>Put everything into one balanced fund</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qA3" value="b"><span>Map each goal to its own horizon-appropriate mix, safe/liquid for the buffer, conservative for the car, growth-tilted for retirement</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qA3" value="c"><span>Put everything into equity for maximum growth</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qA3" value="d"><span>Put everything into FDs to be safe</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qA3" value="a"><span>One single moderate-risk portfolio covering all three together</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA3" value="b"><span>Map each goal to its horizon, liquid for the buffer, mostly debt for the car, equity-tilted for retirement</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA3" value="c"><span>Keep all three mainly in equity, since equity wins over long periods</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA3" value="d"><span>Keep all three mainly in debt and FDs, to keep everything secure and simple</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Goal bucketing: each goal's time horizon drives its own asset mix. One blanket portfolio either takes too much risk with near-term money or too little with long-term money.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Each goal's time horizon should drive its own asset mix (bucketing). A single blanket portfolio (A) either over-risks the near-term money or under-grows the long-term money; C over-risks the buffer and car; D starves the retirement goal of growth.</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">A4</span><span class="q-tag">Real value</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">When estimating the corpus needed for a child's education 15 years away, <b>ignoring inflation</b> would:</p>
+      <p class="q-text">You're sizing the corpus a client needs for a child's college in 15 years. Which is the soundest basis?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qA4" value="a"><span>Overstate how much is needed</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qA4" value="b"><span>Understate how much is needed, future fees will be far higher than today's</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qA4" value="c"><span>Have no effect on the number</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qA4" value="d"><span>Only matter for retirement, not education</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qA4" value="a"><span>Today's college fees, that's the concrete number you actually have</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA4" value="b"><span>Today's fees grown by an assumed education-inflation rate to their future level</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA4" value="c"><span>Today's fees plus a flat 10% buffer</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA4" value="d"><span>Whatever the client can comfortably invest each month</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Education and medical inflation are high in India; you must grow today's cost to the future value. Planning on today's fees badly under-funds the goal. Tests the real-vs-nominal instinct.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Education inflation is high, so you must grow today's fee to its future value. A and C badly understate the goal; D confuses how much they can invest with how much the goal will cost.</div></div>
     </div>
   </div>
 
@@ -336,54 +334,47 @@ body.reviewer .actionbar{display:none}
 
     <div class="q" data-type="mcq" data-correct="c">
       <div class="q-head"><span class="q-no">B1</span><span class="q-tag">Protection</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">For pure income protection of a 32-year-old sole earner with two dependents, the most cost-effective cover is:</p>
+      <p class="q-text">A 32-year-old sole earner with two dependents wants the largest income protection his budget allows. Which gives the most cover for the lowest premium?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qB1" value="a"><span>An endowment policy</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qB1" value="b"><span>A ULIP</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qB1" value="c"><span>A pure term life policy, high cover for a low premium</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qB1" value="d"><span>A money-back policy</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qB1" value="a"><span>An endowment plan, cover plus a guaranteed maturity payout</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB1" value="b"><span>A ULIP, cover plus a market-linked investment</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB1" value="c"><span>A pure term life policy</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB1" value="d"><span>A money-back policy, periodic payouts plus cover</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>C.</b> Keep protection and investment separate, term gives the most cover per rupee. Bundled products (endowment/ULIP/money-back) dilute both the cover and the returns.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>C.</b> Pure protection is cheapest through term; the others (A, B, D) all bundle an investment into the premium, which buys far less cover per rupee. Separate protection from investing.</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">B2</span><span class="q-tag">Adequacy</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A common starting rule of thumb for how much life cover a working person needs is roughly:</p>
+      <p class="q-text">How would you arrive at how much life cover a working client needs?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qB2" value="a"><span>About one year's income</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qB2" value="b"><span>Around 10 to 15 times annual income, adjusted for liabilities and goals</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qB2" value="c"><span>Whatever is currently in the savings account</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>A flat ₹5 lakh for everyone</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qB2" value="a"><span>Match it to the balance currently in their savings and investments</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB2" value="b"><span>Replace their income for the family's needs, around 10 to 15&times; annual income, then add liabilities and subtract existing assets</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB2" value="c"><span>A standard ₹1 crore, which works for most people</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>Match it to one year's income, enough to tide the family over</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Roughly 10&ndash;15&times; income as a start (or a proper income-replacement / human-life-value / needs basis). Bonus if they add outstanding liabilities and future goals, and net off existing assets.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Cover should replace lost income and clear liabilities (an income-replacement / needs basis, ~10&ndash;15&times; income, plus loans, minus existing assets). A, C and D are convenient shortcuts that routinely leave families under-covered.</div></div>
     </div>
 
-    <div class="q" data-type="mcq" data-correct="a">
-      <div class="q-head"><span class="q-no">B3</span><span class="q-tag">Health risk</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">Why advise a client to hold a <b>personal</b> health policy even though their employer already provides group cover?</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qB3" value="a"><span>Employer cover ends when the job does and may be inadequate; a personal policy gives continuity and builds renewal history before age or illness make cover costly</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qB3" value="b"><span>Personal cover is always cheaper than group cover</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qB3" value="c"><span>Group cover cannot be used in hospitals</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qB3" value="d"><span>There is no real reason to</span></label>
+    <div class="q" data-type="tf" data-correct="true">
+      <div class="q-head"><span class="q-no">B3</span><span class="q-tag">Health risk</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">A client's employer-provided group health cover typically ends when they leave or change that job.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qB3" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qB3" value="false"><span>False</span></label>
       </div>
+      <textarea class="q-why" name="qB3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Group cover is tied to the job, can be withdrawn, and is often too small. A personal policy ensures continuity and locks in insurability/renewal history early.</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> Group cover is tied to the employer and lapses when the job does, and it's often inadequate. That is exactly why a client should also hold a <b>personal</b> health policy, for continuity and to lock in insurability before age or illness make cover costly. <b>Look for:</b> True + recognising the job-tied risk and why a personal policy matters.</div></div>
     </div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">B4</span><span class="q-tag">Drawdown risk</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">For a client who has just retired and is drawing an income from their corpus, the most damaging event is:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qB4" value="a"><span>A small dip in the fifteenth year of retirement</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qB4" value="b"><span>A large market fall in the first few years while they are withdrawing, it can permanently impair the corpus (sequence-of-returns risk)</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qB4" value="c"><span>Interest rates staying flat</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qB4" value="d"><span>A year of unusually low inflation</span></label>
-      </div>
-      <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Sequence-of-returns risk: a big early drawdown combined with withdrawals is very hard to recover from. Mitigated by a cash/debt buffer (bucket strategy) and a conservative early-retirement glide path.</div></div>
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">B4</span><span class="q-tag">Retirement · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client has just retired and will draw a monthly income from their investment corpus. Of everything that could go wrong, which single risk would worry you most in the first few years, why, and how would you guard against it?</p>
+      <textarea name="qB4" placeholder="The risk, why it matters, and how you'd guard against it..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Sequence-of-returns risk</b>, a large fall early in retirement, while money is being withdrawn, can permanently impair the corpus. Guard against it with a <b>cash/debt buffer</b> of a few years' withdrawals (a bucket strategy) so equity isn't sold in a downturn, plus a conservative early glide path. Reward naming sequence risk and a concrete buffer/bucket mitigation.</div></div>
     </div>
   </div>
 
@@ -391,132 +382,110 @@ body.reviewer .actionbar{display:none}
   <div class="section">
     <div class="section-head"><span class="sec-no">Section C</span><h2>Tax, Estate &amp; Succession</h2><span class="sec-sub">4 questions</span></div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">C1</span><span class="q-tag">Tax efficiency</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">Frequently switching equity funds to chase performance is usually <b>tax-inefficient</b> because:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qC1" value="a"><span>It has no tax impact at all</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qC1" value="b"><span>Each switch can realise capital gains (taxable) and trigger costs/exit loads, dragging net returns versus simply staying invested</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qC1" value="c"><span>Switching funds is not allowed</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qC1" value="d"><span>It always increases returns</span></label>
+    <div class="q" data-type="tf" data-correct="false">
+      <div class="q-head"><span class="q-no">C1</span><span class="q-tag">Tax efficiency</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">As long as a client stays within equity funds, frequently switching between them to chase the best performer carries no real tax cost.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qC1" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qC1" value="false"><span>False</span></label>
       </div>
+      <textarea class="q-why" name="qC1_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Churning realises gains (tax now) and adds costs; staying invested defers tax and lets it compound. No exact rates needed, the principle is the point.</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>False.</b> Each switch is a redemption, it can realise taxable capital gains and trigger exit loads and costs. Staying invested defers tax and lets it compound. <b>Look for:</b> False + realised-gains / tax-drag reasoning.</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">C2</span><span class="q-tag">Tax-saving</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A young client in a high tax bracket wants to save tax under 80C <b>and</b> build long-term wealth. Among common 80C options, the best fit is usually:</p>
+      <p class="q-text">A 30-year-old in the 30% tax bracket wants an 80C investment that <b>also</b> builds long-term wealth. Which fits best?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qC2" value="a"><span>A 5-year tax-saving fixed deposit</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qC2" value="b"><span>ELSS, an equity fund with a 3-year lock-in, tax saving plus long-term growth potential</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qC2" value="c"><span>Keeping the money idle in a savings account</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qC2" value="d"><span>A low-yield traditional insurance plan bought only for the deduction</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qC2" value="a"><span>PPF, safe, but a 15-year lock-in and debt-like returns</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC2" value="b"><span>ELSS, an equity fund with a 3-year lock-in and long-term growth potential</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC2" value="c"><span>A 5-year tax-saving fixed deposit, fully taxable interest, modest returns</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC2" value="d"><span>A traditional endowment policy that bundles insurance with savings</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Match the tool to goal and horizon: ELSS gives growth potential with the shortest 80C lock-in. Buying insurance purely for a tax deduction (D) is a classic mis-step.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> For tax saving <i>and</i> growth with the shortest lock-in, ELSS fits. PPF is safe but long and debt-like; the FD's returns are modest and taxed; the endowment bundles insurance and savings poorly. The candidate has to weigh growth vs lock-in vs suitability, not spot a joke.</div></div>
     </div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">C3</span><span class="q-tag">Succession</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A client believes the <b>nominee</b> on their mutual funds and bank accounts automatically becomes the owner of those assets on death. In fact:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qC3" value="a"><span>The nominee does become the legal owner</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qC3" value="b"><span>A nominee is a trustee who receives the assets to pass on to the legal heirs; actual ownership is decided by a will or succession law</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qC3" value="c"><span>A nomination overrides a will in every case</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qC3" value="d"><span>Nominations carry no legal weight</span></label>
+    <div class="q" data-type="tf" data-correct="false">
+      <div class="q-head"><span class="q-no">C3</span><span class="q-tag">Succession</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">The nominee on a client's mutual fund or bank account automatically becomes the legal owner of those assets when the client dies.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qC3" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qC3" value="false"><span>False</span></label>
       </div>
+      <textarea class="q-why" name="qC3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A nominee is a custodian/trustee, not the owner; a valid will (or succession law) decides who inherits. A frequent and important client misconception, good for an adviser to catch.</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>False.</b> A nominee is a trustee/custodian who receives the assets to pass on to the legal heirs; who actually inherits is decided by a will or succession law. A common and important client misconception. <b>Look for:</b> False + the nominee-vs-heir distinction.</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">C4</span><span class="q-tag">Estate planning</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">For an HNI family wanting a smooth, private, dispute-resistant transfer of assets across generations, a useful structure <b>beyond a basic will</b> is:</p>
+      <p class="q-text">An HNI family wants their wealth to pass to the next generation smoothly, privately and with minimal disputes. Beyond holding assets jointly, the most robust step is:</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qC4" value="a"><span>Doing nothing and relying on nominations</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qC4" value="b"><span>A properly drafted will plus, where appropriate, a private family trust</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qC4" value="c"><span>A verbal understanding with the children</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qC4" value="d"><span>Putting all the assets in one child's name</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qC4" value="a"><span>Relying on nominations across all their accounts</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC4" value="b"><span>A properly drafted will, and for a complex estate, a private family trust</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC4" value="c"><span>Gifting most of the assets to the children now, while they're alive</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC4" value="d"><span>Keeping a detailed letter of wishes with the family</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A will is the base; for larger/complex estates a family trust adds control, privacy, continuity and helps avoid probate disputes. Directly relevant to SELEQT's HNI clientele.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A valid will is the base; for a complex/large estate a family trust adds control, privacy and continuity and pre-empts disputes. A, C and D are partial measures with real gaps (nominations don't decide ownership; gifting loses control and has tax angles; a letter of wishes isn't legally binding).</div></div>
     </div>
   </div>
 
   <!-- ============ SECTION D ============ -->
   <div class="section">
-    <div class="section-head"><span class="sec-no">Section D</span><h2>Products, Suitability &amp; Regulation</h2><span class="sec-sub">4 questions</span></div>
+    <div class="section-head"><span class="sec-no">Section D</span><h2>Products, Suitability &amp; Regulation</h2><span class="sec-sub">3 questions</span></div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">D1</span><span class="q-tag">MFD vs RIA</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">The core difference between a mutual-fund distributor (MFD) and a SEBI-registered investment adviser (RIA) is:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qD1" value="a"><span>There is no real difference</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qD1" value="b"><span>An MFD earns commission from product providers for distribution; an RIA charges the client a fee and advises in a fiduciary capacity, advice and distribution are kept separate</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qD1" value="c"><span>An RIA is not allowed to give advice</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qD1" value="d"><span>An MFD cannot sell mutual funds</span></label>
-      </div>
-      <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Commission vs fee, and the RIA's fiduciary duty with advice/distribution segregated. Central to a firm that is both MFD and RIA. Strong sign if the candidate grasps the conflict-of-interest angle.</div></div>
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D1</span><span class="q-tag">MFD vs RIA</span><span class="q-type">Written</span></div>
+      <p class="q-text">In your own words, what is the difference between a mutual-fund distributor (MFD) and a SEBI-registered investment adviser (RIA), and why does that distinction matter to a client?</p>
+      <textarea name="qD1" placeholder="The difference, and why it matters to the client..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">An <b>MFD</b> earns commission from the product makers for distribution; an <b>RIA</b> charges the client a fee and advises in a <b>fiduciary</b> capacity, with advice and distribution kept separate. <b>Why it matters:</b> how the adviser is paid shapes potential conflicts of interest, the client should know whose interest the advice serves. Reward grasping commission-vs-fee, the fiduciary duty, and the conflict angle (especially for a firm that is both).</div></div>
     </div>
 
     <div class="q" data-type="mcq" data-correct="b">
       <div class="q-head"><span class="q-no">D2</span><span class="q-tag">Costs</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">Compared with a <b>Regular</b> plan, a <b>Direct</b> plan of the same mutual fund:</p>
+      <p class="q-text">A client asks whether to hold the <b>Direct</b> or <b>Regular</b> plan of the same mutual fund. Which is accurate?</p>
       <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qD2" value="a"><span>Has a higher expense ratio</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qD2" value="b"><span>Has a lower expense ratio (no distributor commission built in), so a slightly higher return over time, all else equal</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qD2" value="c"><span>Invests in a different set of stocks</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qD2" value="d"><span>Is inherently riskier</span></label>
+        <label class="opt" data-opt="a"><input type="radio" name="qD2" value="a"><span>Regular costs less, because the distributor negotiates a discount for the client</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD2" value="b"><span>Direct has a lower expense ratio (no distributor commission), so a slightly higher return, same portfolio</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD2" value="c"><span>Direct holds a different, riskier set of securities than Regular</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD2" value="d"><span>There's no real difference; the labels are just branding</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Direct = no trail commission &rarr; lower expense ratio &rarr; higher net return, same underlying portfolio. (Worth knowing where it fits given the MFD/RIA models.)</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Same portfolio, but Direct carries no trail commission, so a lower expense ratio and a slightly higher net return. A, C and D are common misconceptions.</div></div>
     </div>
 
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Ethics</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">A product that pays you a high commission doesn't fit the client's goal, but a lower-paying option does. The right action is:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qD3" value="a"><span>Sell the high-commission product; commissions are the point</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qD3" value="b"><span>Recommend the suitable option; putting commission ahead of suitability is mis-selling and a conflict of interest</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qD3" value="c"><span>Sell whichever product the client has already heard of</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qD3" value="d"><span>Avoid recommending anything at all</span></label>
+    <div class="q" data-type="tf" data-correct="true">
+      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Portfolio</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">Rebalancing a portfolio is mainly about keeping its risk aligned with the plan, rather than about maximising returns.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qD3" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qD3" value="false"><span>False</span></label>
       </div>
+      <textarea class="q-why" name="qD3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Suitability and the client's interest come first; disclose conflicts. A direct integrity check, central to the role and the firm's reputation.</div></div>
-    </div>
-
-    <div class="q" data-type="mcq" data-correct="b">
-      <div class="q-head"><span class="q-no">D4</span><span class="q-tag">Portfolio</span><span class="q-type">Multiple choice</span></div>
-      <p class="q-text">Periodically <b>rebalancing</b> a portfolio back to its target asset mix:</p>
-      <div class="opts">
-        <label class="opt" data-opt="a"><input type="radio" name="qD4" value="a"><span>Is pointless and just adds cost</span></label>
-        <label class="opt" data-opt="b"><input type="radio" name="qD4" value="b"><span>Enforces a "sell-high, buy-low" discipline and keeps risk aligned with the client's plan</span></label>
-        <label class="opt" data-opt="c"><input type="radio" name="qD4" value="c"><span>Guarantees a higher return every single year</span></label>
-        <label class="opt" data-opt="d"><input type="radio" name="qD4" value="d"><span>Means selling everything and starting over</span></label>
-      </div>
-      <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Rebalancing controls risk drift and instils contrarian discipline. It is not a return guarantee (C is the trap).</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> Rebalancing controls risk drift, keeping the mix aligned with the plan, and instils a sell-high / buy-low discipline. It is not a return-maximiser, and rebalancing too often just adds cost and tax. <b>Look for:</b> True + risk-control reasoning (ideally noting that more-often isn't better).</div></div>
     </div>
   </div>
 
   <!-- ============ SECTION E — ON THE JOB ============ -->
   <div class="section flagship">
-    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">6 advisory situations</span></div>
+    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">5 advisory situations</span></div>
 
     <div class="q" data-type="open">
       <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Suitability · advise</span><span class="q-type">Written</span></div>
       <p class="q-text">A client with a balanced, goal-aligned portfolio wants to move <b>60% of it</b> into one red-hot sectoral fund that's up sharply this year. As their adviser, how do you respond, and what is the right course of action?</p>
       <textarea name="qE1" placeholder="Identify the issue, then the right course of action..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Acknowledge the appeal, then the problems: heavy <b>concentration</b> in one sector, <b>performance-chasing / recency bias</b>, and it breaks the goal-aligned plan and pushes risk past the client's profile. Right course: revisit goals and risk, stay diversified, and at most a <i>small</i> satellite (say 5&ndash;10%) if it genuinely fits, then rebalance. Reward suitability-first reasoning and a concrete moderate alternative, not just a flat "no".</div></div>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Acknowledge the appeal, then the problems: heavy <b>concentration</b> in one sector, <b>performance-chasing / recency bias</b>, and it breaks the goal-aligned plan and pushes risk past the client's profile. Right course: revisit goals and risk, stay diversified, at most a <i>small</i> satellite (say 5&ndash;10%) if it genuinely fits, then rebalance. Reward suitability-first reasoning and a concrete moderate alternative, not a flat "no".</div></div>
     </div>
 
     <div class="q" data-type="open">
       <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Retirement · advise</span><span class="q-type">Written</span></div>
       <p class="q-text">A 57-year-old retiring in 3 years has their <b>entire</b> savings in fixed deposits because "FDs are safe." What is the planning problem, and what would you recommend?</p>
       <textarea name="qE2" placeholder="The problem, then your recommendation..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Problem:</b> "safe" only in nominal terms, over a 25&ndash;30 year retirement, inflation plus tax leaves a near-zero or negative real return (longevity/inflation risk). <b>Recommend:</b> a glide-path / bucket approach, keep near-term needs safe but add a growth sleeve (equity-tilted) for the long tail, diversify, and plan withdrawals. Reward naming inflation/longevity risk and proposing a balanced, staged mix rather than 100% FD or 100% equity.</div></div>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Problem:</b> "safe" only in nominal terms, over a 25&ndash;30 year retirement, inflation plus tax leaves a near-zero or negative real return (longevity/inflation risk). <b>Recommend:</b> a glide-path / bucket approach, keep near-term needs safe but add a growth sleeve for the long tail, diversify, plan withdrawals. Reward naming inflation/longevity risk and a balanced, staged mix rather than 100% FD or 100% equity.</div></div>
     </div>
 
     <div class="q" data-type="open">
@@ -527,31 +496,24 @@ body.reviewer .actionbar{display:none}
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Judgment · advise</span><span class="q-type">Written</span></div>
-      <p class="q-text">A client realises a high-cost endowment/ULIP they were sold years ago is underperforming and wants to <b>surrender it immediately</b>. How should you analyse this before advising?</p>
-      <textarea name="qE4" placeholder="How you'd analyse it before giving advice..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Not a reflex "surrender" or "keep". Analyse: surrender value vs paid-up vs continuing; charges are largely <i>sunk</i>; years left to maturity; whether making it paid-up beats surrendering; the protection it provides (replace with term <b>first</b> if it was their only cover); and tax on surrender. Often the answer is replace with term + invest the difference, but only after checking the numbers and the protection gap. Reward a structured, numbers-and-protection-aware approach over a knee-jerk one.</div></div>
-    </div>
-
-    <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Ethics · advise</span><span class="q-type">Written</span></div>
+      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Ethics · advise</span><span class="q-type">Written</span></div>
       <p class="q-text">Your firm earns a much higher commission on Product X, but Product Y is cheaper and a better fit for this client's goal. The client trusts your recommendation completely. What do you do, and why?</p>
-      <textarea name="qE5" placeholder="What you do, and your reasoning..." style="min-height:120px"></textarea>
+      <textarea name="qE4" placeholder="What you do, and your reasoning..." style="min-height:120px"></textarea>
       <div class="key"><div class="key-label">What to look for · character check</div><div class="key-line">Recommend the suitable option (Y), the client's interest and trust come first, and be transparent about how you're paid. Never let commission drive advice, that's mis-selling. Reward clear fiduciary/ethical reasoning, awareness of the MFD vs RIA conflict, and recognition that the client's trust is the firm's real long-term asset. A weak or self-serving answer here is a serious red flag.</div></div>
     </div>
 
     <div class="q" data-type="open">
-      <div class="q-head"><span class="q-no">E6</span><span class="q-tag">Succession · advise</span><span class="q-type">Written</span></div>
-      <p class="q-text">An HNI client with assets spread across mutual funds, property and business interests, and a <b>blended family</b>, wants to ensure a smooth, fair transfer to the next generation. What should their plan include?</p>
-      <textarea name="qE6" placeholder="What the estate/succession plan should include..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line">A clear, valid <b>will</b>; <b>nominations aligned</b> with the will (not contradicting it); for the complexity, a <b>family trust</b> for control, privacy and continuity; <b>liquidity planning</b> for taxes/expenses on transfer; and clarity to pre-empt disputes (especially with a blended family), reviewed periodically. Reward a structured estate-planning answer touching will + nomination alignment + trust + liquidity, suited to an HNI context.</div></div>
+      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Build a plan · capstone</span><span class="q-type">Written</span></div>
+      <p class="q-text">A new client, 40, married with two young children, a home loan, a handful of mutual funds bought ad hoc, and one insurance policy from years ago, says: <i>"I have no idea if I'm on track. Sort me out."</i> How would you approach building their financial plan, and in what order?</p>
+      <textarea name="qE5" placeholder="Your approach, step by step..." style="min-height:130px"></textarea>
+      <div class="key"><div class="key-label">What to look for · planner's mindset</div><div class="key-line">A logical sequence, not a jump to product picks. <b>First understand them</b> (goals, cash flow, net worth, risk profile). <b>Then the foundation</b>, emergency fund and protection (adequate term + health) before chasing growth. <b>Review</b> the old policy for suitability (replace if it's a poor product), and consolidate the ad-hoc funds into a goal-based, diversified allocation. Then <b>document</b> the plan and set a review cadence. Reward the assess &rarr; protect &rarr; build order and breadth.</div></div>
     </div>
   </div>
 
   <!-- ============ ACTION BAR (candidate) ============ -->
   <div class="actionbar">
     <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
-    <span class="status" id="status">Answered <b id="ansCount">0</b> of 22</span>
+    <span class="status" id="status">Answered <b id="ansCount">0</b> of 20</span>
     <button class="btn lockbtn" id="lockBtn" title="Interviewer access (code required)">&#128274;&nbsp;Interviewer</button>
   </div>
 
@@ -651,7 +613,7 @@ body.reviewer .actionbar{display:none}
     try{
       const subAt = new Date().toLocaleString();
       const score = attempt.score.correct + ' / ' + attempt.score.total;
-      const cols=['Submitted At','Candidate','Date','MCQ Score'];
+      const cols=['Submitted At','Candidate','Date','Objective score'];
       const vals=[ subAt, attempt.name, prettyDate(attempt.date), score ];
       const questions=[];
       qs.forEach(q=>{
@@ -660,13 +622,22 @@ body.reviewer .actionbar{display:none}
         const prompt=((q.querySelector('.q-text')||{}).textContent||'').trim();
         const rubric=((q.querySelector('.key-line')||{}).textContent||'').trim();
         cols.push(tag ? (no+' · '+tag) : no);
-        if(q.dataset.type==='mcq'){
+        const tp=q.dataset.type;
+        if(tp==='mcq'){
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
           const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
           vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
           questions.push({ no, tag, type:'mcq', prompt,
             answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
             correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
+        } else if(tp==='tf'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct, ok=chosen===correct;
+          const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+          const ta=q.querySelector('textarea'); const why=(ta?(attempt.answers[ta.name]||''):'').trim();
+          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('— (→'+cap(correct)+')')) + (why? '  —  '+why : ''));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: (chosen?cap(chosen):'Not answered') + (why? ' — '+why : ''),
+            correct: cap(correct), isCorrect: ok, rubric });
         } else {
           const ta=q.querySelector('textarea');
           vals.push(attempt.answers[ta.name]||'');
@@ -684,7 +655,8 @@ body.reviewer .actionbar{display:none}
   function countAnswered(){
     let n = 0;
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){ if(q.querySelector('input[type=radio]:checked')) n++; }
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ if(q.querySelector('input[type=radio]:checked')) n++; }
       else { const ta = q.querySelector('textarea'); if(ta && ta.value.trim().length>0) n++; }
     });
     ansCountEl.textContent = n;
@@ -696,8 +668,9 @@ body.reviewer .actionbar{display:none}
   function collectAnswers(){
     const ans = {};
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
-      else { const ta=q.querySelector('textarea'); ans[ta.name] = ta.value; }
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
+      const ta=q.querySelector('textarea'); if(ta) ans[ta.name] = ta.value;
     });
     return ans;
   }
@@ -705,12 +678,12 @@ body.reviewer .actionbar{display:none}
   // fill the form from an answers object (or clear if null) and optionally lock it
   function setInputs(ans, disabled){
     qs.forEach(q=>{
-      if(q.dataset.type==='mcq'){
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){
         const nm = mcqName(q);
         q.querySelectorAll('input[type=radio]').forEach(i=>{ i.checked = ans ? (ans[nm]===i.value) : false; i.disabled = disabled; });
-      } else {
-        const ta = q.querySelector('textarea'); ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled;
       }
+      const ta = q.querySelector('textarea'); if(ta){ ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled; }
       q.classList.toggle('locked', disabled);
     });
   }
@@ -719,7 +692,7 @@ body.reviewer .actionbar{display:none}
   function grade(keyOnly){
     let correct = 0, total = 0;
     qs.forEach(q=>{
-      if(q.dataset.type!=='mcq') return;
+      if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return;
       total++;
       const want = q.dataset.correct;
       const chosen = q.querySelector('input[type=radio]:checked');
@@ -737,7 +710,7 @@ body.reviewer .actionbar{display:none}
         }
       } else { mark.className='mark na'; mark.textContent='— Not answered'; }
     });
-    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total + ' MCQ');
+    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total);
   }
 
   // ---- candidate: Finish & Lock (saves the attempt) ----
@@ -746,7 +719,7 @@ body.reviewer .actionbar{display:none}
     countAnswered();
     const ans = collectAnswers();
     let correct=0, total=0;
-    qs.forEach(q=>{ if(q.dataset.type!=='mcq') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
+    qs.forEach(q=>{ if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
     const attempt = {
       id: 'a' + Date.now() + '_' + Math.floor(Math.random()*1e6),
       name: (candName.value.trim() || 'Unnamed candidate'),
