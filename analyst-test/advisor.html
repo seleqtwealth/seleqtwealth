@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SELEQT Private Wealth · Analyst Aptitude Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#101312; --bg2:#0B0D0C;
+  --card:#171B19; --card2:#1B201D;
+  --line:#262C29; --line2:#343B36;
+  --text:#EAE4D8; --muted:#9C968A; --faint:#6F6B61;
+  --gold:#C9A86A; --gold-bright:#E2C48E; --gold-dim:rgba(201,168,106,.14);
+  --green:#8DB89A; --amber:#D9A441; --red:#CD7C66;
+  --serif:'Fraunces',Georgia,serif; --sans:'Manrope',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px; scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgba(201,168,106,.05), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  background-color:var(--bg);
+  color:var(--text); font-family:var(--sans); min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1}
+
+/* ---------- header ---------- */
+header{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+  padding:30px 44px 24px; border-bottom:1px solid var(--line); max-width:1000px; margin:0 auto;
+}
+.wordmark{font-size:12px; letter-spacing:.34em; color:var(--gold); font-weight:700; text-transform:uppercase}
+.wordmark b{color:var(--gold-bright)}
+header h1{font-family:var(--serif); font-weight:600; font-size:31px; letter-spacing:.01em; margin-top:8px}
+.head-right{text-align:right; color:var(--muted); font-size:12.5px; line-height:1.7}
+.head-right .as-of{color:var(--text); font-weight:600}
+
+main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
+
+/* ---------- intro / candidate ---------- */
+.intro{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 28px; margin-bottom:30px}
+.intro p{color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:10px}
+.intro p b{color:var(--text); font-weight:600}
+.intro .note{font-size:12.5px; color:var(--faint); margin-top:14px; padding-top:14px; border-top:1px solid var(--line)}
+.cand{display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; margin-top:18px}
+.field{display:flex; flex-direction:column; gap:6px}
+.field label{font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.04em; text-transform:uppercase}
+.field input{
+  background:#121514; border:1px solid var(--line); border-radius:9px; color:var(--text);
+  font-family:var(--sans); font-weight:600; font-size:14px; padding:9px 12px; outline:none; transition:border-color .15s;
+}
+.field input:focus{border-color:var(--gold)}
+.field input[type=date]{color-scheme:dark; cursor:pointer}
+
+/* ---------- section ---------- */
+.section{margin-top:38px}
+.section-head{display:flex; align-items:baseline; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:8px}
+.section-head .sec-no{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:700}
+.section-head h2{font-family:var(--serif); font-weight:600; font-size:23px}
+.section-head .sec-sub{margin-left:auto; font-size:12px; color:var(--faint)}
+.section.flagship .section-head h2{color:var(--gold-bright)}
+
+/* ---------- question ---------- */
+.q{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:16px; transition:border-color .15s}
+.section.flagship .q{border-color:var(--line2); background:var(--card2)}
+.q-head{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.q-no{font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--gold); background:var(--gold-dim); border:1px solid rgba(201,168,106,.3); padding:3px 9px; border-radius:6px}
+.q-tag{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-type{margin-left:auto; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-text{font-size:15px; line-height:1.6; color:var(--text); font-weight:500; margin-bottom:16px}
+.q-text i{color:var(--gold-bright); font-style:italic}
+.opts{display:flex; flex-direction:column; gap:9px}
+.opt{display:flex; align-items:flex-start; gap:11px; padding:11px 14px; background:#121514; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .14s}
+.opt:hover{border-color:var(--line2)}
+.opt input{accent-color:var(--gold); margin-top:2px; width:15px; height:15px; cursor:pointer; flex:none}
+.opt span{font-size:14px; line-height:1.5; color:var(--muted)}
+.opt:has(input:checked){border-color:var(--gold); background:var(--gold-dim)}
+.opt:has(input:checked) span{color:var(--text)}
+textarea{width:100%; min-height:96px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:12px 14px; outline:none; resize:vertical; transition:border-color .15s}
+textarea:focus{border-color:var(--gold)}
+.q.locked .opt{cursor:default; opacity:.92}
+.q.locked .opt input{pointer-events:none}
+
+/* ---------- answer key (reviewer only) ---------- */
+.key{display:none; margin-top:14px; padding:13px 15px; background:#13160F; border:1px solid rgba(201,168,106,.28); border-radius:10px}
+body.reviewer .key{display:block}
+.key-label{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px}
+.key-line{font-size:13px; line-height:1.65; color:var(--muted)}
+.key-line b{color:var(--gold-bright); font-weight:700}
+.mark{display:none; margin-top:10px; font-size:12.5px; font-weight:800; letter-spacing:.04em}
+body.reviewer .mark{display:inline-block}
+.mark.right{color:var(--green)}
+.mark.wrong{color:var(--red)}
+.mark.na{color:var(--faint)}
+body.reviewer .opt.is-correct{border-color:var(--green); background:rgba(141,184,154,.1)}
+body.reviewer .opt.is-correct span{color:var(--green)}
+body.reviewer .opt.is-chosen-wrong{border-color:var(--red); background:rgba(205,124,102,.1)}
+body.reviewer .opt.is-chosen-wrong span{color:var(--red)}
+
+/* ---------- action bar ---------- */
+.actionbar{position:sticky; bottom:0; margin-top:40px; background:linear-gradient(180deg, transparent, var(--bg2) 40%);
+  padding:26px 0 8px; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.btn{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.02em; cursor:pointer;
+  border:1px solid var(--line2); border-radius:10px; padding:12px 22px; transition:all .15s; background:#121514; color:var(--text)}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold); color:#101312; border-color:var(--gold)}
+.btn.primary:hover{background:var(--gold-bright)}
+.btn.subtle{color:var(--faint); border-color:var(--line); font-size:12px; padding:10px 16px}
+.status{font-size:13px; color:var(--muted); font-weight:600}
+.status b{color:var(--gold-bright)}
+.scorebox{display:none; margin-left:auto; text-align:right}
+body.reviewer .scorebox{display:block}
+.scorebox .s-big{font-family:var(--serif); font-size:26px; font-weight:600; color:var(--gold-bright)}
+.scorebox .s-lab{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+
+.locked-banner{display:none; background:var(--gold-dim); border:1px solid rgba(201,168,106,.4); border-radius:12px;
+  padding:16px 20px; margin-bottom:24px; color:var(--gold-bright); font-size:14px; font-weight:600}
+body.submitted .locked-banner{display:block}
+
+/* ---------- interviewer chooser overlay ---------- */
+.overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px)}
+.overlay[hidden]{display:none}
+.chooser-card{width:100%; max-width:560px; max-height:86vh; overflow:auto; background:var(--card); border:1px solid var(--line2);
+  border-radius:18px; padding:24px 24px 20px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.chooser-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px}
+.ch-kicker{font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); font-weight:800}
+.ch-title{font-family:var(--serif); font-size:22px; font-weight:600; margin-top:4px}
+.ch-close{background:none; border:none; color:var(--faint); font-size:24px; line-height:1; cursor:pointer; padding:0 6px; border-radius:8px}
+.ch-close:hover{color:var(--text)}
+.ch-sec{margin-bottom:20px}
+.ch-lab{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:800; margin-bottom:10px}
+.ch-row{width:100%; display:flex; align-items:center; gap:12px; text-align:left; background:#121514; border:1px solid var(--line);
+  border-radius:11px; padding:13px 15px; cursor:pointer; transition:all .14s; color:var(--text); font-family:var(--sans); margin-bottom:8px}
+.ch-row:hover{border-color:var(--gold); background:var(--gold-dim)}
+.key-row{color:var(--gold-bright); font-weight:700; font-size:14px}
+.key-row .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+.att-list{display:flex; flex-direction:column}
+.att-main{display:flex; flex-direction:column; gap:3px; min-width:0}
+.att-row .att-name{font-weight:700; font-size:14px}
+.att-row .att-meta{color:var(--muted); font-size:11.5px}
+.att-row .att-score{margin-left:auto; font-family:var(--serif); font-weight:600; font-size:18px; color:var(--gold-bright); font-variant-numeric:tabular-nums; flex:none}
+.ch-empty{font-size:13px; color:var(--faint); padding:6px 2px}
+.ch-empty[hidden]{display:none}
+.ch-foot{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; padding-top:16px; border-top:1px solid var(--line)}
+.ch-foot .danger{color:var(--red); border-color:rgba(205,124,102,.4)}
+.ch-foot .danger:hover{border-color:var(--red)}
+.ch-hint{font-size:11.5px; color:var(--faint); flex:1 1 100%; margin-top:8px}
+body.keymode .scorebox{display:none}
+body.keymode .mark{display:none!important}
+
+/* ---------- interviewer mode chrome (distinct top bar + accent frame) ---------- */
+.ivbar{position:fixed; top:0; left:0; right:0; z-index:40; display:none; align-items:center; justify-content:space-between;
+  gap:16px; height:52px; padding:0 20px; background:linear-gradient(90deg, var(--gold), var(--gold-bright));
+  color:#0E1110; box-shadow:0 8px 28px rgba(0,0,0,.45)}
+body.reviewer .ivbar{display:flex}
+body.reviewer{padding-top:52px}
+.ivbar-left{display:flex; align-items:center; gap:12px; min-width:0}
+.iv-badge{font-size:10.5px; font-weight:900; letter-spacing:.2em; text-transform:uppercase;
+  background:rgba(16,19,18,.18); padding:5px 10px; border-radius:6px; white-space:nowrap}
+.iv-context{font-size:13px; font-weight:800; color:#16190F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ivbar-right{display:flex; align-items:center; gap:9px; flex:none}
+.iv-score{font-family:var(--serif); font-weight:700; font-size:16px; color:#0E1110; font-variant-numeric:tabular-nums; white-space:nowrap}
+.iv-btn{font-family:var(--sans); font-size:12.5px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:rgba(16,19,18,.10); color:#0E1110; border:1px solid rgba(16,19,18,.30); border-radius:8px; padding:7px 13px; transition:all .14s}
+.iv-btn:hover{background:rgba(16,19,18,.20)}
+.iv-exit{background:#0E1110; color:var(--gold-bright); border-color:#0E1110}
+.iv-exit:hover{background:#000}
+.iv-frame{position:fixed; inset:0; z-index:39; pointer-events:none; display:none; border:4px solid var(--gold)}
+body.reviewer .iv-frame{display:block}
+body.keymode .iv-score{display:none}
+body.reviewer .actionbar{display:none}
+.lockbtn{margin-left:auto; background:transparent; border-color:var(--line); color:var(--faint); font-size:11.5px; font-weight:700; padding:9px 13px}
+.lockbtn:hover{color:var(--gold); border-color:var(--line2)}
+.ch-row.newrow{color:var(--gold-bright); font-weight:700; font-size:14px}
+.ch-row.newrow .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+
+/* ---------- candidate "attempt submitted" popup ---------- */
+.donepop{position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px)}
+.donepop[hidden]{display:none}
+.donepop-card{background:var(--card); border:1px solid var(--line2); border-radius:18px; padding:32px 36px; text-align:center;
+  max-width:400px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.donepop-tick{width:58px; height:58px; margin:0 auto 18px; border-radius:50%; background:var(--gold-dim);
+  border:1px solid rgba(201,168,106,.5); color:var(--gold-bright); font-size:28px; line-height:56px; font-weight:700}
+.donepop-title{font-family:var(--serif); font-size:23px; font-weight:600; margin-bottom:9px; color:var(--text)}
+.donepop-sub{font-size:13.5px; color:var(--muted); line-height:1.65; margin-bottom:22px}
+.donepop-ok{font-family:var(--sans); font-size:13px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:var(--gold); color:#101312; border:none; border-radius:10px; padding:11px 30px}
+.donepop-ok:hover{background:var(--gold-bright)}
+
+@media (max-width:680px){
+  header,main{padding-left:20px; padding-right:20px}
+  .cand{grid-template-columns:1fr}
+  .head-right{display:none}
+  .ivbar{position:sticky; height:auto; padding:10px 14px; flex-wrap:wrap; row-gap:8px}
+  body.reviewer{padding-top:0}
+  .iv-frame{display:none!important}
+}
+@media print{
+  body{background:#fff!important; color:#1a1a1a!important; padding-top:0!important}
+  header,.intro,.q,.panel,.section-head{background:#fff!important; border-color:#cfcfcb!important; box-shadow:none!important}
+  header h1,.q-text,.q-text b,.section-head h2,.intro p b{color:#111!important}
+  .wordmark,.wordmark b,.sec-no,.q-no,.key-label{color:#9c7b33!important}
+  .q-no{background:#f4eedd!important; border-color:#e0d3ad!important}
+  .q-tag,.q-type,.head-right,.sec-sub,.intro p,.preview,.field label{color:#555!important}
+  .q-text i{color:#9c7b33!important}
+  .opt{background:#fff!important; border-color:#cfcfcb!important}
+  .opt span{color:#222!important}
+  .field input,textarea{color:#222!important; background:#fff!important; border-color:#cfcfcb!important}
+  .key{background:#faf6ec!important; border-color:#e6dcc2!important}
+  .key-line{color:#4a4334!important}
+  .key-line b{color:#8a6d2c!important}
+  .mark.right{color:#1a7f37!important}
+  .mark.wrong{color:#b3261e!important}
+  .opt.is-correct{background:#eef7f0!important; border-color:#1a7f37!important}
+  .opt.is-correct span{color:#176c2f!important}
+  .opt.is-chosen-wrong{background:#fdeeec!important; border-color:#b3261e!important}
+  .opt.is-chosen-wrong span{color:#9c2017!important}
+  .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn,.donepop{display:none!important}
+}
+.backlink{display:inline-block; font-size:11.5px; color:var(--faint); text-decoration:none; letter-spacing:.04em; margin-bottom:9px; font-weight:600}
+.backlink:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="iv-frame" id="ivFrame" aria-hidden="true"></div>
+<div class="ivbar" id="ivbar">
+  <div class="ivbar-left">
+    <span class="iv-badge">Interviewer mode</span>
+    <span class="iv-context" id="ivContext">Reviewing</span>
+  </div>
+  <div class="ivbar-right">
+    <span class="iv-score" id="ivScore"></span>
+    <button class="iv-btn" id="ivSwitch">Switch view</button>
+    <button class="iv-btn" id="ivPrint">Print</button>
+    <button class="iv-btn iv-exit" id="ivExit">Exit interviewer</button>
+  </div>
+</div>
+
+<header>
+  <div>
+    <a href="index.html" class="backlink">&larr; All assessments</a>
+    <div class="wordmark"><b>SELEQT</b>&nbsp;&nbsp;Private Wealth</div>
+    <h1>Wealth Advisor Aptitude · Practical Assessment</h1>
+  </div>
+  <div class="head-right">
+    <div class="as-of">Internal hiring assessment</div>
+    <div>~30 minutes · 22 questions</div>
+    <div>Applied financial-planning judgment</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="locked-banner" id="lockedBanner">✓ Responses locked. Please hand the device back to your interviewer.</div>
+
+  <div class="intro">
+    <p><b>Welcome.</b> This is a practical assessment, not a textbook or CFP-style exam. We are not testing recall of rules or formulas. We want to see how you think as a planner and adviser, about clients, suitability, and the trade-offs in real situations.</p>
+    <p>The last section, <b>On the Job</b>, puts you in real advisory situations and asks for your judgment: identify the issue and the right course of action for the client. There are no trick questions and no negative marking, and no calculations need a calculator. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
+    <div class="cand">
+      <div class="field"><label>Candidate name</label><input type="text" id="candName" placeholder="Full name"></div>
+      <div class="field"><label>Date</label><input type="date" id="candDate"></div>
+    </div>
+    <div class="note">Take your time. Aim for roughly 30 minutes. When you are done, press <b>Finish &amp; Lock</b> at the bottom.</div>
+  </div>
+
+  <!-- ============ SECTION A ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section A</span><h2>Planning Fundamentals &amp; Goals</h2><span class="sec-sub">4 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A1</span><span class="q-tag">Planning process</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A new client opens with <i>"just tell me which funds to buy."</i> Before recommending any product, the first thing a planner should establish is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA1" value="a"><span>The single best-performing fund this year</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA1" value="b"><span>The client's goals, time horizons, cash flows and risk profile</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA1" value="c"><span>Which fund pays the highest commission</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA1" value="d"><span>The client's date of birth, and nothing else</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Products come last. Planning starts with understanding the client, goals, horizon, capacity and cash flow, then suitability, then product. Picking a product first is the classic mistake.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A2</span><span class="q-tag">Risk profiling</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client insists he is "aggressive" and wants full equity, but he needs this specific money in 2 years for a home purchase. What should govern the recommendation?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA2" value="a"><span>His stated aggressive comfort level</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA2" value="b"><span>His risk capacity, a 2-year horizon can't absorb equity volatility, so capacity overrides his stated tolerance</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA2" value="c"><span>Whatever has given the highest return recently</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA2" value="d"><span>The current direction of the market</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Distinguish risk <i>capacity</i> (ability to take risk, set by horizon and finances) from <i>tolerance</i> (willingness). A short, fixed horizon means low capacity, which must win. Strong sign if the candidate names that distinction.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A3</span><span class="q-tag">Goal-based</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client has three goals: an emergency buffer, a car in 3 years, and retirement in 25 years. The soundest approach is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA3" value="a"><span>Put everything into one balanced fund</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA3" value="b"><span>Map each goal to its own horizon-appropriate mix, safe/liquid for the buffer, conservative for the car, growth-tilted for retirement</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA3" value="c"><span>Put everything into equity for maximum growth</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA3" value="d"><span>Put everything into FDs to be safe</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Goal bucketing: each goal's time horizon drives its own asset mix. One blanket portfolio either takes too much risk with near-term money or too little with long-term money.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">A4</span><span class="q-tag">Real value</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">When estimating the corpus needed for a child's education 15 years away, <b>ignoring inflation</b> would:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA4" value="a"><span>Overstate how much is needed</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA4" value="b"><span>Understate how much is needed, future fees will be far higher than today's</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA4" value="c"><span>Have no effect on the number</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA4" value="d"><span>Only matter for retirement, not education</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Education and medical inflation are high in India; you must grow today's cost to the future value. Planning on today's fees badly under-funds the goal. Tests the real-vs-nominal instinct.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION B ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section B</span><h2>Retirement, Insurance &amp; Risk</h2><span class="sec-sub">4 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="c">
+      <div class="q-head"><span class="q-no">B1</span><span class="q-tag">Protection</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">For pure income protection of a 32-year-old sole earner with two dependents, the most cost-effective cover is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB1" value="a"><span>An endowment policy</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB1" value="b"><span>A ULIP</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB1" value="c"><span>A pure term life policy, high cover for a low premium</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB1" value="d"><span>A money-back policy</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>C.</b> Keep protection and investment separate, term gives the most cover per rupee. Bundled products (endowment/ULIP/money-back) dilute both the cover and the returns.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">B2</span><span class="q-tag">Adequacy</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A common starting rule of thumb for how much life cover a working person needs is roughly:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB2" value="a"><span>About one year's income</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB2" value="b"><span>Around 10 to 15 times annual income, adjusted for liabilities and goals</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB2" value="c"><span>Whatever is currently in the savings account</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>A flat ₹5 lakh for everyone</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Roughly 10&ndash;15&times; income as a start (or a proper income-replacement / human-life-value / needs basis). Bonus if they add outstanding liabilities and future goals, and net off existing assets.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">B3</span><span class="q-tag">Health risk</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Why advise a client to hold a <b>personal</b> health policy even though their employer already provides group cover?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB3" value="a"><span>Employer cover ends when the job does and may be inadequate; a personal policy gives continuity and builds renewal history before age or illness make cover costly</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB3" value="b"><span>Personal cover is always cheaper than group cover</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB3" value="c"><span>Group cover cannot be used in hospitals</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB3" value="d"><span>There is no real reason to</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Group cover is tied to the job, can be withdrawn, and is often too small. A personal policy ensures continuity and locks in insurability/renewal history early.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">B4</span><span class="q-tag">Drawdown risk</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">For a client who has just retired and is drawing an income from their corpus, the most damaging event is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB4" value="a"><span>A small dip in the fifteenth year of retirement</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB4" value="b"><span>A large market fall in the first few years while they are withdrawing, it can permanently impair the corpus (sequence-of-returns risk)</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB4" value="c"><span>Interest rates staying flat</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB4" value="d"><span>A year of unusually low inflation</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Sequence-of-returns risk: a big early drawdown combined with withdrawals is very hard to recover from. Mitigated by a cash/debt buffer (bucket strategy) and a conservative early-retirement glide path.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION C ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section C</span><h2>Tax, Estate &amp; Succession</h2><span class="sec-sub">4 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C1</span><span class="q-tag">Tax efficiency</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Frequently switching equity funds to chase performance is usually <b>tax-inefficient</b> because:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC1" value="a"><span>It has no tax impact at all</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC1" value="b"><span>Each switch can realise capital gains (taxable) and trigger costs/exit loads, dragging net returns versus simply staying invested</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC1" value="c"><span>Switching funds is not allowed</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC1" value="d"><span>It always increases returns</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Churning realises gains (tax now) and adds costs; staying invested defers tax and lets it compound. No exact rates needed, the principle is the point.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C2</span><span class="q-tag">Tax-saving</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A young client in a high tax bracket wants to save tax under 80C <b>and</b> build long-term wealth. Among common 80C options, the best fit is usually:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC2" value="a"><span>A 5-year tax-saving fixed deposit</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC2" value="b"><span>ELSS, an equity fund with a 3-year lock-in, tax saving plus long-term growth potential</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC2" value="c"><span>Keeping the money idle in a savings account</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC2" value="d"><span>A low-yield traditional insurance plan bought only for the deduction</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Match the tool to goal and horizon: ELSS gives growth potential with the shortest 80C lock-in. Buying insurance purely for a tax deduction (D) is a classic mis-step.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C3</span><span class="q-tag">Succession</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client believes the <b>nominee</b> on their mutual funds and bank accounts automatically becomes the owner of those assets on death. In fact:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC3" value="a"><span>The nominee does become the legal owner</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC3" value="b"><span>A nominee is a trustee who receives the assets to pass on to the legal heirs; actual ownership is decided by a will or succession law</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC3" value="c"><span>A nomination overrides a will in every case</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC3" value="d"><span>Nominations carry no legal weight</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A nominee is a custodian/trustee, not the owner; a valid will (or succession law) decides who inherits. A frequent and important client misconception, good for an adviser to catch.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C4</span><span class="q-tag">Estate planning</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">For an HNI family wanting a smooth, private, dispute-resistant transfer of assets across generations, a useful structure <b>beyond a basic will</b> is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC4" value="a"><span>Doing nothing and relying on nominations</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC4" value="b"><span>A properly drafted will plus, where appropriate, a private family trust</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC4" value="c"><span>A verbal understanding with the children</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC4" value="d"><span>Putting all the assets in one child's name</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> A will is the base; for larger/complex estates a family trust adds control, privacy, continuity and helps avoid probate disputes. Directly relevant to SELEQT's HNI clientele.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION D ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section D</span><h2>Products, Suitability &amp; Regulation</h2><span class="sec-sub">4 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">D1</span><span class="q-tag">MFD vs RIA</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">The core difference between a mutual-fund distributor (MFD) and a SEBI-registered investment adviser (RIA) is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qD1" value="a"><span>There is no real difference</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD1" value="b"><span>An MFD earns commission from product providers for distribution; an RIA charges the client a fee and advises in a fiduciary capacity, advice and distribution are kept separate</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD1" value="c"><span>An RIA is not allowed to give advice</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD1" value="d"><span>An MFD cannot sell mutual funds</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Commission vs fee, and the RIA's fiduciary duty with advice/distribution segregated. Central to a firm that is both MFD and RIA. Strong sign if the candidate grasps the conflict-of-interest angle.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">D2</span><span class="q-tag">Costs</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Compared with a <b>Regular</b> plan, a <b>Direct</b> plan of the same mutual fund:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qD2" value="a"><span>Has a higher expense ratio</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD2" value="b"><span>Has a lower expense ratio (no distributor commission built in), so a slightly higher return over time, all else equal</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD2" value="c"><span>Invests in a different set of stocks</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD2" value="d"><span>Is inherently riskier</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Direct = no trail commission &rarr; lower expense ratio &rarr; higher net return, same underlying portfolio. (Worth knowing where it fits given the MFD/RIA models.)</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Ethics</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A product that pays you a high commission doesn't fit the client's goal, but a lower-paying option does. The right action is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qD3" value="a"><span>Sell the high-commission product; commissions are the point</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD3" value="b"><span>Recommend the suitable option; putting commission ahead of suitability is mis-selling and a conflict of interest</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD3" value="c"><span>Sell whichever product the client has already heard of</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD3" value="d"><span>Avoid recommending anything at all</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Suitability and the client's interest come first; disclose conflicts. A direct integrity check, central to the role and the firm's reputation.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">D4</span><span class="q-tag">Portfolio</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Periodically <b>rebalancing</b> a portfolio back to its target asset mix:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qD4" value="a"><span>Is pointless and just adds cost</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qD4" value="b"><span>Enforces a "sell-high, buy-low" discipline and keeps risk aligned with the client's plan</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qD4" value="c"><span>Guarantees a higher return every single year</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qD4" value="d"><span>Means selling everything and starting over</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Rebalancing controls risk drift and instils contrarian discipline. It is not a return guarantee (C is the trap).</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION E — ON THE JOB ============ -->
+  <div class="section flagship">
+    <div class="section-head"><span class="sec-no">Section E</span><h2>On the Job</h2><span class="sec-sub">6 advisory situations</span></div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Suitability · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client with a balanced, goal-aligned portfolio wants to move <b>60% of it</b> into one red-hot sectoral fund that's up sharply this year. As their adviser, how do you respond, and what is the right course of action?</p>
+      <textarea name="qE1" placeholder="Identify the issue, then the right course of action..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Acknowledge the appeal, then the problems: heavy <b>concentration</b> in one sector, <b>performance-chasing / recency bias</b>, and it breaks the goal-aligned plan and pushes risk past the client's profile. Right course: revisit goals and risk, stay diversified, and at most a <i>small</i> satellite (say 5&ndash;10%) if it genuinely fits, then rebalance. Reward suitability-first reasoning and a concrete moderate alternative, not just a flat "no".</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Retirement · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">A 57-year-old retiring in 3 years has their <b>entire</b> savings in fixed deposits because "FDs are safe." What is the planning problem, and what would you recommend?</p>
+      <textarea name="qE2" placeholder="The problem, then your recommendation..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Problem:</b> "safe" only in nominal terms, over a 25&ndash;30 year retirement, inflation plus tax leaves a near-zero or negative real return (longevity/inflation risk). <b>Recommend:</b> a glide-path / bucket approach, keep near-term needs safe but add a growth sleeve (equity-tilted) for the long tail, diversify, and plan withdrawals. Reward naming inflation/longevity risk and proposing a balanced, staged mix rather than 100% FD or 100% equity.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E3</span><span class="q-tag">Protection · diagnose</span><span class="q-type">Written</span></div>
+      <p class="q-text">A 35-year-old sole earner has a ₹50 lakh home loan, two young children, <b>no term life cover</b>, and is putting all surplus into equity SIPs. What is the most important gap, and what do you do first?</p>
+      <textarea name="qE3" placeholder="The key gap, then the first action..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">The glaring gap is <b>protection</b>: if the earner dies, the family is left with the loan and no income, and the SIPs won't have grown enough to cover it. Protection comes before wealth-building. First: adequate <b>term life cover</b> (loan + income replacement + goals), plus health cover and an emergency fund, then continue the SIPs. Reward putting risk management ahead of returns.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E4</span><span class="q-tag">Judgment · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client realises a high-cost endowment/ULIP they were sold years ago is underperforming and wants to <b>surrender it immediately</b>. How should you analyse this before advising?</p>
+      <textarea name="qE4" placeholder="How you'd analyse it before giving advice..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Not a reflex "surrender" or "keep". Analyse: surrender value vs paid-up vs continuing; charges are largely <i>sunk</i>; years left to maturity; whether making it paid-up beats surrendering; the protection it provides (replace with term <b>first</b> if it was their only cover); and tax on surrender. Often the answer is replace with term + invest the difference, but only after checking the numbers and the protection gap. Reward a structured, numbers-and-protection-aware approach over a knee-jerk one.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E5</span><span class="q-tag">Ethics · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">Your firm earns a much higher commission on Product X, but Product Y is cheaper and a better fit for this client's goal. The client trusts your recommendation completely. What do you do, and why?</p>
+      <textarea name="qE5" placeholder="What you do, and your reasoning..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · character check</div><div class="key-line">Recommend the suitable option (Y), the client's interest and trust come first, and be transparent about how you're paid. Never let commission drive advice, that's mis-selling. Reward clear fiduciary/ethical reasoning, awareness of the MFD vs RIA conflict, and recognition that the client's trust is the firm's real long-term asset. A weak or self-serving answer here is a serious red flag.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">E6</span><span class="q-tag">Succession · advise</span><span class="q-type">Written</span></div>
+      <p class="q-text">An HNI client with assets spread across mutual funds, property and business interests, and a <b>blended family</b>, wants to ensure a smooth, fair transfer to the next generation. What should their plan include?</p>
+      <textarea name="qE6" placeholder="What the estate/succession plan should include..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">A clear, valid <b>will</b>; <b>nominations aligned</b> with the will (not contradicting it); for the complexity, a <b>family trust</b> for control, privacy and continuity; <b>liquidity planning</b> for taxes/expenses on transfer; and clarity to pre-empt disputes (especially with a blended family), reviewed periodically. Reward a structured estate-planning answer touching will + nomination alignment + trust + liquidity, suited to an HNI context.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ ACTION BAR (candidate) ============ -->
+  <div class="actionbar">
+    <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
+    <span class="status" id="status">Answered <b id="ansCount">0</b> of 22</span>
+    <button class="btn lockbtn" id="lockBtn" title="Interviewer access (code required)">&#128274;&nbsp;Interviewer</button>
+  </div>
+
+  <!-- ============ INTERVIEWER CHOOSER ============ -->
+  <div class="overlay" id="chooser" role="dialog" aria-modal="true" aria-labelledby="chTitle" hidden>
+    <div class="chooser-card">
+      <div class="chooser-head">
+        <div>
+          <div class="ch-kicker">Interviewer</div>
+          <div class="ch-title" id="chTitle">Choose what to view</div>
+        </div>
+        <button class="ch-close" id="chClose" title="Close">&times;</button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Answer key</div>
+        <button class="ch-row key-row" id="viewKey">
+          <span>View blank answer key &amp; rubric</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Saved attempts (<span id="attCount">0</span>)</div>
+        <div id="attList" class="att-list"></div>
+        <div class="ch-empty" id="attEmpty">No completed attempts are saved on this device yet.</div>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Next candidate</div>
+        <button class="ch-row newrow" id="newBtn">
+          <span>Start a fresh blank test</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <div class="ch-foot">
+        <button class="btn subtle" id="exportBtn">Export backup</button>
+        <button class="btn subtle" id="importBtn">Import backup</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+        <button class="btn subtle danger" id="clearBtn">Clear all</button>
+        <span class="ch-hint">Tip: reload the page for a fresh blank test. Saved attempts stay here.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DONE POPUP (candidate) ============ -->
+  <div class="donepop" id="donePop" hidden>
+    <div class="donepop-card">
+      <div class="donepop-tick">&#10003;</div>
+      <div class="donepop-title">Attempt submitted</div>
+      <div class="donepop-sub">Thank you. Your responses have been recorded. Please hand the device back to your interviewer.</div>
+      <button class="donepop-ok" id="donePopOk">Done</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+  const REVIEWER_CODE = "SELEQT2026";
+  const LS_KEY = "seleqt_advisor_attempts_v1";
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwXbROg_rENGKnf7CLs0xDgVB2sjFGuz74xubxuJnA7B8a1rWARKaNSsLmy8T6N7MFaTQ/exec";
+  const SHEET_TOKEN = "seleqt-analyst-9X7k2p";
+  const TEST_ID = "advisor";
+  const TEST_NAME = "Client Servicing + Wealth Advisor";
+  const SHEET_TAB = "Advisor";
+  const PDF_PARENT = "SELEQT Hiring Tests";
+  const PDF_FOLDER = "Advisor Test";
+  const qs = Array.from(document.querySelectorAll('.q'));
+  const ansCountEl = document.getElementById('ansCount');
+  const candName = document.getElementById('candName');
+  const candDate = document.getElementById('candDate');
+  const finishBtn = document.getElementById('finishBtn');
+  const lockBtn = document.getElementById('lockBtn');
+  const chooser = document.getElementById('chooser');
+  const ivContext = document.getElementById('ivContext');
+  const ivScore = document.getElementById('ivScore');
+  const donePop = document.getElementById('donePop');
+
+  let unlocked = false;       // authenticated for the current interviewer session
+  let mode = 'candidate';     // 'candidate' | 'interviewer'
+  let liveSnap = null;        // snapshot of an in-progress candidate session, taken before reviewing
+  let lastFocus = null;       // element focused before the chooser opened (for restore)
+
+  function loadAttempts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }catch(e){ return []; } }
+  function saveAttempts(a){ try{ localStorage.setItem(LS_KEY, JSON.stringify(a)); return true; }catch(e){ return false; } }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function fmt(ts){ try{ return new Date(ts).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return ''; } }
+  function mcqName(q){ const i=q.querySelector('input[type=radio]'); return i ? i.name : null; }
+  function todayISO(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  function prettyDate(v){ v=String(v||''); const m=v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? (m[3]+'/'+m[2]+'/'+m[1]) : v; }
+
+  // best-effort: send each completed attempt to the Google Sheet (localStorage stays the reliable store)
+  function postToSheet(attempt){
+    if(!SHEET_ENDPOINT) return;
+    try{
+      const subAt = new Date().toLocaleString();
+      const score = attempt.score.correct + ' / ' + attempt.score.total;
+      const cols=['Submitted At','Candidate','Date','MCQ Score'];
+      const vals=[ subAt, attempt.name, prettyDate(attempt.date), score ];
+      const questions=[];
+      qs.forEach(q=>{
+        const no=(q.querySelector('.q-no')||{}).textContent||'';
+        const tag=(q.querySelector('.q-tag')||{}).textContent||'';
+        const prompt=((q.querySelector('.q-text')||{}).textContent||'').trim();
+        const rubric=((q.querySelector('.key-line')||{}).textContent||'').trim();
+        cols.push(tag ? (no+' · '+tag) : no);
+        if(q.dataset.type==='mcq'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
+          const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
+          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
+            correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
+        } else {
+          const ta=q.querySelector('textarea');
+          vals.push(attempt.answers[ta.name]||'');
+          questions.push({ no, tag, type:'open', prompt, answer: (attempt.answers[ta.name]||''), rubric });
+        }
+      });
+      const meta={ submittedAt:subAt, name:attempt.name, date:prettyDate(attempt.date), score, test: TEST_NAME };
+      fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions }) });
+    }catch(e){ /* ignore network errors; the local copy is already saved */ }
+  }
+  function showDonePopup(){ donePop.hidden=false; }
+  function hideDonePopup(){ donePop.hidden=true; }
+
+  function countAnswered(){
+    let n = 0;
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){ if(q.querySelector('input[type=radio]:checked')) n++; }
+      else { const ta = q.querySelector('textarea'); if(ta && ta.value.trim().length>0) n++; }
+    });
+    ansCountEl.textContent = n;
+    return n;
+  }
+  document.addEventListener('input', countAnswered);
+  document.addEventListener('change', countAnswered);
+
+  function collectAnswers(){
+    const ans = {};
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
+      else { const ta=q.querySelector('textarea'); ans[ta.name] = ta.value; }
+    });
+    return ans;
+  }
+
+  // fill the form from an answers object (or clear if null) and optionally lock it
+  function setInputs(ans, disabled){
+    qs.forEach(q=>{
+      if(q.dataset.type==='mcq'){
+        const nm = mcqName(q);
+        q.querySelectorAll('input[type=radio]').forEach(i=>{ i.checked = ans ? (ans[nm]===i.value) : false; i.disabled = disabled; });
+      } else {
+        const ta = q.querySelector('textarea'); ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled;
+      }
+      q.classList.toggle('locked', disabled);
+    });
+  }
+
+  // grade MCQs from current DOM; keyOnly = blank answer-key reference (no candidate marks)
+  function grade(keyOnly){
+    let correct = 0, total = 0;
+    qs.forEach(q=>{
+      if(q.dataset.type!=='mcq') return;
+      total++;
+      const want = q.dataset.correct;
+      const chosen = q.querySelector('input[type=radio]:checked');
+      const mark = q.querySelector('.mark');
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.classList.remove('is-correct','is-chosen-wrong');
+        if(opt.dataset.opt===want) opt.classList.add('is-correct');
+      });
+      if(keyOnly){ mark.className='mark'; mark.textContent=''; return; }
+      if(chosen){
+        if(chosen.value===want){ correct++; mark.className='mark right'; mark.textContent='✓ Correct'; }
+        else {
+          const w = q.querySelector('.opt[data-opt="'+chosen.value+'"]'); if(w) w.classList.add('is-chosen-wrong');
+          mark.className='mark wrong'; mark.textContent='✗ Candidate chose '+chosen.value.toUpperCase();
+        }
+      } else { mark.className='mark na'; mark.textContent='— Not answered'; }
+    });
+    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total + ' MCQ');
+  }
+
+  // ---- candidate: Finish & Lock (saves the attempt) ----
+  finishBtn.addEventListener('click', function(){
+    if(finishBtn.disabled) return;
+    countAnswered();
+    const ans = collectAnswers();
+    let correct=0, total=0;
+    qs.forEach(q=>{ if(q.dataset.type!=='mcq') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
+    const attempt = {
+      id: 'a' + Date.now() + '_' + Math.floor(Math.random()*1e6),
+      name: (candName.value.trim() || 'Unnamed candidate'),
+      date: candDate.value.trim(),
+      ts: Date.now(),
+      answers: ans,
+      score: { correct, total }
+    };
+    const arr = loadAttempts(); arr.push(attempt);
+    const saved = saveAttempts(arr);
+    postToSheet(attempt);
+    // clear the candidate's filled-in answers from the screen and lock the form
+    setInputs(null, true);
+    candName.value=''; candDate.value=''; candName.readOnly = true; candDate.readOnly = true;
+    finishBtn.disabled = true;
+    document.body.classList.add('submitted');
+    window.scrollTo({top:0, behavior:'smooth'});
+    showDonePopup();
+    if(!saved){
+      setTimeout(()=>alert('Heads up: this browser blocked saving a LOCAL copy of the result (this can happen when a file is opened directly in the browser). If online, it was still sent to the results Sheet, but it will not appear in this device\'s in-app list.'), 350);
+    }
+  });
+
+  function enterInterviewer(){ document.body.classList.add('reviewer'); document.body.classList.remove('submitted'); mode='interviewer'; }
+
+  // snapshot an in-progress candidate session before the interviewer overwrites the shared form
+  function snapHasContent(s){
+    if(!s) return false;
+    if((s.name||'').trim()) return true;
+    return Object.keys(s.answers||{}).some(k=>{ const v=s.answers[k]; return v!==null && String(v).trim()!==''; });
+  }
+  function captureLiveIfNeeded(){
+    if(mode==='candidate' && liveSnap===null){
+      liveSnap = { answers: collectAnswers(), name: candName.value, date: candDate.value, submitted: document.body.classList.contains('submitted') };
+    }
+  }
+
+  // ---- reset to a clean blank candidate test (and re-lock interviewer access) ----
+  function resetToBlank(){
+    liveSnap = null;
+    setInputs(null, false);
+    candName.value=''; candDate.value=todayISO(); candName.readOnly=false; candDate.readOnly=false;
+    finishBtn.disabled = false;
+    document.body.classList.remove('reviewer','keymode','submitted');
+    mode = 'candidate'; unlocked = false;
+    countAnswered();
+    closeChooser();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ---- leave interviewer mode: restore an unfinished candidate's work, else go to a blank test ----
+  function exitInterviewer(){
+    if(liveSnap && !liveSnap.submitted && snapHasContent(liveSnap)){
+      setInputs(liveSnap.answers, false);
+      candName.value = liveSnap.name || ''; candDate.value = liveSnap.date || '';
+      candName.readOnly=false; candDate.readOnly=false; finishBtn.disabled=false;
+      document.body.classList.remove('reviewer','keymode','submitted');
+      mode='candidate'; unlocked=false; liveSnap=null;
+      countAnswered(); closeChooser();
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      resetToBlank();
+    }
+  }
+
+  // ---- Interviewer chooser ----
+  function openChooser(){ lastFocus = document.activeElement; renderList(); chooser.hidden=false; const f=document.getElementById('viewKey'); if(f){ try{ f.focus(); }catch(e){} } }
+  function closeChooser(){ chooser.hidden=true; if(lastFocus){ try{ lastFocus.focus(); }catch(e){} } lastFocus=null; }
+
+  function renderList(){
+    const arr = loadAttempts().slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+    document.getElementById('attCount').textContent = arr.length;
+    const list = document.getElementById('attList'); list.innerHTML='';
+    document.getElementById('attEmpty').hidden = arr.length>0;
+    arr.forEach(att=>{
+      const sc = att.score ? (att.score.correct+'/'+att.score.total) : '';
+      const meta = (att.date ? esc(prettyDate(att.date))+' · ' : '') + 'submitted ' + esc(fmt(att.ts));
+      const b = document.createElement('button'); b.className='ch-row att-row';
+      b.innerHTML = '<span class="att-main"><span class="att-name">'+esc(att.name)+'</span>'
+                  + '<span class="att-meta">'+meta+'</span></span>'
+                  + '<span class="att-score">'+sc+'</span>';
+      b.addEventListener('click', ()=>viewAttempt(att));
+      list.appendChild(b);
+    });
+  }
+
+  function viewAttempt(att){
+    captureLiveIfNeeded();
+    setInputs(att.answers, true);
+    candName.value = att.name||''; candDate.value = att.date||''; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.remove('keymode');
+    ivContext.textContent = 'Viewing: ' + (att.name||'candidate') + (att.date ? '  ·  '+prettyDate(att.date) : '');
+    enterInterviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
+  }
+  function viewKey(){
+    captureLiveIfNeeded();
+    setInputs(null, true);
+    candName.value='Answer key'; candDate.value='reference'; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.add('keymode');
+    ivContext.textContent = 'Answer key & rubric';
+    enterInterviewer(); grade(true); closeChooser(); window.scrollTo(0,0);
+  }
+
+  // ---- candidate: discreet interviewer lock ----
+  lockBtn.addEventListener('click', function(){
+    if(!unlocked){
+      const code = prompt('Enter the interviewer code to access results and the answer key:');
+      if(code===null) return;
+      if(code.trim()!==REVIEWER_CODE){ alert('Incorrect code.'); return; }
+      unlocked = true;
+    }
+    openChooser();
+  });
+
+  // ---- chooser controls ----
+  document.getElementById('viewKey').addEventListener('click', viewKey);
+  document.getElementById('newBtn').addEventListener('click', function(){
+    if(!confirm('Start a fresh blank test for the next candidate?\n\nThis clears the form on screen. Saved past attempts are kept.')) return;
+    resetToBlank();
+  });
+  function chooserDismiss(){ closeChooser(); if(mode==='candidate') unlocked=false; }
+  document.getElementById('chClose').addEventListener('click', chooserDismiss);
+  chooser.addEventListener('click', e=>{ if(e.target===chooser) chooserDismiss(); });
+  document.addEventListener('keydown', function(e){
+    if(chooser.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); chooserDismiss(); return; }
+    if(e.key==='Tab'){
+      const f = chooser.querySelectorAll('button:not([disabled]), input:not([disabled])');
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ---- interviewer top-bar controls ----
+  document.getElementById('ivSwitch').addEventListener('click', openChooser);
+  document.getElementById('ivPrint').addEventListener('click', ()=>window.print());
+  document.getElementById('ivExit').addEventListener('click', exitInterviewer);
+
+  // ---- candidate "attempt submitted" popup ----
+  document.getElementById('donePopOk').addEventListener('click', hideDonePopup);
+  donePop.addEventListener('click', e=>{ if(e.target===donePop) hideDonePopup(); });
+
+  // ---- export / import / clear ----
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    const data = localStorage.getItem(LS_KEY) || '[]';
+    const blob = new Blob([data], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='seleqt-analyst-results.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  const importFile = document.getElementById('importFile');
+  document.getElementById('importBtn').addEventListener('click', ()=>importFile.click());
+  importFile.addEventListener('change', function(e){
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = function(){
+      try{
+        const incoming = JSON.parse(r.result);
+        if(!Array.isArray(incoming)) throw 0;
+        const byId = {};
+        loadAttempts().concat(incoming).forEach(a=>{ if(a && a.id) byId[a.id]=a; });
+        const merged = Object.keys(byId).map(k=>byId[k]);
+        saveAttempts(merged); renderList();
+        alert('Imported. Total saved attempts: ' + merged.length + '.');
+      }catch(err){ alert('Could not read that file as a results backup.'); }
+    };
+    r.readAsText(f); e.target.value='';
+  });
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if(confirm('Delete ALL saved attempts on this device?\n\nThis cannot be undone. Consider Export backup first.')){ saveAttempts([]); renderList(); }
+  });
+
+  candDate.value = todayISO();
+  countAnswered();
+})();
+</script>
+</body>
+</html>
