@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SELEQT Private Wealth · Analyst Aptitude Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#101312; --bg2:#0B0D0C;
+  --card:#171B19; --card2:#1B201D;
+  --line:#262C29; --line2:#343B36;
+  --text:#EAE4D8; --muted:#9C968A; --faint:#6F6B61;
+  --gold:#C9A86A; --gold-bright:#E2C48E; --gold-dim:rgba(201,168,106,.14);
+  --green:#8DB89A; --amber:#D9A441; --red:#CD7C66;
+  --serif:'Fraunces',Georgia,serif; --sans:'Manrope',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px; scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgba(201,168,106,.05), transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  background-color:var(--bg);
+  color:var(--text); font-family:var(--sans); min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1}
+
+/* ---------- header ---------- */
+header{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px;
+  padding:30px 44px 24px; border-bottom:1px solid var(--line); max-width:1000px; margin:0 auto;
+}
+.wordmark{font-size:12px; letter-spacing:.34em; color:var(--gold); font-weight:700; text-transform:uppercase}
+.wordmark b{color:var(--gold-bright)}
+header h1{font-family:var(--serif); font-weight:600; font-size:31px; letter-spacing:.01em; margin-top:8px}
+.head-right{text-align:right; color:var(--muted); font-size:12.5px; line-height:1.7}
+.head-right .as-of{color:var(--text); font-weight:600}
+
+main{max-width:1000px; margin:0 auto; padding:28px 44px 80px}
+
+/* ---------- intro / candidate ---------- */
+.intro{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 28px; margin-bottom:30px}
+.intro p{color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:10px}
+.intro p b{color:var(--text); font-weight:600}
+.intro .note{font-size:12.5px; color:var(--faint); margin-top:14px; padding-top:14px; border-top:1px solid var(--line)}
+.cand{display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; margin-top:18px}
+.field{display:flex; flex-direction:column; gap:6px}
+.field label{font-size:11px; color:var(--muted); font-weight:700; letter-spacing:.04em; text-transform:uppercase}
+.field input{
+  background:#121514; border:1px solid var(--line); border-radius:9px; color:var(--text);
+  font-family:var(--sans); font-weight:600; font-size:14px; padding:9px 12px; outline:none; transition:border-color .15s;
+}
+.field input:focus{border-color:var(--gold)}
+.field input[type=date]{color-scheme:dark; cursor:pointer}
+
+/* ---------- section ---------- */
+.section{margin-top:38px}
+.section-head{display:flex; align-items:baseline; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:8px}
+.section-head .sec-no{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:700}
+.section-head h2{font-family:var(--serif); font-weight:600; font-size:23px}
+.section-head .sec-sub{margin-left:auto; font-size:12px; color:var(--faint)}
+.section.flagship .section-head h2{color:var(--gold-bright)}
+
+/* ---------- question ---------- */
+.q{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-top:16px; transition:border-color .15s}
+.section.flagship .q{border-color:var(--line2); background:var(--card2)}
+.q-head{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.q-no{font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--gold); background:var(--gold-dim); border:1px solid rgba(201,168,106,.3); padding:3px 9px; border-radius:6px}
+.q-tag{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-type{margin-left:auto; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:700}
+.q-text{font-size:15px; line-height:1.6; color:var(--text); font-weight:500; margin-bottom:16px}
+.q-text i{color:var(--gold-bright); font-style:italic}
+.opts{display:flex; flex-direction:column; gap:9px}
+.opts.tf{flex-direction:row; gap:10px}
+.opts.tf .opt{flex:1; justify-content:center; font-weight:700}
+.q-why{width:100%; min-height:70px; margin-top:11px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:11px 13px; outline:none; resize:vertical; transition:border-color .15s}
+.q-why:focus{border-color:var(--gold)}
+.opt{display:flex; align-items:flex-start; gap:11px; padding:11px 14px; background:#121514; border:1px solid var(--line); border-radius:10px; cursor:pointer; transition:all .14s}
+.opt:hover{border-color:var(--line2)}
+.opt input{accent-color:var(--gold); margin-top:2px; width:15px; height:15px; cursor:pointer; flex:none}
+.opt span{font-size:14px; line-height:1.5; color:var(--muted)}
+.opt:has(input:checked){border-color:var(--gold); background:var(--gold-dim)}
+.opt:has(input:checked) span{color:var(--text)}
+textarea{width:100%; min-height:96px; background:#121514; border:1px solid var(--line); border-radius:10px; color:var(--text);
+  font-family:var(--sans); font-size:14px; line-height:1.6; padding:12px 14px; outline:none; resize:vertical; transition:border-color .15s}
+textarea:focus{border-color:var(--gold)}
+.q.locked .opt{cursor:default; opacity:.92}
+.q.locked .opt input{pointer-events:none}
+
+/* ---------- answer key (reviewer only) ---------- */
+.key{display:none; margin-top:14px; padding:13px 15px; background:#13160F; border:1px solid rgba(201,168,106,.28); border-radius:10px}
+body.reviewer .key{display:block}
+.key-label{font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-weight:800; margin-bottom:7px}
+.key-line{font-size:13px; line-height:1.65; color:var(--muted)}
+.key-line b{color:var(--gold-bright); font-weight:700}
+.mark{display:none; margin-top:10px; font-size:12.5px; font-weight:800; letter-spacing:.04em}
+body.reviewer .mark{display:inline-block}
+.mark.right{color:var(--green)}
+.mark.wrong{color:var(--red)}
+.mark.na{color:var(--faint)}
+body.reviewer .opt.is-correct{border-color:var(--green); background:rgba(141,184,154,.1)}
+body.reviewer .opt.is-correct span{color:var(--green)}
+body.reviewer .opt.is-chosen-wrong{border-color:var(--red); background:rgba(205,124,102,.1)}
+body.reviewer .opt.is-chosen-wrong span{color:var(--red)}
+
+/* ---------- action bar ---------- */
+.actionbar{position:sticky; bottom:0; margin-top:40px; background:linear-gradient(180deg, transparent, var(--bg2) 40%);
+  padding:26px 0 8px; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.btn{font-family:var(--sans); font-size:13px; font-weight:700; letter-spacing:.02em; cursor:pointer;
+  border:1px solid var(--line2); border-radius:10px; padding:12px 22px; transition:all .15s; background:#121514; color:var(--text)}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold); color:#101312; border-color:var(--gold)}
+.btn.primary:hover{background:var(--gold-bright)}
+.btn.subtle{color:var(--faint); border-color:var(--line); font-size:12px; padding:10px 16px}
+.status{font-size:13px; color:var(--muted); font-weight:600}
+.status b{color:var(--gold-bright)}
+.scorebox{display:none; margin-left:auto; text-align:right}
+body.reviewer .scorebox{display:block}
+.scorebox .s-big{font-family:var(--serif); font-size:26px; font-weight:600; color:var(--gold-bright)}
+.scorebox .s-lab{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); font-weight:700}
+
+.locked-banner{display:none; background:var(--gold-dim); border:1px solid rgba(201,168,106,.4); border-radius:12px;
+  padding:16px 20px; margin-bottom:24px; color:var(--gold-bright); font-size:14px; font-weight:600}
+body.submitted .locked-banner{display:block}
+
+/* ---------- interviewer chooser overlay ---------- */
+.overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px)}
+.overlay[hidden]{display:none}
+.chooser-card{width:100%; max-width:560px; max-height:86vh; overflow:auto; background:var(--card); border:1px solid var(--line2);
+  border-radius:18px; padding:24px 24px 20px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.chooser-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px}
+.ch-kicker{font-size:10.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); font-weight:800}
+.ch-title{font-family:var(--serif); font-size:22px; font-weight:600; margin-top:4px}
+.ch-close{background:none; border:none; color:var(--faint); font-size:24px; line-height:1; cursor:pointer; padding:0 6px; border-radius:8px}
+.ch-close:hover{color:var(--text)}
+.ch-sec{margin-bottom:20px}
+.ch-lab{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:800; margin-bottom:10px}
+.ch-row{width:100%; display:flex; align-items:center; gap:12px; text-align:left; background:#121514; border:1px solid var(--line);
+  border-radius:11px; padding:13px 15px; cursor:pointer; transition:all .14s; color:var(--text); font-family:var(--sans); margin-bottom:8px}
+.ch-row:hover{border-color:var(--gold); background:var(--gold-dim)}
+.key-row{color:var(--gold-bright); font-weight:700; font-size:14px}
+.key-row .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+.att-list{display:flex; flex-direction:column}
+.att-main{display:flex; flex-direction:column; gap:3px; min-width:0}
+.att-row .att-name{font-weight:700; font-size:14px}
+.att-row .att-meta{color:var(--muted); font-size:11.5px}
+.att-row .att-score{margin-left:auto; font-family:var(--serif); font-weight:600; font-size:18px; color:var(--gold-bright); font-variant-numeric:tabular-nums; flex:none}
+.ch-empty{font-size:13px; color:var(--faint); padding:6px 2px}
+.ch-empty[hidden]{display:none}
+.ch-foot{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; padding-top:16px; border-top:1px solid var(--line)}
+.ch-foot .danger{color:var(--red); border-color:rgba(205,124,102,.4)}
+.ch-foot .danger:hover{border-color:var(--red)}
+.ch-hint{font-size:11.5px; color:var(--faint); flex:1 1 100%; margin-top:8px}
+body.keymode .scorebox{display:none}
+body.keymode .mark{display:none!important}
+
+/* ---------- interviewer mode chrome (distinct top bar + accent frame) ---------- */
+.ivbar{position:fixed; top:0; left:0; right:0; z-index:40; display:none; align-items:center; justify-content:space-between;
+  gap:16px; height:52px; padding:0 20px; background:linear-gradient(90deg, var(--gold), var(--gold-bright));
+  color:#0E1110; box-shadow:0 8px 28px rgba(0,0,0,.45)}
+body.reviewer .ivbar{display:flex}
+body.reviewer{padding-top:52px}
+.ivbar-left{display:flex; align-items:center; gap:12px; min-width:0}
+.iv-badge{font-size:10.5px; font-weight:900; letter-spacing:.2em; text-transform:uppercase;
+  background:rgba(16,19,18,.18); padding:5px 10px; border-radius:6px; white-space:nowrap}
+.iv-context{font-size:13px; font-weight:800; color:#16190F; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ivbar-right{display:flex; align-items:center; gap:9px; flex:none}
+.iv-score{font-family:var(--serif); font-weight:700; font-size:16px; color:#0E1110; font-variant-numeric:tabular-nums; white-space:nowrap}
+.iv-btn{font-family:var(--sans); font-size:12.5px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:rgba(16,19,18,.10); color:#0E1110; border:1px solid rgba(16,19,18,.30); border-radius:8px; padding:7px 13px; transition:all .14s}
+.iv-btn:hover{background:rgba(16,19,18,.20)}
+.iv-exit{background:#0E1110; color:var(--gold-bright); border-color:#0E1110}
+.iv-exit:hover{background:#000}
+.iv-frame{position:fixed; inset:0; z-index:39; pointer-events:none; display:none; border:4px solid var(--gold)}
+body.reviewer .iv-frame{display:block}
+body.keymode .iv-score{display:none}
+body.reviewer .actionbar{display:none}
+.lockbtn{margin-left:auto; background:transparent; border-color:var(--line); color:var(--faint); font-size:11.5px; font-weight:700; padding:9px 13px}
+.lockbtn:hover{color:var(--gold); border-color:var(--line2)}
+.ch-row.newrow{color:var(--gold-bright); font-weight:700; font-size:14px}
+.ch-row.newrow .ch-arrow{margin-left:auto; color:var(--gold); font-size:16px}
+
+/* ---------- candidate "attempt submitted" popup ---------- */
+.donepop{position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:24px;
+  background:rgba(6,8,7,.74); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px)}
+.donepop[hidden]{display:none}
+.donepop-card{background:var(--card); border:1px solid var(--line2); border-radius:18px; padding:32px 36px; text-align:center;
+  max-width:400px; box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.donepop-tick{width:58px; height:58px; margin:0 auto 18px; border-radius:50%; background:var(--gold-dim);
+  border:1px solid rgba(201,168,106,.5); color:var(--gold-bright); font-size:28px; line-height:56px; font-weight:700}
+.donepop-title{font-family:var(--serif); font-size:23px; font-weight:600; margin-bottom:9px; color:var(--text)}
+.donepop-sub{font-size:13.5px; color:var(--muted); line-height:1.65; margin-bottom:22px}
+.donepop-ok{font-family:var(--sans); font-size:13px; font-weight:800; letter-spacing:.02em; cursor:pointer;
+  background:var(--gold); color:#101312; border:none; border-radius:10px; padding:11px 30px}
+.donepop-ok:hover{background:var(--gold-bright)}
+
+@media (max-width:680px){
+  header,main{padding-left:20px; padding-right:20px}
+  .cand{grid-template-columns:1fr}
+  .head-right{display:none}
+  .ivbar{position:sticky; height:auto; padding:10px 14px; flex-wrap:wrap; row-gap:8px}
+  body.reviewer{padding-top:0}
+  .iv-frame{display:none!important}
+}
+@media print{
+  body{background:#fff!important; color:#1a1a1a!important; padding-top:0!important}
+  header,.intro,.q,.panel,.section-head{background:#fff!important; border-color:#cfcfcb!important; box-shadow:none!important}
+  header h1,.q-text,.q-text b,.section-head h2,.intro p b{color:#111!important}
+  .wordmark,.wordmark b,.sec-no,.q-no,.key-label{color:#9c7b33!important}
+  .q-no{background:#f4eedd!important; border-color:#e0d3ad!important}
+  .q-tag,.q-type,.head-right,.sec-sub,.intro p,.preview,.field label{color:#555!important}
+  .q-text i{color:#9c7b33!important}
+  .opt{background:#fff!important; border-color:#cfcfcb!important}
+  .opt span{color:#222!important}
+  .field input,textarea{color:#222!important; background:#fff!important; border-color:#cfcfcb!important}
+  .key{background:#faf6ec!important; border-color:#e6dcc2!important}
+  .key-line{color:#4a4334!important}
+  .key-line b{color:#8a6d2c!important}
+  .mark.right{color:#1a7f37!important}
+  .mark.wrong{color:#b3261e!important}
+  .opt.is-correct{background:#eef7f0!important; border-color:#1a7f37!important}
+  .opt.is-correct span{color:#176c2f!important}
+  .opt.is-chosen-wrong{background:#fdeeec!important; border-color:#b3261e!important}
+  .opt.is-chosen-wrong span{color:#9c2017!important}
+  .actionbar,.intro .note,.opt input,.ivbar,.iv-frame,.overlay,.lockbtn,.donepop{display:none!important}
+}
+.backlink{display:inline-block; font-size:11.5px; color:var(--faint); text-decoration:none; letter-spacing:.04em; margin-bottom:9px; font-weight:600}
+.backlink:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="iv-frame" id="ivFrame" aria-hidden="true"></div>
+<div class="ivbar" id="ivbar">
+  <div class="ivbar-left">
+    <span class="iv-badge">Interviewer mode</span>
+    <span class="iv-context" id="ivContext">Reviewing</span>
+  </div>
+  <div class="ivbar-right">
+    <span class="iv-score" id="ivScore"></span>
+    <button class="iv-btn" id="ivSwitch">Switch view</button>
+    <button class="iv-btn" id="ivPrint">Print</button>
+    <button class="iv-btn iv-exit" id="ivExit">Exit interviewer</button>
+  </div>
+</div>
+
+<header>
+  <div>
+    <a href="index.html" class="backlink">&larr; All assessments</a>
+    <div class="wordmark"><b>SELEQT</b>&nbsp;&nbsp;Private Wealth</div>
+    <h1>Client Service Aptitude · Practical Assessment</h1>
+  </div>
+  <div class="head-right">
+    <div class="as-of">Internal hiring assessment</div>
+    <div>~30 minutes · 20 questions</div>
+    <div>Back-office operations &amp; onboarding</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="locked-banner" id="lockedBanner">✓ Responses locked. Please hand the device back to your interviewer.</div>
+
+  <div class="intro">
+    <p><b>Welcome.</b> This is a practical assessment of how you handle the operational side of the job, onboarding, documentation, accuracy and getting things done, not a theory exam. We want to see how you work in real situations on the desk.</p>
+    <p>The last section, <b>On the Job</b>, puts you in real operational situations and asks how you would handle them. There are no trick questions and no negative marking. If you are unsure, give your best practical reasoning rather than leaving it blank.</p>
+    <div class="cand">
+      <div class="field"><label>Candidate name</label><input type="text" id="candName" placeholder="Full name"></div>
+      <div class="field"><label>Date</label><input type="date" id="candDate"></div>
+    </div>
+    <div class="note">Take your time. Aim for roughly 30 minutes. When you are done, press <b>Finish &amp; Lock</b> at the bottom.</div>
+  </div>
+
+  <!-- ============ SECTION A ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section A</span><h2>Onboarding &amp; KYC</h2><span class="sec-sub">5 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">A1</span><span class="q-tag">KYC documents</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">To complete KYC and onboard a new resident individual client, which set is essential?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA1" value="a"><span>PAN, a valid address proof, a photograph and a bank account proof (e.g. cancelled cheque)</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA1" value="b"><span>PAN and an address proof only, no photo or bank proof needed</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA1" value="c"><span>The Aadhaar card alone is sufficient for everything</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA1" value="d"><span>PAN plus the client's latest investment statements</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Standard KYC needs identity (PAN), address proof, photograph and bank proof. B under-collects; C is a misconception; D gathers irrelevant documents.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">A2</span><span class="q-tag">KYC process</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">After collecting a new client's KYC documents, the records are registered with:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA2" value="a"><span>A KRA / the CKYC registry, so the KYC is recognised across the industry</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA2" value="b"><span>Only your firm's internal client files</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA2" value="c"><span>The Income Tax Department directly</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA2" value="d"><span>The client's own bank branch</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> KYC is registered with a KRA / CKYC so it's portable and recognised across SEBI-registered intermediaries, not just kept in-house.</div></div>
+    </div>
+
+    <div class="q" data-type="tf" data-correct="true">
+      <div class="q-head"><span class="q-no">A3</span><span class="q-tag">KYC portability</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">Once a client is KYC-compliant through a KRA, they generally don't need to repeat full KYC to invest through a new intermediary.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qA3" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qA3" value="false"><span>False</span></label>
+      </div>
+      <textarea class="q-why" name="qA3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> KYC done with a KRA / CKYC is portable across SEBI-registered intermediaries, so you don't redo full KYC, you only collect any firm-specific or incremental forms (FATCA, additional details, fresh nomination). <b>Look for:</b> True + the KRA / portability reasoning.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">A4</span><span class="q-tag">Special cases</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">When onboarding investments for a <b>minor</b>, which is correct?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qA4" value="a"><span>The investment is in the minor's name, represented by a guardian, with the minor's PAN/birth proof and the guardian's details</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qA4" value="b"><span>The investment must be held in the guardian's own name</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qA4" value="c"><span>Minors cannot be onboarded under any circumstances</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qA4" value="d"><span>It must be a joint holding between two guardians</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> A minor invests in their own name through a natural/legal guardian, with the minor's proof of age and PAN and the guardian's KYC. No joint holder is allowed with a minor.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">A5</span><span class="q-tag">Family onboarding</span><span class="q-type">Written</span></div>
+      <p class="q-text">A new HNI client wants to onboard himself, his wife, and the family <b>HUF</b>. From an onboarding standpoint, what would you set up, and what documents would you gather for each?</p>
+      <textarea name="qA5" placeholder="How you'd structure it and what you'd collect for each..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Treat each as a <b>separate holder/entity</b> with its own KYC and folio: individual KYC for him and his wife (PAN, address proof, photo, bank proof, FATCA, nomination). The HUF is a distinct entity, its own PAN, the HUF deed/declaration, and the Karta's details/KYC. Reward recognising three separate entities, each with its own KYC, bank mandate and nomination, not lumping them together.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION B ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section B</span><h2>Documentation &amp; Accuracy</h2><span class="sec-sub">5 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="c">
+      <div class="q-head"><span class="q-no">B1</span><span class="q-tag">Spot the issue</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Which of these on a mutual fund application would most likely get it <b>rejected</b>?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB1" value="a"><span>The applicant's name is entered exactly as it appears on the PAN</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB1" value="b"><span>The amount is "₹50,000" in figures and "Fifty thousand only" in words, and they match</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB1" value="c"><span>The first holder's signature differs from the signature on record / the bank mandate</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB1" value="d"><span>The nominee is named with a 100% share</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>C.</b> A signature mismatch against the records / bank mandate is a classic rejection cause. A, B and D are all correct practices.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">B2</span><span class="q-tag">Cheque accuracy</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">You're processing a lump-sum investment by cheque. Which mistake will most often get the cheque rejected at the bank?</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB2" value="a"><span>The amount in words and the amount in figures don't match</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB2" value="b"><span>The cheque is dated with today's date</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB2" value="c"><span>The cheque is crossed "A/C Payee"</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>The payee is the scheme/AMC, as required</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> A words-vs-figures mismatch gets a cheque returned. B, C and D are all correct and expected.</div></div>
+    </div>
+
+    <div class="q" data-type="tf" data-correct="false">
+      <div class="q-head"><span class="q-no">B3</span><span class="q-tag">Checking</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">Once you've carefully filled in a client's form yourself, having a second person check it before submission is an unnecessary delay.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qB3" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qB3" value="false"><span>False</span></label>
+      </div>
+      <textarea class="q-why" name="qB3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>False.</b> A second review (maker-checker) catches errors before they cause rejections, rework and delays for the client, accuracy is worth the few minutes, especially on anything financial or compliance-related. <b>Look for:</b> False + the value of a double-check / maker-checker.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">B4</span><span class="q-tag">Records</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client calls to update their registered mobile number and email. The correct operational step is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qB4" value="a"><span>Note it informally and update it whenever you get time</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qB4" value="b"><span>Process it through the proper change-request, with due verification/authorisation, and keep a record of the change</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qB4" value="c"><span>Tell the client to sort it out with the AMC themselves</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qB4" value="d"><span>Change it only in your own personal notes</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Contact-detail changes must go through the proper, verified change process and be recorded, both for accuracy and to prevent fraud (a fraudster changing contact details is a known risk).</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">B5</span><span class="q-tag">Spot the mistakes</span><span class="q-type">Written</span></div>
+      <p class="q-text">You're checking a new client's onboarding form before submission. It shows: applicant name <b>"Sunil R Patel"</b>; PAN card reads <b>"Sunil Rameshbhai Patel"</b>; the bank <b>IFSC has only 9 characters</b>; the <b>nominee field is blank</b>; and the <b>FATCA declaration is unsigned</b>. What would you flag before submitting?</p>
+      <textarea name="qB5" placeholder="List the problems you'd catch..." style="min-height:130px"></textarea>
+      <div class="key"><div class="key-label">What to look for · attention to detail</div><div class="key-line">Catch all of these: (1) the <b>name doesn't match the PAN</b>, it must read exactly as on the PAN, or it'll be rejected; (2) the <b>IFSC is the wrong length</b> (a valid IFSC is 11 characters), so the bank details are invalid; (3) the <b>nominee is blank</b>, it should be filled or nomination explicitly opted out; (4) the <b>FATCA declaration is unsigned</b>, a mandatory signature is missing. Reward catching most or all, and knowing each would cause a rejection or compliance gap.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION C ============ -->
+  <div class="section">
+    <div class="section-head"><span class="sec-no">Section C</span><h2>Operations &amp; Coordination</h2><span class="sec-sub">5 questions</span></div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">C1</span><span class="q-tag">Cut-off timing</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A client wants <b>today's</b> NAV for a large equity fund purchase. Broadly, the operational requirement is that:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC1" value="a"><span>The application and cleared funds must be received and time-stamped before the cut-off time</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC1" value="b"><span>It's enough to submit any time during the day</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC1" value="c"><span>The NAV is always the next day, regardless of when you submit</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC1" value="d"><span>The client must phone the AMC to lock the NAV</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> Applicable NAV depends on the application and (for larger amounts) the funds being received before the cut-off and time-stamped. Missing the cut-off means the next day's NAV.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="a">
+      <div class="q-head"><span class="q-no">C2</span><span class="q-tag">Who does what</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">Day-to-day mutual fund transactions and folio servicing are typically processed through:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC2" value="a"><span>Registrar &amp; Transfer Agents such as CAMS or KFintech</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC2" value="b"><span>The Reserve Bank of India</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC2" value="c"><span>The client's employer's HR department</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC2" value="d"><span>SEBI's grievance cell</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>A.</b> RTAs (CAMS, KFintech) process MF transactions and folio servicing. Knowing who to go to for what is core to the role.</div></div>
+    </div>
+
+    <div class="q" data-type="mcq" data-correct="b">
+      <div class="q-head"><span class="q-no">C3</span><span class="q-tag">Handling rejections</span><span class="q-type">Multiple choice</span></div>
+      <p class="q-text">A submitted transaction comes back <b>rejected</b> by the RTA. The right first step is:</p>
+      <div class="opts">
+        <label class="opt" data-opt="a"><input type="radio" name="qC3" value="a"><span>Resubmit the exact same form again immediately</span></label>
+        <label class="opt" data-opt="b"><input type="radio" name="qC3" value="b"><span>Find the rejection reason, fix that specific issue, then resubmit and inform the client/RM</span></label>
+        <label class="opt" data-opt="c"><input type="radio" name="qC3" value="c"><span>Leave it; it will usually process on its own eventually</span></label>
+        <label class="opt" data-opt="d"><input type="radio" name="qC3" value="d"><span>Ask the client to open a fresh account</span></label>
+      </div>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Read the rejection reason, correct that specific issue, resubmit, and keep the client/RM informed. Blindly resubmitting (A) just gets rejected again.</div></div>
+    </div>
+
+    <div class="q" data-type="tf" data-correct="true">
+      <div class="q-head"><span class="q-no">C4</span><span class="q-tag">Settlement</span><span class="q-type">True / False · why</span></div>
+      <p class="q-text">A client redeeming from an equity mutual fund should be told the money will take a few working days to reach their bank account, not the same day.</p>
+      <div class="opts tf">
+        <label class="opt" data-opt="true"><input type="radio" name="qC4" value="true"><span>True</span></label>
+        <label class="opt" data-opt="false"><input type="radio" name="qC4" value="false"><span>False</span></label>
+      </div>
+      <textarea class="q-why" name="qC4_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
+      <div class="mark"></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> Equity fund redemptions settle over a few working days (T+ a couple of days); liquid/overnight funds are faster. Set that expectation up front so the client isn't surprised. <b>Look for:</b> True + awareness of the settlement cycle.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">C5</span><span class="q-tag">Prioritise · coordinate</span><span class="q-type">Written</span></div>
+      <p class="q-text">It's a busy morning: a client's SIP mandate has just failed, an RM needs a portfolio statement for an 11 am client meeting, and a redemption request must go in before the afternoon cut-off. How would you prioritise and handle all three?</p>
+      <textarea name="qC5" placeholder="Your order of play and how you'd handle each..." style="min-height:120px"></textarea>
+      <div class="key"><div class="key-label">What to look for · operational judgment</div><div class="key-line">Prioritise by hard deadline and impact: the <b>statement for the 11 am meeting</b> and the <b>redemption before the cut-off</b> are time-boxed, do those first (and confirm the cut-off time). The <b>failed SIP</b> needs fixing and the client informed, but it isn't a hard deadline and can be actioned right after. Reward reasoning about deadlines, communicating with the RM and client, and not dropping any of the three.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION D — ON THE JOB ============ -->
+  <div class="section flagship">
+    <div class="section-head"><span class="sec-no">Section D</span><h2>On the Job</h2><span class="sec-sub">5 situations</span></div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D1</span><span class="q-tag">SIP failure</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client's monthly SIP has failed because of an insufficient-balance / mandate issue. What do you do?</p>
+      <textarea name="qD1" placeholder="The steps you'd take..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Check the exact reason, inform the client promptly and tactfully, help fix it (ensure funds / re-activate or re-register the mandate so the next cycle goes through), and reassure them that a single missed SIP is just a missed installment, not a default or penalty. Reward: diagnose &rarr; communicate &rarr; fix &rarr; follow-up.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D2</span><span class="q-tag">Rejection fix</span><span class="q-type">Written</span></div>
+      <p class="q-text">You submitted a new client's onboarding and the KRA/RTA rejected it citing a <b>"name mismatch."</b> Walk through how you'd resolve it.</p>
+      <textarea name="qD2" placeholder="How you'd diagnose and fix it..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Identify the mismatch (the form/records vs the name exactly as on the PAN), get the correct details or proof from the client, correct the form/records to match the PAN precisely, resubmit, and confirm clearance, keeping the client informed throughout. Reward a methodical fix and not just blindly resubmitting.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D3</span><span class="q-tag">Judgment · escalate</span><span class="q-type">Written</span></div>
+      <p class="q-text">A client asks you to process a redemption into a <b>different person's bank account</b> (not their registered one) "just this once, to save time." What do you do?</p>
+      <textarea name="qD3" placeholder="What you do, and why..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for · integrity</div><div class="key-line">Don't do it. Redemptions go only to the client's own registered, verified bank account, this is a basic anti-fraud / compliance control. Explain politely, offer the proper route (register and verify the account first if it genuinely belongs to the client), and escalate to a senior/compliance if pressured. Reward refusing the bypass, the compliance reasoning, and still being helpful. A willingness to bend the rule here is a serious red flag.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D4</span><span class="q-tag">Discrepancy</span><span class="q-type">Written</span></div>
+      <p class="q-text">While preparing a client's portfolio statement, you notice a transaction in the records that the client insists they never made. What do you do?</p>
+      <textarea name="qD4" placeholder="How you'd handle it..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Take it seriously, don't dismiss or assume. Verify against the source records (RTA/AMC), check for a data-entry error or a folio mix-up, and if it looks like an unauthorised or genuinely unexplained transaction, escalate to the RM/compliance, document everything, and keep the client informed. Reward verifying first + escalating an unauthorised transaction appropriately rather than ignoring it.</div></div>
+    </div>
+
+    <div class="q" data-type="open">
+      <div class="q-head"><span class="q-no">D5</span><span class="q-tag">Client call · under pressure</span><span class="q-type">Written</span></div>
+      <p class="q-text">An anxious client phones, demanding to know why their redemption money hasn't arrived a day after they placed the request. How do you handle the call and the situation?</p>
+      <textarea name="qD5" placeholder="How you'd handle the call and the work behind it..." style="min-height:110px"></textarea>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Stay calm and reassuring, acknowledge the concern. Explain the settlement timeline (equity redemptions take a few working days), but also <b>actually check the status</b>, was it processed, is there a rejection or hold, rather than just placating. Give a clear, realistic expectation and follow up to closure. Reward empathy + correct process knowledge + checking the real status.</div></div>
+    </div>
+  </div>
+
+  <!-- ============ ACTION BAR (candidate) ============ -->
+  <div class="actionbar">
+    <button class="btn primary" id="finishBtn">Finish &amp; Lock</button>
+    <span class="status" id="status">Answered <b id="ansCount">0</b> of 20</span>
+    <button class="btn lockbtn" id="lockBtn" title="Interviewer access (code required)">&#128274;&nbsp;Interviewer</button>
+  </div>
+
+  <!-- ============ INTERVIEWER CHOOSER ============ -->
+  <div class="overlay" id="chooser" role="dialog" aria-modal="true" aria-labelledby="chTitle" hidden>
+    <div class="chooser-card">
+      <div class="chooser-head">
+        <div>
+          <div class="ch-kicker">Interviewer</div>
+          <div class="ch-title" id="chTitle">Choose what to view</div>
+        </div>
+        <button class="ch-close" id="chClose" title="Close">&times;</button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Answer key</div>
+        <button class="ch-row key-row" id="viewKey">
+          <span>View blank answer key &amp; rubric</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Saved attempts (<span id="attCount">0</span>)</div>
+        <div id="attList" class="att-list"></div>
+        <div class="ch-empty" id="attEmpty">No completed attempts are saved on this device yet.</div>
+      </div>
+
+      <div class="ch-sec">
+        <div class="ch-lab">Next candidate</div>
+        <button class="ch-row newrow" id="newBtn">
+          <span>Start a fresh blank test</span>
+          <span class="ch-arrow">&rarr;</span>
+        </button>
+      </div>
+
+      <div class="ch-foot">
+        <button class="btn subtle" id="exportBtn">Export backup</button>
+        <button class="btn subtle" id="importBtn">Import backup</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+        <button class="btn subtle danger" id="clearBtn">Clear all</button>
+        <span class="ch-hint">Tip: reload the page for a fresh blank test. Saved attempts stay here.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DONE POPUP (candidate) ============ -->
+  <div class="donepop" id="donePop" hidden>
+    <div class="donepop-card">
+      <div class="donepop-tick">&#10003;</div>
+      <div class="donepop-title">Attempt submitted</div>
+      <div class="donepop-sub">Thank you. Your responses have been recorded. Please hand the device back to your interviewer.</div>
+      <button class="donepop-ok" id="donePopOk">Done</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+  const REVIEWER_CODE = "SELEQT2026";
+  const LS_KEY = "seleqt_clientservice_attempts_v1";
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwXbROg_rENGKnf7CLs0xDgVB2sjFGuz74xubxuJnA7B8a1rWARKaNSsLmy8T6N7MFaTQ/exec";
+  const SHEET_TOKEN = "seleqt-analyst-9X7k2p";
+  const TEST_ID = "clientservice";
+  const TEST_NAME = "Client Service Executive";
+  const SHEET_TAB = "Client Service";
+  const PDF_PARENT = "SELEQT Hiring Tests";
+  const PDF_FOLDER = "Client Service Test";
+  const qs = Array.from(document.querySelectorAll('.q'));
+  const ansCountEl = document.getElementById('ansCount');
+  const candName = document.getElementById('candName');
+  const candDate = document.getElementById('candDate');
+  const finishBtn = document.getElementById('finishBtn');
+  const lockBtn = document.getElementById('lockBtn');
+  const chooser = document.getElementById('chooser');
+  const ivContext = document.getElementById('ivContext');
+  const ivScore = document.getElementById('ivScore');
+  const donePop = document.getElementById('donePop');
+
+  let unlocked = false;       // authenticated for the current interviewer session
+  let mode = 'candidate';     // 'candidate' | 'interviewer'
+  let liveSnap = null;        // snapshot of an in-progress candidate session, taken before reviewing
+  let lastFocus = null;       // element focused before the chooser opened (for restore)
+
+  function loadAttempts(){ try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }catch(e){ return []; } }
+  function saveAttempts(a){ try{ localStorage.setItem(LS_KEY, JSON.stringify(a)); return true; }catch(e){ return false; } }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function fmt(ts){ try{ return new Date(ts).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'}); }catch(e){ return ''; } }
+  function mcqName(q){ const i=q.querySelector('input[type=radio]'); return i ? i.name : null; }
+  function todayISO(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  function prettyDate(v){ v=String(v||''); const m=v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? (m[3]+'/'+m[2]+'/'+m[1]) : v; }
+
+  // best-effort: send each completed attempt to the Google Sheet (localStorage stays the reliable store)
+  function postToSheet(attempt){
+    if(!SHEET_ENDPOINT) return;
+    try{
+      const subAt = new Date().toLocaleString();
+      const score = attempt.score.correct + ' / ' + attempt.score.total;
+      const cols=['Submitted At','Candidate','Date','Objective score'];
+      const vals=[ subAt, attempt.name, prettyDate(attempt.date), score ];
+      const questions=[];
+      qs.forEach(q=>{
+        const no=(q.querySelector('.q-no')||{}).textContent||'';
+        const tag=(q.querySelector('.q-tag')||{}).textContent||'';
+        const prompt=((q.querySelector('.q-text')||{}).textContent||'').trim();
+        const rubric=((q.querySelector('.key-line')||{}).textContent||'').trim();
+        cols.push(tag ? (no+' · '+tag) : no);
+        const tp=q.dataset.type;
+        if(tp==='mcq'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
+          const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
+          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
+            correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
+        } else if(tp==='tf'){
+          const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct, ok=chosen===correct;
+          const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
+          const ta=q.querySelector('textarea'); const why=(ta?(attempt.answers[ta.name]||''):'').trim();
+          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('— (→'+cap(correct)+')')) + (why? '  —  '+why : ''));
+          questions.push({ no, tag, type:'mcq', prompt,
+            answer: (chosen?cap(chosen):'Not answered') + (why? ' — '+why : ''),
+            correct: cap(correct), isCorrect: ok, rubric });
+        } else {
+          const ta=q.querySelector('textarea');
+          vals.push(attempt.answers[ta.name]||'');
+          questions.push({ no, tag, type:'open', prompt, answer: (attempt.answers[ta.name]||''), rubric });
+        }
+      });
+      const meta={ submittedAt:subAt, name:attempt.name, date:prettyDate(attempt.date), score, test: TEST_NAME };
+      const body = JSON.stringify({ token: SHEET_TOKEN, test: TEST_ID, sheetTab: SHEET_TAB, pdfParent: PDF_PARENT, pdfFolder: PDF_FOLDER, cols, vals, meta, questions });
+      let sent = false;
+      try { if(navigator.sendBeacon){ sent = navigator.sendBeacon(SHEET_ENDPOINT, new Blob([body], {type:'text/plain;charset=utf-8'})); } } catch(e){ sent = false; }
+      if(!sent){ fetch(SHEET_ENDPOINT, { method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body: body }); }
+    }catch(e){ /* ignore network errors; the local copy is already saved */ }
+  }
+  function showDonePopup(){ donePop.hidden=false; }
+  function hideDonePopup(){ donePop.hidden=true; }
+
+  function countAnswered(){
+    let n = 0;
+    qs.forEach(q=>{
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ if(q.querySelector('input[type=radio]:checked')) n++; }
+      else { const ta = q.querySelector('textarea'); if(ta && ta.value.trim().length>0) n++; }
+    });
+    ansCountEl.textContent = n;
+    return n;
+  }
+  document.addEventListener('input', countAnswered);
+  document.addEventListener('change', countAnswered);
+
+  function collectAnswers(){
+    const ans = {};
+    qs.forEach(q=>{
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){ const c=q.querySelector('input[type=radio]:checked'); ans[mcqName(q)] = c ? c.value : null; }
+      const ta=q.querySelector('textarea'); if(ta) ans[ta.name] = ta.value;
+    });
+    return ans;
+  }
+
+  // fill the form from an answers object (or clear if null) and optionally lock it
+  function setInputs(ans, disabled){
+    qs.forEach(q=>{
+      const t=q.dataset.type;
+      if(t==='mcq'||t==='tf'){
+        const nm = mcqName(q);
+        q.querySelectorAll('input[type=radio]').forEach(i=>{ i.checked = ans ? (ans[nm]===i.value) : false; i.disabled = disabled; });
+      }
+      const ta = q.querySelector('textarea'); if(ta){ ta.value = ans ? (ans[ta.name]||'') : ''; ta.readOnly = disabled; }
+      q.classList.toggle('locked', disabled);
+    });
+  }
+
+  // grade MCQs from current DOM; keyOnly = blank answer-key reference (no candidate marks)
+  function grade(keyOnly){
+    let correct = 0, total = 0;
+    qs.forEach(q=>{
+      if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return;
+      total++;
+      const want = q.dataset.correct;
+      const chosen = q.querySelector('input[type=radio]:checked');
+      const mark = q.querySelector('.mark');
+      q.querySelectorAll('.opt').forEach(opt=>{
+        opt.classList.remove('is-correct','is-chosen-wrong');
+        if(opt.dataset.opt===want) opt.classList.add('is-correct');
+      });
+      if(keyOnly){ mark.className='mark'; mark.textContent=''; return; }
+      if(chosen){
+        if(chosen.value===want){ correct++; mark.className='mark right'; mark.textContent='✓ Correct'; }
+        else {
+          const w = q.querySelector('.opt[data-opt="'+chosen.value+'"]'); if(w) w.classList.add('is-chosen-wrong');
+          mark.className='mark wrong'; mark.textContent='✗ Candidate chose '+chosen.value.toUpperCase();
+        }
+      } else { mark.className='mark na'; mark.textContent='— Not answered'; }
+    });
+    ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total);
+  }
+
+  // ---- candidate: Finish & Lock (saves the attempt) ----
+  finishBtn.addEventListener('click', function(){
+    if(finishBtn.disabled) return;
+    countAnswered();
+    const ans = collectAnswers();
+    let correct=0, total=0;
+    qs.forEach(q=>{ if(q.dataset.type!=='mcq' && q.dataset.type!=='tf') return; total++; if(ans[mcqName(q)]===q.dataset.correct) correct++; });
+    const attempt = {
+      id: 'a' + Date.now() + '_' + Math.floor(Math.random()*1e6),
+      name: (candName.value.trim() || 'Unnamed candidate'),
+      date: candDate.value.trim(),
+      ts: Date.now(),
+      answers: ans,
+      score: { correct, total }
+    };
+    const arr = loadAttempts(); arr.push(attempt);
+    const saved = saveAttempts(arr);
+    postToSheet(attempt);
+    // clear the candidate's filled-in answers from the screen and lock the form
+    setInputs(null, true);
+    candName.value=''; candDate.value=''; candName.readOnly = true; candDate.readOnly = true;
+    finishBtn.disabled = true;
+    document.body.classList.add('submitted');
+    window.scrollTo({top:0, behavior:'smooth'});
+    showDonePopup();
+    if(!saved){
+      setTimeout(()=>alert('Heads up: this browser blocked saving a LOCAL copy of the result (this can happen when a file is opened directly in the browser). If online, it was still sent to the results Sheet, but it will not appear in this device\'s in-app list.'), 350);
+    }
+  });
+
+  function enterInterviewer(){ document.body.classList.add('reviewer'); document.body.classList.remove('submitted'); mode='interviewer'; }
+
+  // snapshot an in-progress candidate session before the interviewer overwrites the shared form
+  function snapHasContent(s){
+    if(!s) return false;
+    if((s.name||'').trim()) return true;
+    return Object.keys(s.answers||{}).some(k=>{ const v=s.answers[k]; return v!==null && String(v).trim()!==''; });
+  }
+  function captureLiveIfNeeded(){
+    if(mode==='candidate' && liveSnap===null){
+      liveSnap = { answers: collectAnswers(), name: candName.value, date: candDate.value, submitted: document.body.classList.contains('submitted') };
+    }
+  }
+
+  // ---- reset to a clean blank candidate test (and re-lock interviewer access) ----
+  function resetToBlank(){
+    liveSnap = null;
+    setInputs(null, false);
+    candName.value=''; candDate.value=todayISO(); candName.readOnly=false; candDate.readOnly=false;
+    finishBtn.disabled = false;
+    document.body.classList.remove('reviewer','keymode','submitted');
+    mode = 'candidate'; unlocked = false;
+    countAnswered();
+    closeChooser();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ---- leave interviewer mode: restore an unfinished candidate's work, else go to a blank test ----
+  function exitInterviewer(){
+    if(liveSnap && !liveSnap.submitted && snapHasContent(liveSnap)){
+      setInputs(liveSnap.answers, false);
+      candName.value = liveSnap.name || ''; candDate.value = liveSnap.date || '';
+      candName.readOnly=false; candDate.readOnly=false; finishBtn.disabled=false;
+      document.body.classList.remove('reviewer','keymode','submitted');
+      mode='candidate'; unlocked=false; liveSnap=null;
+      countAnswered(); closeChooser();
+      window.scrollTo({top:0, behavior:'smooth'});
+    } else {
+      resetToBlank();
+    }
+  }
+
+  // ---- Interviewer chooser ----
+  function openChooser(){ lastFocus = document.activeElement; renderList(); chooser.hidden=false; const f=document.getElementById('viewKey'); if(f){ try{ f.focus(); }catch(e){} } }
+  function closeChooser(){ chooser.hidden=true; if(lastFocus){ try{ lastFocus.focus(); }catch(e){} } lastFocus=null; }
+
+  function renderList(){
+    const arr = loadAttempts().slice().sort((a,b)=> (b.ts||0)-(a.ts||0));
+    document.getElementById('attCount').textContent = arr.length;
+    const list = document.getElementById('attList'); list.innerHTML='';
+    document.getElementById('attEmpty').hidden = arr.length>0;
+    arr.forEach(att=>{
+      const sc = att.score ? (att.score.correct+'/'+att.score.total) : '';
+      const meta = (att.date ? esc(prettyDate(att.date))+' · ' : '') + 'submitted ' + esc(fmt(att.ts));
+      const b = document.createElement('button'); b.className='ch-row att-row';
+      b.innerHTML = '<span class="att-main"><span class="att-name">'+esc(att.name)+'</span>'
+                  + '<span class="att-meta">'+meta+'</span></span>'
+                  + '<span class="att-score">'+sc+'</span>';
+      b.addEventListener('click', ()=>viewAttempt(att));
+      list.appendChild(b);
+    });
+  }
+
+  function viewAttempt(att){
+    captureLiveIfNeeded();
+    setInputs(att.answers, true);
+    candName.value = att.name||''; candDate.value = att.date||''; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.remove('keymode');
+    ivContext.textContent = 'Viewing: ' + (att.name||'candidate') + (att.date ? '  ·  '+prettyDate(att.date) : '');
+    enterInterviewer(); grade(false); closeChooser(); window.scrollTo(0,0);
+  }
+  function viewKey(){
+    captureLiveIfNeeded();
+    setInputs(null, true);
+    candName.value='Answer key'; candDate.value='reference'; candName.readOnly=true; candDate.readOnly=true;
+    document.body.classList.add('keymode');
+    ivContext.textContent = 'Answer key & rubric';
+    enterInterviewer(); grade(true); closeChooser(); window.scrollTo(0,0);
+  }
+
+  // ---- candidate: discreet interviewer lock ----
+  lockBtn.addEventListener('click', function(){
+    if(!unlocked){
+      const code = prompt('Enter the interviewer code to access results and the answer key:');
+      if(code===null) return;
+      if(code.trim()!==REVIEWER_CODE){ alert('Incorrect code.'); return; }
+      unlocked = true;
+    }
+    openChooser();
+  });
+
+  // ---- chooser controls ----
+  document.getElementById('viewKey').addEventListener('click', viewKey);
+  document.getElementById('newBtn').addEventListener('click', function(){
+    if(!confirm('Start a fresh blank test for the next candidate?\n\nThis clears the form on screen. Saved past attempts are kept.')) return;
+    resetToBlank();
+  });
+  function chooserDismiss(){ closeChooser(); if(mode==='candidate') unlocked=false; }
+  document.getElementById('chClose').addEventListener('click', chooserDismiss);
+  chooser.addEventListener('click', e=>{ if(e.target===chooser) chooserDismiss(); });
+  document.addEventListener('keydown', function(e){
+    if(chooser.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); chooserDismiss(); return; }
+    if(e.key==='Tab'){
+      const f = chooser.querySelectorAll('button:not([disabled]), input:not([disabled])');
+      if(!f.length) return;
+      const first=f[0], last=f[f.length-1];
+      if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ---- interviewer top-bar controls ----
+  document.getElementById('ivSwitch').addEventListener('click', openChooser);
+  document.getElementById('ivPrint').addEventListener('click', ()=>window.print());
+  document.getElementById('ivExit').addEventListener('click', exitInterviewer);
+
+  // ---- candidate "attempt submitted" popup ----
+  document.getElementById('donePopOk').addEventListener('click', hideDonePopup);
+  donePop.addEventListener('click', e=>{ if(e.target===donePop) hideDonePopup(); });
+
+  // ---- export / import / clear ----
+  document.getElementById('exportBtn').addEventListener('click', function(){
+    const data = localStorage.getItem(LS_KEY) || '[]';
+    const blob = new Blob([data], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href=url; a.download='seleqt-analyst-results.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  const importFile = document.getElementById('importFile');
+  document.getElementById('importBtn').addEventListener('click', ()=>importFile.click());
+  importFile.addEventListener('change', function(e){
+    const f = e.target.files[0]; if(!f) return;
+    const r = new FileReader();
+    r.onload = function(){
+      try{
+        const incoming = JSON.parse(r.result);
+        if(!Array.isArray(incoming)) throw 0;
+        const byId = {};
+        loadAttempts().concat(incoming).forEach(a=>{ if(a && a.id) byId[a.id]=a; });
+        const merged = Object.keys(byId).map(k=>byId[k]);
+        saveAttempts(merged); renderList();
+        alert('Imported. Total saved attempts: ' + merged.length + '.');
+      }catch(err){ alert('Could not read that file as a results backup.'); }
+    };
+    r.readAsText(f); e.target.value='';
+  });
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    if(confirm('Delete ALL saved attempts on this device?\n\nThis cannot be undone. Consider Export backup first.')){ saveAttempts([]); renderList(); }
+  });
+
+  candDate.value = todayISO();
+  countAnswered();
+})();
+</script>
+</body>
+</html>

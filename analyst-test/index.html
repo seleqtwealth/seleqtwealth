@@ -32,7 +32,7 @@ header h1{font-family:var(--serif); font-weight:600; font-size:31px; letter-spac
 main{max-width:1000px; margin:0 auto; width:100%; padding:36px 44px 60px; flex:1}
 .lead{color:var(--muted); font-size:15px; line-height:1.6; margin-bottom:30px}
 .lead b{color:var(--text); font-weight:600}
-.cards{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+.cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(265px, 1fr)); gap:20px}
 .card{display:flex; flex-direction:column; text-decoration:none; color:inherit;
   background:var(--card); border:1px solid var(--line); border-radius:18px; padding:28px 28px 24px;
   transition:all .16s; position:relative; overflow:hidden}
@@ -73,6 +73,14 @@ main{max-width:1000px; margin:0 auto; width:100%; padding:36px 44px 60px; flex:1
       <div class="card-title">Wealth Advisor Aptitude</div>
       <div class="card-desc">Applied financial planning, retirement and insurance, tax and succession, product suitability and ethics, plus advisory judgment. A mix of multiple-choice, true/false-with-reasoning and written answers, pitched above the analyst test for a CFP-level candidate.</div>
       <div class="card-meta">~35 minutes &middot; 20 questions</div>
+      <div class="card-go">Start assessment &rarr;</div>
+    </a>
+    <a class="card" href="clientservice.html">
+      <div class="card-no">03</div>
+      <div class="card-role">Client Service &middot; Operations</div>
+      <div class="card-title">Client Service Aptitude</div>
+      <div class="card-desc">Onboarding and KYC, documentation and accuracy, and day-to-day operations and coordination, with spot-the-mistake checks. For a back-office client service executive.</div>
+      <div class="card-meta">~30 minutes &middot; 20 questions</div>
       <div class="card-go">Start assessment &rarr;</div>
     </a>
   </div>
