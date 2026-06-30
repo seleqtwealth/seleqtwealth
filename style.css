@@ -4240,6 +4240,17 @@ html.intro-running .hero-wordmark-spotlight {
   font-weight: 500;
   color: var(--navy-deep);
 }
+.article-body ol, .article-body ul {
+  margin: 0 0 1.4em;
+  padding-left: 1.5em;
+  color: var(--ink-strong);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+.article-body li { margin-bottom: 0.6em; padding-left: 0.3em; }
+.article-body ol li::marker { color: var(--gold); font-weight: 500; }
+.article-body li strong { font-weight: 500; color: var(--navy-deep); }
 
 .article-body h2 {
   font-family: var(--font-display);
