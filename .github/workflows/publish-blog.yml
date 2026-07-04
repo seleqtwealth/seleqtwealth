@@ -2,7 +2,7 @@ name: Publish scheduled blog
 
 # Reveals any due blog post on the listing + sitemap each Wednesday.
 # The blog pages already exist in the repo; this only surfaces them on
-# schedule. The push triggers Vercel's automatic deploy.
+# schedule, then fires a Vercel deploy hook so the live site refreshes.
 
 on:
   schedule:
@@ -26,6 +26,7 @@ jobs:
         run: python3 scripts/publish_next.py
 
       - name: Commit and push if anything changed
+        id: commit
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "SELEQT Scheduler"
@@ -33,6 +34,20 @@ jobs:
             git add blogs.html sitemap.xml scripts/schedule.json
             git commit -m "Publish scheduled blog post(s) [skip ci]"
             git push
+            echo "published=true" >> "$GITHUB_OUTPUT"
           else
             echo "No posts due; nothing to commit."
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The publish commit is marked [skip ci] and the git->Vercel webhook is
+      # unreliable, so trigger the deploy explicitly. VERCEL_DEPLOY_HOOK is a
+      # repo secret holding the Vercel deploy-hook URL for the production project.
+      - name: Trigger Vercel deploy (refresh listing + sitemap)
+        if: steps.commit.outputs.published == 'true'
+        run: |
+          if [ -n "${{ secrets.VERCEL_DEPLOY_HOOK }}" ]; then
+            curl -s -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" > /dev/null && echo "Vercel deploy triggered."
+          else
+            echo "WARNING: VERCEL_DEPLOY_HOOK secret not set - the new post will not appear on the live listing until a deploy runs."
           fi
