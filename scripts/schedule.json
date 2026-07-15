@@ -19,7 +19,7 @@
     "date_display": "15 July 2026",
     "read": 6,
     "excerpt": "In 2026 the rupee did quickly what it usually does slowly. It slipped past ₹90 to the dollar and touched a record low near ₹97 before the RBI stepped in to steady it. If you hold only Indian assets, the...",
-    "published": false,
+    "published": true,
     "listing_card": "        <article class=\"insight-card insight-card--featured reveal\">\n          <div class=\"insight-card-meta\">\n            <span class=\"insight-category\">Investments</span>\n            <span class=\"insight-meta-dot\">·</span>\n            <time datetime=\"2026-07-15\">15 July 2026</time>\n            <span class=\"insight-meta-dot\">·</span>\n            <span class=\"insight-read-time\">6 min read</span>\n          </div>\n          <h2 class=\"insight-title\">\n            <a href=\"/blogs/falling-rupee-investment-returns\">What a Falling Rupee Does to Your Returns, and <em>Investing in US Stocks From India</em></a>\n          </h2>\n          <p class=\"insight-excerpt\">In 2026 the rupee did quickly what it usually does slowly. It slipped past ₹90 to the dollar and touched a record low near ₹97 before the RBI stepped in to steady it. If you hold only Indian assets, the...</p>\n          <a href=\"/blogs/falling-rupee-investment-returns\" class=\"insight-cta\">Read the piece <span class=\"insight-cta-arrow\">&rarr;</span></a>\n        </article>\n",
     "sitemap_url": "  <url>\n    <loc>https://seleqtwealth.in/blogs/falling-rupee-investment-returns</loc>\n    <lastmod>2026-07-15</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n"
   },
