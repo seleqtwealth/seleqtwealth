@@ -115,7 +115,7 @@
     "date_display": "9 September 2026",
     "read": 5,
     "excerpt": "Ask a certain kind of adviser and a family trust is the answer to everything: tax, succession, protection, all solved at once. Ask a plain-speaking one and the honest answer is narrower. A family trust in...",
-    "published": false,
+    "published": true,
     "listing_card": "        <article class=\"insight-card insight-card--featured reveal\">\n          <div class=\"insight-card-meta\">\n            <span class=\"insight-category\">Succession</span>\n            <span class=\"insight-meta-dot\">·</span>\n            <time datetime=\"2026-09-09\">9 September 2026</time>\n            <span class=\"insight-meta-dot\">·</span>\n            <span class=\"insight-read-time\">5 min read</span>\n          </div>\n          <h2 class=\"insight-title\">\n            <a href=\"/blogs/private-family-trusts-india\">Private Family Trusts in India: <em>When They Make Sense, and When They Don't</em></a>\n          </h2>\n          <p class=\"insight-excerpt\">Ask a certain kind of adviser and a family trust is the answer to everything: tax, succession, protection, all solved at once. Ask a plain-speaking one and the honest answer is narrower. A family trust in...</p>\n          <a href=\"/blogs/private-family-trusts-india\" class=\"insight-cta\">Read the piece <span class=\"insight-cta-arrow\">&rarr;</span></a>\n        </article>\n",
     "sitemap_url": "  <url>\n    <loc>https://seleqtwealth.in/blogs/private-family-trusts-india</loc>\n    <lastmod>2026-09-09</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n"
   },
