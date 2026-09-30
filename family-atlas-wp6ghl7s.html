@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a1a35" />
+  <title>ATLAS · Family preparedness · SELEQT</title>
+  <meta name="description" content="Fill in your SELEQT ATLAS in your browser and download it as a PDF. Everything stays on your device; nothing is sent to SELEQT or anyone else." />
+  <!-- Unlisted: reached only by its shared link. Not linked from the site, not in the
+       sitemap, and kept out of search results. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- The browser enforces this: the page can load its own files and nothing else, and it
+       has nowhere to send what is typed. No analytics, no third-party scripts, no forms. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SELEQT" />
+  <meta property="og:title" content="ATLAS · Family preparedness · SELEQT" />
+  <meta property="og:description" content="Everything the family holds, mapped. Fill it in privately in your browser and download your PDF." />
+  <meta property="og:url" content="https://seleqtwealth.in/family-atlas-wp6ghl7s" />
+  <meta property="og:image" content="https://seleqtwealth.in/og-image.jpg" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="atlas/atlas.css" />
+</head>
+<body class="at-body">
+
+  <header class="at-bar">
+    <div class="at-bar-inner">
+      <a class="at-brand" href="/" aria-label="SELEQT home">SELEQT</a>
+      <span class="at-brand-doc">ATLAS</span>
+      <div class="at-bar-actions">
+        <span class="at-progress" id="atProgress" aria-live="polite"></span>
+        <button type="button" class="at-btn at-btn-gold at-dl" data-at-download>Download PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Cover -->
+  <section class="at-hero">
+    <div class="at-wrap">
+      <p class="at-eyebrow">Family preparedness</p>
+      <h1 class="at-title">ATLAS</h1>
+      <p class="at-kicker">Accounts · Titles · Liabilities · Advisers · Succession</p>
+      <p class="at-lead">Everything the family holds, mapped. A working record of what you hold, where it is and who to call, built so that nothing important depends on memory.</p>
+
+      <div class="at-privacy" role="note">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+        <p><strong>Private by design.</strong> What you type stays in this browser. Nothing is sent to SELEQT or anyone else, and your PDF is made right here on your device. Keep the file safe, and come back here with it whenever you want to update it.</p>
+      </div>
+
+      <div class="at-hero-actions">
+        <a href="#atStart" class="at-btn at-btn-gold">Start filling</a>
+        <label class="at-btn at-btn-ghost at-resume">
+          <input type="file" id="atResume" class="at-file" accept="application/pdf,.pdf" />
+          Continue from my ATLAS PDF
+        </label>
+      </div>
+      <p class="at-resume-msg" id="atResumeMsg" role="status" hidden></p>
+    </div>
+  </section>
+
+  <div class="at-layout at-wrap" id="atStart">
+    <nav class="at-nav" id="atNav" aria-label="Sections">
+      <div class="at-nav-head">
+        <span>Sections</span>
+        <button type="button" class="at-nav-close" id="atNavClose" aria-label="Close sections">&times;</button>
+      </div>
+      <ol class="at-nav-list" id="atNavList"></ol>
+    </nav>
+
+    <main class="at-main" id="atMain">
+      <details class="at-guide" open>
+        <summary><span class="at-guide-kicker">Before you begin</span> How to use this file</summary>
+        <p class="at-guide-lead">A map of what you hold, where it is, and who to call. Five things decide whether it is useful on the day it is needed.</p>
+        <ol class="at-rules">
+          <li><strong>Fill it in slowly.</strong> Nobody completes this in one sitting. Start with banking, insurance and the location of original documents, which is what a family needs first, and come back to the rest.</li>
+          <li><strong>Never write live credentials.</strong> No full passwords, no PINs, no card numbers, no CVVs, no OTP details. Record where the information lives (a password manager, a locker, a named person) rather than the information itself.</li>
+          <li><strong>Store it the way you would store a will.</strong> A home safe, a bank locker, or an encrypted file with a passphrase your spouse or executor already knows. A copy sitting in an email inbox is not storage.</li>
+          <li><strong>Tell two people it exists.</strong> A perfectly completed file that nobody can find has no value. Name a spouse, an adult child, or an executor, and tell them where it is and how to open it.</li>
+          <li><strong>Review it once a year.</strong> Also after a marriage, a birth, a death, a property purchase, a change of residency status, or the sale of a business. Log each review on the final page.</li>
+        </ol>
+        <div class="at-note"><p><strong>A word on security.</strong> This file is valuable to your family precisely because it would also be valuable to someone else. Treat it as a map, not a set of keys. Every field in this kit is designed so that a person who finds it cannot transact with it, but a person you have briefed can act on it within a day.</p></div>
+        <div class="at-note"><p><strong>What this is not.</strong> This kit is an organiser, not a legal instrument. It does not transfer assets, it does not override a will, and completing it is not a substitute for a properly drafted will, a trust deed, or up to date nominations. Where this file surfaces a gap, that is the point of it. Bring the gap to your adviser.</p></div>
+        <div class="at-note at-note-how"><p><strong>How this page works.</strong> Your answers are kept only in this browser tab while you work. Download the PDF whenever you stop: it is your printable ATLAS, and it also carries your answers, so choosing it under Continue from my ATLAS PDF picks up exactly where you left off. Use English letters for names and addresses so they print correctly.</p></div>
+      </details>
+
+      <div id="atParts" aria-busy="true"><p class="at-loading">Preparing your ATLAS...</p></div>
+
+      <section class="at-finish" id="atFinish">
+        <p class="at-eyebrow at-eyebrow-dark">Next step</p>
+        <h2 class="at-finish-title">Download it, <em>then store it well</em></h2>
+        <p>Your PDF is made on this device. Store it the way you would store a will, tell two people where it is, and review it once a year.</p>
+        <button type="button" class="at-btn at-btn-gold" data-at-download>Download PDF</button>
+        <p class="at-finish-small">Most families who complete this file finish with three or four blanks they cannot fill and one or two answers they do not like. That is the useful output. Bring the completed file, or the incomplete one, and we will work through it with you: contact@seleqtwealth.in · +91 99981 39596.</p>
+      </section>
+
+      <section class="at-device">
+        <label class="at-keep">
+          <input type="checkbox" id="atKeep" />
+          <span><strong>Keep an unfinished draft on this device</strong> until I clear it. Off by default. Leave it off on a shared or office computer; your answers then disappear when this tab closes.</span>
+        </label>
+        <button type="button" class="at-link at-danger" id="atClear">Clear everything on this page</button>
+      </section>
+    </main>
+  </div>
+
+  <!-- Phone: sections and download always to hand -->
+  <div class="at-dock">
+    <button type="button" class="at-btn at-btn-ghost-dark" id="atNavOpen">Sections</button>
+    <span class="at-progress at-progress-dock" id="atProgressDock"></span>
+    <button type="button" class="at-btn at-btn-gold" data-at-download>Download PDF</button>
+  </div>
+
+  <div class="at-toast" id="atToast" role="status" aria-live="polite" hidden></div>
+
+  <footer class="at-foot">
+    <div class="at-wrap">
+      <p class="at-foot-brand">SELEQT <span>Private wealth, considered from every angle.</span></p>
+      <p>contact@seleqtwealth.in · +91 99981 39596 · 313, Arista Business Space, Ahmedabad, Gujarat 380059</p>
+      <p class="at-fine">This kit is provided for organisational purposes only and does not constitute investment, tax or legal advice. It creates no rights and transfers no assets. Investments in securities markets are subject to market risks. Read all related documents carefully before investing. Past performance is not indicative of future results. Succession and estate planning involves legal considerations and we work in coordination with qualified legal professionals. All material conflicts of interest are disclosed in writing prior to engagement. &copy; 2026 SELEQT Private Wealth. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="atlas/atlas.js"></script>
+</body>
+</html>
