@@ -118,7 +118,6 @@ def build():
             label = uncap(sec["t"])
             part["section"] = re.search(r"\d+", label).group(0)
             part["continued"] = "CONTINUED" in label
-        title_top = min((s["b"].y0 for s in title_spans), default=0)
         title_bottom = max((s["b"].y1 for s in title_spans), default=0)
         if title_spans:
             part["title"] = "".join(s["t"] for s in title_spans).strip()
@@ -137,7 +136,7 @@ def build():
 
         items = []  # (y, x, block) gathered, then ordered top to bottom
 
-        def heading_above(y, x0=None, within=60):
+        def heading_above(y, within=60):
             cands = [s for s in spans if s["font"] == "Poppins-Medium" and spaced_caps(s["t"]) and s["rgb"] == NAVY_TXT
                      and s["b"].y1 <= y + 1 and y - s["b"].y1 < within and not any(inside(s["b"], c) for c in cards)]
             return max(cands, key=lambda s: s["b"].y1) if cands else None
@@ -162,7 +161,6 @@ def build():
         rows_by_y = {}
         for b in navy_boxes:
             rows_by_y.setdefault(round(b.y0), []).append(b)
-        table_lines_used = set()
         for ty, cells in sorted(rows_by_y.items()):
             cells = sorted(cells, key=lambda r: r.x0)
             tx0, tx1, hy1 = cells[0].x0, cells[-1].x1, max(c.y1 for c in cells)
@@ -193,8 +191,6 @@ def build():
             if not rows:
                 continue
             items.append((ty, tx0, {"type": "table", "id": tid, "title": nice(tname) if tname else None, "cols": [c["label"] for c in cols], "rows": rows}))
-            for ri in range(len(ys)):
-                table_lines_used.add(ys[ri])
 
         # ---- Checkboxes: a small white square with a label to its right ----
         checks = []
@@ -261,7 +257,6 @@ def build():
             free = sorted(free, key=lambda r: r.y0)
             items.append((free[0].y0, 0, {"type": "lines", "id": uid("p%s.writing" % num), "page": pi,
                                           "lines": [{"x0": round(r.x0 + 2, 1), "x1": round(r.x1 - 2, 1), "y": round(r.y0 - 4, 1)} for r in free]}))
-        # Headings over tables and checklists are carried by those blocks; others stand alone
         # ---- Callouts: a bold lead and the advice after it ----
         for c in callouts:
             txt = sorted([s for s in spans if inside(s["b"], c, 2)], key=lambda s: (round(s["b"].y0), s["b"].x0))

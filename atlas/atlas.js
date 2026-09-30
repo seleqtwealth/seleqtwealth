@@ -12,8 +12,9 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var SESSION_KEY = 'seleqt_atlas_session', DRAFT_KEY = 'seleqt_atlas_draft', KEEP_KEY = 'seleqt_atlas_keep';
-  var DATA = {}, INDEX = {}, NAV = [], TOTAL = 0, seq = 0, dirty = false, saveTimer = null, SCHEMA = null;
+  var DATA = {}, INDEX = {}, NAV = [], seq = 0, setSeq = 0, dirty = false, saveTimer = null, warmTimer = null, SCHEMA = null;
   var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var FIRST_ROWS = 2; // table rows shown before "Add a row"
 
   // ---- Local storage only; wrapped because private windows can refuse it ----
   function box(kind) { try { return window[kind] || null; } catch (e) { return null; } }
@@ -33,11 +34,13 @@
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
   }
+  // Section titles carry an italic phrase from the printed page; only <em> is let through.
+  function safeTitle(p) { return esc(p.titleHtml || p.title).replace(/&lt;(\/?)em&gt;/g, '<$1em>'); }
   function today() { var d = new Date(); return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
   function niceDate(iso) { var d = new Date(iso); return isNaN(d) ? 'earlier' : d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
   function toast(text) {
     var t = $('atToast'); t.textContent = text; t.hidden = false;
-    clearTimeout(toast.timer); toast.timer = setTimeout(function () { t.hidden = true; }, 6500);
+    clearTimeout(toast.timer); toast.timer = setTimeout(function () { t.hidden = true; }, 7000);
   }
   function msg(text) { var m = $('atResumeMsg'); m.textContent = text; m.hidden = !text; }
 
@@ -48,14 +51,13 @@
     if (/last 4/i.test(l)) return a + ' inputmode="numeric" maxlength="4" data-digits="4" placeholder="Last 4 digits only"';
     if (/^PAN$/.test(l)) return a + ' maxlength="10" autocapitalize="characters" spellcheck="false" data-upper="1"';
     if (/^e-?mail$/i.test(l)) return a + ' inputmode="email" spellcheck="false"';
-    if (/^(mobile|alternate mobile|phone|direct line|branch phone|executor phone)$/i.test(l)) return a + ' inputmode="tel"';
+    if (/^(mobile|alternate mobile|phone|direct line|branch phone)$/i.test(l)) return a + ' inputmode="tel"';
     return a;
   }
 
   function reg(item, kind) {
     var id = 'at' + (++seq);
     INDEX[item.id] = { item: item, kind: kind, el: id };
-    TOTAL++;
     return id;
   }
 
@@ -74,14 +76,16 @@
     if (b.type === 'table') {
       var head = b.cols.map(function (c) { return '<th scope="col">' + esc(c) + '</th>'; }).join('');
       var rows = b.rows.map(function (r, ri) {
-        return '<tr><th scope="row" class="at-rowno">' + (ri + 1) + '</th>' + r.map(function (c, ci) {
+        return '<tr' + (ri >= FIRST_ROWS ? ' hidden' : '') + '><th scope="row" class="at-rowno">' + (ri + 1) + '</th>' + r.map(function (c, ci) {
           var id = reg(c, 'cell'); ids.push(c.id);
           return '<td data-label="' + esc(b.cols[ci]) + '"><input type="text" id="' + id + '" data-key="' + esc(c.id) + '" aria-label="' +
             esc(b.cols[ci] + ', row ' + (ri + 1)) + '"' + attrsFor(b.cols[ci]) + ' /></td>';
         }).join('') + '</tr>';
       }).join('');
       return (b.title ? '<h3 class="at-h3">' + esc(b.title) + '</h3>' : '') +
-        '<div class="at-table-wrap"><table class="at-table"><thead><tr><th class="at-rowno"><span class="at-sr">Row</span></th>' + head + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+        '<div class="at-table-wrap"><table class="at-table" data-table="' + esc(b.id) + '"><thead><tr><th class="at-rowno"><span class="at-sr">Row</span></th>' + head +
+        '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        (b.rows.length > FIRST_ROWS ? '<button type="button" class="at-add" data-addrow="' + esc(b.id) + '"><span class="at-add-plus" aria-hidden="true">+</span> Add a row</button>' : '');
     }
     if (b.type === 'checks') {
       return (b.title ? '<h3 class="at-h3">' + esc(b.title) + '</h3>' : '') + '<ul class="at-checks">' + b.items.map(function (it) {
@@ -97,30 +101,78 @@
     return '';
   }
 
+  // Repeated groups (Account 1 to 4, Loan 1 and 2...) show the first; the rest open one
+  // at a time, so the page starts short. The PDF keeps every slot either way.
+  function baseOf(group) { return /\b\d+\b/.test(group || '') ? group.replace(/\s*\b\d+\b\s*/, ' # ').replace(/\s+/g, ' ').trim() : null; }
+  function nounOf(base) {
+    var n = base.replace(/\s*#\s*/, ' ').replace(/\s+/g, ' ').trim();
+    return /^[A-Z][a-z]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n;
+  }
+  function renderBlocks(blocks, ids) {
+    var out = [], i = 0;
+    while (i < blocks.length) {
+      var b = blocks[i], base = b.type === 'fields' ? baseOf(b.group) : null, run = [b];
+      while (base && i + run.length < blocks.length && blocks[i + run.length].type === 'fields' && baseOf(blocks[i + run.length].group) === base) run.push(blocks[i + run.length]);
+      if (run.length > 1) {
+        var sid = 'set' + (++setSeq);
+        out.push(renderBlock(run[0], ids));
+        run.slice(1).forEach(function (rb) { out.push('<div class="at-extra" data-set="' + sid + '" hidden>' + renderBlock(rb, ids) + '</div>'); });
+        out.push('<button type="button" class="at-add" data-add="' + sid + '"><span class="at-add-plus" aria-hidden="true">+</span> Add another ' + esc(nounOf(base)) + '</button>');
+      } else {
+        out.push(renderBlock(b, ids));
+      }
+      i += run.length;
+    }
+    return out.join('');
+  }
+
   function build(schema) {
     var html = [], navHtml = [];
     schema.parts.forEach(function (p) {
       if (p.kind === 'guide') return; // shown as the Before you begin panel
       var ids = [];
       var head = p.kind === 'cover'
-        ? '<p class="at-sec">Cover</p><h2 class="at-part-title">Whose file <em>this is</em></h2><p class="at-intro">The front page of your ATLAS. Date created and Last updated fill themselves in when you download.</p>'
-        : '<p class="at-sec">Section ' + esc(p.section) + (p.continued ? ' continued' : '') + '</p><h2 class="at-part-title">' + (p.titleHtml || esc(p.title)) + '</h2>' +
+        ? '<p class="at-sec">Cover</p><h2 class="at-part-title">Whose file <em>this is</em></h2><p class="at-intro">The front page of your ATLAS. The dates fill themselves in when you download.</p>'
+        : '<p class="at-sec">Section ' + esc(p.section) + (p.continued ? ' continued' : '') + '</p><h2 class="at-part-title">' + safeTitle(p) + '</h2>' +
           (p.intro ? '<p class="at-intro">' + esc(p.intro) + '</p>' : '');
-      var body = p.blocks.map(function (b) { return renderBlock(b, ids); }).join('');
-      html.push('<section class="at-part" id="' + p.id + '">' + head + body + '</section>');
+      html.push('<section class="at-part" id="' + p.id + '">' + head + renderBlocks(p.blocks, ids) + '</section>');
       NAV.push({ id: p.id, ids: ids });
       navHtml.push('<li class="at-nav-item' + (p.continued ? ' is-sub' : '') + '" data-nav="' + p.id + '"><a href="#' + p.id + '">' +
-        '<span class="at-nav-num">' + (p.kind === 'cover' ? '' : (p.continued ? '' : esc(p.section))) + '</span>' +
-        '<span class="at-nav-title">' + esc(p.kind === 'cover' ? 'Cover' : p.title) + '</span><span class="at-nav-count"></span></a></li>');
+        '<span class="at-nav-num">' + (p.kind === 'cover' || p.continued ? '' : esc(p.section)) + '</span>' +
+        '<span class="at-nav-title">' + esc(p.kind === 'cover' ? 'Cover' : p.title) + '<span class="at-sr at-nav-state"></span></span>' +
+        '<span class="at-nav-dot" aria-hidden="true"></span></a></li>');
     });
     $('atParts').innerHTML = html.join('');
     $('atParts').setAttribute('aria-busy', 'false');
     $('atNavList').innerHTML = navHtml.join('');
     NAV.forEach(function (n) {
       n.li = document.querySelector('[data-nav="' + n.id + '"]');
-      n.count = n.li.querySelector('.at-nav-count');
+      n.state = n.li.querySelector('.at-nav-state');
     });
   }
+
+  function hasData(el) { return [].some.call(el.querySelectorAll('[data-key]'), function (i) { return DATA[i.getAttribute('data-key')]; }); }
+  function hiddenIn(list) { return list.filter(function (x) { return x.hidden; }); }
+  // Open anything that holds an answer (and everything before it), so nothing saved is hidden.
+  function syncDisclosure(collapse) {
+    var sets = {};
+    [].forEach.call(document.querySelectorAll('.at-extra'), function (x) { (sets[x.dataset.set] = sets[x.dataset.set] || []).push(x); });
+    Object.keys(sets).forEach(function (sid) {
+      var list = sets[sid], last = -1;
+      list.forEach(function (x, i) { if (hasData(x)) last = i; });
+      list.forEach(function (x, i) { if (i <= last) x.hidden = false; else if (collapse) x.hidden = true; });
+      var btn = document.querySelector('[data-add="' + sid + '"]');
+      if (btn) btn.hidden = !hiddenIn(list).length;
+    });
+    [].forEach.call(document.querySelectorAll('.at-table[data-table]'), function (t) {
+      var rows = [].slice.call(t.tBodies[0].rows), last = FIRST_ROWS - 1;
+      rows.forEach(function (r, i) { if (hasData(r)) last = Math.max(last, i); });
+      rows.forEach(function (r, i) { if (i <= last) r.hidden = false; else if (collapse) r.hidden = true; });
+      var btn = document.querySelector('[data-addrow="' + t.dataset.table + '"]');
+      if (btn) btn.hidden = !hiddenIn(rows).length;
+    });
+  }
+  function focusFirst(el) { var i = el.querySelector('input, textarea'); if (i) i.focus(); }
 
   function fillForm() {
     Object.keys(INDEX).forEach(function (key) {
@@ -131,16 +183,15 @@
   }
 
   function progress() {
-    var filled = 0;
-    Object.keys(DATA).forEach(function (k) { if (INDEX[k] && DATA[k]) filled++; });
-    $('atProgress').textContent = filled + ' of ' + TOTAL + ' filled';
-    $('atProgressDock').textContent = filled + ' / ' + TOTAL;
+    var started = 0;
     NAV.forEach(function (n) {
       var c = n.ids.filter(function (k) { return DATA[k]; }).length;
-      n.count.textContent = c + '/' + n.ids.length;
       n.li.classList.toggle('is-started', c > 0);
-      n.li.classList.toggle('is-done', c === n.ids.length && c > 0);
+      n.state.textContent = c ? ', started' : '';
+      if (c) started++;
     });
+    $('atProgress').textContent = started + ' of ' + NAV.length + ' sections started';
+    $('atProgressDock').textContent = started + ' of ' + NAV.length + ' started';
   }
 
   function onEdit(e) {
@@ -158,6 +209,8 @@
     dirty = true;
     saveSoon();
     progress();
+    // Fetch the PDF tools quietly once someone starts, so the first download is quick.
+    if (!warmTimer) warmTimer = setTimeout(function () { warm().catch(function () {}); }, 2500);
   }
 
   function fieldByLabel(partId, label, groupRx) {
@@ -176,7 +229,7 @@
   }
 
   // ============ Making the PDF (on this device) ============
-  var loaded = {};
+  var loaded = {}, warmed = null;
   function loadScript(src) {
     if (!loaded[src]) loaded[src] = new Promise(function (ok, bad) {
       var s = document.createElement('script');
@@ -186,6 +239,12 @@
     return loaded[src];
   }
   function bytes(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.arrayBuffer(); }); }
+  function warm() {
+    if (!warmed) warmed = Promise.all([loadScript('vendor/pdf-lib.min.js'), loadScript('vendor/fontkit.umd.min.js')])
+      .then(function () { return Promise.all([bytes('atlas/template.pdf'), bytes('atlas/Poppins-Regular.ttf')]); })
+      .catch(function (e) { warmed = null; throw e; });
+    return warmed;
+  }
 
   function makePdf(tplBuf, fontBuf) {
     var L = window.PDFLib;
@@ -199,8 +258,9 @@
         var widthOf = function (t, s) { return font.widthOfTextAtSize(t, s); };
 
         function clean(s, item) { // characters the font cannot draw become '?', and the field is noted
-          var out = Array.from(String(s).replace(/[\u0000-\u001f]+/g, ' ')).map(function (ch) { return chars.has(ch.codePointAt(0)) ? ch : '?'; }).join('');
-          if (out !== String(s).replace(/[\u0000-\u001f]+/g, ' ') && item && odd.indexOf(item) < 0) odd.push(item);
+          var src = String(s).replace(/[\u0000-\u001f]+/g, ' ');
+          var out = Array.from(src).map(function (ch) { return chars.has(ch.codePointAt(0)) ? ch : '?'; }).join('');
+          if (out !== src && item && odd.indexOf(item) < 0) odd.push(item);
           return out;
         }
         function breakLong(word, w, size) { // a word wider than the space is split by characters
@@ -213,8 +273,7 @@
           var lines = [], cur = '';
           text.split(' ').forEach(function (word) {
             if (!word) return;
-            var pieces = widthOf(word, size) > w ? breakLong(word, w, size) : [word];
-            pieces.forEach(function (pc) {
+            (widthOf(word, size) > w ? breakLong(word, w, size) : [word]).forEach(function (pc) {
               var t = cur ? cur + ' ' + pc : pc;
               if (widthOf(t, size) <= w) cur = t; else { if (cur) lines.push(cur); cur = pc; }
             });
@@ -319,7 +378,7 @@
   }
   function busy(on) {
     [].forEach.call(document.querySelectorAll('[data-at-download]'), function (b) {
-      if (on) { b.dataset.label = b.textContent; b.textContent = 'Making your PDF...'; } else if (b.dataset.label) b.textContent = b.dataset.label;
+      if (on) { b.dataset.label = b.textContent; b.textContent = 'Making PDF...'; } else if (b.dataset.label) b.textContent = b.dataset.label;
       b.disabled = on;
     });
   }
@@ -330,9 +389,8 @@
     setValue('cover.last-updated', today());
     saveSoon(); progress();
     busy(true);
-    Promise.all([loadScript('vendor/pdf-lib.min.js'), loadScript('vendor/fontkit.umd.min.js')])
-      .then(function () { return Promise.all([bytes('atlas/template.pdf'), bytes('atlas/Poppins-Regular.ttf')]); })
-      .then(function (b) { return makePdf(b[0], b[1]); })
+    warm()
+      .then(function (b) { return makePdf(b[0].slice(0), b[1].slice(0)); }) // copies, so the cached files stay untouched
       .then(function (res) {
         saveFile(res.bytes, fileName());
         dirty = false;
@@ -364,7 +422,7 @@
       if (Object.keys(DATA).length && !window.confirm('Replace the answers on this page with the ones in that PDF?')) { msg(''); return; }
       DATA = {};
       Object.keys(saved.data).forEach(function (k) { if (INDEX[k] && saved.data[k]) DATA[k] = saved.data[k]; });
-      fillForm(); progress(); saveSoon(); dirty = false;
+      fillForm(); syncDisclosure(true); progress(); saveSoon(); dirty = false;
       msg('Loaded your ATLAS saved on ' + niceDate(saved.saved) + '. Pick up where you left off, then download a fresh copy.');
       $('atStart').scrollIntoView({ behavior: 'smooth' });
     }).catch(function (e) {
@@ -389,10 +447,24 @@
       if (rm && !DATA[rm]) DATA[rm] = adv;
     }
     fillForm();
+    syncDisclosure();
     progress();
 
     $('atParts').addEventListener('input', onEdit);
     $('atParts').addEventListener('change', onEdit);
+    $('atParts').addEventListener('click', function (e) {
+      var add = e.target.closest('[data-add]'), addRow = e.target.closest('[data-addrow]'), next, rest;
+      if (add) {
+        rest = [].slice.call(document.querySelectorAll('.at-extra[data-set="' + add.dataset.add + '"]'));
+        next = hiddenIn(rest)[0];
+      } else if (addRow) {
+        var t = document.querySelector('.at-table[data-table="' + addRow.dataset.addrow + '"]');
+        rest = t ? [].slice.call(t.tBodies[0].rows) : [];
+        next = hiddenIn(rest)[0];
+      } else return;
+      if (next) { next.hidden = false; focusFirst(next); }
+      if (!hiddenIn(rest).length) (add || addRow).hidden = true;
+    });
     [].forEach.call(document.querySelectorAll('[data-at-download]'), function (b) { b.addEventListener('click', download); });
 
     // Section highlighting while scrolling
@@ -407,11 +479,20 @@
     }
   }
 
+  // Inside apps' built-in browsers (Instagram, Facebook, Android web views) downloads often fail.
+  if (/FBAN|FBAV|Instagram|Line\/|; wv\)/i.test(navigator.userAgent || '')) $('atInApp').hidden = false;
+
   // Sections panel on phones
-  function navOpen(on) { document.body.classList.toggle('at-nav-open', on); }
+  function navOpen(on, keepFocus) {
+    document.body.classList.toggle('at-nav-open', on);
+    $('atNavOpen').setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (keepFocus) return;
+    if (on) $('atNavClose').focus(); else $('atNavOpen').focus();
+  }
   $('atNavOpen').addEventListener('click', function () { navOpen(true); });
   $('atNavClose').addEventListener('click', function () { navOpen(false); });
-  $('atNavList').addEventListener('click', function (e) { if (e.target.closest('a')) navOpen(false); });
+  $('atNavList').addEventListener('click', function (e) { if (e.target.closest('a') && document.body.classList.contains('at-nav-open')) navOpen(false, true); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && document.body.classList.contains('at-nav-open')) navOpen(false); });
 
   $('atResume').addEventListener('change', function () { var f = this.files && this.files[0]; if (f) resume(f); this.value = ''; });
 
@@ -434,7 +515,7 @@
     if (!window.confirm('Clear every answer on this page? Download your PDF first if you want to keep them.')) return;
     DATA = {};
     drop('sessionStorage', SESSION_KEY); drop('localStorage', DRAFT_KEY);
-    fillForm(); progress(); dirty = false; msg('');
+    fillForm(); syncDisclosure(true); progress(); dirty = false; msg('');
     toast('Cleared. Nothing from this page is kept on this device.');
   });
 
