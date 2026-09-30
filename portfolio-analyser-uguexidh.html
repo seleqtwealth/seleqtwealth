@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a1a35" />
+  <title>Portfolio Second Opinion · SELEQT</title>
+  <meta name="description" content="A free portfolio analyser. Drop in your NSDL, CDSL, or CAMS statement and see your whole portfolio in one read: shares, mutual funds, bonds, and gold. Overlap, concentration, cost, and tax, read entirely in your browser. Your statement never leaves your device." />
+  <!-- Unlisted: reached only by its shared link. Not linked from the site, not in the
+       sitemap, and kept out of search results. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SELEQT" />
+  <meta property="og:title" content="Portfolio Second Opinion · SELEQT" />
+  <meta property="og:description" content="A free portfolio analyser: your whole portfolio from one NSDL or CDSL statement, with overlap, concentration, cost, and tax. Read entirely in your browser, nothing is uploaded." />
+  <meta property="og:url" content="https://seleqtwealth.in/portfolio-analyser-uguexidh" />
+  <meta property="og:image" content="https://seleqtwealth.in/og-image.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="SELEQT — Private Wealth, considered from every angle." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Portfolio Second Opinion · SELEQT" />
+  <meta name="twitter:description" content="A free portfolio analyser for your NSDL or CDSL statement. Read entirely in your browser." />
+  <meta name="twitter:image" content="https://seleqtwealth.in/og-image.jpg" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="second-opinion.css" />
+  <link rel="preload" href="/fonts/outfit-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/cormorant-garamond-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Page-transition pre-paint: applies entering-curtain class if the user
+       just clicked through from another page on the site. Cleared by main.js. -->
+  <script>
+    (function() {
+      if (sessionStorage.getItem('seleqt_transitioning')) {
+        document.documentElement.classList.add('is-page-entering');
+        sessionStorage.removeItem('seleqt_transitioning');
+      }
+    })();
+  </script>
+  <!-- Coder-theme pre-paint (site-wide, remembered) -->
+  <script>(function(){try{var d=new Date(),iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(iso>"2026-09-11"){localStorage.removeItem("seleqt_theme");}else if(localStorage.getItem("seleqt_theme")==="coder"){document.documentElement.classList.add("theme-coder");}}catch(e){}})();</script>
+</head>
+<body>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="logo">SELEQT</a>
+      <div class="nav-links">
+        <a href="/#services">Services</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/about">About</a>
+        <a href="/#contact" class="nav-cta">Speak With Us</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/#services">Services</a>
+      <a href="/blogs">Blogs</a>
+      <a href="/about">About</a>
+      <a href="/#contact">Speak With Us</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="sub-hero">
+    <div class="container sub-hero-content">
+      <p class="section-tag">Free portfolio analyser</p>
+      <h1>Portfolio <em>Second Opinion</em></h1>
+      <p class="lead">Drop in your NSDL or CDSL statement and see your whole portfolio in one read: shares, mutual funds, bonds, and gold. What you actually own once the funds are looked through, where the same bet hides more than once, what it all costs, and what it means at tax time.</p>
+      <div class="so-hero-actions">
+        <a href="#soGet" class="btn-primary">Analyse my portfolio</a>
+        <button type="button" class="so-hero-sample" data-so-sample>Or see a sample report first</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL -->
+  <section class="sub-content" id="so-tool">
+    <div class="container">
+      <div class="so-inner">
+
+        <!-- ============ STAGE 1: UPLOAD ============ -->
+        <div class="so-stage" id="soUpload">
+
+          <!-- STEP 1: getting the statement. The depository statement (NSDL or CDSL) is the whole
+               portfolio and is already in most investors' inbox, so it leads; CAMS is the route for
+               investors without a demat account. Facts from the NSDL, CDSL, and CAMS sites. -->
+          <div class="so-get" id="soGet">
+            <div class="so-stephead">
+              <span class="so-stepbadge" aria-hidden="true">1</span>
+              <div>
+                <h2 class="so-steptitle">Get your statement</h2>
+                <p class="so-stepsub">One statement, your whole portfolio. Free, and no login. <a class="so-help-link" href="#soStep2">Already have it? Skip to step 2</a></p>
+              </div>
+            </div>
+
+            <div class="so-routes">
+              <!-- Route A: anyone with a demat account -->
+              <section class="so-route is-main" aria-labelledby="soRouteA">
+                <p class="so-route-tag">Recommended for most investors</p>
+                <h3 class="so-route-title" id="soRouteA">Have a demat account? Use your NSDL or CDSL statement</h3>
+                <p class="so-route-lead">If you have ever bought shares through a broker or a trading app, you have one. NSDL or CDSL already emails you this statement, and it covers your shares, bonds, gold bonds, and ETFs, and your mutual funds too, across every demat account and fund house linked to your PAN.</p>
+                <div class="so-covers" aria-label="What it covers">
+                  <span>Shares</span><span>Mutual funds</span><span>ETFs</span><span>Bonds</span><span>Gold bonds</span>
+                </div>
+                <ol class="so-steps">
+                  <li>
+                    <strong>Search your email</strong>
+                    <span>Look for mail from NSDL or CDSL with your Consolidated Account Statement (CAS) attached. It comes every month you transact, and every April and October otherwise.</span>
+                  </li>
+                  <li>
+                    <strong>Download the latest PDF</strong>
+                    <span>On a phone, save the attachment to your files first.</span>
+                  </li>
+                  <li>
+                    <strong>Drop it into step 2</strong>
+                    <span>The password is your PAN in capitals, for example ABCDE1234F.</span>
+                  </li>
+                </ol>
+
+                <div class="so-findit">
+                  <p class="so-findit-title">Cannot find it?</p>
+                  <dl class="so-findit-list">
+                    <div>
+                      <dt>NSDL or CDSL?</dt>
+                      <dd>Check your demat account number in your broker's app. Sixteen digits means CDSL, and starting with IN means NSDL. If you have accounts at both, the statement comes from the older one and covers both.</dd>
+                    </div>
+                    <div>
+                      <dt>CDSL</dt>
+                      <dd>Download any past statement from the CDSL site with your PAN, your 16 digit demat account number (BO ID), and your date of birth.
+                        <a class="btn-primary so-get-btn" href="https://www.cdslindia.com/CAS/LoginCAS.aspx" target="_blank" rel="noopener">Open the CDSL page<span class="so-sr"> (opens in a new tab)</span></a></dd>
+                    </div>
+                    <div>
+                      <dt>NSDL</dt>
+                      <dd>Ask your broker for a copy of your latest statement, or call the NSDL CAS helpdesk on <a class="so-help-link" href="tel:+912248867000">022 4886 7000</a>.</dd>
+                    </div>
+                  </dl>
+                </div>
+              </section>
+
+              <!-- Route B: mutual funds only, no demat account -->
+              <section class="so-route" aria-labelledby="soRouteB">
+                <p class="so-route-tag">No demat account</p>
+                <h3 class="so-route-title" id="soRouteB">Only mutual funds? Request a CAMS statement</h3>
+                <p class="so-route-lead">One request covers every fund serviced by CAMS and KFintech, and it arrives by email in a few minutes.</p>
+                <ol class="so-steps">
+                  <li>
+                    <strong>Open the CAMS page</strong>
+                    <a class="so-ghost-btn so-get-btn" href="https://www.camsonline.com/Investors/Statements/Consolidated-Account-Statement" target="_blank" rel="noopener">Open the CAMS page<span class="so-sr"> (opens in a new tab)</span></a>
+                  </li>
+                  <li>
+                    <strong>Choose Detailed</strong>
+                    <span>The form opens on Summary, which this page cannot read. Leave the period and folio options as they are.</span>
+                  </li>
+                  <li>
+                    <strong>Enter your email, create a password</strong>
+                    <span>Use the email on your mutual funds. PAN is optional. The password needs 8 to 15 characters, starting with a letter, with a capital, a number, and one of @ # $ * _</span>
+                  </li>
+                  <li>
+                    <strong>Drop it into step 2</strong>
+                    <span>Type the password you created.</span>
+                  </li>
+                </ol>
+
+                <details class="so-form-more">
+                  <summary>See the CAMS form filled in</summary>
+                  <div class="so-form" role="group" aria-label="The CAMS form, filled in">
+                    <dl class="so-form-list">
+                      <div class="so-form-row is-key">
+                        <dt>Statement type</dt>
+                        <dd><span class="so-radio" aria-hidden="true"></span><span>Detailed <small>Includes transaction listing</small></span><em class="so-form-flag">Change this</em></dd>
+                      </div>
+                      <div class="so-form-row">
+                        <dt>Period</dt>
+                        <dd><span class="so-radio" aria-hidden="true"></span><span>Current Financial Year <small>Already selected</small></span></dd>
+                      </div>
+                      <div class="so-form-row">
+                        <dt>Folio listing</dt>
+                        <dd><span class="so-radio" aria-hidden="true"></span><span>Without zero balance folios <small>Already selected</small></span></dd>
+                      </div>
+                      <div class="so-form-row">
+                        <dt>Email</dt>
+                        <dd><span>The email registered on your mutual funds</span></dd>
+                      </div>
+                      <div class="so-form-row">
+                        <dt>PAN</dt>
+                        <dd><span>Optional, you can leave it blank</span></dd>
+                      </div>
+                      <div class="so-form-row is-key">
+                        <dt>Password</dt>
+                        <dd><span>Create one and note it down, it opens the PDF later</span></dd>
+                      </div>
+                    </dl>
+                  </div>
+                </details>
+              </section>
+            </div>
+
+            <!-- For first timers: the question most people have before they start -->
+            <div class="so-first">
+              <h3 class="so-first-title">Never logged in anywhere?</h3>
+              <p class="so-first-lead"><strong>You do not need to.</strong> NSDL or CDSL emails your statement automatically, and there is nothing to sign up for. The CDSL download page asks only for your PAN, demat account number, and date of birth.</p>
+              <ul class="so-first-list">
+                <li><strong>Which email gets it?</strong> The one registered with your broker for your demat account. For a CAMS statement, it is the email on your mutual funds.</li>
+                <li><strong>Email changed, or never registered one?</strong> Update it with your broker for the demat statement, or through CAMS for mutual funds. <a class="so-help-link" href="/#contact">We can help with this too.</a></li>
+                <li><strong>Hold funds and shares in different places?</strong> The NSDL or CDSL statement brings them together on your PAN, so one file is enough.</li>
+                <li><strong>Still stuck?</strong> <button type="button" class="so-help-link" data-so-manual>Enter your holdings by hand</button> instead. It takes a few minutes.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- STEP 2: reading it -->
+          <div class="so-step2" id="soStep2">
+            <div class="so-stephead">
+              <span class="so-stepbadge" aria-hidden="true">2</span>
+              <div>
+                <h2 class="so-steptitle">Read it here, on your device</h2>
+              </div>
+            </div>
+
+            <!-- The privacy promise, stated plainly, next to the control it applies to. -->
+            <div class="so-privacy" role="note">
+              <div class="so-privacy-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+              </div>
+              <div class="so-privacy-text">
+                <strong>Your statement never leaves this device.</strong>
+                It is read entirely inside your own browser. Nothing is uploaded, no copy is sent to SELEQT or anyone else, and the analysis is discarded the moment you close this tab. You can confirm it yourself: open your browser's network tab and watch, no part of the file is transmitted.
+              </div>
+            </div>
+
+            <!-- Drop zone / file picker -->
+            <label class="so-drop" id="soDrop" for="soFile">
+              <!-- Visually hidden, not display:none, so keyboard users can reach it -->
+              <input type="file" id="soFile" class="so-file-input" accept="application/pdf,.pdf" />
+              <div class="so-drop-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              </div>
+              <div class="so-drop-title">Drop your statement here, or choose a file</div>
+              <div class="so-drop-sub">Your NSDL or CDSL statement for the whole portfolio, or a CAMS statement for mutual funds only. It is a PDF.</div>
+            </label>
+            <p class="so-sample-line">No statement handy? <button type="button" class="so-help-link" data-so-sample>See a sample report</button> built from an example portfolio.</p>
+
+            <!-- Password prompt (revealed only when the PDF is encrypted) -->
+            <div class="so-pass" id="soPass" hidden>
+              <label class="so-pass-label" for="soPassInput">This statement is password protected</label>
+              <p class="so-pass-help">For an NSDL or CDSL statement, it is your PAN in capitals (for example ABCDE1234F). For a CAMS statement, it is the password you created on the request form, exactly as you typed it. It is used here on your device only, and never transmitted.</p>
+              <div class="so-pass-row">
+                <input type="text" id="soPassInput" class="so-pass-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Statement password" />
+                <button type="button" class="btn-primary so-pass-btn" id="soPassBtn">Unlock</button>
+              </div>
+              <p class="so-pass-error" id="soPassError" hidden></p>
+            </div>
+
+            <!-- Working / status -->
+            <div class="so-status" id="soStatus" hidden>
+              <span class="so-spinner" aria-hidden="true"></span>
+              <span class="so-status-text" id="soStatusText">Reading your statement on this device...</span>
+            </div>
+
+            <!-- Fallbacks and help -->
+            <div class="so-help">
+              <button type="button" class="so-help-link" id="soManualLink">Enter holdings by hand instead</button>
+              <span class="so-help-dot">·</span>
+              <a class="so-help-link" href="#so-how">Password or statement questions</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STAGE 2: MANUAL ENTRY FALLBACK ============ -->
+        <div class="so-stage" id="soManual" hidden>
+          <h2 class="so-section-title">Enter your holdings</h2>
+          <!-- Shown only when a statement was loaded but no holdings could be read from it -->
+          <p class="so-note so-manual-why" id="soManualWhy" hidden>We could not find the holdings in that statement. An NSDL or CDSL statement reads best, as does a Detailed CAMS statement (a CAMS Summary does not read here). <button type="button" class="so-help-link" id="soManualGet">See how to get one</button>, or add your holdings below.</p>
+          <p class="so-note">Add each holding below. Start typing a fund or company name and pick it from the list, or paste its ISIN, then enter what it is worth today. Everything here also stays on your device.</p>
+          <div class="so-manual-rows" id="soManualRows"></div>
+          <p class="so-manual-note" id="soManualNote" role="status" hidden></p>
+          <div class="so-manual-actions">
+            <button type="button" class="so-ghost-btn" id="soManualAdd">+ Add another holding</button>
+            <button type="button" class="btn-primary" id="soManualRun">Analyse these holdings</button>
+          </div>
+          <button type="button" class="so-help-link" id="soManualBack">Back to upload</button>
+        </div>
+
+        <!-- ============ STAGE 3: REPORT (built by second-opinion.js) ============ -->
+        <div class="so-stage" id="soReport" hidden>
+          <div class="so-report-head">
+            <p class="so-eyebrow">Your second opinion</p>
+            <h2 class="so-report-title" id="soReportTitle">A read on your portfolio</h2>
+            <p class="so-report-sub" id="soReportSub"></p>
+          </div>
+
+          <!-- Analysis findings are rendered here by second-opinion.js -->
+          <div id="soReportBody"></div>
+
+          <!-- Lead capture -->
+          <div class="so-lead" id="soLead">
+            <div class="so-lead-head">
+              <h3>Want this looked at properly?</h3>
+              <p>Leave your details and a SELEQT adviser will get in touch to set up a focused thirty minute review of what this surfaced. No pitch, no obligation. To keep a copy of the report itself, use Save or print below.</p>
+            </div>
+            <form class="so-lead-form" id="soLeadForm" action="https://api.web3forms.com/submit" method="POST">
+              <!-- Web3Forms: same access key as the site contact form, distinct subject. -->
+              <input type="hidden" name="access_key" value="cd27fa7f-b356-4eba-859d-079f15cd3f40">
+              <input type="hidden" name="subject" value="Portfolio Second Opinion request from seleqtwealth.in">
+              <input type="hidden" name="from_name" value="SELEQT Second Opinion">
+              <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+              <!-- Portfolio summary, filled by JS only if the opt-in box is ticked. -->
+              <input type="hidden" name="portfolio_summary" id="soLeadSummary" value="">
+              <div class="so-lead-grid">
+                <label class="so-field"><span>Name</span><input type="text" name="name" required autocomplete="name" /></label>
+                <label class="so-field"><span>Email</span><input type="email" name="email" required autocomplete="email" /></label>
+                <label class="so-field"><span>Phone</span><input type="tel" name="phone" required autocomplete="tel" /></label>
+              </div>
+              <label class="so-consent" id="soConsentRow">
+                <input type="checkbox" id="soConsent" name="consent_share" value="yes" />
+                <span>Share my portfolio summary with SELEQT so the review is informed: the totals, allocation, and findings shown above, never the statement itself. Leave it unticked and we will see only your contact details.</span>
+              </label>
+              <div class="so-lead-actions">
+                <button type="submit" class="btn-primary" id="soLeadSubmit">Request my review</button>
+              </div>
+              <p class="so-lead-fine">We use these details only to contact you about this review.</p>
+              <p class="so-lead-msg" id="soLeadMsg" hidden></p>
+            </form>
+          </div>
+
+          <div class="so-report-foot">
+            <button type="button" class="so-ghost-btn" id="soPrint">Save or print this report</button>
+            <button type="button" class="so-help-link" id="soRestart">Read a different statement</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO GET YOUR CAS -->
+  <section class="faq-section" id="so-how">
+    <div class="container faq-container">
+      <div class="faq-head">
+        <p class="faq-eyebrow">Getting your statement</p>
+        <h2 class="faq-heading">Common <em>questions</em></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Which statement should I use?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>If you have a demat account, use the one NSDL or CDSL emails you. It is the whole portfolio in one file: shares, bonds, gold bonds, ETFs, and your mutual funds, across every demat account and fund house linked to your PAN. If you only hold mutual funds and have no demat account, request a Detailed statement from CAMS instead.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Do I need to log in anywhere?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>No. NSDL or CDSL emails the statement to you every month you transact, and every April and October otherwise. To download a past CDSL statement, the <a href="https://www.cdslindia.com/CAS/LoginCAS.aspx" target="_blank" rel="noopener">CDSL page</a> asks only for your PAN, your 16 digit demat account number, and your date of birth. The <a href="https://www.camsonline.com/Investors/Statements/Consolidated-Account-Statement" target="_blank" rel="noopener">CAMS page</a> is a request form, not a sign in.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Is my account with NSDL or CDSL?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Look at your demat account number in your broker&#39;s app. A 16 digit number means CDSL, and one starting with IN means NSDL. If you have accounts at both, the statement comes from the depository where you opened your first account, and it covers both.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>The PDF will not open with my password</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>For an NSDL or CDSL statement, the password is the PAN of the first holder, in capitals. For a CAMS statement, it is the password you created on the request form, exactly as typed. Lost the CAMS password? Simply request the statement again with a new one.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Some of my holdings are missing</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>The NSDL or CDSL statement is matched on PAN, so check that every account and folio carries the same PAN, in the same holder order. A CAMS statement is matched on email instead, and covers only the folios registered to the email you entered. Holdings that sit outside the securities market, such as fixed deposits, PPF, property, or insurance, are not in any of these statements.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Why Detailed and not Summary on CAMS?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>This page is built around the layout of the Detailed statement, which lists every fund with its ISIN, units, cost, and market value. The Summary version is laid out differently and does not read reliably here. The CAMS form opens on Summary, so switch it to Detailed before you submit.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span>Is my statement really not uploaded?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Correct. The reading happens with code running inside your browser, on your device. You can verify it: open your browser's developer tools, watch the network tab, and load your statement. No request carries any part of the file. Nothing is sent anywhere unless you fill in the form at the end and tick the box to share your summary.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="logo">SELEQT</a>
+          <p>Private wealth, considered from every angle.</p>
+        </div>
+        <div class="footer-col">
+          <h2>Practice</h2>
+          <a href="/investments">Investments</a>
+          <a href="/taxation">Taxation</a>
+          <a href="/insurance">Insurance</a>
+          <a href="/succession">Succession Planning</a>
+        </div>
+        <div class="footer-col">
+          <h2>Firm</h2>
+          <a href="/about">About</a>
+          <a href="/blogs">Blogs</a>
+          <a href="/#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h2>Reach</h2>
+          <span>contact@seleqtwealth.in</span>
+          <span>+91 99981 39596</span>
+          <span>313, Arista Business Space, Ahmedabad, Gujarat, 380059</span>
+        </div>
+      </div>
+
+      <div class="footer-wordmark">SELEQT</div>
+
+      <div class="footer-bottom">
+        <p>&copy; <span class="footer-year">2026</span> SELEQT Private Wealth. All rights reserved.</p>
+        <p class="disclaimer">
+          This tool provides general information only, generated from the statement you supply. It is not investment, tax, or legal advice, and it is not a recommendation to buy, hold, or sell any security. Figures may rest on stated assumptions and on data that updates over time. Investments in securities markets are subject to market risks. Read all related documents carefully before investing. Past performance is not indicative of future results. All material conflicts of interest are disclosed in writing prior to engagement.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Self-hosted pdf.js (no third-party script on a page that reads financial statements) -->
+  <script src="vendor/pdf.min.js"></script>
+  <script src="second-opinion.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

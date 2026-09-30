@@ -1,0 +1,6 @@
+# Build tooling and local material: never served from the site.
+scripts/
+_castest/
+_local/
+brand/
+.claude/

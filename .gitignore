@@ -9,3 +9,10 @@
 # Temp
 *.swp
 *.tmp
+_castest/
+
+# fund-data build download cache
+scripts/.cache/
+
+# local-only launch material (site links for a later public launch)
+_local/
