@@ -163,7 +163,7 @@
     "date_display": "7 October 2026",
     "read": 5,
     "excerpt": "There is a number that pulls investors in like nothing else: the yield. A bond or NCD advertising 12% next to a bank FD at 7% looks like free money, and every year some investors chase that gap straight into a...",
-    "published": false,
+    "published": true,
     "listing_card": "        <article class=\"insight-card insight-card--featured reveal\">\n          <div class=\"insight-card-meta\">\n            <span class=\"insight-category\">Investments</span>\n            <span class=\"insight-meta-dot\">·</span>\n            <time datetime=\"2026-10-07\">7 October 2026</time>\n            <span class=\"insight-meta-dot\">·</span>\n            <span class=\"insight-read-time\">5 min read</span>\n          </div>\n          <h2 class=\"insight-title\">\n            <a href=\"/blogs/higher-yield-is-not-higher-return\">Higher Yield Is Not Higher Return: <em>How to Invest in Bonds in India Without Getting Burned</em></a>\n          </h2>\n          <p class=\"insight-excerpt\">There is a number that pulls investors in like nothing else: the yield. A bond or NCD advertising 12% next to a bank FD at 7% looks like free money, and every year some investors chase that gap straight into a...</p>\n          <a href=\"/blogs/higher-yield-is-not-higher-return\" class=\"insight-cta\">Read the piece <span class=\"insight-cta-arrow\">&rarr;</span></a>\n        </article>\n",
     "sitemap_url": "  <url>\n    <loc>https://seleqtwealth.in/blogs/higher-yield-is-not-higher-return</loc>\n    <lastmod>2026-10-07</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n"
   },
