@@ -21,15 +21,16 @@ const scores = {
     G: rec({ n: 'Steady Corporate Bond Fund', cat: 'corporate_bond', catLabel: 'Corporate Bond', score: 60, cons: 0.7, beat: 34, margin: 0.3, bsrc: 'category_peers', bvia: 'median of 20 direct-plan corporate bond funds', amc: 'Steady Mutual Fund' }),
     I1: rec({ n: 'Uno Nifty 50 Index Fund', cat: 'index', catLabel: 'Index Fund', score: 70, isIndex: true, indexGroup: 'nifty 50', ter: 0.2, td: -0.1, bsrc: 'index_peers', bvia: '6 direct index funds on the same index', amc: 'Uno Mutual Fund' }),
     E: rec(Object.assign({ n: 'Echo Small Cap Fund', cat: 'small_cap', catLabel: 'Small Cap', score: 75, cons: 0.8, beat: 39, margin: 3.0, amc: 'Echo Mutual Fund' }, P, { bname: 'Nifty Smallcap 250' })),
+    T: rec(Object.assign({ n: 'Tango ELSS Tax Saver Fund', cat: 'elss', catLabel: 'ELSS', score: 80, cons: 0.85, beat: 42, margin: 2.0, amc: 'Tango Mutual Fund' }, P, { bname: 'Nifty 500' })),
     FOC1: rec(Object.assign({ n: 'Fox Flexi Cap Fund', cat: 'flexi_cap', catLabel: 'Flexi Cap', score: 90, cons: 0.95, beat: 47, margin: 3.0, amc: 'Fox Mutual Fund' }, P))
   },
-  sib: { A_REG: 'A', G_REG: 'G' },
-  cats: { large_cap: { median: 55 }, flexi_cap: { median: 55 }, focused: { median: 55 }, mid_cap: { median: 50 }, corporate_bond: { median: 50 }, index: { median: 50 }, small_cap: { median: 50 } },
+  sib: { A_REG: 'A', G_REG: 'G', T_REG: 'T' },
+  cats: { large_cap: { median: 55 }, flexi_cap: { median: 55 }, focused: { median: 55 }, mid_cap: { median: 50 }, corporate_bond: { median: 50 }, index: { median: 50 }, small_cap: { median: 50 }, elss: { median: 50 } },
   picks: { large_cap: ['A', 'B'], flexi_cap: ['FOC1', 'C'], focused: ['FOC1'], mid_cap: ['W'], small_cap: ['E'], corporate_bond: ['G'], short_duration: [], liquid: [], money_market: [], aggressive_hybrid: [], balanced_advantage: [], multi_asset: [] },
   cheapestIndex: {}, gf2018: {}
 };
 const H = { i: { C: 0, D: 1 }, f: [[null, 98, [[0, 30], [1, 25], [2, 20]]], [null, 97, [[0, 28], [1, 24], [2, 20], [3, 5]]]], s: [] };
-const schemes = { A_REG: { plan: 'regular', ter: 1.6 }, G_REG: { plan: 'regular', ter: 0.9 } };
+const schemes = { A_REG: { plan: 'regular', ter: 1.6 }, G_REG: { plan: 'regular', ter: 0.9 }, T_REG: { plan: 'regular', ter: 2.0 } };
 const moderate = { age: 1, horizon: 2, goal: 2, income: 1, fall: 1, exp: 2, slab: 6, booked: 0 };
 const today = '2026-10-10';
 const lot = (d, units, amt) => ({ d, units, amt, price: amt / units, kind: units > 0 ? 'buy' : 'redeem' });
@@ -127,6 +128,33 @@ test('statement older than 30 days is flagged stale', () => {
   const h = { isin: 'C', name: 'Gamma Flexi Cap Fund', type: 'mf', value: 300000, units: 2000, cost: 200000, txns: [] };
   assert.strictEqual(build([h], { parsed: { source: 'cams', period: { from: '2018-01-01', to: '2026-08-01' }, holdings: [h] } }).stale, true);
   assert.strictEqual(build([h]).stale, false);
+});
+
+test('ELSS: units inside the three-year lock-in wait until they are free, one step a quarter', () => {
+  const h = { isin: 'T_REG', name: 'Tango ELSS', type: 'mf', value: 300000, units: 3000, cost: 200000,
+    txns: [lot('2022-01-10', 1000, 50000), lot('2024-05-15', 1000, 70000), lot('2024-08-20', 1000, 80000)] };
+  const p = build([h]);
+  const now = p.stages.now.find((s) => /Tango/.test(s.name)), after = p.stages.after.filter((s) => /Tango/.test(s.name));
+  assert.ok(now && Math.abs(now.units - 1000) < 1e-6, 'only the free lot now: ' + JSON.stringify(now));
+  assert.deepStrictEqual(after.map((s) => s.date), ['2027-05-15', '2027-08-20']);
+  assert.ok(/locked in for three years/.test(after[0].why));
+  assert.ok(!p.stages.next.find((s) => /Tango/.test(s.name)), 'no locked units in the next-year step');
+});
+
+test('first in, first out: newer units never go before older units held over to the next year', () => {
+  const h = { isin: 'A_REG', name: 'Alpha Reg', plan: 'regular', type: 'mf', value: 900000, units: 9000, cost: 540000, nav: 100,
+    txns: [lot('2019-05-01', 3000, 200000), lot('2020-05-01', 3000, 240000), lot('2026-01-15', 3000, 100000)] };
+  const p = build([h]);
+  const next = p.stages.next.find((s) => /Alpha/.test(s.name)), after = p.stages.after.find((s) => /Alpha/.test(s.name));
+  assert.ok(next && after, 'expected next-year and later steps');
+  assert.strictEqual(after.date, next.date); assert.ok(/sold first/.test(after.why), after.why);
+});
+
+test('missed gains: no yearly rate for purchases under a year old', () => {
+  const h = { isin: 'A', name: 'Alpha', type: 'mf', value: 10500, units: 1000, cost: 10000, txns: [lot('2026-06-01', 1000, 10000)] };
+  const px = { PX: { n: 'Axis Nifty 100 Index Fund', index: 'Nifty 100', d0: '2026-01-01', nav: new Array(400).fill(10) } };
+  const m = build([h], { proxyNavs: px }).missed.find((r) => r.name === 'Alpha Large Cap Fund');
+  assert.ok(m && !m.skip && m.months === 4 && m.xirrFund == null, JSON.stringify(m));
 });
 
 console.log('\n' + passed + ' fixture tests passed');

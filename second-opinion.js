@@ -170,7 +170,9 @@
   // CAMS / KFintech mutual fund CAS. pdf.js spaces out glyph runs, so the ISIN
   // renders as "INF 179 KA 1 RQ 7"; reconstruct it. Value labels stay intact.
   function parseCAMS(text) {
-    var holdings = [], re = /ISIN\s*:\s*((?:[A-Z0-9]\s*){11}[A-Z0-9])\s*\(/g, m, marks = [];
+    // The registrar label can land inside a wrapped ISIN ("ISIN : INF Registrar : CAMS / 109 K 01837").
+    text = text.replace(/[ \t]*Registrar\s*:\s*(?:CAMS|KFINTECH|KFin\s*Technologies|Karvy)\b/gi, '');
+    var holdings = [], re = /ISIN\s*:\s*((?:[A-Z0-9]\s*){11}[A-Z0-9])(?=\s*\(|[ \t]+Registrar|[ \t]*(?:\n|$))/g, m, marks = [];
     while ((m = re.exec(text))) {
       var isin = m[1].replace(/\s+/g, '');
       if (!/^IN[EF][0-9A-Z]{9}$/.test(isin)) continue;
@@ -228,9 +230,10 @@
   // A transaction line: date, description, amount, units, price, [balance]. Redemptions and
   // switch-outs print in brackets. Stamp duty and STT lines carry a single figure and are skipped.
   function camsTxns(block) {
-    var out = [];
+    var out = [], prev = '';
     block.split('\n').forEach(function (line) {
-      var m = line.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(.*)$/);
+      var m = line.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(.*)$/), above = prev;
+      prev = line;
       if (!m || /\*\*\*/.test(m[2])) return;
       var toks = m[2].match(/\(?-?[\d,]+\.\d+\)?/g) || [];
       if (toks.length < 3) return;
@@ -244,6 +247,8 @@
         if (!(price > 0) || Math.abs(Math.abs(amt) - Math.abs(units) * price) > Math.max(2, Math.abs(amt) * 0.03)) return;
       }
       var desc = m[2].replace(/\(?-?[\d,]+\.\d+\)?/g, ' ').replace(/\s+/g, ' ').trim();
+      // A long description can wrap onto the line above the figures.
+      if (!desc && above && !/^\d{2}-[A-Za-z]{3}-\d{4}/.test(above)) desc = above.replace(/\(?-?[\d,]+\.\d+\)?/g, ' ').replace(/\s+/g, ' ').trim();
       out.push({ d: isoDate(m[1]), amt: Math.abs(amt) * (units < 0 ? -1 : 1), units: units, price: price, desc: desc,
         kind: units < 0 ? (/switch/i.test(desc) ? 'switch_out' : 'redeem') : (/switch/i.test(desc) ? 'switch_in' : /reinvest|idcw|dividend/i.test(desc) ? 'reinvest' : 'buy') });
     });
@@ -573,9 +578,25 @@
     // ---------- Doubling up ----------
     // Group by the category tail ("Large Cap Fund"): AMFI mixes "Equity Scheme -"
     // and "Equity Schemes -", which would otherwise split one category in two.
-    var catLabel = function (c) { c = (c || 'Uncategorised').trim(); var i = c.lastIndexOf('- '); return (i >= 0 ? c.slice(i + 2) : c).trim(); };
-    var byCat = {};
-    cur.filter(isFund).forEach(function (x) { var c = catLabel(x.cat); (byCat[c] = byCat[c] || []).push(x); });
+    // AMFI also carries older or variant names for one SEBI category; fold them together.
+    var CAT_ALIAS = [[/^ultra short term fund$/i, 'Ultra Short Duration Fund'], [/^banking and psu fund$/i, 'Banking and PSU Debt Fund'],
+      [/^children.?s.? fund$/i, 'Children\'s Fund'], [/balanced advantage/i, 'Balanced Advantage Fund'], [/^equity savings$/i, 'Equity Savings Fund'],
+      [/^gilt$/i, 'Gilt Fund'], [/^short term fund$/i, 'Short Duration Fund'], [/^medium term fund$/i, 'Medium Duration Fund'],
+      [/^medium to long term fund$/i, 'Medium to Long Duration Fund'], [/^tax saver fund$/i, 'ELSS'], [/^multi asset allocation$/i, 'Multi Asset Allocation Fund'],
+      [/^(sectoral|thematic) fund$/i, 'Sectoral/ Thematic'], [/^fof domestic$/i, 'Fund of Funds Scheme (Domestic)'], [/^fof overseas$/i, 'Fund of Funds investing overseas'],
+      [/^other\s+etfs?$/i, 'Other ETFs']];
+    var catLabel = function (c) {
+      c = (c || 'Uncategorised').trim(); var i = c.lastIndexOf('- '); c = (i >= 0 ? c.slice(i + 2) : c).trim();
+      for (var k = 0; k < CAT_ALIAS.length; k++) if (CAT_ALIAS[k][0].test(c)) return CAT_ALIAS[k][1];
+      return c;
+    };
+    // One fund held in two folios is still one fund.
+    var byCat = {}, seenIsin = {};
+    cur.filter(isFund).forEach(function (x) {
+      if (x.isin && seenIsin[x.isin]) return;
+      if (x.isin) seenIsin[x.isin] = 1;
+      var c = catLabel(x.cat); (byCat[c] = byCat[c] || []).push(x);
+    });
     var amcs = Object.keys(amcSet).map(function (a) { return { name: a, p: 100 * amcSet[a] / total }; }).sort(function (a, b) { return b.p - a.p; });
     m.dup = {
       cats: Object.keys(byCat).filter(function (c) { return byCat[c].length > 1 && c !== 'Uncategorised'; })
@@ -754,7 +775,8 @@
       inner += '<div class="so-amc"><div class="so-amc-bar">' + segs + '</div><p class="so-amc-cap"><strong>' + esc(d.topAMC.name) + '</strong> manages ' + pct1(d.topAMC.p) +
         ' of your money. That ties a big part of your outcome to one investment team.</p></div>';
     }
-    var head = d.cats.length ? d.cats.map(function (c) { return c.funds.length + ' ' + esc(c.label.toLowerCase()); }).join(' and ') + ' funds' : 'One fund house runs a big share';
+    var head = d.cats.length > 2 ? d.cats.length + ' categories hold more than one fund'
+      : d.cats.length ? d.cats.map(function (c) { return c.funds.length + ' ' + esc(c.label.toLowerCase()); }).join(' and ') + ' funds' : 'One fund house runs a big share';
     return sec('dup', 'Doubling up', head, inner);
   }
 

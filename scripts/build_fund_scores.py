@@ -123,11 +123,12 @@ def is_direct(r):
 
 
 def is_growth(r):
+    # A few AMCs call the growth option "Cumulative" (not the "cum" inside "Income Distribution cum ...").
     o = (r["option"] or "").lower()
     if o:
-        return "growth" in o and "idcw" not in o
+        return bool(re.search(r"growth|\bcumulative\b", o)) and "idcw" not in o
     n = r["name"].lower()
-    return "growth" in n and not re.search(r"idcw|dividend", n)
+    return bool(re.search(r"growth|\bcumulative\b", n)) and not re.search(r"idcw|dividend", n)
 
 
 # ------------------------------------------------------------ NAV history ----

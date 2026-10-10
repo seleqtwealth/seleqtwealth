@@ -15,6 +15,9 @@
   function days(a, b) { return Math.round((t(b) - t(a)) / DAY); }
   function addDays(d, n) { return iso(t(d) + n * DAY); }
   function fyStart(d) { var x = new Date(t(d)), y = x.getUTCFullYear(); return (x.getUTCMonth() >= 3 ? y : y - 1) + '-04-01'; }
+  var MONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function nice(d) { return d ? (+d.slice(8, 10)) + ' ' + MONS[+d.slice(5, 7) - 1] + ' ' + d.slice(0, 4) : ''; }
+  function addYears(d, n) { return (+d.slice(0, 4) + n) + d.slice(4); }
   function nextFy(d) { return (+fyStart(d).slice(0, 4) + 1) + '-04-01'; }
   R.dates = { t: t, iso: iso, days: days, addDays: addDays, fyStart: fyStart, nextFy: nextFy };
 
@@ -189,7 +192,9 @@
       var dg = S.sib[h.isin] || h.isin, rec = S.funds[dg] || null;
       var cls = classify(rec, h.name, cfg, eqShareOf(h.isin, H) != null ? eqShareOf(h.isin, H) : eqShareOf(dg, H));
       var plan_ = h.plan || (I.schemes && I.schemes[h.isin] ? I.schemes[h.isin].plan : null);
-      return { h: h, isin: h.isin, dg: dg, rec: rec, cls: cls, regular: plan_ === 'regular', value: h._today, name: rec ? rec.n : h.name, reasons: [] };
+      var nm = rec ? rec.n : h.name, twin = held.filter(function (o) { return o.isin === h.isin; }).length > 1;
+      if (twin && h.folio) nm += ' (folio ' + String(h.folio).split('/')[0].trim() + ')';
+      return { h: h, isin: h.isin, dg: dg, rec: rec, cls: cls, regular: plan_ === 'regular', value: h._today, name: nm, reasons: [] };
     });
 
     // ---- target and current mix ----
@@ -292,7 +297,7 @@
       var add = { sub: sub, label: LABELS[sub], gap: gap, gapPct: gap / total };
       if (existing) { add.topUp = existing.name; add.reason = 'You already hold a good ' + LABELS[sub].toLowerCase() + ' fund, so add to it rather than open another.'; plan.additions.push(add); return; }
       var isEq = ['large', 'flexi', 'mid', 'small'].indexOf(sub) >= 0;
-      if (isEq && eqFunds >= cfg.ceilings.max_equity_funds) { add.skipped = 'You already hold ' + eqFunds + ' equity funds, the most this plan allows.'; plan.additions.push(add); return; }
+      if (isEq && eqFunds >= cfg.ceilings.max_equity_funds) { add.skipped = 'You are keeping ' + eqFunds + ' equity funds, ' + (eqFunds > cfg.ceilings.max_equity_funds ? 'more than' : 'already') + ' the ' + cfg.ceilings.max_equity_funds + ' this plan allows, so it does not suggest another. Close this gap by adding to the funds you keep.'; plan.additions.push(add); return; }
       var pool = [];
       SUBCATS[sub].forEach(function (c) { (S.picks[c] || []).forEach(function (i) { if (S.funds[i]) pool.push(i); }); });
       pool.sort(function (a, b) { return S.funds[b].score - S.funds[a].score; });
@@ -338,8 +343,12 @@
       var gf = S.gf2018 ? S.gf2018[h.isin] : null, nav = h._nav;
       var action = f.verdict === 'replace' || f.verdict === 'reduce' ? 'sell' : 'direct';
       var allowYoung = f.rec && f.rec.cons != null && f.rec.cons < cfg.switching.sell_young_lot_if_consistency_below;
-      var young = [], mature = [];
+      var young = [], mature = [], locked = [];
+      // ELSS units are locked in for three years from each purchase (an opening balance counts from the statement start, at the latest).
+      var isElss = (f.rec && f.rec.cat === 'elss') || /\bELSS\b|tax saver|long term equity fund/i.test(f.name || '');
+      if (isElss && L.lots.some(function (l) { return !l.d; })) f.reasons.push('An ELSS fund: units are locked in for three years from each purchase. This statement does not show when they were bought, so check that they are free before selling.');
       L.lots.forEach(function (l) {
+        if (isElss && l.d && t(addYears(l.d, 3)) > t(today)) { locked.push(l); return; }
         var ageNow = l.d ? days(l.d, today) : 99999;
         if (f.cls.tax === 'equity' && ageNow < cfg.tax.equity_lt_days && !allowYoung) young.push(l); else mature.push(l);
       });
@@ -377,13 +386,27 @@
       var label = action === 'direct' ? 'Switch to the direct plan of the same fund' : (f.verdict === 'reduce' ? 'Sell (reduce)' : 'Sell (replace)');
       if (now.length) steps.push({ stage: 'now', c: costOf(now, today, fy, pool), part: next.length || young.length });
       if (next.length) { var nf = nextFy(today); steps.push({ stage: 'next', date: nf, c: costOf(next, nf, nf, pool), part: true, why: 'Selling these units now would push long-term gains past this year\'s ' + inr(cfg.tax.ltcg_exemption) + ' tax-free allowance.' }); }
+      // Units go out first in, first out, so newer units cannot be sold before older ones still waiting for the next financial year.
+      var floor = next.length ? nextFy(today) : null;
+      var later = function (dd) { return floor && t(dd) < t(floor) ? floor : dd; };
+      var fifoNote = function (dd) { return floor && t(dd) < t(floor) ? ' Older units of this fund are sold first, on ' + nice(floor) + ', so these go then too.' : ''; };
       var byDate = {};
       young.forEach(function (l) { var dd = addDays(l.d, cfg.tax.equity_lt_days + 1); (byDate[dd] = byDate[dd] || []).push(l); });
       Object.keys(byDate).sort().forEach(function (dd) {
         var open = byDate[dd].some(function (l) { return l.open; });
-        steps.push({ stage: 'after', date: dd, c: costOf(byDate[dd], dd, fyStart(dd), pool), part: true,
-          why: open ? 'Held since at least ' + byDate[dd][0].d + ', when the statement starts. Their real purchase date may be earlier; until a full statement shows it, wait until ' + dd + ' to be sure the gain is long term.'
-            : 'Bought less than a year ago: wait until ' + dd + ' so the gain is long term and any exit load has lapsed.' });
+        var on = later(dd);
+        steps.push({ stage: 'after', date: on, c: costOf(byDate[dd], on, fyStart(on), pool), part: true,
+          why: (open ? 'Held since at least ' + nice(byDate[dd][0].d) + ', when the statement starts. Their real purchase date may be earlier; until a full statement shows it, wait until ' + nice(dd) + ' to be sure the gain is long term.'
+            : 'Bought less than a year ago: wait until ' + nice(dd) + ' so the gain is long term and any exit load has lapsed.') + fifoNote(dd) });
+      });
+      // Locked ELSS units: one step a quarter, on the day the last of that quarter's units is free.
+      var byQ = {};
+      locked.forEach(function (l) { var u = addYears(l.d, 3), q = u.slice(0, 4) + 'Q' + Math.floor((+u.slice(5, 7) - 1) / 3); (byQ[q] = byQ[q] || []).push(l); });
+      Object.keys(byQ).sort().forEach(function (q) {
+        var g = byQ[q], dd = g.map(function (l) { return addYears(l.d, 3); }).sort().pop();
+        var on = later(dd);
+        steps.push({ stage: 'after', date: on, c: costOf(g, on, fyStart(on), pool), part: true,
+          why: 'ELSS units are locked in for three years from purchase' + (g.some(function (l) { return l.open; }) ? ' (these are counted from the statement start, as their real purchase date is not shown)' : '') + '; these are free from ' + nice(dd) + '.' + fifoNote(dd) });
       });
       var totalCost = steps.reduce(function (sum, st) { return sum + st.c.cost; }, 0);
       f.switchCost = totalCost; f.benefit = benefit; f.benefitWhy = benefitWhy;
@@ -420,7 +443,11 @@
       var proxyVal = Math.max(0, units) * pe, actual = h.value;
       fflows = flows.concat([{ d: end, v: actual }]);
       row.proxyName = P.n; row.actual = actual; row.proxy = proxyVal; row.diff = actual - proxyVal;
-      row.xirrFund = xirr(fflows); row.xirrProxy = xirr(flows.concat([{ d: end, v: proxyVal }])); row.asOf = end;
+      row.asOf = end;
+      // A yearly rate over a few months is misleading (a 2% dip reads as -30% a year), so it is shown only after a year.
+      var span = days(flows[0].d, end);
+      if (span < 365) row.months = Math.max(1, Math.round(span / 30.4));
+      else { row.xirrFund = xirr(fflows); row.xirrProxy = xirr(flows.concat([{ d: end, v: proxyVal }])); }
       plan.missed.push(row);
     });
 

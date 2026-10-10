@@ -153,7 +153,7 @@
     out.push('<section class="so-sec"><div class="so-sec-label">Missed gains</div><h3 class="so-sec-head">Your actual purchases, run through an index fund on paper</h3>' + (plan.missed.length ? '<ul class="sp-reasons">' + plan.missed.map(function (m) {
       if (m.skip) return '<li><strong>' + esc(m.name) + ':</strong> ' + esc(m.skip) + '</li>';
       return '<li><strong>' + esc(m.name) + ':</strong> worth ' + inr(m.actual) + ' on ' + nice(m.asOf) + '. The same purchases and redemptions in the ' + esc(m.proxyName) + ' would be worth ' + inr(m.proxy) +
-        ', a difference of ' + (m.diff >= 0 ? inr(m.diff) + ' in your favour' : inr(-m.diff) + ' against you') + '. XIRR ' + pct(m.xirrFund, 1) + ' against ' + pct(m.xirrProxy, 1) + '.</li>';
+        ', a difference of ' + (m.diff >= 0 ? inr(m.diff) + ' in your favour' : inr(-m.diff) + ' against you') + (m.months ? '. Held for about ' + m.months + (m.months === 1 ? ' month' : ' months') + ', too short for a yearly rate to mean much.' : '. XIRR ' + pct(m.xirrFund, 1) + ' against ' + pct(m.xirrProxy, 1) + '.') + '</li>';
     }).join('') + '</ul>' : '<p class="sp-none">No equity funds to compare.</p>') + '</section>');
 
     $('spBody').innerHTML = out.join('') + method(plan, cfg);

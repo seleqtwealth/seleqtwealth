@@ -1171,6 +1171,12 @@
     "pick": false
    },
    {
+    "isin": "INF109KA11J9",
+    "n": "ICICI Prudential Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
     "isin": "INF205KA1049",
     "n": "Invesco India Equity Savings Fund",
     "cat": "Equity Savings",
@@ -3350,7 +3356,7 @@
     "isin": "INF090I01GC8",
     "n": "Franklin India Opportunities Fund",
     "cat": "Sectoral and Thematic",
-    "pick": true
+    "pick": false
    },
    {
     "isin": "INF090I01FE6",
@@ -3557,6 +3563,18 @@
     "pick": false
    },
    {
+    "isin": "INF109KC1GH2",
+    "n": "ICICI Prudential Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1RH9",
+    "n": "ICICI Prudential India Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": true
+   },
+   {
     "isin": "INF109K018M4",
     "n": "ICICI Prudential Infrastructure Fund",
     "cat": "Sectoral and Thematic",
@@ -3571,6 +3589,12 @@
    {
     "isin": "INF109KC1D93",
     "n": "ICICI Prudential MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1LJ8",
+    "n": "ICICI Prudential Manufacturing Fund",
     "cat": "Sectoral and Thematic",
     "pick": false
    },
