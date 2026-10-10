@@ -1,0 +1,9 @@
+{
+  "_how": "For AMCs the build does not fetch automatically (their download listing is encrypted in the browser). Each quarter, open the AMC's monthly-portfolio page in a browser, copy the latest file link(s), and put them here with the portfolio month. Keys are AMFI mf_ids. Entries older than ~3 months are ignored.",
+  "_pages": {
+    "16": "JM Financial: https://www.jmfinancialmf.com/downloads/Portfolio-Disclosure (one file per scheme)",
+    "69": "Mahindra Manulife: https://www.mahindramanulife.com/downloads#mandatory-disclosures (one consolidated workbook)"
+  },
+  "16": {"month": "", "urls": []},
+  "69": {"month": "", "urls": []}
+}
