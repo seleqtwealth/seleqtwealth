@@ -200,10 +200,54 @@
         folio: folio,
         plan: /direct/i.test(nameRaw) ? 'direct' : 'regular',
         type: 'mf',
-        exitLoadClause: /Exit Load\s*:?\s*1(?:\.00)?%|within\s*(?:1 ?year|365 days)/i.test(block)
+        exitLoadClause: /Exit Load\s*:?\s*1(?:\.00)?%|within\s*(?:1 ?year|365 days)/i.test(block),
+        opening: f(/Opening Unit Balance\s*:?\s*([\d,]+\.?\d*)/i),
+        exitLoad: exitLoadOf(block),
+        txns: camsTxns(block)
       });
     }
-    return { source: 'cams', holdings: holdings };
+    var per = text.match(/(\d{2}-[A-Za-z]{3}-\d{4})\s+To\s+(\d{2}-[A-Za-z]{3}-\d{4})/);
+    return { source: 'cams', holdings: holdings, period: per ? { from: isoDate(per[1]), to: isoDate(per[2]) } : null };
+  }
+
+  // ---- Transaction lots for the action plan (switch costs, tax, missed gains) ----
+  var MON = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+  function isoDate(s) {
+    var m = String(s).match(/(\d{2})-([A-Za-z]{3})-(\d{4})/);
+    return m ? m[3] + '-' + String(MON[m[2].toLowerCase()]).padStart(2, '0') + '-' + m[1] : null;
+  }
+  // "an Exit Load of 1.00% is payable ... within 1 year", "Exit Load: NIL"
+  function exitLoadOf(block) {
+    var r = block.match(/Exit\s*Load\s*(?:of)?\s*:?\s*(NIL|\d+(?:\.\d+)?\s*%)/i);
+    if (!r) return null;
+    if (/nil/i.test(r[1])) return { rate: 0, days: 0 };
+    var w = block.slice(r.index, r.index + 600).match(/within\s+(\d+)\s*(years?|months?|days?)/i), days = 0;
+    if (w) days = +w[1] * (/year/i.test(w[2]) ? 365 : /month/i.test(w[2]) ? 30 : 1);
+    return { rate: parseFloat(r[1]) / 100, days: days };
+  }
+  // A transaction line: date, description, amount, units, price, [balance]. Redemptions and
+  // switch-outs print in brackets. Stamp duty and STT lines carry a single figure and are skipped.
+  function camsTxns(block) {
+    var out = [];
+    block.split('\n').forEach(function (line) {
+      var m = line.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(.*)$/);
+      if (!m || /\*\*\*/.test(m[2])) return;
+      var toks = m[2].match(/\(?-?[\d,]+\.\d+\)?/g) || [];
+      if (toks.length < 3) return;
+      var nums = toks.slice(-4).map(function (t) { var neg = /^\(|-/.test(t); var v = num(t.replace(/[()\-]/g, '')); return neg ? -v : v; });
+      // Take amount, units, price from the right, with or without a trailing balance.
+      var pick = nums.length === 4 ? nums.slice(0, 3) : nums.slice(-3);
+      var amt = pick[0], units = pick[1], price = pick[2];
+      if (!(price > 0) || !units) return;
+      if (Math.abs(Math.abs(amt) - Math.abs(units) * price) > Math.max(2, Math.abs(amt) * 0.03)) {
+        if (nums.length === 4) { amt = nums[1]; units = nums[2]; price = nums[3]; } // no balance printed
+        if (!(price > 0) || Math.abs(Math.abs(amt) - Math.abs(units) * price) > Math.max(2, Math.abs(amt) * 0.03)) return;
+      }
+      var desc = m[2].replace(/\(?-?[\d,]+\.\d+\)?/g, ' ').replace(/\s+/g, ' ').trim();
+      out.push({ d: isoDate(m[1]), amt: Math.abs(amt) * (units < 0 ? -1 : 1), units: units, price: price, desc: desc,
+        kind: units < 0 ? (/switch/i.test(desc) ? 'switch_out' : 'redeem') : (/switch/i.test(desc) ? 'switch_in' : /reinvest|idcw|dividend/i.test(desc) ? 'reinvest' : 'buy') });
+    });
+    return out;
   }
 
   // NSDL / CDSL demat CAS. The statement opens with a portfolio composition by asset class,
@@ -315,7 +359,11 @@
       h.isin = isin; h.name = name; h.type = type; h.plan = null; h.section = section;
       holdings.push(h);
     }
-    return { source: cdsl ? 'cdsl' : 'nsdl', holdings: holdings, assetComposition: comp, skipped: skipped };
+    // The holdings date: "Holdings as on 30-Sep-2026", else the end of "for the month of September 2026"
+    var asOn = null, ao = text.match(/as\s+on\s+(\d{2}-[A-Za-z]{3}-\d{4})/i), mo = text.match(/for the month of\s+([A-Za-z]+)\s+(\d{4})/i);
+    if (ao) asOn = isoDate(ao[1]);
+    else if (mo && MON[mo[1].slice(0, 3).toLowerCase()]) { var mm = MON[mo[1].slice(0, 3).toLowerCase()]; asOn = new Date(Date.UTC(+mo[2], mm, 0)).toISOString().slice(0, 10); }
+    return { source: cdsl ? 'cdsl' : 'nsdl', holdings: holdings, assetComposition: comp, skipped: skipped, asOn: asOn };
   }
 
   // ============ Reference data (lazy-loaded once, after a parse) ============
@@ -381,7 +429,11 @@
     return loadData().then(function (D) {
       setStatus(false);
       var model = buildModel(parsed, D);
+      model.stmtDate = (parsed.period && parsed.period.to) || parsed.asOn || null;
       renderReport(model);
+      // Hand the parsed statement to the action plan module (same page, nothing leaves the device)
+      window.SO_LAST = { parsed: parsed, data: D, model: model };
+      try { document.dispatchEvent(new CustomEvent('so:report', { detail: window.SO_LAST })); } catch (e) {}
       // A sample report is nobody's portfolio, so there is nothing to offer to share.
       var sample = model.source === 'sample';
       lastSummary = sample ? null : { text: model.summaryText };
@@ -772,19 +824,24 @@
     return '<details class="so-method"><summary>How we worked this out</summary><ul><li>' + li.join('</li><li>') + '</li></ul></details>';
   }
 
+  function niceStmtDate(d) { var p = d.split('-'); return +p[2] + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+p[1] - 1] + ' ' + p[0]; }
   function renderReport(m) {
     var body = document.getElementById('soReportBody');
     var title = document.getElementById('soReportTitle');
     var sub = document.getElementById('soReportSub');
     if (m.empty) {
       title.textContent = 'This statement has no current holdings';
-      sub.textContent = 'Everything in it shows a zero balance. Load a recent statement with live holdings, or add them by hand, to get the full read.';
+      sub.textContent = 'Everything in it shows a zero balance. Load a recent statement with live holdings, or add them by hand, to get the full read.' + (m.stmtDate ? ' Statement as on ' + niceStmtDate(m.stmtDate) + '.' : '');
       body.innerHTML = '<p class="so-lede"><button type="button" class="so-help-link" data-so-restart="soStep2">Load a different statement</button></p>';
       return;
     }
     var sample = m.source === 'sample';
     title.textContent = sample ? 'A read on a sample ' + fmtShort(m.total) + ' portfolio' : 'A read on your ' + fmtShort(m.total) + ' portfolio';
     sub.textContent = sample ? 'An example portfolio of real funds and companies with made-up amounts, to show what the report looks like.' : 'Worked out on your device. Nothing was uploaded.';
+    if (m.stmtDate && !sample) {
+      var age = Math.round((Date.now() - Date.UTC(+m.stmtDate.slice(0, 4), +m.stmtDate.slice(5, 7) - 1, +m.stmtDate.slice(8, 10))) / 86400000);
+      sub.textContent += ' Statement as on ' + niceStmtDate(m.stmtDate) + (age > 30 ? '. That is ' + age + ' days ago, so holdings and values may have changed since; a fresh statement gives a truer read.' : '.');
+    }
     var banner = sample ? '<div class="so-sample-banner">' + ICON.info + '<span><strong>This is a sample, not your portfolio.</strong> Load your own statement to see yours, in about two minutes. ' +
       '<button type="button" class="so-help-link" data-so-restart="soGet">Get my statement</button></span></div>' : '';
     body.innerHTML = banner + rUnread(m) + rTiles(m) + rShape(m) + rOverlap(m) + rDup(m) + rCost(m) + rTax(m) + rTidy(m) + rMethod(m);

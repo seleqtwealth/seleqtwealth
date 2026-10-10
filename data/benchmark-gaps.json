@@ -1,0 +1,4455 @@
+{
+ "built": "2026-10-10",
+ "groups": {
+  "Category index for Aggressive Hybrid (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01ZC0",
+    "n": "Aditya Birla Sun Life Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01E25",
+    "n": "Axis Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01DM6",
+    "n": "BANK OF INDIA AGGRESSIVE HYBRID FUND",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01OZ7",
+    "n": "BARODA BNP PARIBAS AGGRESSIVE HYBRID FUND",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF194KA1U56",
+    "n": "Bandhan Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01EZ8",
+    "n": "Canara Robeco Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01NY4",
+    "n": "DSP Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01CE0",
+    "n": "Edelweiss Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01FZ1",
+    "n": "Franklin India Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01FA3",
+    "n": "Groww Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01XZ1",
+    "n": "HDFC Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01LE4",
+    "n": "HSBC Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01Y07",
+    "n": "ICICI Prudential Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF205K014Q7",
+    "n": "Invesco India Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01BQ9",
+    "n": "JM Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01LL7",
+    "n": "Kotak Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF767K01ED0",
+    "n": "LIC MF Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01788",
+    "n": "Mahindra Manulife Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01DH9",
+    "n": "Mirae Asset Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF959L01CX3",
+    "n": "Navi Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF204KB13T1",
+    "n": "Nippon India Aggressive Hybrid Fund (Existing Number of Segregated Portfolios - 2)",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01GX2",
+    "n": "PGIM India Aggressive Hybrid Equity Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01556",
+    "n": "Quant Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01RY0",
+    "n": "SBI AGGRESSIVE HYBRID FUND",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01042",
+    "n": "Shriram Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01FE6",
+    "n": "Sundaram Aggressive Hybrid Fund (Formerly Known as Principal Hybrid Equity Fund)",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01MN2",
+    "n": "Tata Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01SK9",
+    "n": "UTI Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01GY0",
+    "n": "Union Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01AF8",
+    "n": "WhiteOak Capital Aggressive Hybrid Fund",
+    "cat": "Aggressive Hybrid",
+    "pick": false
+   }
+  ],
+  "Category index for Arbitrage (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01VP1",
+    "n": "ADITYA BIRLA SUN LIFE ARBITRAGE FUND",
+    "cat": "Arbitrage",
+    "pick": true
+   },
+   {
+    "isin": "INF846K01PZ1",
+    "n": "Axis Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01Y60",
+    "n": "BANDHAN Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01ED3",
+    "n": "BANK OF INDIA ARBITRAGE FUND",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01OT0",
+    "n": "BARODA BNP PARIBAS ARBITRAGE FUND",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701524",
+    "n": "Bajaj Finserv Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF226401117",
+    "n": "Capitalmind Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1DN4",
+    "n": "DSP Arbitrage fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01EA4",
+    "n": "Edelweiss Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01XS9",
+    "n": "Franklin India Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01ON8",
+    "n": "Groww Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF179KA1KT6",
+    "n": "HDFC Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01QR5",
+    "n": "HSBC Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8701442",
+    "n": "Helios Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF109K016O4",
+    "n": "ICICI Prudential Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01440",
+    "n": "ITI Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01KR8",
+    "n": "Invesco India Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": true
+   },
+   {
+    "isin": "INF192K01BN6",
+    "n": "JM Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001101",
+    "n": "JioBlackRock Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01LC6",
+    "n": "Kotak Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01PP0",
+    "n": "LIC MF Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01AA0",
+    "n": "Mahindra Manulife Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01FS1",
+    "n": "Mirae Asset Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01ED1",
+    "n": "Motilal Oswal Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0J8L01065",
+    "n": "NJ Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01XZ7",
+    "n": "Nippon India Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0S5R01125",
+    "n": "Old Bridge Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF879O01225",
+    "n": "Parag Parikh Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01QU0",
+    "n": "SBI Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01214",
+    "n": "Samco Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01NF7",
+    "n": "Sundaram Arbitrage Fund(Formerly Known as Prinicpal Arbitrage Fund)",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01859",
+    "n": "TRUSTMF ARBITRAGE FUND",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF277K017Q3",
+    "n": "Tata Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001271",
+    "n": "The Wealth Company Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF789FB1RG6",
+    "n": "UTI - Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01ES7",
+    "n": "Union Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01910",
+    "n": "WhiteOak Capital Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8F01232",
+    "n": "Zerodha Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01DW8",
+    "n": "quant Arbitrage Fund",
+    "cat": "Arbitrage",
+    "pick": false
+   }
+  ],
+  "Category index for Balanced Advantage (CRISIL or NSE)": [
+   {
+    "isin": "INF084M01DJ5",
+    "n": "Aditya Birla Sun Life Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01A29",
+    "n": "Axis Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF194KA1UH1",
+    "n": "BANDHAN Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01BO6",
+    "n": "BANK OF INDIA BALANCED ADVANTAGE FUND",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701656",
+    "n": "Bajaj Finserv Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01HF7",
+    "n": "Baroda BNP Paribas Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": true
+   },
+   {
+    "isin": "INF760K01LD0",
+    "n": "Canara Robeco Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01K81",
+    "n": "DSP Dynamic Asset Allocation Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01BS2",
+    "n": "Edelweiss Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01WQ5",
+    "n": "Franklin India Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01WA6",
+    "n": "HDFC Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": true
+   },
+   {
+    "isin": "INF917K01IN1",
+    "n": "HSBC Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8701145",
+    "n": "Helios Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF109K012B0",
+    "n": "ICICI Prudential Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01689",
+    "n": "ITI Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01LN5",
+    "n": "Invesco India Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001366",
+    "n": "JioBlackRock Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1210",
+    "n": "Kotak Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01QY0",
+    "n": "LIC MF Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01BE0",
+    "n": "Mahindra Manulife Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01IN6",
+    "n": "Mirae Asset Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01635",
+    "n": "Motilal Oswal Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF0J8L01040",
+    "n": "NJ Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01G94",
+    "n": "Nippon India Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01V49",
+    "n": "PGIM India Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF879O01266",
+    "n": "Parag Parikh Dynamic Asset Allocation Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF200KA1Y73",
+    "n": "SBI Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": true
+   },
+   {
+    "isin": "INF0K1H01131",
+    "n": "Samco Dynamic Asset Allocation Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01208",
+    "n": "Shriram Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01FI7",
+    "n": "Sundaram Dynamic Asset Allocation Fund (Formerly Known as Sundaram Balanced Advantage Fund)",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF277K013S8",
+    "n": "Tata Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001479",
+    "n": "The Wealth Company Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF1MIY01015",
+    "n": "UNIFI DYNAMIC ASSET ALLOCATION FUND",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1AYV3",
+    "n": "UTI Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01DE9",
+    "n": "Union Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01738",
+    "n": "WhiteOak Capital Balanced Advantage Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01BL5",
+    "n": "quant Dynamic Asset Allocation Fund",
+    "cat": "Balanced Advantage",
+    "pick": false
+   }
+  ],
+  "Category index for Banking and PSU (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01YN0",
+    "n": "Aditya Birla Sun Life Banking & PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01CR6",
+    "n": "Axis Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701607",
+    "n": "Bajaj Finserv Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF194K015G8",
+    "n": "Bandhan Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01KC4",
+    "n": "Canara Robeco Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01ZW2",
+    "n": "DSP Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF843K01FC8",
+    "n": "Edelweiss Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01KR8",
+    "n": "Franklin India Banking & PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF179KA1IZ7",
+    "n": "HDFC Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": true
+   },
+   {
+    "isin": "INF917K01HH5",
+    "n": "HSBC Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF109K010A6",
+    "n": "ICICI Prudential Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": true
+   },
+   {
+    "isin": "INF00XX01861",
+    "n": "ITI Banking & PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01KT4",
+    "n": "Invesco India Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01KH7",
+    "n": "Kotak Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01GI4",
+    "n": "LIC MF Banking & PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01FY9",
+    "n": "Mirae Asset Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF204KA1U53",
+    "n": "Nippon India Banking and PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01V08",
+    "n": "SBI BANKING & PSU DEBT FUND",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF903J017I5",
+    "n": "Sundaram Banking and PSU Debt Fund (Formerly Known as Sundaram Banking and PSU Fund)",
+    "cat": "Banking and PSU",
+    "pick": false
+   },
+   {
+    "isin": "INF789F015Z6",
+    "n": "UTI Banking & PSU Debt Fund",
+    "cat": "Banking and PSU",
+    "pick": true
+   }
+  ],
+  "Category index for Conservative Hybrid (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01XH4",
+    "n": "Aditya Birla Sun Life Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01EA8",
+    "n": "Axis Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF194K015B9",
+    "n": "BANDHAN CONSERVATIVE HYBRID FUND",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01819",
+    "n": "BANK OF INDIA CONSERVATIVE HYBRID FUND",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01HR8",
+    "n": "BARODA BNP PARIBAS CONSERVATIVE HYBRID FUND",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01GB4",
+    "n": "Canara Robeco Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01NO5",
+    "n": "DSP Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01GF1",
+    "n": "Franklin India Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01XE6",
+    "n": "HDFC Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01DW4",
+    "n": "HSBC Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01S39",
+    "n": "ICICI Prudential Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01JZ1",
+    "n": "Kotak Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF767K01EO7",
+    "n": "LIC MF Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01YV4",
+    "n": "Nippon India Conservative Hybrid Fund (Existing number of Segregated Portfolios - 1)",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF879O01175",
+    "n": "Parag Parikh Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF200K01TS8",
+    "n": "SBI CONSERVATIVE HYBRID FUND",
+    "cat": "Conservative Hybrid",
+    "pick": true
+   },
+   {
+    "isin": "INF903J01OP6",
+    "n": "Sundaram Conservative Hybrid Fund (Formerly Known as Sundaram Debt Oriented Hybrid Fund)",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01UJ7",
+    "n": "UTI Conservative Hybrid Fund",
+    "cat": "Conservative Hybrid",
+    "pick": false
+   }
+  ],
+  "Category index for Corporate Bond (CRISIL or NSE)": [
+   {
+    "isin": "INF846K01ZM8",
+    "n": "AXIS Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": true
+   },
+   {
+    "isin": "INF209K01S38",
+    "n": "Aditya Birla Sun Life Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF194KA1M23",
+    "n": "BANDHAN Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01GP4",
+    "n": "BARODA BNP PARIBAS CORPORATE BOND FUND",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01HB2",
+    "n": "Canara Robeco Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1KE8",
+    "n": "DSP Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01FW8",
+    "n": "Franklin India Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01XD8",
+    "n": "HDFC Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01HN3",
+    "n": "HSBC Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF109K016B1",
+    "n": "ICICI Prudential Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": true
+   },
+   {
+    "isin": "INF205K01RF8",
+    "n": "Invesco India Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF178L01BY0",
+    "n": "Kotak Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01HD9",
+    "n": "Mirae Asset Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01C15",
+    "n": "Nippon India Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": true
+   },
+   {
+    "isin": "INF223J01OO2",
+    "n": "PGIM India Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF200KA1YR4",
+    "n": "SBI Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF903J01NR4",
+    "n": "Sundaram Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01560",
+    "n": "TRUSTMF CORPORATE BOND FUND",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF277KA1224",
+    "n": "Tata Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1A538",
+    "n": "UTI - Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01DU5",
+    "n": "Union Corporate Bond Fund",
+    "cat": "Corporate Bond",
+    "pick": false
+   }
+  ],
+  "Category index for Credit Risk (CRISIL or NSE)": [
+   {
+    "isin": "INF209KA1K88",
+    "n": "Aditya Birla Sun Life Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": true
+   },
+   {
+    "isin": "INF846K01PJ5",
+    "n": "Axis Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF194KA1X61",
+    "n": "BANDHAN CREDIT RISK FUND",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01DG8",
+    "n": "BANK OF INDIA CREDIT RISK FUND",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01OS4",
+    "n": "DSP Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01VZ8",
+    "n": "Franklin India Credit Risk Fund (No. of segregated portfolios-3)",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF179KA1FZ3",
+    "n": "HDFC Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01UH8",
+    "n": "HSBC Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01V00",
+    "n": "ICICI Prudential Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": true
+   },
+   {
+    "isin": "INF205K01I83",
+    "n": "Invesco India Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01LZ7",
+    "n": "Kotak Credit Risk Fund",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01A74",
+    "n": "Nippon India Credit Risk Fund (Existing Number of Segregated Portfolios - 1)",
+    "cat": "Credit Risk",
+    "pick": true
+   },
+   {
+    "isin": "INF200K01SV4",
+    "n": "SBI CREDIT RISK FUND",
+    "cat": "Credit Risk",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01YB6",
+    "n": "UTI - Credit Risk Fund.",
+    "cat": "Credit Risk",
+    "pick": false
+   }
+  ],
+  "Category index for Dynamic Bond (CRISIL or NSE)": [
+   {
+    "isin": "INF090I01WD3",
+    "n": "Franklin India Dynamic Accrual Fund (No. of segregated portfolios- 3)",
+    "cat": "Dynamic Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF082J01176",
+    "n": "Quantum Dynamic Term Fund",
+    "cat": "Dynamic Bond",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01MV5",
+    "n": "Tata Dynamic Bond Fund",
+    "cat": "Dynamic Bond",
+    "pick": false
+   }
+  ],
+  "Category index for Equity Savings (CRISIL or NSE)": [
+   {
+    "isin": "INF209KA1TP9",
+    "n": "Aditya Birla Sun Life Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01VJ3",
+    "n": "Axis Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01Z02",
+    "n": "BANDHAN EQUITY SAVINGS FUND",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701BT9",
+    "n": "Bajaj Finserv Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01IL3",
+    "n": "Baroda BNP Paribas Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1504",
+    "n": "DSP Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF843K01KC8",
+    "n": "Edelweiss Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01PD7",
+    "n": "Franklin India Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01XT4",
+    "n": "HDFC Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01GE4",
+    "n": "HSBC Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1049",
+    "n": "Invesco India Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01D28",
+    "n": "Kotak Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": true
+   },
+   {
+    "isin": "INF397L01AZ5",
+    "n": "LIC MF Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01184",
+    "n": "Mahindra Manulife Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01EK1",
+    "n": "Mirae Asset Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": true
+   },
+   {
+    "isin": "INF204KB11E7",
+    "n": "Nippon India Equity Savings Fund (Existing number of Segregated Portfolios - 2)",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF223J01QD0",
+    "n": "PGIM India Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF200KA1DF3",
+    "n": "SBI EQUITY SAVINGS FUND",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01GZ9",
+    "n": "Sundaram Equity Savings Fund (Formerly Known as Principal Equity Savings Fund)",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01QH5",
+    "n": "Tata Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1A777",
+    "n": "UTI - Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01EC1",
+    "n": "Union Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01AB7",
+    "n": "WhiteOak Capital Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01EC8",
+    "n": "quant Equity Savings Fund",
+    "cat": "Equity Savings",
+    "pick": false
+   }
+  ],
+  "Category index for Gilt (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01XP7",
+    "n": "Aditya Birla Sun Life Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01DD4",
+    "n": "Axis Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01AD7",
+    "n": "BARODA BNP PARIBAS GILT FUND",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701AP9",
+    "n": "Bajaj Finserv Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01P38",
+    "n": "Bandhan 10 year Constant Maturity Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01Q29",
+    "n": "Bandhan Gilt   Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01FC4",
+    "n": "Canara Robeco Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF740K019I5",
+    "n": "DSP 10 year Constant Maturity Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01NF3",
+    "n": "DSP Gilt Fund",
+    "cat": "Gilt",
+    "pick": true
+   },
+   {
+    "isin": "INF843K01GS2",
+    "n": "Edelweiss Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01HS2",
+    "n": "Franklin India Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01KK2",
+    "n": "Groww Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01VS0",
+    "n": "HDFC Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01FI7",
+    "n": "HSBC Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF109KA1O37",
+    "n": "ICICI Prudential 10 year Constant Maturity Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF109K018C5",
+    "n": "ICICI Prudential Gilt Fund",
+    "cat": "Gilt",
+    "pick": true
+   },
+   {
+    "isin": "INF205K01SN0",
+    "n": "Invesco India Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01KM7",
+    "n": "Kotak Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01EZ3",
+    "n": "LIC MF Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01XP8",
+    "n": "Nippon India Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF223J01ND7",
+    "n": "PGIM India Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SK7",
+    "n": "SBI 10 YEAR CONSTANT MATURITY GILT FUND",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SH3",
+    "n": "SBI GILT FUND",
+    "cat": "Gilt",
+    "pick": true
+   },
+   {
+    "isin": "INF277K01OX7",
+    "n": "Tata Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01TL5",
+    "n": "UTI - Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1AVR7",
+    "n": "UTI 10 year Constant Maturity Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01HW2",
+    "n": "Union Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01BF7",
+    "n": "quant Gilt Fund",
+    "cat": "Gilt",
+    "pick": false
+   }
+  ],
+  "Category index for Liquid (CRISIL or NSE)": [
+   {
+    "isin": "INF579M01621",
+    "n": "360 ONE Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF2XUU01013",
+    "n": "ASK Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF2JJD01029",
+    "n": "Abakkus Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01VA3",
+    "n": "Aditya Birla Sun Life Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01CX4",
+    "n": "Axis Liquid Fund",
+    "cat": "Liquid",
+    "pick": true
+   },
+   {
+    "isin": "INF194K01I60",
+    "n": "BANDHAN LIQUID Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01785",
+    "n": "BANK OF INDIA LIQUID FUND",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01AL0",
+    "n": "BARODA BNP PARIBAS LIQUID FUND",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701011",
+    "n": "Bajaj Finserv Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01FU6",
+    "n": "Canara Robeco Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF226401034",
+    "n": "Capitalmind Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01QL4",
+    "n": "DSP Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01GM4",
+    "n": "Edelweiss Liquid Fund",
+    "cat": "Liquid",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01JV2",
+    "n": "Franklin India Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01451",
+    "n": "Groww Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF179KB1HP9",
+    "n": "HDFC Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01Q49",
+    "n": "ICICI Prudential Liquid Fund -",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01283",
+    "n": "ITI Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01MF9",
+    "n": "Invesco India Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01CM6",
+    "n": "JM Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001010",
+    "n": "JioBlackRock Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01NE8",
+    "n": "Kotak Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01DN1",
+    "n": "LIC MF Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01044",
+    "n": "Mahindra Manulife Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01CM1",
+    "n": "Mirae Asset Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01ZH0",
+    "n": "Nippon India Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF223J01NS5",
+    "n": "PGIM India Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF879O01068",
+    "n": "Parag Parikh Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01820",
+    "n": "Quant Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF082J01127",
+    "n": "Quantum Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01UT4",
+    "n": "SBI LIQUID FUND",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01430",
+    "n": "Shriram Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01GU0",
+    "n": "Sundaram Liquid Fund (Formerly Known as Principal Cash Management Fund)",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01255",
+    "n": "TRUSTMF Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01YE6",
+    "n": "Tata Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001081",
+    "n": "The Wealth Company Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF1MIY01056",
+    "n": "UNIFI LIQUID FUND",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1AD46",
+    "n": "UTI - Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01674",
+    "n": "Union Liquid Fund",
+    "cat": "Liquid",
+    "pick": true
+   },
+   {
+    "isin": "INF03VN01043",
+    "n": "WhiteOak Capital Liquid Fund",
+    "cat": "Liquid",
+    "pick": false
+   }
+  ],
+  "Category index for Medium Duration (CRISIL or NSE)": [
+   {
+    "isin": "INF174K01VQ5",
+    "n": "Kotak Medium Term Fund",
+    "cat": "Medium Duration",
+    "pick": false
+   }
+  ],
+  "Category index for Medium to Long Duration (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01WY1",
+    "n": "Aditya Birla Sun Life Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01R51",
+    "n": "Bandhan Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01FI1",
+    "n": "Canara Robeco Medium To Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01XG4",
+    "n": "Franklin India Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01WL3",
+    "n": "HDFC Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01DE2",
+    "n": "HSBC Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01V83",
+    "n": "ICICI Prudential Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF192K01CW5",
+    "n": "JM Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01JC0",
+    "n": "Kotak Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF767K01EW0",
+    "n": "LIC MF Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01XS2",
+    "n": "Nippon India Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SR2",
+    "n": "SBI MEDIUM TO LONG TERM FUND",
+    "cat": "Medium to Long Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF277K01OY5",
+    "n": "Tata Income Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01SQ6",
+    "n": "UTI Medium to Long Term Fund",
+    "cat": "Medium to Long Duration",
+    "pick": false
+   }
+  ],
+  "Category index for Money Market (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01UU3",
+    "n": "Aditya Birla Sun Life Money Market Fund",
+    "cat": "Money Market",
+    "pick": true
+   },
+   {
+    "isin": "INF846K01Q62",
+    "n": "Axis Money Market Fund",
+    "cat": "Money Market",
+    "pick": true
+   },
+   {
+    "isin": "INF0QA701334",
+    "n": "Bajaj Finserv Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01M80",
+    "n": "Bandhan Money  Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01GO5",
+    "n": "Bank of India Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01ID0",
+    "n": "Baroda BNP Paribas Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01NU2",
+    "n": "DSP Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF843K01CE1",
+    "n": "Edelweiss Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01GV8",
+    "n": "Franklin India Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01MW3",
+    "n": "Groww Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF179KB1HU9",
+    "n": "HDFC Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01FE6",
+    "n": "HSBC Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01R14",
+    "n": "ICICI Prudential Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01RY9",
+    "n": "Invesco India Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001028",
+    "n": "JioBlackRock Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01MW2",
+    "n": "Kotak Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01RE0",
+    "n": "LIC MF Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01HN8",
+    "n": "Mirae Asset Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01ZP3",
+    "n": "Nippon India Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01T84",
+    "n": "PGIM India Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SZ5",
+    "n": "SBI Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01471",
+    "n": "Shriram Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1FR6",
+    "n": "Sundaram Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01503",
+    "n": "TRUSTMF Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01PR6",
+    "n": "Tata Money Market Fund",
+    "cat": "Money Market",
+    "pick": true
+   },
+   {
+    "isin": "INF789F01XV6",
+    "n": "UTI - Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01HG5",
+    "n": "Union Money Market Fund",
+    "cat": "Money Market",
+    "pick": false
+   }
+  ],
+  "Category index for Multi Asset (CRISIL or NSE)": [
+   {
+    "isin": "INF579M01BM2",
+    "n": "360 ONE Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB15R9",
+    "n": "Aditya Birla Sun Life Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF2VOA01012",
+    "n": "AlphaGrep Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01EV4",
+    "n": "Axis Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1HM7",
+    "n": "BANDHAN MULTI ASSET ALLOCATION FUND",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701821",
+    "n": "Bajaj Finserv Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01FZ3",
+    "n": "Bank of India Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01RF2",
+    "n": "Baroda BNP Paribas Multi Asset Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01LH1",
+    "n": "Canara Robeco Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF226401059",
+    "n": "Capitalmind Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1TE9",
+    "n": "DSP Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01RS8",
+    "n": "Edelweiss Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01YH0",
+    "n": "Franklin India Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01MA9",
+    "n": "Groww Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01XW8",
+    "n": "HDFC Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01RI3",
+    "n": "HSBC Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF109K015K4",
+    "n": "ICICI Prudential Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": true
+   },
+   {
+    "isin": "INF00XX01DS6",
+    "n": "ITI Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1AC1",
+    "n": "Invesco India Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01NQ4",
+    "n": "JM Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1PD4",
+    "n": "Kotak Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01RZ5",
+    "n": "LIC MF Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01BW2",
+    "n": "Mahindra Manulife Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01KZ6",
+    "n": "Mirae Asset Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF204KB19V4",
+    "n": "Nippon India Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": true
+   },
+   {
+    "isin": "INF663L010A3",
+    "n": "PGIM India Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01580",
+    "n": "Quant Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": true
+   },
+   {
+    "isin": "INF082J01457",
+    "n": "Quantum Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01TZ3",
+    "n": "SBI MULTI ASSET ALLOCATION FUND",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01230",
+    "n": "Samco Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01406",
+    "n": "Shriram Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1LK9",
+    "n": "Sundaram Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF277K019Y3",
+    "n": "Tata Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001347",
+    "n": "The Wealth Company Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01VE6",
+    "n": "UTI Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01JY4",
+    "n": "Union Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01761",
+    "n": "WhiteOak Capital Multi Asset Allocation Fund",
+    "cat": "Multi Asset",
+    "pick": false
+   }
+  ],
+  "Category index for Overnight (CRISIL or NSE)": [
+   {
+    "isin": "INF579M01BG4",
+    "n": "360 ONE Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB1ZH2",
+    "n": "ADITYA BIRLA SUN LIFE OVERNIGHT FUND",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01N65",
+    "n": "Axis Overnight Fund",
+    "cat": "Overnight",
+    "pick": true
+   },
+   {
+    "isin": "INF194KB1447",
+    "n": "BANDHAN Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01EU7",
+    "n": "BANK OF INDIA OVERNIGHT FUND",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701177",
+    "n": "Bajaj Finserv Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01HV4",
+    "n": "Baroda BNP Paribas Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01JM5",
+    "n": "Canara Robeco Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF2KCX01087",
+    "n": "Choice Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1MC8",
+    "n": "DSP Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01JV9",
+    "n": "Edelweiss Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01SS9",
+    "n": "Franklin India Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01GL8",
+    "n": "Groww Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF179KB1HT1",
+    "n": "HDFC Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01OF6",
+    "n": "HSBC Overnight Fund",
+    "cat": "Overnight",
+    "pick": true
+   },
+   {
+    "isin": "INF0R8701079",
+    "n": "Helios Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC11G1",
+    "n": "ICICI Prudential Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01564",
+    "n": "ITI Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1163",
+    "n": "Invesco India Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01MB8",
+    "n": "JM Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001036",
+    "n": "JioBlackRock Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1BF9",
+    "n": "Kotak Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF2ZPR01014",
+    "n": "LAKSHYA OVERNIGHT FUND",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01QI3",
+    "n": "LIC MF Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01838",
+    "n": "Mahindra Manulife Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01FG6",
+    "n": "Mirae Asset Overnight Fund",
+    "cat": "Overnight",
+    "pick": true
+   },
+   {
+    "isin": "INF2ZSC01028",
+    "n": "Monarch Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF0J8L01081",
+    "n": "NJ Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF204KB1R31",
+    "n": "Nippon India Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01T01",
+    "n": "PGIM India Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01TK5",
+    "n": "SBI OVERNIGHT FUND",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01040",
+    "n": "Samco Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01497",
+    "n": "Shriram Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1HG5",
+    "n": "Sundaram Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01453",
+    "n": "TRUSTMF Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF277K018T5",
+    "n": "Tata Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF789FB1S71",
+    "n": "UTI - Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01FA2",
+    "n": "Union Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8F01075",
+    "n": "Zerodha Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01AZ7",
+    "n": "quant Overnight Fund",
+    "cat": "Overnight",
+    "pick": false
+   }
+  ],
+  "Category index for Short Duration (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01XK8",
+    "n": "Aditya Birla Sun Life Short Term Fund",
+    "cat": "Short Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF740K01NJ5",
+    "n": "DSP Short Term Fund",
+    "cat": "Short Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01VS3",
+    "n": "Franklin India Short-Term Income Plan (no. of segregated portfolios- 3)",
+    "cat": "Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF109K013N3",
+    "n": "ICICI Prudential Short Term Fund",
+    "cat": "Short Duration",
+    "pick": true
+   }
+  ],
+  "Category index for Ultra Short Duration (CRISIL or NSE)": [
+   {
+    "isin": "INF209K01UR9",
+    "n": "Aditya Birla Sun Life Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF209K01XU7",
+    "n": "Aditya Birla Sun Life Ultra short to short term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF846K01F40",
+    "n": "Axis Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01EN1",
+    "n": "Axis Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF194KA16R3",
+    "n": "BANDHAN ULTRA SHORT TERM FUND",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01J77",
+    "n": "BANDHAN ULTRA SHORT TO SHORT TERM FUND",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01892",
+    "n": "BANK OF INDIA ULTRA SHORT TERM FUND",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01GJ7",
+    "n": "BARODA BNP PARIBAS ULTRA SHORT TO SHORT TERM FUND",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701CF6",
+    "n": "Bajaj Finserv Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01HA8",
+    "n": "Baroda BNP Paribas Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01GM1",
+    "n": "Canara Robeco Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01ET1",
+    "n": "Canara Robeco Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01ON5",
+    "n": "DSP Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF740K013Q1",
+    "n": "DSP Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01XR8",
+    "n": "Edelweiss Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01UP8",
+    "n": "Edelweiss Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01XL4",
+    "n": "Franklin India Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01YE7",
+    "n": "Franklin India Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF179KB15Q6",
+    "n": "HDFC Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01VF7",
+    "n": "HDFC Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01GM7",
+    "n": "HSBC Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01T04",
+    "n": "ICICI Prudential Ultra Short term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01O82",
+    "n": "ICICI Prudential Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01AE2",
+    "n": "ITI Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01TH0",
+    "n": "Invesco India Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01NY8",
+    "n": "Invesco India Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01DW3",
+    "n": "JM Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001150",
+    "n": "JioBlackRock Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01JP2",
+    "n": "Kotak Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF178L01AX4",
+    "n": "Kotak Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01QU8",
+    "n": "LIC MF Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01FM8",
+    "n": "LIC MF Ultra Short to Short Term fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01887",
+    "n": "Mahindra Manulife Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01267",
+    "n": "Mahindra Manulife Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01BO9",
+    "n": "Mirae Asset Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01GK6",
+    "n": "Mirae Asset Ultra Short-Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01247",
+    "n": "Motilal Oswal Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF204KB10H2",
+    "n": "Nippon India Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01ZU3",
+    "n": "Nippon India Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": true
+   },
+   {
+    "isin": "INF223J01QO7",
+    "n": "PGIM India Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01TF5",
+    "n": "SBI ULTRA SHORT TERM FUND",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01VM7",
+    "n": "SBI Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01HI3",
+    "n": "Sundaram Ultra Short Term Fund (Formerly Known as Sundaram Ultra Short Duration Fund)",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF173K01FS6",
+    "n": "Sundaram Ultra Short to Short Term Fund (Formerly Known as Sundaram Low Duration Fund)",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF277K011T0",
+    "n": "Tata Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01OK4",
+    "n": "Tata Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01TI1",
+    "n": "UTI Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01XI3",
+    "n": "UTI Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01KO3",
+    "n": "Union Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01LQ6",
+    "n": "Union Ultra Short to Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01209",
+    "n": "WhiteOak Capital Ultra Short Term Fund",
+    "cat": "Ultra Short Duration",
+    "pick": false
+   }
+  ],
+  "Nifty LargeMidcap 250": [
+   {
+    "isin": "INF2JJD01193",
+    "n": "Abakkus Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01VH8",
+    "n": "Aditya Birla Sun Life Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01J46",
+    "n": "Axis Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01652",
+    "n": "BANK OF INDIA LARGE & MID CAP FUND",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701763",
+    "n": "Bajaj Finserv Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01V89",
+    "n": "Bandhan Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01JU2",
+    "n": "Baroda BNP Paribas Large and Mid Cap fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01EI4",
+    "n": "Canara Robeco Large and Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01PL6",
+    "n": "DSP Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF843K01AL0",
+    "n": "Edelweiss Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01IN1",
+    "n": "Franklin India Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF179KA1RQ7",
+    "n": "HDFC Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01NV5",
+    "n": "HSBC Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8701269",
+    "n": "Helios Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF109K011O5",
+    "n": "ICICI Prudential Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": true
+   },
+   {
+    "isin": "INF00XX01DA4",
+    "n": "ITI Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01MA0",
+    "n": "Invesco India Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF192K01NK7",
+    "n": "JM Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF174K01LF9",
+    "n": "Kotak Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": true
+   },
+   {
+    "isin": "INF767K01NE9",
+    "n": "LIC MF Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01945",
+    "n": "Mahindra Manulife Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01BI1",
+    "n": "Mirae Asset Large & Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01999",
+    "n": "Motilal Oswal Large and Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF959L01CH6",
+    "n": "Navi Large & Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01F20",
+    "n": "Nippon India Vision Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01Y12",
+    "n": "PGIM India Large and Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01648",
+    "n": "Quant Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01UJ5",
+    "n": "SBI LARGE & MIDCAP FUND",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01271",
+    "n": "Samco Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF903J01PR9",
+    "n": "Sundaram Large and Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF0GCD01891",
+    "n": "TRUSTMF LARGE & MIDCAP FUND",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01MK8",
+    "n": "Tata Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001594",
+    "n": "The Wealth Company Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01UG3",
+    "n": "UTI Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": true
+   },
+   {
+    "isin": "INF582M01GA0",
+    "n": "Union Large & Midcap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01845",
+    "n": "WhiteOak Capital Large & Mid Cap Fund",
+    "cat": "Large and Mid Cap",
+    "pick": false
+   }
+  ],
+  "Sectoral and thematic indices (varies by fund)": [
+   {
+    "isin": "INF579M01AI2",
+    "n": "360 ONE QUANT FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K014W1",
+    "n": "Aditya Birla Sun Life Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB14D2",
+    "n": "Aditya Birla Sun Life Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KC1373",
+    "n": "Aditya Birla Sun Life Conglomerate Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01WC7",
+    "n": "Aditya Birla Sun Life Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01VF2",
+    "n": "Aditya Birla Sun Life Digital India Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB1U76",
+    "n": "Aditya Birla Sun Life ESG Integration Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01WH6",
+    "n": "Aditya Birla Sun Life Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01WS3",
+    "n": "Aditya Birla Sun Life International Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209K01VT3",
+    "n": "Aditya Birla Sun Life MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KA1YK0",
+    "n": "Aditya Birla Sun Life Manufacturing Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB1O82",
+    "n": "Aditya Birla Sun Life PSU Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": true
+   },
+   {
+    "isin": "INF209KB1O25",
+    "n": "Aditya Birla Sun Life Pharma and Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KC1118",
+    "n": "Aditya Birla Sun Life Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB1T79",
+    "n": "Aditya Birla Sun Life Special Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF209KB15X7",
+    "n": "Aditya Birla Sun Life Transportation and Logistics Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K016N4",
+    "n": "Axis Business Cycles Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K013X0",
+    "n": "Axis Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01W23",
+    "n": "Axis ESG Integration Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K016S3",
+    "n": "Axis India Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01X71",
+    "n": "Axis Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K011Z9",
+    "n": "Axis Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846K01Z87",
+    "n": "Axis Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF846KA1168",
+    "n": "Axis Services Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1GB2",
+    "n": "BANDHAN FINANCIAL SERVICES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1IE2",
+    "n": "BANDHAN INNOVATION FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194K01X46",
+    "n": "BANDHAN Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1EB7",
+    "n": "BANDHAN TRANSPORTATION AND LOGISTICS FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01702",
+    "n": "BANK OF INDIA MANUFACTURING & INFRASTRUCTURE FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701BZ6",
+    "n": "Bajaj Finserv Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701946",
+    "n": "Bajaj Finserv Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0QA701AB9",
+    "n": "Bajaj Finserv Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1IQ6",
+    "n": "Bandhan Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1KF5",
+    "n": "Bandhan Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF194KB1JX0",
+    "n": "Bandhan Multi-Factor Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01HE4",
+    "n": "Bank of India Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01GF3",
+    "n": "Bank of India Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF761K01GI7",
+    "n": "Bank of India Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01971",
+    "n": "Baroda BNP Paribas Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01VJ6",
+    "n": "Baroda BNP Paribas Business Conglomerates Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF955L01KK1",
+    "n": "Baroda BNP Paribas Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01VP3",
+    "n": "Baroda BNP Paribas ESG Best-in-Class Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01UJ8",
+    "n": "Baroda BNP Paribas Energy Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01VA5",
+    "n": "Baroda BNP Paribas Health and Wellness Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01PT7",
+    "n": "Baroda BNP Paribas India Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01TE1",
+    "n": "Baroda BNP Paribas Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01TP7",
+    "n": "Baroda BNP Paribas Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF251K01VY5",
+    "n": "Baroda BNP Paribas Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01LN9",
+    "n": "Canara Robeco Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01DU1",
+    "n": "Canara Robeco Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01FO9",
+    "n": "Canara Robeco Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF760K01KZ5",
+    "n": "Canara Robeco Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1TQ3",
+    "n": "DSP Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1UX7",
+    "n": "DSP Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1ZM9",
+    "n": "DSP Financial Services Sectoral Debt Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1LG1",
+    "n": "DSP Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01PU7",
+    "n": "DSP India T.I.G.E.R. Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740K01QA7",
+    "n": "DSP Natural Resources And New Energy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF740KA1NQ6",
+    "n": "DSP Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01TA2",
+    "n": "Edelweiss Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01TY2",
+    "n": "Edelweiss Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01WH1",
+    "n": "Edelweiss Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01ML4",
+    "n": "Edelweiss Recently Listed IPO Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF754K01SK3",
+    "n": "Edelweiss Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01IZ5",
+    "n": "Franklin Asian Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01JF5",
+    "n": "Franklin Build India Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01YQ1",
+    "n": "Franklin India Multi-Factor Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF090I01GC8",
+    "n": "Franklin India Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": true
+   },
+   {
+    "isin": "INF090I01FE6",
+    "n": "Franklin India Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF666M01HS1",
+    "n": "Groww Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1BG0",
+    "n": "HDFC Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1DY9",
+    "n": "HDFC Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1GO3",
+    "n": "HDFC Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1GI5",
+    "n": "HDFC Defence Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1AU3",
+    "n": "HDFC Housing Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1JO7",
+    "n": "HDFC INNOVATION FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179K01WQ2",
+    "n": "HDFC Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1FC0",
+    "n": "HDFC MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1II1",
+    "n": "HDFC Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1HO1",
+    "n": "HDFC Pharma and Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1HI3",
+    "n": "HDFC Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF179KC1GU0",
+    "n": "HDFC Transportation and Logistics Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01RI2",
+    "n": "HSBC Business Cycles Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01QZ9",
+    "n": "HSBC Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01RU8",
+    "n": "HSBC Financial Services fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF336L01RO1",
+    "n": "HSBC India Export Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF917K01FW8",
+    "n": "HSBC Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0R8701202",
+    "n": "Helios Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC12W6",
+    "n": "ICICI PRUDENTIAL ENERGY OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC10C2",
+    "n": "ICICI PRUDENTIAL HOUSING OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC12I5",
+    "n": "ICICI PRUDENTIAL PSU EQUITY FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC12K1",
+    "n": "ICICI PRUDENTIAL TRANSPORTATION AND LOGISTICS FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K1A385",
+    "n": "ICICI Prudential Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K013J1",
+    "n": "ICICI Prudential Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1YD4",
+    "n": "ICICI Prudential Bharat Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1P24",
+    "n": "ICICI Prudential Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": true
+   },
+   {
+    "isin": "INF109KC1F91",
+    "n": "ICICI Prudential Commodities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K1A427",
+    "n": "ICICI Prudential Conglomerate Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1O09",
+    "n": "ICICI Prudential ESG Exclusionary Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC10Y6",
+    "n": "ICICI Prudential Equity Minimum Variance Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01W25",
+    "n": "ICICI Prudential Exports & Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01Z14",
+    "n": "ICICI Prudential FMCG Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K018M4",
+    "n": "ICICI Prudential Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC12T2",
+    "n": "ICICI Prudential Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1D93",
+    "n": "ICICI Prudential MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC1O66",
+    "n": "ICICI Prudential QUANT FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K1A187",
+    "n": "ICICI Prudential Quality Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109KC12Z9",
+    "n": "ICICI Prudential Rural Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01Z48",
+    "n": "ICICI Prudential Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF109K01Z71",
+    "n": "ICICI Prudential US Bluechip Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01BU6",
+    "n": "ITI Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01DG1",
+    "n": "ITI Bharat Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01DM9",
+    "n": "ITI Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF00XX01BO9",
+    "n": "ITI Pharma and Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1AI8",
+    "n": "Invesco India Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1BI6",
+    "n": "Invesco India Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1338",
+    "n": "Invesco India ESG Integration Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01KY4",
+    "n": "Invesco India Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01MD4",
+    "n": "Invesco India Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1908",
+    "n": "Invesco India Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205K01NG5",
+    "n": "Invesco India PSU Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1BX5",
+    "n": "Invesco India Pharma and Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF205KA1965",
+    "n": "Invesco India Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF22M001168",
+    "n": "JioBlackRock Sector Rotation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1XA4",
+    "n": "Kotak Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1MD1",
+    "n": "Kotak Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1JN6",
+    "n": "Kotak Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1PP8",
+    "n": "Kotak Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1FI4",
+    "n": "Kotak ESG Exclusionary Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1VX0",
+    "n": "Kotak Energy Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1PZ7",
+    "n": "Kotak Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF178L01AL9",
+    "n": "Kotak Infrastructure and Economic Reform Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1TG9",
+    "n": "Kotak MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1IF4",
+    "n": "Kotak Manufacture in India Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1EZ1",
+    "n": "Kotak Pioneer Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1OL0",
+    "n": "Kotak Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1XW8",
+    "n": "Kotak Rural Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1YV8",
+    "n": "Kotak Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1SF3",
+    "n": "Kotak Special Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1QZ5",
+    "n": "Kotak Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174KA1TS4",
+    "n": "Kotak Transportation & Logistics Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01NK6",
+    "n": "LIC MF Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01SD0",
+    "n": "LIC MF Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF397L01LK4",
+    "n": "LIC MF Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01GW5",
+    "n": "LIC MF Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01RR2",
+    "n": "LIC MF Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF767K01SJ7",
+    "n": "LIC MF Technology Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01BQ4",
+    "n": "Mahindra Manulife Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01663",
+    "n": "Mahindra Manulife Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01DA4",
+    "n": "Mahindra Manulife Innovation Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01CC2",
+    "n": "Mahindra Manulife Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF174V01CO7",
+    "n": "MahindraManulife Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01GX9",
+    "n": "Mirae Asset Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01BL5",
+    "n": "Mirae Asset Great Consumer Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01ED6",
+    "n": "Mirae Asset Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF769K01PV4",
+    "n": "Mirae Asset Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01EP5",
+    "n": "Motilal Oswal Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01DN2",
+    "n": "Motilal Oswal Digital India Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01GN5",
+    "n": "Motilal Oswal Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01EW1",
+    "n": "Motilal Oswal Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01EJ8",
+    "n": "Motilal Oswal Innovation Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01HI3",
+    "n": "Motilal Oswal Quality Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01CS3",
+    "n": "Motilal Oswal Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01FE6",
+    "n": "Motilal Oswal Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF247L01FS6",
+    "n": "Motilal Oswal Special Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0J8L01172",
+    "n": "NJ Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KC1EK5",
+    "n": "Nippon India Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01XO1",
+    "n": "Nippon India Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01G52",
+    "n": "Nippon India Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KC1BO3",
+    "n": "Nippon India Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KA1SI1",
+    "n": "Nippon India Japan Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KC1FR7",
+    "n": "Nippon India MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01I50",
+    "n": "Nippon India Pharma Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01I92",
+    "n": "Nippon India Power & Infra Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204K01J34",
+    "n": "Nippon India Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KC1303",
+    "n": "Nippon India Taiwan Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF204KA15G5",
+    "n": "Nippon India US Equity Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF663L01Z45",
+    "n": "PGIM India Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF082J01382",
+    "n": "QUANTUM ESG BEST IN CLASS STRATEGY FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01721",
+    "n": "Quant Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF082J01473",
+    "n": "Quantum Ethical Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KB1183",
+    "n": "SBI Automotive Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KA1507",
+    "n": "SBI BANKING & FINANCIAL SERVICES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SB6",
+    "n": "SBI COMMA FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01RM5",
+    "n": "SBI CONSUMPTION OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SE0",
+    "n": "SBI ESG Exclusionary Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KB1126",
+    "n": "SBI Energy Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KA1A71",
+    "n": "SBI Equity Minimum Variance Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01UP2",
+    "n": "SBI HEALTHCARE OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01RS2",
+    "n": "SBI INFRASTRUCTURE FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KB1324",
+    "n": "SBI Innovative Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01SN1",
+    "n": "SBI MNC FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01UY4",
+    "n": "SBI PSU FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KB1AG6",
+    "n": "SBI Quality Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200KB1506",
+    "n": "SBI Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF200K01RV6",
+    "n": "SBI TECHNOLOGY OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01081",
+    "n": "Samco Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01024",
+    "n": "Samco Flexi Cap Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF0K1H01180",
+    "n": "Samco Special Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF680P01455",
+    "n": "Shriram Multi Sector Rotation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1LQ6",
+    "n": "Sundaram Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903J01NH5",
+    "n": "Sundaram Consumption Fund (Formerly Known as Sundaram Rural and Consumption Fund)",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903J01NB8",
+    "n": "Sundaram Financial Services Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903J01F92",
+    "n": "Sundaram Infrastructure Advantage Fund (Erstwhile Sundaram Capex Opportunities)",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1LV6",
+    "n": "Sundaram Multi-Factor Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF903JA1FA2",
+    "n": "Sundaram Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277KA1497",
+    "n": "TATA HOUSING OPPORTUNITIES FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF2F0001214",
+    "n": "THE WEALTH COMPANY ETHICAL FUND",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01Z10",
+    "n": "Tata Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277KA1166",
+    "n": "Tata Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01Z77",
+    "n": "Tata Digital India Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01NG4",
+    "n": "Tata Ethical Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K013A6",
+    "n": "Tata India Consumer Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277KA1CU2",
+    "n": "Tata India Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K019A3",
+    "n": "Tata India Pharma & Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K01PQ8",
+    "n": "Tata Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K013Y6",
+    "n": "Tata Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF277K015B9",
+    "n": "Tata Resources & Energy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF044D01CN2",
+    "n": "Taurus Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF044D01CJ0",
+    "n": "Taurus Ethical Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF044D01CD3",
+    "n": "Taurus Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01SN3",
+    "n": "UTI - Banking and Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01TO9",
+    "n": "UTI - Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01VF3",
+    "n": "UTI - India Consumer Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01TU6",
+    "n": "UTI - Infrastructure Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01UD0",
+    "n": "UTI - MNC Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F01SH5",
+    "n": "UTI - Transportation and Logistics Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1AZA4",
+    "n": "UTI Innovation Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF789F1AA98",
+    "n": "UTI Quant Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01KG9",
+    "n": "Union Active Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01JQ0",
+    "n": "Union Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01MH3",
+    "n": "Union Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF582M01JE6",
+    "n": "Union Innovation & Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01860",
+    "n": "WhiteOak Capital Banking & Financial Services Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01AD3",
+    "n": "WhiteOak Capital Consumption Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01936",
+    "n": "WhiteOak Capital Digital Bharat Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01951",
+    "n": "WhiteOak Capital ESG Best-In-Class Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01886",
+    "n": "WhiteOak Capital Pharma and Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01977",
+    "n": "WhiteOak Capital Quality Equity Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF03VN01902",
+    "n": "WhiteOak Capital Special Opportunities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01BX0",
+    "n": "quant BFSI Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01BR2",
+    "n": "quant Business Cycle Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01DF3",
+    "n": "quant Commodities Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01DN7",
+    "n": "quant Consumption Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01AD4",
+    "n": "quant ESG Integration Strategy Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01CD0",
+    "n": "quant Healthcare Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01CJ7",
+    "n": "quant Manufacturing Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01CZ3",
+    "n": "quant Momentum Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01DT4",
+    "n": "quant PSU Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01AK9",
+    "n": "quant Quantamental Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   },
+   {
+    "isin": "INF966L01CT6",
+    "n": "quant Teck Fund",
+    "cat": "Sectoral and Thematic",
+    "pick": false
+   }
+  ]
+ }
+}

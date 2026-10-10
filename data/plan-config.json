@@ -1,0 +1,128 @@
+{
+  "_about": "SELEQT action plan rules (Phase 1, mutual funds). One file, read by the weekly scoring script and by the page. Every number is a STARTING VALUE awaiting sign-off by the SELEQT investment team. Change values here, never in code. Each section's _why explains it.",
+  "version": "2026-10-draft-1",
+
+  "risk_profile": {
+    "_why": "Seven questions: six scored (0 to 4 points each, 24 maximum) and the income tax slab, which feeds the tax maths only. An eighth, optional question asks for equity gains already booked this financial year place the visitor in one of four profiles. A short horizon caps the profile, because time, not temperament, decides how much equity risk this money can take.",
+    "bands": [
+      { "profile": "conservative", "max_points": 8 },
+      { "profile": "moderate", "max_points": 14 },
+      { "profile": "growth", "max_points": 19 },
+      { "profile": "aggressive", "max_points": 24 }
+    ],
+    "horizon_caps": { "_why": "horizon answer index to the highest profile allowed", "0": "conservative", "1": "moderate" }
+  },
+
+  "target_mix": {
+    "_why": "Share of the mutual fund portfolio in each sleeve, by profile.",
+    "conservative": { "equity": 0.30, "hybrid": 0.20, "debt": 0.50 },
+    "moderate": { "equity": 0.50, "hybrid": 0.20, "debt": 0.30 },
+    "growth": { "equity": 0.70, "hybrid": 0.10, "debt": 0.20 },
+    "aggressive": { "equity": 0.85, "hybrid": 0.05, "debt": 0.10 }
+  },
+  "equity_split": {
+    "_why": "Split within the equity sleeve. Flexi includes multi cap, focused, value, contra, dividend yield and ELSS. Large and mid cap funds count half large, half mid.",
+    "conservative": { "large": 0.70, "flexi": 0.30, "mid": 0.00, "small": 0.00 },
+    "moderate": { "large": 0.50, "flexi": 0.30, "mid": 0.15, "small": 0.05 },
+    "growth": { "large": 0.40, "flexi": 0.30, "mid": 0.20, "small": 0.10 },
+    "aggressive": { "large": 0.30, "flexi": 0.30, "mid": 0.25, "small": 0.15 }
+  },
+  "hybrid_categories": ["aggressive_hybrid", "balanced_advantage", "multi_asset"],
+  "debt_liquid_categories": ["liquid", "money_market", "overnight", "ultra_short", "low_duration"],
+  "debt_core_categories": ["short_duration", "corporate_bond", "banking_psu"],
+  "debt_split": {
+    "_why": "Within the debt sleeve: money for the next year or so, and the rest in short-duration or corporate bond funds.",
+    "liquid": 0.40,
+    "core": 0.60
+  },
+  "ceilings": {
+    "_why": "Simplicity limits. More funds in one category rarely add anything but cost.",
+    "max_equity_funds": 6,
+    "max_per_category": 1,
+    "max_per_amc": 2
+  },
+
+  "scoring": {
+    "_why": "Score from 0 to 100 within the fund's SEBI category. Three-year periods stepped monthly over the last seven years (about 49 periods); at least 24 periods are needed, otherwise the fund is too new to judge. Components become percentiles within the category, then are weighted; a missing component is dropped and the rest re-weighted.",
+    "window_months": 36,
+    "lookback_months": 84,
+    "min_windows": 24,
+    "weights": { "consistency": 0.35, "margin": 0.20, "downside": 0.15, "cost": 0.15, "size": 0.15 },
+    "size_bands_cr": [
+      { "below": 500, "points": 20 },
+      { "below": 1000, "points": 50 },
+      { "below": 5000, "points": 80 },
+      { "below": null, "points": 100 }
+    ],
+    "smallcap_capacity_cr": 15000,
+    "smallcap_over_capacity_points": 85,
+    "index_weights": { "_why": "Index funds are never judged on beating the market, only on cost and how closely they track their index.", "cost": 0.5, "tracking": 0.5 },
+    "min_proxy_months": 59
+  },
+
+  "benchmarks": {
+    "_why": "Default benchmark per category, used because declared benchmarks are not available free. Resolution order: licensed_index (slot, not available yet), then index_fund_proxy (cheapest direct index fund on this index with enough history), then category_peers (median of direct-plan peers). Debt and hybrid always use category_peers.",
+    "large_cap": { "index": "Nifty 100", "match": "nifty\\s*100(?!\\s*(equal|low|quality|alpha|esg|enhanced))" },
+    "large_mid": { "index": "Nifty LargeMidcap 250", "match": "large\\s*mid\\s*cap\\s*250" },
+    "mid_cap": { "index": "Nifty Midcap 150", "match": "midcap\\s*150(?!\\s*(momentum|quality|alpha))" },
+    "small_cap": { "index": "Nifty Smallcap 250", "match": "smallcap\\s*250(?!\\s*(momentum|quality))" },
+    "flexi_cap": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "multi_cap": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "focused": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "value": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "contra": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "dividend_yield": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" },
+    "elss": { "index": "Nifty 500", "match": "nifty\\s*500(?!\\s*(momentum|value|quality|multicap|equal|low|multifactor|flexi))" }
+  },
+
+  "verdict": {
+    "_why": "Applied in this order: too new, category outside the target mix, weak consistency, a better fund held in the same category or overlapping heavily, borderline consistency, then keep if at or above the category median. Switching a regular plan to direct is a separate instruction added on top.",
+    "replace_consistency_below": 0.40,
+    "review_consistency_below": 0.55,
+    "overlap_replace_above": 0.60,
+    "review_history_below_months": 36,
+    "credit_risk_review": true
+  },
+
+  "additions": {
+    "_why": "Fill a sleeve when it is short of target by more than this share of the portfolio. Candidates are direct growth funds, five years old, at least 1,000 crore, best score in the category.",
+    "gap_threshold": 0.05,
+    "min_aum_cr": 1000,
+    "min_history_months": 60,
+    "max_overlap_with_holdings": 0.40,
+    "alternatives": 2
+  },
+
+  "tax": {
+    "_why": "Indian rules from 23 July 2024. Debt funds bought on or after 1 April 2023 are taxed at the slab whatever the holding period. Hybrid tax follows the fund's equity share. 4% cess is added; surcharge is not modelled.",
+    "equity_stcg": 0.20,
+    "equity_ltcg": 0.125,
+    "equity_lt_days": 365,
+    "ltcg_exemption": 125000,
+    "debt_lt_rate": 0.125,
+    "debt_lt_days": 730,
+    "debt_slab_from": "2023-04-01",
+    "hybrid_equity_taxed_at": 0.65,
+    "hybrid_slab_below": 0.35,
+    "grandfather_date": "2018-01-31",
+    "grandfather_buy_before": "2018-02-01",
+    "cess": 0.04,
+    "slabs": [0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30]
+  },
+
+  "exit_load_defaults": {
+    "_why": "Used only where the statement does not state the scheme's exit load. Estimates, labelled as such in the plan.",
+    "equity": { "rate": 0.01, "days": 365 },
+    "hybrid": { "rate": 0.01, "days": 365 },
+    "debt": { "rate": 0.0, "days": 0 },
+    "liquid": { "rate": 0.0, "days": 7 },
+    "index": { "rate": 0.0, "days": 0 }
+  },
+
+  "switching": {
+    "_why": "Do not sell an equity lot held under a year unless the fund is clearly broken. Skip a switch whose cost is more than a conservative three-year estimate of what it gains; the estimate takes only half of the historical edge.",
+    "sell_young_lot_if_consistency_below": 0.25,
+    "benefit_years": 3,
+    "benefit_haircut": 0.5
+  }
+}

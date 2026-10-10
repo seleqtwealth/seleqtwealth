@@ -485,3 +485,44 @@ html.theme-coder .so-lead-msg.is-err { color: #f7768e; }
   .so-own-bar span, .so-cost-fill { animation: none; }
   .so-report-title, .so-sec-head, .so-tile-num, .so-big-num { color: #111 !important; }
 }
+
+/* ============================================================
+   ACTION PLAN (internal test, second-opinion-plan.js)
+   Sober and editorial: verdicts are small tags, never large type.
+   ============================================================ */
+.sp-banner { position: sticky; top: 0; z-index: 2000; padding: 9px 16px; background: #7a2e1f; color: #fff; text-align: center; font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.04em; }
+.sp-wrap { margin-top: 48px; padding-top: 34px; border-top: 1px solid var(--ink-line); }
+.sp-title { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--ink-strong); margin-bottom: 10px; }
+.sp-lede, .sp-meta { font-family: var(--font-body); font-size: 0.95rem; line-height: 1.6; color: var(--ink-soft); margin-bottom: 18px; max-width: 64ch; }
+.sp-meta strong { color: var(--ink-strong); font-weight: 600; }
+.sp-form { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.sp-q { border: 1px solid var(--ink-line); border-radius: 6px; padding: 14px 18px; background: var(--paper-soft); }
+.sp-q legend { padding: 0 6px; font-family: var(--font-body); font-size: 0.92rem; font-weight: 500; color: var(--ink-strong); }
+.sp-q label { display: inline-flex; align-items: center; gap: 6px; margin: 6px 18px 0 0; font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-soft); cursor: pointer; }
+.sp-num input { width: 140px; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: 4px; background: var(--paper); font: inherit; }
+.sp-hint { margin-top: 8px; font-family: var(--font-body); font-size: 0.82rem; line-height: 1.55; color: var(--ink-faint); }
+.sp-err { color: #b4453a; font-family: var(--font-body); font-size: 0.88rem; }
+.sp-none { font-family: var(--font-body); font-size: 0.9rem; color: var(--ink-faint); margin: 6px 0 12px; }
+.sp-card { margin-top: 14px; padding: 16px 18px; border: 1px solid var(--ink-line); border-radius: 6px; background: var(--paper); }
+.sp-card h4 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; color: var(--ink-strong); }
+.sp-card-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.sp-vals, .sp-cmp { margin-top: 6px; font-family: var(--font-body); font-size: 0.86rem; line-height: 1.55; color: var(--ink-soft); }
+.sp-cmp strong { color: var(--ink-strong); font-weight: 500; }
+.sp-reasons, .sp-picks { margin: 8px 0 0; padding-left: 18px; font-family: var(--font-body); font-size: 0.9rem; line-height: 1.6; color: var(--ink-soft); }
+.sp-reasons li + li, .sp-picks li + li { margin-top: 6px; }
+.sp-why { display: block; font-size: 0.82rem; color: var(--ink-faint); }
+.sp-tag { display: inline-block; margin-left: 6px; padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: 999px; font-family: var(--font-body); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.sp-keep { border-color: rgba(40, 110, 70, 0.5); color: #286e46; }
+.sp-replace, .sp-reduce { border-color: rgba(180, 69, 58, 0.5); color: #b4453a; }
+.sp-review { border-color: var(--border-gold); color: var(--gold-deep); }
+.sp-direct, .sp-hold { border-color: var(--ink-line-strong); }
+.sp-stage { margin: 18px 0 6px; font-family: var(--font-body); font-size: 0.74rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-deep); }
+.sp-table { width: 100%; border-collapse: collapse; font-family: var(--font-body); font-size: 0.86rem; color: var(--ink-soft); }
+.sp-table th { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--ink-line-strong); font-weight: 500; color: var(--ink-strong); font-size: 0.78rem; }
+.sp-table td { padding: 8px 8px; border-bottom: 1px solid var(--ink-line); vertical-align: top; }
+.sp-mix td.sp-bar { width: 40%; }
+.sp-b-t, .sp-b-c { display: block; height: 6px; border-radius: 3px; }
+.sp-b-t { background: var(--ink-line-strong); margin-bottom: 3px; }
+.sp-b-c { background: var(--gold); }
+@media (max-width: 640px) { .sp-table { font-size: 0.78rem; } .sp-table th, .sp-table td { padding: 6px 4px; } }
+@media print { .sp-banner, #spStart, .sp-form { display: none !important; } .sp-card { break-inside: avoid; } }
