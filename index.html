@@ -86,75 +86,8 @@
       }
     })();
   </script>
-  <!-- GFF 2026 welcome pop-up: shown only during the fest window (or with ?gff),
-       dismissible. Decided pre-paint so it is ready before first paint. -->
-  <script>
-    (function() {
-      try {
-        var START = '2026-09-08', END = '2026-09-11';
-        var preview = window.location.search.indexOf('gff') !== -1; // ?gff previews it any day
-        var t = new Date();
-        var iso = t.getFullYear() + '-' +
-          String(t.getMonth() + 1).padStart(2, '0') + '-' +
-          String(t.getDate()).padStart(2, '0');
-        var inWindow = iso >= START && iso <= END;
-        if (preview || inWindow) {
-          var el = document.documentElement;
-          el.classList.add('gff-on');
-          if (preview) {
-            el.classList.add('gff-preview');
-          } else if (localStorage.getItem('seleqt_gff_state') === 'docked') {
-            el.classList.add('gff-docked'); // returning visitor: show the bar, not the pop-up
-          }
-        }
-      } catch (e) {}
-    })();
-  </script>
-  <!-- Coder-theme pre-paint (site-wide, remembered) -->
-  <script>(function(){try{var d=new Date(),iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(iso>"2026-09-11"){localStorage.removeItem("seleqt_theme");}else if(localStorage.getItem("seleqt_theme")==="coder"){document.documentElement.classList.add("theme-coder");}}catch(e){}})();</script>
 </head>
 <body>
-
-  <!-- GFF 2026 welcome pop-up + docked bar (time-boxed; controlled by html.gff-on) -->
-  <div class="gff-modal-overlay" id="gffModal" role="dialog" aria-modal="true" aria-labelledby="gffModalTitle">
-    <div class="gff-modal">
-      <span class="gff-progress" aria-hidden="true"><span class="gff-progress-bar" id="gffProgress"></span></span>
-      <button class="gff-modal-close" id="gffClose" type="button" aria-label="Close">&times;</button>
-      <span class="gff-modal-eyebrow">SELEQT is at</span>
-      <h2 class="gff-modal-title" id="gffModalTitle">Global Fintech Fest <span class="gff-modal-year">2026</span></h2>
-      <p class="gff-modal-where">8 to 11 September &middot; Jio World Centre, Mumbai</p>
-      <p class="gff-modal-msg">Lovely to meet you. Let's continue the conversation.</p>
-      <div class="gff-modal-actions">
-        <a class="gff-mbtn gff-mbtn--wa" id="gffWhatsApp" href="https://wa.me/919426669596?text=Hi%20SELEQT%2C%20we%20met%20at%20Global%20Fintech%20Fest%202026.%20I%27d%20love%20to%20learn%20more." target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.001 3C9.373 3 3.998 8.375 3.998 15c0 2.385.7 4.605 1.9 6.482L3 29l7.78-2.04A12.94 12.94 0 0 0 16.001 27C22.628 27 28 21.626 28 15S22.628 3 16.001 3zm0 21.818c-1.97 0-3.81-.54-5.382-1.476l-.385-.226-4.616 1.21 1.232-4.5-.252-.395A9.79 9.79 0 0 1 6.18 15c0-5.42 4.4-9.82 9.82-9.82 5.42 0 9.82 4.4 9.82 9.82 0 5.418-4.4 9.818-9.82 9.818zm5.39-7.36c-.295-.148-1.748-.862-2.018-.96-.27-.099-.467-.148-.664.148-.196.295-.762.96-.934 1.157-.172.197-.345.222-.64.074-.295-.148-1.245-.46-2.371-1.467-.876-.78-1.467-1.745-1.64-2.04-.172-.296-.018-.456.13-.604.133-.132.295-.345.443-.517.148-.173.197-.296.295-.493.099-.197.05-.37-.025-.518-.074-.148-.664-1.6-.91-2.193-.24-.576-.484-.498-.664-.508-.172-.008-.369-.01-.566-.01a1.087 1.087 0 0 0-.787.37c-.27.296-1.034 1.01-1.034 2.46s1.058 2.852 1.206 3.05c.148.197 2.084 3.18 5.05 4.46.706.305 1.257.487 1.687.624.708.225 1.353.193 1.863.117.568-.085 1.748-.715 1.994-1.405.246-.69.246-1.282.172-1.406-.073-.123-.27-.197-.566-.345z"/></svg>
-          Chat on WhatsApp
-        </a>
-        <a class="gff-mbtn gff-mbtn--call" id="gffBook" href="#contact">Book a call</a>
-      </div>
-      <div class="gff-modal-brand">SELEQT &middot; Private Wealth</div>
-    </div>
-  </div>
-
-  <!-- GFF docked bar: the pop-up collapses to this after close / 15s. Click the
-       label to reopen; the switch flips the site's developer theme. -->
-  <div class="gff-bar" id="gffBar" role="region" aria-label="Global Fintech Fest 2026">
-    <div class="gff-bar-inner">
-      <button class="gff-bar-main" id="gffBarMain" type="button" aria-label="Reopen Global Fintech Fest details">
-        <span class="gff-bar-dot" aria-hidden="true"></span>
-        <span class="gff-bar-label">SELEQT at <strong>Global Fintech Fest 2026</strong></span>
-        <span class="gff-bar-hint" aria-hidden="true">expand</span>
-      </button>
-      <div class="gff-bar-actions">
-        <a class="gff-bar-btn gff-bar-btn--wa" id="gffBarWhatsApp" href="https://wa.me/919426669596?text=Hi%20SELEQT%2C%20we%20met%20at%20Global%20Fintech%20Fest%202026.%20I%27d%20love%20to%20learn%20more." target="_blank" rel="noopener noreferrer">WhatsApp</a>
-        <a class="gff-bar-btn gff-bar-btn--call" id="gffBarBook" href="#contact">Book a call</a>
-        <label class="gff-switch" title="Developer theme">
-          <input type="checkbox" class="gff-switch-input" id="gffThemeSwitch" aria-label="Toggle developer theme" autocomplete="off" />
-          <span class="gff-switch-track"><span class="gff-switch-thumb"></span></span>
-          <span class="gff-switch-text">&lt;/&gt; Dev mode</span>
-        </label>
-      </div>
-    </div>
-  </div>
 
   <!-- NAV -->
   <nav id="navbar">
@@ -223,6 +156,7 @@
       <div class="hero-actions hero-actions-center reveal delay-1">
         <a href="#contact" class="btn-primary">Begin a Conversation</a>
         <a href="#services" class="btn-ghost">Our Services</a>
+        <a href="/gift-city" class="hero-global-link"><span class="hgl-kicker">Investing from abroad?</span><span class="hgl-cta">Explore GIFT City <span aria-hidden="true">&rarr;</span></span></a>
       </div>
     </div>
     <div class="hero-scroll-hint">

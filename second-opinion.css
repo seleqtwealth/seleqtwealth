@@ -207,7 +207,6 @@
 .so-pass-input:focus { outline: none; border-color: var(--gold); }
 .so-pass-btn { flex-shrink: 0; }
 .so-pass-error { margin-top: 12px; font-family: var(--font-body); font-size: 0.88rem; color: #b4453a; }
-html.theme-coder .so-pass-error { color: #f7768e; }
 
 /* ---- Status / spinner ---- */
 .so-status { display: flex; align-items: center; gap: 14px; margin-top: 26px; font-family: var(--font-body); color: var(--ink-soft); }
@@ -280,10 +279,6 @@ html.theme-coder .so-pass-error { color: #f7768e; }
 #soReport {
   --c-eq: #1f3a5f; --c-hy: #6d8bab; --c-debt: #b8924e; --c-gold: #d9b25f; --c-cash: #9aa7ba; --c-other: #c9c2ae;
   --c-gain: #b8924e; --c-extra: #b4453a; --c-dot-off: rgba(10, 26, 53, 0.13);
-}
-html.theme-coder #soReport {
-  --c-eq: #7aa2f7; --c-hy: #bb9af7; --c-debt: #e0af68; --c-gold: #ff9e64; --c-cash: #9ece6a; --c-other: #565f89;
-  --c-gain: #e0af68; --c-extra: #f7768e; --c-dot-off: rgba(192, 202, 245, 0.16);
 }
 .so-key, .so-dot, .so-own-bar span, .so-cost-fill, .so-cost-extra, .so-gain-bar span, .so-amc-bar span {
   -webkit-print-color-adjust: exact; print-color-adjust: exact;
@@ -458,7 +453,6 @@ html.theme-coder #soReport {
 .so-sample-banner .so-help-link { font-size: inherit; }
 .so-lead-msg.is-ok { color: var(--gold-deep); }
 .so-lead-msg.is-err { color: #b4453a; }
-html.theme-coder .so-lead-msg.is-err { color: #f7768e; }
 
 .so-report-foot { margin-top: 34px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
 
@@ -476,7 +470,7 @@ html.theme-coder .so-lead-msg.is-err { color: #f7768e; }
 @media print {
   #navbar, .footer, .floating-back, .so-privacy, .so-help, .so-hero-actions,
   .so-lead, .so-report-foot, .faq-section, .whatsapp-fab,
-  .cookie-banner, .gff-modal-overlay, .gff-bar, .coder-exit,
+  .cookie-banner,
   #soUpload, #soManual { display: none !important; }
   body { background: #fff; color: #111; }
   .sub-hero { padding: 20px 0 0 !important; min-height: 0 !important; }

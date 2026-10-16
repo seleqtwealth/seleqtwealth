@@ -1,29 +1,6 @@
 /* Self-hosted fonts — Cormorant Garamond + Outfit (latin, latin-ext).
    Generated from Google Fonts woff2; swap display; only needed
    subsets/weights download via unicode-range. */
-/* JetBrains Mono (Apache-2.0, self-hosted) — used only by the coder theme, so it
-   downloads lazily when that theme is active. */
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('fonts/jetbrains-mono-400-normal-latin.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('fonts/jetbrains-mono-500-normal-latin.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('fonts/jetbrains-mono-700-normal-latin.woff2') format('woff2');
-}
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: italic;
@@ -252,103 +229,6 @@
   --rule: 1px solid var(--border);
   --rule-strong: 1px solid var(--border-strong);
 }
-
-/* ============================================
-   CODER THEME — "Tokyo Night" dark IDE (toggled from the GFF pop-up, site-wide,
-   remembered as seleqt_theme=coder). Deep indigo editor palette, cyan accent,
-   JetBrains Mono headings. --navy is used across the site as dark TEXT on light
-   surfaces, so it is flipped LIGHT here (keeps those headings readable); the few
-   surfaces that use --navy as a dark BACKGROUND are re-darkened below.
-   ============================================ */
-html.theme-coder {
-  --navy: #c0caf5;          /* was dark heading text -> light so it stays legible */
-  --navy-deep: #c0caf5;
-  --navy-mid: #24283b;      /* dark surface (services / principles) */
-  --navy-light: #2f334d;    /* dark surface hover */
-  --navy-accent: #2f334d;
-  --ink: #16161e;           /* darkest surface: hero / contact / footer */
-
-  --gold: #7dcfff;          /* cyan accent replaces gold */
-  --gold-light: #a9dfff;
-  --gold-deep: #5ab0e8;
-  --gold-dim: rgba(125, 207, 255, 0.30);
-  --gold-faint: rgba(125, 207, 255, 0.08);
-
-  --paper: #1a1b26;
-  --paper-soft: #24283b;
-  --paper-deep: #2f334d;
-
-  --ink-strong: #c0caf5;
-  --ink-soft: rgba(192, 202, 245, 0.68);
-  --ink-faint: rgba(192, 202, 245, 0.46);
-  --ink-line: rgba(192, 202, 245, 0.12);
-  --ink-line-strong: rgba(192, 202, 245, 0.22);
-
-  --white: #c0caf5;
-  --white-dim: rgba(192, 202, 245, 0.64);
-  --white-faint: rgba(192, 202, 245, 0.12);
-  --white-ghost: rgba(192, 202, 245, 0.04);
-
-  --border: rgba(192, 202, 245, 0.12);
-  --border-strong: rgba(192, 202, 245, 0.26);
-  --border-gold: rgba(125, 207, 255, 0.42);
-
-  /* Headings stay in the elegant serif (mono at display size reads tacky). Mono
-     is used only for the small "code" accents listed below. */
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-  background: #1a1b26;
-  color-scheme: dark;
-}
-html.theme-coder body { background: var(--paper); color: var(--ink-strong); }
-
-/* Mono only on small accents: nav, labels, numbers, CTAs, meta, tags. */
-html.theme-coder .nav-links a,
-html.theme-coder .nav-cta,
-html.theme-coder [class*="eyebrow"],
-html.theme-coder .sc-index, html.theme-coder .sc-index-current, html.theme-coder .sc-index-total,
-html.theme-coder .sc-cta, html.theme-coder .about-cta, html.theme-coder .insight-cta,
-html.theme-coder .btn-primary, html.theme-coder .btn-secondary,
-html.theme-coder .stat-num, html.theme-coder .stat-label,
-html.theme-coder .contact-label,
-html.theme-coder .insight-category, html.theme-coder .article-category,
-html.theme-coder .insight-read-time, html.theme-coder .article-meta-top, html.theme-coder time,
-html.theme-coder .footer-col h2, html.theme-coder .word-counter {
-  font-family: var(--font-mono);
-}
-
-/* Re-darken surfaces that use bare --navy as a BACKGROUND (now flipped light). */
-html.theme-coder .statement-band,
-html.theme-coder .serve,
-html.theme-coder .cookie-banner { background: #16161e; }
-
-/* The scroll-cards' cream "active/near" backing -> dark surface. */
-html.theme-coder .sc-item[data-i="0"].is-active::after,
-html.theme-coder .sc-item[data-i="1"].is-active::after,
-html.theme-coder .sc-item[data-i="2"].is-active::after { background: rgba(36, 40, 59, 0.72); }
-html.theme-coder .sc-item[data-i="0"].is-near::after,
-html.theme-coder .sc-item[data-i="1"].is-near::after,
-html.theme-coder .sc-item[data-i="2"].is-near::after { background: rgba(36, 40, 59, 0.34); }
-html.theme-coder .sc-item[data-i="3"] + .sc-item::before { background: rgba(192, 202, 245, 0.10); }
-
-/* Hardcoded cream surfaces -> dark. */
-html.theme-coder #navbar.scrolled {
-  background: rgba(22, 22, 30, 0.86);
-  border-bottom-color: rgba(192, 202, 245, 0.12);
-}
-html.theme-coder #navbar.scrolled .mobile-menu { background: rgba(22, 22, 30, 0.97); }
-html.theme-coder .floating-back.is-on-paper { background: rgba(36, 40, 59, 0.92); color: var(--ink-strong); }
-
-/* Filled cyan CTAs get dark text; the outline nav-cta keeps its cyan text at
-   rest and only flips dark when it fills on hover. */
-html.theme-coder .btn-primary { color: #0a1420 !important; }
-html.theme-coder .nav-cta:hover,
-html.theme-coder #navbar.scrolled .nav-cta:hover { color: #0a1420 !important; }
-html.theme-coder ::selection { background: rgba(125, 207, 255, 0.30); }
-
-/* Keep the breathing hero's gold italic accent (rest of the hero is serif too). */
-html.theme-coder .hero .hero-title em.italic,
-html.theme-coder .hero-title.hero-title-oneline em.italic { color: #b8924e; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -5054,313 +4934,6 @@ html.intro-running .hero-wordmark-spotlight {
 }
 
 /* ============================================
-   GFF 2026 WELCOME POP-UP
-   Prominent centered modal, shown only when <html> has .gff-on (set pre-paint in
-   index.html for the fest date window, or via ?gff). Styled to the official
-   Global Fintech Fest palette: indigo/purple gradient, cyan year, orange CTA.
-   ============================================ */
-.gff-modal-overlay { display: none; }
-html.gff-on .gff-modal-overlay {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(8, 5, 26, 0.74);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s var(--ease-out);
-}
-html.gff-on .gff-modal-overlay.is-open { opacity: 1; pointer-events: auto; }
-
-.gff-modal {
-  position: relative;
-  width: 100%;
-  max-width: 468px;
-  padding: 42px 38px 30px;
-  border-radius: 18px;
-  background:
-    radial-gradient(130% 100% at 100% 0%, rgba(255, 88, 47, 0.30) 0%, rgba(255, 88, 47, 0) 46%),
-    linear-gradient(150deg, #1b0b5e 0%, #3a18c8 56%, #6510f5 100%);
-  box-shadow: 0 34px 90px rgba(10, 5, 40, 0.62);
-  color: #ffffff;
-  overflow: hidden;
-  transform: translateY(24px) scale(0.96);
-  transition: transform 0.5s var(--ease-out);
-  font-family: var(--font-body);
-}
-html.gff-on .gff-modal-overlay.is-open .gff-modal { transform: none; }
-
-/* Docking: the pop-up flies UP and shrinks toward the bar so the movement reads. */
-html.gff-on .gff-modal-overlay.is-docking { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
-html.gff-on .gff-modal-overlay.is-docking .gff-modal {
-  transform: translateY(-46vh) scale(0.26);
-  opacity: 0;
-  transition: transform 0.6s cubic-bezier(0.6, 0, 0.35, 1), opacity 0.5s ease;
-}
-
-/* Theme-switch "code rain" transition overlay (canvas injected by main.js). */
-.theme-fx {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  pointer-events: none;
-  background: #0b0b12;
-  opacity: 0;
-}
-
-.gff-modal-eyebrow {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.74);
-  margin-bottom: 10px;
-}
-.gff-modal-title {
-  font-family: var(--font-body);
-  font-size: 2rem;
-  line-height: 1.06;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  margin: 0 0 14px;
-  color: #ffffff;
-}
-.gff-modal-year { color: #35c8f0; }
-.gff-modal-where {
-  font-size: 0.86rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.82);
-  margin: 0 0 18px;
-}
-.gff-modal-msg {
-  font-size: 1.02rem;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.94);
-  margin: 0 0 28px;
-}
-.gff-modal-actions { display: flex; gap: 12px; }
-.gff-mbtn {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 14px 16px;
-  border-radius: 9px;
-  text-decoration: none;
-  border: 1.5px solid transparent;
-  cursor: pointer;
-  transition: transform 0.2s var(--ease-out), background 0.2s, border-color 0.2s;
-}
-.gff-mbtn--wa { background: #ff582f; color: #ffffff; }
-.gff-mbtn--wa:hover { background: #ff6d49; transform: translateY(-2px); }
-.gff-mbtn--wa svg { display: block; }
-.gff-mbtn--call { background: transparent; color: #ffffff; border-color: rgba(255, 255, 255, 0.5); }
-.gff-mbtn--call:hover { border-color: #ffffff; background: rgba(255, 255, 255, 0.10); }
-.gff-modal-close {
-  position: absolute;
-  top: 14px; right: 16px;
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 1.7rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: color 0.2s;
-}
-.gff-modal-close:hover { color: #ffffff; }
-.gff-modal-brand {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.58);
-}
-.gff-mbtn:focus-visible,
-.gff-modal-close:focus-visible { outline: 2px solid #35c8f0; outline-offset: 3px; }
-
-@media (max-width: 480px) {
-  .gff-modal { padding: 36px 24px 26px; border-radius: 16px; }
-  .gff-modal-title { font-size: 1.66rem; }
-  .gff-modal-msg { font-size: 0.96rem; }
-  .gff-modal-actions { flex-direction: column; }
-}
-
-/* 15s auto-dock timer: a quiet depleting line across the top of the pop-up. */
-.gff-progress {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.12);
-}
-.gff-progress-bar {
-  display: block;
-  height: 100%;
-  width: 100%;
-  background: #35c8f0;
-}
-
-/* ============================================
-   GFF DOCKED BAR — where the pop-up collapses to (close / 15s). Sits above the
-   fixed nav (offset by --gff-bar-h, measured in main.js). Click the label to
-   reopen the pop-up; the switch flips the site-wide developer theme.
-   ============================================ */
-.gff-bar { display: none; }
-html.gff-docked { --gff-bar-h: 52px; }
-html.gff-docked #navbar { top: var(--gff-bar-h); }
-html.gff-docked .gff-bar {
-  display: block;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1001;
-  background: linear-gradient(90deg, #1b0b5e, #6510f5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  transform: translateY(-100%);
-  transition: transform 0.5s var(--ease-out);
-}
-html.gff-docked .gff-bar.is-in { transform: translateY(0); }
-.gff-bar-inner {
-  max-width: 1600px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 48px;
-}
-.gff-bar-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  background: none;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  font-family: var(--font-body);
-  text-align: left;
-  padding: 6px 0;
-}
-.gff-bar-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #ff582f;
-  flex-shrink: 0;
-  animation: gffPulse 2s infinite;
-}
-@keyframes gffPulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 88, 47, 0.5); }
-  70% { box-shadow: 0 0 0 8px rgba(255, 88, 47, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 88, 47, 0); }
-}
-.gff-bar-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.gff-bar-label strong { font-weight: 600; color: #ffffff; }
-.gff-bar-hint {
-  font-size: 0.66rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-  padding: 2px 7px;
-  flex-shrink: 0;
-}
-.gff-bar-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.gff-bar-btn {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 8px 14px;
-  border-radius: 7px;
-  text-decoration: none;
-  white-space: nowrap;
-  border: 1.5px solid transparent;
-  transition: background 0.2s, border-color 0.2s, transform 0.2s;
-}
-.gff-bar-btn--wa { background: #ff582f; color: #ffffff; }
-.gff-bar-btn--wa:hover { background: #ff6d49; transform: translateY(-1px); }
-.gff-bar-btn--call { color: #ffffff; border-color: rgba(255, 255, 255, 0.45); }
-.gff-bar-btn--call:hover { border-color: #ffffff; }
-
-/* Developer-theme switch (lives in the docked bar) */
-.gff-switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
-.gff-switch-input { position: absolute; opacity: 0; width: 0; height: 0; }
-.gff-switch-track {
-  width: 38px; height: 22px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
-  position: relative;
-  transition: background 0.2s;
-  flex-shrink: 0;
-}
-.gff-switch-thumb {
-  position: absolute;
-  top: 3px; left: 3px;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: #ffffff;
-  transition: transform 0.2s var(--ease-out);
-}
-.gff-switch-input:checked + .gff-switch-track { background: #7dcfff; }
-.gff-switch-input:checked + .gff-switch-track .gff-switch-thumb { transform: translateX(16px); }
-.gff-switch-input:focus-visible + .gff-switch-track { outline: 2px solid #35c8f0; outline-offset: 2px; }
-.gff-switch-text {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.85);
-  white-space: nowrap;
-}
-
-/* Floating "exit dev mode" chip: appears on every page while the coder theme is
-   on, so a visitor is never stranded in it on a page without the bar. */
-.coder-exit {
-  position: fixed;
-  left: 20px; bottom: 20px;
-  z-index: 999;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #7dcfff;
-  background: #161b22;
-  border: 1px solid rgba(125, 207, 255, 0.5);
-  border-radius: 8px;
-  padding: 9px 14px;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-  transition: background 0.2s, transform 0.2s;
-}
-.coder-exit:hover { background: #1c232c; transform: translateY(-1px); }
-.coder-exit:focus-visible { outline: 2px solid #7dcfff; outline-offset: 3px; }
-
-@media (max-width: 820px) {
-  .gff-bar-inner { padding: 8px 20px; gap: 10px; flex-wrap: wrap; }
-  .gff-bar-hint { display: none; }
-  .gff-bar-btn--call { display: none; }
-  .gff-bar-label { font-size: 0.82rem; white-space: normal; }
-}
-
-/* ============================================
    ACCESSIBILITY — keyboard focus rings
    Restores visible focus indication that the legacy `outline: none`
    rules suppressed. Only fires for keyboard navigation, not mouse clicks.
@@ -5385,32 +4958,33 @@ button:focus-visible {
 
 /* ============================================
    MONACO CONCIERGE BAR (injected by main.js; no end date, see MONACO_BAR)
-   Sits above the fixed nav; the nav is pushed down by --mc-bar-h.
+   A champagne-gold band above the fixed nav with navy type, so it stands out
+   on both the dark hero and the paper nav; the nav is pushed down by
+   --mc-bar-h. On a fresh load it arrives as the .mc-pop pill (below).
    ============================================ */
 .mc-bar {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1001;
-  background: linear-gradient(90deg, #050b17 0%, #0c1830 50%, #050b17 100%);
-  color: var(--white);
+  background: linear-gradient(100deg, #a9843f 0%, #d4b679 38%, #ecd9a8 50%, #d4b679 62%, #a9843f 100%);
+  background-size: 240% 100%;
+  animation: mcShine 10s ease-in-out infinite;
+  color: var(--navy-deep);
+  box-shadow: 0 8px 28px -12px rgba(2, 8, 18, 0.65);
   transform: translateY(-100%);
   transition: transform 0.7s var(--ease-out);
 }
 .mc-bar.is-in { transform: translateY(0); }
-/* Gold hairline with a slow sheen travelling along it */
 .mc-bar::after {
   content: '';
   position: absolute;
   left: 0; right: 0; bottom: 0;
   height: 1px;
-  background:
-    linear-gradient(90deg, transparent 0%, rgba(232, 205, 150, 0.95) 50%, transparent 100%) -40% 0 / 40% 100% no-repeat,
-    linear-gradient(90deg, transparent, rgba(184, 146, 78, 0.55) 20%, rgba(184, 146, 78, 0.55) 80%, transparent);
-  animation: mcSheen 7s var(--ease-in-out) infinite;
+  background: rgba(6, 14, 28, 0.28);
 }
-@keyframes mcSheen {
-  0% { background-position: -40% 0, 0 0; }
-  60%, 100% { background-position: 140% 0, 0 0; }
+@keyframes mcShine {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0% 0; }
 }
 html.mc-on #navbar { top: var(--mc-bar-h, 46px); }
 html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
@@ -5418,6 +4992,7 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   html.mc-on .floating-back { top: calc(76px + var(--mc-bar-h, 46px)); }
 }
 #navbar { transition: background 0.5s, backdrop-filter 0.5s, border-color 0.5s, top 0.7s var(--ease-out); }
+html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
 
 .mc-inner {
   max-width: 1600px;
@@ -5428,37 +5003,31 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   gap: 22px;
   padding: 11px 64px;
   position: relative;
+  transition: opacity 0.5s ease 0.1s;
 }
+.mc-bar.is-arriving .mc-inner { opacity: 0; transition: none; }
 .mc-place {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-family: var(--font-body);
   font-size: 0.62rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--gold-light);
+  color: var(--navy-deep);
   padding-right: 22px;
-  border-right: 1px solid rgba(184, 146, 78, 0.35);
+  border-right: 1px solid rgba(6, 14, 28, 0.3);
   white-space: nowrap;
 }
-.mc-star { font-size: 0.7rem; letter-spacing: 0; color: var(--gold); }
-.mc-msg {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: rgba(244, 241, 234, 0.72);
-  line-height: 1.4;
-  min-width: 0;
-}
+.mc-star { font-size: 0.7rem; letter-spacing: 0; color: var(--navy-deep); }
+.mc-msg { margin: 0; line-height: 1.4; min-width: 0; }
 .mc-msg em {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 1.12rem;
-  font-weight: 400;
-  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--navy-deep);
   letter-spacing: 0.01em;
 }
 .mc-cta {
@@ -5467,17 +5036,18 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   gap: 8px;
   font-family: var(--font-body);
   font-size: 0.64rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--gold-light);
+  background: var(--navy-deep);
+  border-radius: 999px;
+  padding: 9px 18px 8px;
   text-decoration: none;
   white-space: nowrap;
-  padding: 7px 0 5px;
-  border-bottom: 1px solid rgba(184, 146, 78, 0.45);
-  transition: color 0.3s, border-color 0.3s, gap 0.3s var(--ease-out);
+  transition: color 0.3s, background 0.3s, gap 0.3s var(--ease-out);
 }
-.mc-cta:hover { color: var(--white); border-color: var(--gold-light); gap: 13px; }
+.mc-cta:hover { background: var(--ink); color: var(--white); gap: 13px; }
 .mc-cta-short { display: none; }
 .mc-close {
   position: absolute;
@@ -5489,27 +5059,65 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   place-items: center;
   background: none;
   border: none;
-  color: rgba(244, 241, 234, 0.5);
+  color: rgba(6, 14, 28, 0.6);
   font-size: 1.25rem;
   line-height: 1;
   transition: color 0.3s;
 }
-.mc-close:hover { color: var(--white); }
+.mc-close:hover { color: var(--navy-deep); }
+
+/* Monaco pill: appears mid-screen on a fresh load, then glides up and
+   stretches into the bar (geometry animated from main.js). */
+.mc-pop {
+  position: fixed;
+  z-index: 1002;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%) scale(0.82);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #a9843f 0%, #d4b679 38%, #ecd9a8 50%, #d4b679 62%, #a9843f 100%);
+  background-size: 240% 100%;
+  animation: mcShine 4s ease-in-out infinite;
+  color: var(--navy-deep);
+  box-shadow: 0 22px 60px -14px rgba(2, 8, 18, 0.75), 0 0 0 6px rgba(212, 182, 121, 0.14);
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.mc-pop.is-shown { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.mc-pop.is-moving { transform: none; transition: none; box-shadow: 0 8px 28px -12px rgba(2, 8, 18, 0.65); }
+.mc-pop.is-leaving { opacity: 0; transition: opacity 0.45s ease; }
+.mc-pop-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
 
 @media (max-width: 640px) {
   .mc-inner { gap: 12px; padding: 10px 44px 10px 16px; justify-content: flex-start; }
   .mc-place { display: none; }
-  .mc-msg em { font-size: 1rem; }
+  .mc-msg em { font-size: 1.02rem; }
   .mc-cta-long { display: none; }
   .mc-cta-short { display: inline; }
-  .mc-cta { margin-left: auto; }
+  .mc-cta { margin-left: auto; padding: 8px 14px 7px; }
   .mc-close { right: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mc-bar, #navbar { transition: none; }
-  .mc-bar::after { animation: none; }
+  .mc-bar, .mc-pop { animation: none; }
 }
-@media print { .mc-bar { display: none; } }
+@media print { .mc-bar, .mc-pop { display: none; } }
 
 /* ============================================
    EXPLAINER PAGES (Family Office, GIFT City)
@@ -5548,93 +5156,6 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   margin: 0;
 }
 .xp-lede + .xp-lede { margin-top: 14px; }
-
-/* Comparison cards (two or three across) */
-.xp-compare {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.xp-compare--three { grid-template-columns: repeat(3, 1fr); }
-.xp-card {
-  background: var(--paper-soft);
-  border: 1px solid var(--ink-line);
-  border-radius: 6px;
-  padding: 36px 34px 32px;
-  box-shadow: 0 14px 34px -26px rgba(10, 26, 53, 0.2);
-  display: flex;
-  flex-direction: column;
-}
-.xp-card--dark {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: var(--white);
-}
-.xp-card > .xp-card-tag {
-  font-family: var(--font-body);
-  font-size: 0.62rem;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-}
-.xp-card h3 {
-  font-family: var(--font-display);
-  font-size: 1.7rem;
-  font-weight: 400;
-  line-height: 1.15;
-  color: var(--navy);
-  margin-bottom: 14px;
-}
-.xp-card h3 em { font-style: italic; color: var(--gold); }
-.xp-card--dark h3 { color: var(--white); }
-.xp-card > p {
-  font-size: 0.96rem;
-  font-weight: 300;
-  line-height: 1.75;
-  color: var(--ink-soft);
-  margin-bottom: 22px;
-}
-.xp-card--dark > p { color: var(--white-dim); }
-.xp-facts { margin: auto 0 0; border-top: 1px solid var(--ink-line); }
-.xp-card--dark .xp-facts { border-color: rgba(244, 241, 234, 0.14); }
-.xp-facts div {
-  display: grid;
-  grid-template-columns: 118px 1fr;
-  gap: 14px;
-  padding: 13px 0;
-  border-bottom: 1px solid var(--ink-line);
-}
-.xp-card--dark .xp-facts div { border-color: rgba(244, 241, 234, 0.1); }
-.xp-facts div:last-child { border-bottom: none; padding-bottom: 0; }
-.xp-facts dt {
-  font-size: 0.62rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold-deep);
-  padding-top: 3px;
-}
-.xp-card--dark .xp-facts dt { color: var(--gold-light); }
-.xp-facts dd {
-  margin: 0;
-  font-size: 0.92rem;
-  font-weight: 300;
-  line-height: 1.6;
-  color: var(--ink-strong);
-}
-.xp-card--dark .xp-facts dd { color: rgba(244, 241, 234, 0.88); }
-.xp-card-link {
-  margin-top: 22px;
-  font-size: 0.68rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold-deep);
-  text-decoration: none;
-  border-bottom: 1px solid var(--gold-dim);
-  align-self: flex-start;
-  padding-bottom: 4px;
-}
-.xp-card--dark .xp-card-link { color: var(--gold-light); }
 
 /* Numbered step timeline */
 .xp-steps {
@@ -5677,40 +5198,6 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   line-height: 1.72;
   color: var(--ink-soft);
   margin: 0;
-}
-
-/* Data tiles (e.g. Why India) */
-.xp-tiles {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--ink-line);
-  border-bottom: 1px solid var(--ink-line);
-}
-.xp-tile { padding: 36px 26px 30px; border-left: 1px solid var(--ink-line); }
-.xp-tile:first-child { border-left: none; padding-left: 0; }
-.xp-tile-num {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 3.4vw, 2.8rem);
-  font-weight: 300;
-  line-height: 1;
-  color: var(--navy);
-  margin-bottom: 14px;
-}
-.xp-tile-num em { font-style: italic; color: var(--gold); }
-.xp-tile-label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 300;
-  line-height: 1.55;
-  color: var(--ink-soft);
-}
-.xp-tile-src {
-  display: block;
-  margin-top: 10px;
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
 }
 
 /* Fine print */
@@ -5858,10 +5345,6 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
 .xp-panel-help strong { color: var(--white); font-weight: 400; }
 
 @media (max-width: 1000px) {
-  .xp-compare--three { grid-template-columns: 1fr; }
-  .xp-tiles { grid-template-columns: repeat(2, 1fr); }
-  .xp-tile:nth-child(3) { border-left: none; padding-left: 0; }
-  .xp-tile:nth-child(n+3) { border-top: 1px solid var(--ink-line); }
   .xp-steps { grid-template-columns: repeat(2, 1fr); }
   .xp-steps li:not(:nth-child(3n+1)) { padding-left: 0; border-left: none; }
   .xp-steps li:nth-child(even) { padding-left: 26px; border-left: 1px solid var(--ink-line); }
@@ -5871,14 +5354,8 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
 @media (max-width: 720px) {
   .xp-block { margin-top: 72px; padding-top: 56px; }
   .xp-head { margin-bottom: 36px; }
-  .xp-compare { grid-template-columns: 1fr; }
-  .xp-card { padding: 28px 22px 24px; }
-  .xp-facts div { grid-template-columns: 1fr; gap: 4px; }
   .xp-steps { grid-template-columns: 1fr; }
   .xp-steps li, .xp-steps li:nth-child(even) { padding: 28px 0 30px; border-left: none; }
-  .xp-tiles { grid-template-columns: 1fr; }
-  .xp-tile, .xp-tile:first-child, .xp-tile:nth-child(3) { padding: 26px 0; border-left: none; }
-  .xp-tile + .xp-tile { border-top: 1px solid var(--ink-line); }
   .xp-picker { padding: 8px; margin: 0 -8px; }
   .xp-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .xp-tabs::-webkit-scrollbar { display: none; }
@@ -6222,77 +5699,31 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   .gc-bar-fill, .gc-path, .gc-area { transition: none; }
 }
 
-/* Monaco bar, high-visibility treatment: a champagne-gold band with navy
-   type so it stands out against both the dark hero and the paper nav. */
-.mc-bar {
-  background: linear-gradient(100deg, #a9843f 0%, #d4b679 38%, #ecd9a8 50%, #d4b679 62%, #a9843f 100%);
-  background-size: 240% 100%;
-  animation: mcShine 10s ease-in-out infinite;
-  color: var(--navy-deep);
-  box-shadow: 0 8px 28px -12px rgba(2, 8, 18, 0.65);
+/* Phone-only GIFT City link under the hero buttons (the top nav is folded
+   into the menu on phones, so GIFT City would otherwise be hidden). */
+.hero-global-link { display: none; }
+@media (max-width: 900px) {
+  .hero-global-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    text-decoration: none;
+    text-align: center;
+  }
+  .hgl-kicker {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: rgba(244, 241, 234, 0.78);
+  }
+  .hgl-cta {
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 5px;
+  }
 }
-@keyframes mcShine {
-  0%, 100% { background-position: 100% 0; }
-  50% { background-position: 0% 0; }
-}
-.mc-bar::after { background: rgba(6, 14, 28, 0.28); animation: none; }
-.mc-place { color: var(--navy-deep); border-right-color: rgba(6, 14, 28, 0.3); font-weight: 500; }
-.mc-star { color: var(--navy-deep); }
-.mc-msg em { color: var(--navy-deep); font-weight: 500; font-size: 1.2rem; }
-.mc-cta {
-  background: var(--navy-deep);
-  color: var(--gold-light);
-  border: none;
-  border-radius: 999px;
-  padding: 9px 18px 8px;
-  font-weight: 500;
-}
-.mc-cta:hover { background: var(--ink); color: var(--white); }
-.mc-close { color: rgba(6, 14, 28, 0.6); }
-.mc-close:hover { color: var(--navy-deep); }
-@media (max-width: 640px) {
-  .mc-msg em { font-size: 1.02rem; }
-  .mc-cta { padding: 8px 14px 7px; }
-}
-@media (prefers-reduced-motion: reduce) { .mc-bar { animation: none; } }
-
-/* Monaco pill: appears mid-screen on a fresh load, then glides up and
-   stretches into the bar (geometry animated from main.js). */
-.mc-pop {
-  position: fixed;
-  z-index: 1002;
-  left: 50%;
-  top: 46%;
-  transform: translate(-50%, -50%) scale(0.82);
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 13px 26px;
-  border-radius: 999px;
-  background: linear-gradient(100deg, #a9843f 0%, #d4b679 38%, #ecd9a8 50%, #d4b679 62%, #a9843f 100%);
-  background-size: 240% 100%;
-  animation: mcShine 4s ease-in-out infinite;
-  color: var(--navy-deep);
-  box-shadow: 0 22px 60px -14px rgba(2, 8, 18, 0.75), 0 0 0 6px rgba(212, 182, 121, 0.14);
-  white-space: nowrap;
-  overflow: hidden;
-  pointer-events: none;
-  transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out);
-}
-.mc-pop.is-shown { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-.mc-pop.is-moving { transform: none; transition: none; box-shadow: 0 8px 28px -12px rgba(2, 8, 18, 0.65); }
-.mc-pop.is-leaving { opacity: 0; transition: opacity 0.45s ease; }
-.mc-pop-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-body);
-  font-size: 0.74rem;
-  font-weight: 500;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-}
-.mc-inner { transition: opacity 0.5s ease 0.1s; }
-.mc-bar.is-arriving .mc-inner { opacity: 0; transition: none; }
-html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }

@@ -1,81 +1,62 @@
-# SELEQT — Private Wealth Management Website
+# SELEQT Private Wealth website
 
 Live: **[seleqtwealth.in](https://seleqtwealth.in)**
 
-A static HTML/CSS/JS site for SELEQT, a boutique private wealth firm based in Ahmedabad. Deployed via GitHub Pages on every push to `main`.
+A static HTML/CSS/JS site with no build step. Edit the files directly, commit, and push to `main`.
 
-## File structure
+## Hosting and deploys
+
+- Hosted on **Vercel**. A push to `main` deploys in about 30 seconds.
+- The Git to Vercel webhook has been unreliable. If the live site does not update after a push, trigger the project's **Deploy Hook** (Vercel project Settings, Git, Deploy Hooks). The same URL is stored as the repo secret `VERCEL_DEPLOY_HOOK` for the blog scheduler.
+- `vercel.json` turns on clean URLs (`/about` serves `about.html`).
+- `.vercelignore` keeps `scripts/`, `_castest/`, `_local/`, `brand/`, `.claude/` and the internal docs off the live site.
+- DNS for `seleqtwealth.in` is managed at Hostinger. Email is Zoho: never touch its MX, SPF or verification records.
+
+## Local preview
 
 ```
-seleqtwealth/
-├── index.html             ← Homepage (hero, services carousel, contact form)
-├── about.html             ← About the firm + team section
-├── investments.html       ← Investments practice page
-├── taxation.html          ← Taxation practice page
-├── insurance.html         ← Insurance practice page
-├── succession.html        ← Succession planning practice page
-├── blogs.html          ← Editorial / blog listing page
-├── blogs/              ← Individual long-form articles
-│   └── fee-only-advisory.html
-├── 404.html               ← Custom not-found page (served by GitHub Pages)
-├── style.css              ← All styles
-├── main.js                ← Interactions, animations, cookie consent, GA4 loader
-├── favicon.svg            ← Site favicon
-├── sitemap.xml            ← For search engines (Google Search Console)
-├── robots.txt             ← Crawler instructions
-├── images/team/           ← Team member photos (webp)
-├── pattern-floral.svg     ← Decorative asset
-├── CNAME                  ← Custom domain mapping for GitHub Pages
-├── SEO.md                 ← SEO playbook / checklist
-└── README.md
+python3 -m http.server 8768 --bind 127.0.0.1
 ```
 
-## Adding a new Blog article
+Then open `http://localhost:8768/index.html`. Locally, pages need the `.html` suffix (clean URLs only exist on Vercel). Keep `--bind 127.0.0.1` so test statements in `_castest/` are never exposed to the network.
 
-1. Copy `blogs/fee-only-advisory.html` to `blogs/your-article-slug.html`.
-2. Update title, meta description, canonical URL, OG tags, JSON-LD schema, and date.
-3. Write the article body inside `<div class="article-body">`. Use `<h2>` for sections, `<blockquote>` for pull quotes, `<ol class="article-ol">` for numbered lists.
-4. Add the article to `blogs.html` listing (replace one of the "in development" cards with a real entry, or add a new section).
-5. Add the URL to `sitemap.xml`.
-6. Commit + push.
+## Pages
 
-## Deployment
+| Page | File |
+|---|---|
+| Home (hero, services carousel, contact form) | `index.html` |
+| Services overview (five boxes) | `services.html` |
+| Family Office, Investments, Taxation, Insurance, Succession | `family-office.html`, `investments.html`, `taxation.html`, `insurance.html`, `succession.html` |
+| GIFT City (for global investors) | `gift-city.html` |
+| About and team | `about.html` |
+| Blog listing and articles | `blogs.html`, `blogs/*.html` |
+| Not found | `404.html` |
 
-The site is hosted on **Vercel** with the custom domain `seleqtwealth.in`.
+**Unlisted pages** (noindex, linked from nowhere, shared by link only): `portfolio-analyser-uguexidh.html` (portfolio analyser), `family-atlas-wp6ghl7s.html` (ATLAS fill-in file), `analyst-test/` (hiring assessments). Never add them to the sitemap or `robots.txt`.
 
-Any push to `main` triggers a Vercel build — the live site updates within ~30 seconds. The `CNAME` file is a leftover from the previous GitHub Pages hosting and can be removed once the DNS transition is fully complete.
+## Shared header and footer
 
-## Configuration TODOs
+The nav and footer are written out in every page, not injected. A nav or footer change has to be made in every `*.html`, every `blogs/*.html`, and `scripts/blog_template.html` (used for new articles).
 
-- **Open Graph image**: drop a 1200×630 PNG named `og-image.png` at the repo root for richer link previews on WhatsApp / LinkedIn / Twitter.
-- **Team section** in `about.html`: replace the 4 placeholder cards with real names, roles, and bios.
+## Things that change over time
 
-Google Analytics 4 is wired up (Measurement ID `G-FF6XR4Q4P1` in `main.js`) and gated by the cookie consent banner.
+- **Monaco bar:** a notice above the nav, built in `main.js` (search "Monaco concierge bar"). It has no end date. To take it down, set `MONACO_BAR = false`. On a fresh load it arrives as a small pill that rises into the bar; the close button hides it only until the next load.
+- **Blog schedule:** article pages already exist in `blogs/`. `scripts/schedule.json` lists when each one appears on the listing and in the sitemap; `.github/workflows/publish-blog.yml` runs `scripts/publish_next.py` every Wednesday at 09:00 IST and then fires the deploy hook. Add new entries to keep the weekly cadence going.
+- **GIFT City figures:** the growth chart (IMF World Economic Outlook) and the rupee chart (US Federal Reserve H.10 via FRED, series `DEXINUS`) are written into `gift-city.html` as static markup and data. Refresh them by hand when the IMF publishes a new outlook.
+- **Portfolio analyser data:** `data/*.json`, rebuilt by the scripts in `scripts/` (not deployed).
 
-## Tech notes
+## Integrations
 
-- No build step. Edit HTML/CSS/JS directly, commit, push.
-- Contact form submits via [Web3Forms](https://web3forms.com). Form access key is in `index.html`; lock it to `seleqtwealth.in` in the Web3Forms dashboard to prevent off-domain spam.
-- WhatsApp click-to-chat number and the GA4 Measurement ID live in `main.js` so they can be updated in one place.
-- Cookie consent banner gates GA4 loading — no tracking fires until the user clicks Accept (DPDP Act 2023 safe).
+- **Contact form:** Web3Forms (access key in `index.html`; keep it locked to `seleqtwealth.in` in the Web3Forms dashboard).
+- **Analytics:** Google Analytics 4 (`G-FF6XR4Q4P1` in `main.js`), loaded only after the visitor accepts the cookie banner.
+- **WhatsApp button:** number and default message in `main.js`.
 
-## Features
+## House style
 
-- Animated hero with cursor-tracking gold spotlight
-- Scroll-triggered reveal animations
-- Vertical services carousel with active-state index
-- Marquee strip of service categories with cursor parallax
-- Custom dropdowns with full keyboard navigation
-- Page-to-page transition curtain with live SVG drawing
-- Custom animated cursor (gold dot + ring) on desktop
-- Mobile responsive with hamburger menu
-- WhatsApp click-to-chat floating button
-- Cookie consent banner + GA4 (when configured)
-- `prefers-reduced-motion` honored throughout
+- No em dashes or en dashes in any copy. Use commas, colons or parentheses.
+- "SELEQT" is always written in capitals.
 
-## Brand palette
+## Brand
 
-- Navy: `#0a1a35`
-- Gold: `#b8924e`
-- Paper (cream background): `#f5f1e8`
-- Typography: Cormorant Garamond (display) + Outfit (body)
+- Navy `#0a1a35`, gold `#b8924e`, paper `#f5f1e8`
+- Cormorant Garamond (display) and Outfit (body), self-hosted in `fonts/`
