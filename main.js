@@ -1730,7 +1730,7 @@ function isInViewport(el) {
           setTimeout(() => pop.remove(), 500);
         });
       };
-    }, 1700);
+    }, 1200);
   }
 
   bar.querySelector('.mc-cta').addEventListener('click', () => window.seleqtTrack('monaco_meeting_click', { location: 'bar' }));
@@ -1741,16 +1741,22 @@ function isInViewport(el) {
   });
 
   if (viaSite) { showInstant(); return; }
-  const arrive = reduced ? show : popThenShow;
-  // On the homepage, wait for the hero intro to finish so the pill appears
-  // as the landing page settles, never over the masthead animation.
+  let arrived = false;
+  const arrive = () => { if (arrived) return; arrived = true; (reduced ? show : popThenShow)(); };
+  // On the homepage the pill comes in with the hero title (about 3.5s into
+  // the intro, after the SELEQT masthead has gone), not after the intro's
+  // final cleanup, so there is no pause once the landing page is visible.
   if (html.classList.contains('intro-active')) {
+    const HERO_IN_MS = 3500;
+    let timer = null;
     const mo = new MutationObserver(() => {
-      if (!html.classList.contains('intro-active')) { mo.disconnect(); setTimeout(arrive, 350); }
+      if (!timer && html.classList.contains('intro-running')) timer = setTimeout(arrive, HERO_IN_MS);
+      if (!html.classList.contains('intro-active')) { mo.disconnect(); if (!timer) arrive(); }
     });
     mo.observe(html, { attributes: true, attributeFilter: ['class'] });
+    if (html.classList.contains('intro-running')) timer = setTimeout(arrive, HERO_IN_MS);
   } else {
-    setTimeout(arrive, 700);
+    setTimeout(arrive, 450);
   }
 })();
 
