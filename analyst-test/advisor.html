@@ -355,7 +355,7 @@ body.reviewer .actionbar{display:none}
         <label class="opt" data-opt="d"><input type="radio" name="qB2" value="d"><span>Match it to one year's income, enough to tide the family over</span></label>
       </div>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Cover should replace lost income and clear liabilities (an income-replacement / needs basis, ~10&ndash;15&times; income, plus loans, minus existing assets). A, C and D are convenient shortcuts that routinely leave families under-covered.</div></div>
+      <div class="key"><div class="key-label">Correct answer</div><div class="key-line"><b>B.</b> Cover should replace lost income and clear liabilities (an income-replacement / needs basis, ~10 to 15&times; income, plus loans, minus existing assets). A, C and D are convenient shortcuts that routinely leave families under-covered.</div></div>
     </div>
 
     <div class="q" data-type="tf" data-correct="true">
@@ -367,7 +367,7 @@ body.reviewer .actionbar{display:none}
       </div>
       <textarea class="q-why" name="qB3_why" placeholder="Why? Briefly explain your reasoning..."></textarea>
       <div class="mark"></div>
-      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> A fixed annuity pays a level, nominal income that doesn't rise with prices, so over a 20&ndash;30 year retirement its purchasing power falls, it trades market risk for inflation (and longevity) risk. Mitigate by keeping some growth assets or inflation-linked options rather than annuitising everything. <b>Look for:</b> True + the inflation-erosion reasoning (bonus for naming a mitigation).</div></div>
+      <div class="key"><div class="key-label">Answer</div><div class="key-line"><b>True.</b> A fixed annuity pays a level, nominal income that doesn't rise with prices, so over a 20 to 30 year retirement its purchasing power falls, it trades market risk for inflation (and longevity) risk. Mitigate by keeping some growth assets or inflation-linked options rather than annuitising everything. <b>Look for:</b> True + the inflation-erosion reasoning (bonus for naming a mitigation).</div></div>
     </div>
 
     <div class="q" data-type="open">
@@ -478,14 +478,14 @@ body.reviewer .actionbar{display:none}
       <div class="q-head"><span class="q-no">E1</span><span class="q-tag">Suitability · advise</span><span class="q-type">Written</span></div>
       <p class="q-text">A client with a balanced, goal-aligned portfolio wants to move <b>60% of it</b> into one red-hot sectoral fund that's up sharply this year. As their adviser, how do you respond, and what is the right course of action?</p>
       <textarea name="qE1" placeholder="Identify the issue, then the right course of action..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Acknowledge the appeal, then the problems: heavy <b>concentration</b> in one sector, <b>performance-chasing / recency bias</b>, and it breaks the goal-aligned plan and pushes risk past the client's profile. Right course: revisit goals and risk, stay diversified, at most a <i>small</i> satellite (say 5&ndash;10%) if it genuinely fits, then rebalance. Reward suitability-first reasoning and a concrete moderate alternative, not a flat "no".</div></div>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line">Acknowledge the appeal, then the problems: heavy <b>concentration</b> in one sector, <b>performance-chasing / recency bias</b>, and it breaks the goal-aligned plan and pushes risk past the client's profile. Right course: revisit goals and risk, stay diversified, at most a <i>small</i> satellite (say 5 to 10%) if it genuinely fits, then rebalance. Reward suitability-first reasoning and a concrete moderate alternative, not a flat "no".</div></div>
     </div>
 
     <div class="q" data-type="open">
       <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Retirement · advise</span><span class="q-type">Written</span></div>
       <p class="q-text">A 57-year-old retiring in 3 years has their <b>entire</b> savings in fixed deposits because "FDs are safe." What is the planning problem, and what would you recommend?</p>
       <textarea name="qE2" placeholder="The problem, then your recommendation..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Problem:</b> "safe" only in nominal terms, over a 25&ndash;30 year retirement, inflation plus tax leaves a near-zero or negative real return (longevity/inflation risk). <b>Recommend:</b> a glide-path / bucket approach, keep near-term needs safe but add a growth sleeve for the long tail, diversify, plan withdrawals. Reward naming inflation/longevity risk and a balanced, staged mix rather than 100% FD or 100% equity.</div></div>
+      <div class="key"><div class="key-label">What to look for</div><div class="key-line"><b>Problem:</b> "safe" only in nominal terms, over a 25 to 30 year retirement, inflation plus tax leaves a near-zero or negative real return (longevity/inflation risk). <b>Recommend:</b> a glide-path / bucket approach, keep near-term needs safe but add a growth sleeve for the long tail, diversify, plan withdrawals. Reward naming inflation/longevity risk and a balanced, staged mix rather than 100% FD or 100% equity.</div></div>
     </div>
 
     <div class="q" data-type="open">
@@ -626,7 +626,7 @@ body.reviewer .actionbar{display:none}
         if(tp==='mcq'){
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
           const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
-          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('(→'+correct+')'));
           questions.push({ no, tag, type:'mcq', prompt,
             answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
             correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
@@ -634,9 +634,9 @@ body.reviewer .actionbar{display:none}
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct, ok=chosen===correct;
           const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
           const ta=q.querySelector('textarea'); const why=(ta?(attempt.answers[ta.name]||''):'').trim();
-          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('— (→'+cap(correct)+')')) + (why? '  —  '+why : ''));
+          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('(→'+cap(correct)+')')) + (why? ': '+why : ''));
           questions.push({ no, tag, type:'mcq', prompt,
-            answer: (chosen?cap(chosen):'Not answered') + (why? ' — '+why : ''),
+            answer: (chosen?cap(chosen):'Not answered') + (why? ': '+why : ''),
             correct: cap(correct), isCorrect: ok, rubric });
         } else {
           const ta=q.querySelector('textarea');
@@ -710,7 +710,7 @@ body.reviewer .actionbar{display:none}
           const w = q.querySelector('.opt[data-opt="'+chosen.value+'"]'); if(w) w.classList.add('is-chosen-wrong');
           mark.className='mark wrong'; mark.textContent='✗ Candidate chose '+chosen.value.toUpperCase();
         }
-      } else { mark.className='mark na'; mark.textContent='— Not answered'; }
+      } else { mark.className='mark na'; mark.textContent='Not answered'; }
     });
     ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total);
   }

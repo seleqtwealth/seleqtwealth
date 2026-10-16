@@ -529,14 +529,14 @@ body.reviewer .actionbar{display:none}
       <div class="q-head"><span class="q-no">E2</span><span class="q-tag">Risk &amp; horizon · diagnose</span><span class="q-type">Analysis</span></div>
       <p class="q-text">A 58-year-old retiring in 2 years proposes putting his <b>entire</b> retirement corpus into a small-cap fund because it doubled last year. <b>Analytically, what is wrong with this, and what allocation would actually be appropriate?</b></p>
       <textarea name="qE2" placeholder="Identify the risks, then propose a suitable allocation..." style="min-height:120px"></textarea>
-      <div class="key"><div class="key-label">What to look for · the key analytical question</div><div class="key-line"><b>Issues:</b> horizon mismatch (2 years is far too short for small-caps, which can fall 30&ndash;50% and take years to recover); <b>sequence-of-returns risk</b> is acute right at retirement, a big drawdown just before he starts withdrawing can permanently impair the corpus; "doubled last year" is past performance, not predictive, and small-caps are the most volatile segment; everything in one fund is extreme concentration. <b>Appropriate:</b> a capital-preservation tilt for the near-term needs (debt / short-duration / FDs), a modest diversified equity sleeve for the longer-dated portion, with small-caps at most a small satellite, if at all. Reward spotting horizon + sequence risk + concentration and proposing a sensible mix.</div></div>
+      <div class="key"><div class="key-label">What to look for · the key analytical question</div><div class="key-line"><b>Issues:</b> horizon mismatch (2 years is far too short for small-caps, which can fall 30 to 50% and take years to recover); <b>sequence-of-returns risk</b> is acute right at retirement, a big drawdown just before he starts withdrawing can permanently impair the corpus; "doubled last year" is past performance, not predictive, and small-caps are the most volatile segment; everything in one fund is extreme concentration. <b>Appropriate:</b> a capital-preservation tilt for the near-term needs (debt / short-duration / FDs), a modest diversified equity sleeve for the longer-dated portion, with small-caps at most a small satellite, if at all. Reward spotting horizon + sequence risk + concentration and proposing a sensible mix.</div></div>
     </div>
 
     <div class="q" data-type="open">
       <div class="q-head"><span class="q-no">E3</span><span class="q-tag">Cost drag · analysis</span><span class="q-type">Analysis</span></div>
       <p class="q-text">Two similar equity funds run effectively the same strategy; one has an expense ratio of 0.5%, the other 1.5%. <b>How much does that 1% gap actually matter over the long run, and what else would you weigh before preferring the cheaper one?</b></p>
       <textarea name="qE3" placeholder="The impact of the cost, then the other factors..." style="min-height:110px"></textarea>
-      <div class="key"><div class="key-label">What to look for · cost vs the full picture</div><div class="key-line">The 1% is charged every year on the <i>whole</i> corpus and compounds, so over 15&ndash;20 years it can quietly cost a large slice of the final value; cost is one of the few things known in advance and a fairly reliable predictor of relative performance, so cheaper usually wins all else equal. <b>But not cost alone:</b> weigh consistency and risk-adjusted returns, active vs index (a cheap index fund vs a genuinely skilled active manager), tracking error, fund size and liquidity, and fit with the goal. Strong answer grasps the compounding drag <i>and</i> that cheapest is not automatically best. (Exact maths not needed.)</div></div>
+      <div class="key"><div class="key-label">What to look for · cost vs the full picture</div><div class="key-line">The 1% is charged every year on the <i>whole</i> corpus and compounds, so over 15 to 20 years it can quietly cost a large slice of the final value; cost is one of the few things known in advance and a fairly reliable predictor of relative performance, so cheaper usually wins all else equal. <b>But not cost alone:</b> weigh consistency and risk-adjusted returns, active vs index (a cheap index fund vs a genuinely skilled active manager), tracking error, fund size and liquidity, and fit with the goal. Strong answer grasps the compounding drag <i>and</i> that cheapest is not automatically best. (Exact maths not needed.)</div></div>
     </div>
 
     <div class="q" data-type="open">
@@ -670,7 +670,7 @@ body.reviewer .actionbar{display:none}
         if(tp==='mcq'){
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct;
           const optText=l=>{ const s=q.querySelector('.opt[data-opt="'+l+'"] span'); return s?s.textContent.trim():''; };
-          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('— (→'+correct+')'));
+          vals.push(chosen ? (chosen===correct ? (chosen+' ✓') : (chosen+' ✗ (→'+correct+')')) : ('(→'+correct+')'));
           questions.push({ no, tag, type:'mcq', prompt,
             answer: chosen ? (chosen.toUpperCase()+'. '+optText(chosen)) : 'Not answered',
             correct: correct.toUpperCase()+'. '+optText(correct), isCorrect: chosen===correct, rubric });
@@ -678,9 +678,9 @@ body.reviewer .actionbar{display:none}
           const chosen=attempt.answers[mcqName(q)], correct=q.dataset.correct, ok=chosen===correct;
           const cap=s=>s?s.charAt(0).toUpperCase()+s.slice(1):s;
           const ta=q.querySelector('textarea'); const why=(ta?(attempt.answers[ta.name]||''):'').trim();
-          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('— (→'+cap(correct)+')')) + (why? '  —  '+why : ''));
+          vals.push((chosen ? (cap(chosen)+(ok?' ✓':' ✗ (→'+cap(correct)+')')) : ('(→'+cap(correct)+')')) + (why? ': '+why : ''));
           questions.push({ no, tag, type:'mcq', prompt,
-            answer: (chosen?cap(chosen):'Not answered') + (why? ' — '+why : ''),
+            answer: (chosen?cap(chosen):'Not answered') + (why? ': '+why : ''),
             correct: cap(correct), isCorrect: ok, rubric });
         } else {
           const ta=q.querySelector('textarea');
@@ -754,7 +754,7 @@ body.reviewer .actionbar{display:none}
           const w = q.querySelector('.opt[data-opt="'+chosen.value+'"]'); if(w) w.classList.add('is-chosen-wrong');
           mark.className='mark wrong'; mark.textContent='✗ Candidate chose '+chosen.value.toUpperCase();
         }
-      } else { mark.className='mark na'; mark.textContent='— Not answered'; }
+      } else { mark.className='mark na'; mark.textContent='Not answered'; }
     });
     ivScore.textContent = keyOnly ? '' : (correct + ' / ' + total);
   }
