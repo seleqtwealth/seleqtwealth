@@ -6255,3 +6255,44 @@ html.mc-on .floating-back { top: calc(96px + var(--mc-bar-h, 46px)); }
   .mc-cta { padding: 8px 14px 7px; }
 }
 @media (prefers-reduced-motion: reduce) { .mc-bar { animation: none; } }
+
+/* Monaco pill: appears mid-screen on a fresh load, then glides up and
+   stretches into the bar (geometry animated from main.js). */
+.mc-pop {
+  position: fixed;
+  z-index: 1002;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%) scale(0.82);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(100deg, #a9843f 0%, #d4b679 38%, #ecd9a8 50%, #d4b679 62%, #a9843f 100%);
+  background-size: 240% 100%;
+  animation: mcShine 4s ease-in-out infinite;
+  color: var(--navy-deep);
+  box-shadow: 0 22px 60px -14px rgba(2, 8, 18, 0.75), 0 0 0 6px rgba(212, 182, 121, 0.14);
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.mc-pop.is-shown { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.mc-pop.is-moving { transform: none; transition: none; box-shadow: 0 8px 28px -12px rgba(2, 8, 18, 0.65); }
+.mc-pop.is-leaving { opacity: 0; transition: opacity 0.45s ease; }
+.mc-pop-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+.mc-inner { transition: opacity 0.5s ease 0.1s; }
+.mc-bar.is-arriving .mc-inner { opacity: 0; transition: none; }
+html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }

@@ -1645,18 +1645,24 @@ function isInViewport(el) {
 
 // ── Monaco concierge bar ────────────────────────────────────────────
 // A slim bar above the nav while the founder is in Monaco. No end date:
-// set MONACO_BAR to false (or delete this block and the .mc-bar CSS) to
-// take it down. Skipped on unlisted (noindex) pages; a visitor who
-// dismisses it does not see it again on this device.
+// set MONACO_BAR to false (or delete this block and the .mc-bar / .mc-pop
+// CSS) to take it down. Skipped on unlisted (noindex) pages.
+// On a fresh open or refresh it arrives as a small "Monaco" pill in the
+// middle of the screen (after the homepage intro, if any) that glides up and
+// stretches into the bar. Moving between pages inside the site shows the bar
+// straight away. Dismissing it only hides it until the next page load.
 (function() {
   const MONACO_BAR = true;
   if (!MONACO_BAR) return;
   const robots = document.querySelector('meta[name="robots"]');
   if (robots && /noindex/i.test(robots.content)) return;
-  const KEY = 'seleqt_monaco_bar';
-  try { if (localStorage.getItem(KEY) === 'dismissed') return; } catch (e) {}
+  // Older versions remembered a dismissal forever; clear that so the bar
+  // comes back for those visitors too.
+  try { localStorage.removeItem('seleqt_monaco_bar'); } catch (e) {}
 
   const html = document.documentElement;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const viaSite = html.classList.contains('is-page-entering');
   const subject = encodeURIComponent('Private meeting in Monaco');
   const body = encodeURIComponent('Dear Ishit,\n\nI would welcome a private meeting while you are in Monaco.\n\nName:\nBest days and times:\nA little about what I would like to discuss:\n');
   const bar = document.createElement('div');
@@ -1673,30 +1679,78 @@ function isInViewport(el) {
   document.body.appendChild(bar);
 
   function syncHeight() { html.style.setProperty('--mc-bar-h', bar.offsetHeight + 'px'); }
+  window.addEventListener('resize', () => { if (html.classList.contains('mc-on')) syncHeight(); }, { passive: true });
+
+  // Slide down from above (reduced motion, or as a fallback).
   function show() {
     syncHeight();
     html.classList.add('mc-on');
     requestAnimationFrame(() => bar.classList.add('is-in'));
   }
-  window.addEventListener('resize', () => { if (html.classList.contains('mc-on')) syncHeight(); }, { passive: true });
+  // Already in place, no movement (arriving from another page on the site).
+  function showInstant() {
+    syncHeight();
+    bar.style.transition = 'none';
+    html.classList.add('mc-on', 'mc-instant');
+    bar.classList.add('is-in');
+    void bar.offsetHeight;
+    requestAnimationFrame(() => { bar.style.transition = ''; html.classList.remove('mc-instant'); });
+  }
+  // Small pill in the middle of the screen that glides up into the bar.
+  function popThenShow() {
+    if (typeof Element.prototype.animate !== 'function') { show(); return; }
+    const pop = document.createElement('div');
+    pop.className = 'mc-pop';
+    pop.setAttribute('aria-hidden', 'true');
+    pop.innerHTML = '<span class="mc-pop-label"><span class="mc-star">&#10022;</span>Monaco</span>';
+    document.body.appendChild(pop);
+    requestAnimationFrame(() => requestAnimationFrame(() => pop.classList.add('is-shown')));
+
+    setTimeout(() => {
+      syncHeight();
+      const r = pop.getBoundingClientRect();
+      const W = html.clientWidth, H = bar.offsetHeight;
+      // Freeze the pill at its current place in pixels, then morph.
+      pop.classList.add('is-moving');
+      Object.assign(pop.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
+      pop.querySelector('.mc-pop-label').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, fill: 'forwards' });
+      html.classList.add('mc-on');          // nav eases down while the pill rises
+      const move = pop.animate([
+        { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: (r.height / 2) + 'px' },
+        { left: '0px', top: '0px', width: W + 'px', height: H + 'px', borderRadius: '0px' }
+      ], { duration: 950, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' });
+      move.onfinish = () => {
+        bar.style.transition = 'none';
+        bar.classList.add('is-in', 'is-arriving');
+        void bar.offsetHeight;
+        bar.style.transition = '';
+        requestAnimationFrame(() => {
+          bar.classList.remove('is-arriving');   // bar contents fade in
+          pop.classList.add('is-leaving');        // pill fades away on top of it
+          setTimeout(() => pop.remove(), 500);
+        });
+      };
+    }, 1700);
+  }
 
   bar.querySelector('.mc-cta').addEventListener('click', () => window.seleqtTrack('monaco_meeting_click', { location: 'bar' }));
   bar.querySelector('.mc-close').addEventListener('click', () => {
-    try { localStorage.setItem(KEY, 'dismissed'); } catch (e) {}
     bar.classList.remove('is-in');
     html.classList.remove('mc-on');
     setTimeout(() => bar.remove(), 600);
   });
 
-  // On the homepage, wait for the hero intro to finish so the bar never
-  // interrupts the masthead animation.
+  if (viaSite) { showInstant(); return; }
+  const arrive = reduced ? show : popThenShow;
+  // On the homepage, wait for the hero intro to finish so the pill appears
+  // as the landing page settles, never over the masthead animation.
   if (html.classList.contains('intro-active')) {
     const mo = new MutationObserver(() => {
-      if (!html.classList.contains('intro-active')) { mo.disconnect(); setTimeout(show, 250); }
+      if (!html.classList.contains('intro-active')) { mo.disconnect(); setTimeout(arrive, 350); }
     });
     mo.observe(html, { attributes: true, attributeFilter: ['class'] });
   } else {
-    setTimeout(show, 600);
+    setTimeout(arrive, 700);
   }
 })();
 
