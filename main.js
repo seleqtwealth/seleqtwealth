@@ -1666,7 +1666,7 @@ function isInViewport(el) {
   bar.innerHTML = `
     <div class="mc-inner">
       <span class="mc-place" aria-hidden="true"><span class="mc-star">&#10022;</span>Monaco</span>
-      <p class="mc-msg"><em>SELEQT is presently in Monaco.</em><span class="mc-more"> Ishit Lakhani, our Founder &amp; CIO, is receiving a select number of private meetings.</span></p>
+      <p class="mc-msg"><em>SELEQT is presently visiting Monaco.</em></p>
       <a class="mc-cta" href="mailto:ishit@seleqtwealth.in?subject=${subject}&body=${body}"><span class="mc-cta-long">Arrange a private meeting</span><span class="mc-cta-short">Meet us</span> <span class="mc-arrow" aria-hidden="true">&rarr;</span></a>
       <button class="mc-close" type="button" aria-label="Dismiss the Monaco notice">&times;</button>
     </div>`;
@@ -1738,5 +1738,75 @@ function isInViewport(el) {
     const fromHash = tabs.find(t => '#' + t.id === window.location.hash);
     select(fromHash || tabs[0], false);
     if (fromHash) setTimeout(() => group.scrollIntoView({ block: 'start' }), 300);
+  });
+})();
+
+// ── GIFT City hook charts ───────────────────────────────────────────
+// Bars: hover/focus writes that economy's 2026 and 2027 forecast into the
+// card's status line (every value is also labelled and in the data table).
+// Line: a crosshair snaps to the nearest month; arrow keys step through
+// months when the chart has focus.
+(function() {
+  document.querySelectorAll('.gc-bars').forEach(list => {
+    const tip = list.parentElement.querySelector('.gc-tip');
+    if (!tip) return;
+    const show = li => { tip.textContent = li.getAttribute('data-tip'); };
+    const clear = () => { tip.textContent = ''; };
+    list.querySelectorAll('.gc-bar').forEach(li => {
+      li.addEventListener('pointerenter', () => show(li));
+      li.addEventListener('focus', () => show(li));
+      li.addEventListener('pointerleave', clear);
+      li.addEventListener('blur', clear);
+    });
+  });
+
+  document.querySelectorAll('[data-line]').forEach(fig => {
+    let cfg;
+    try { cfg = JSON.parse(fig.getAttribute('data-line')); } catch (e) { return; }
+    const svg = fig.querySelector('svg.gc-line');
+    const wrap = fig.querySelector('.gc-line-wrap');
+    const tip = fig.querySelector('.gc-tip--float');
+    const hair = svg.querySelector('.gc-xhair');
+    const dot = svg.querySelector('.gc-xdot');
+    const pts = cfg.pts, n = pts.length;
+    const X = i => cfg.x0 + (cfg.x1 - cfg.x0) * i / (n - 1);
+    const Y = v => cfg.y1 - (cfg.y1 - cfg.y0) * (v - cfg.lo) / (cfg.hi - cfg.lo);
+    let idx = n - 1;
+
+    function place(i) {
+      idx = Math.max(0, Math.min(n - 1, i));
+      const x = X(idx), y = Y(pts[idx][1]);
+      hair.setAttribute('x1', x); hair.setAttribute('x2', x);
+      dot.setAttribute('cx', x); dot.setAttribute('cy', y);
+      hair.setAttribute('visibility', 'visible'); dot.setAttribute('visibility', 'visible');
+      tip.textContent = '';
+      const strong = document.createElement('strong');
+      strong.textContent = pts[idx][1].toFixed(1);
+      tip.appendChild(strong);
+      tip.appendChild(document.createTextNode('rupees per US$, ' + pts[idx][0]));
+      const box = svg.getBoundingClientRect(), scale = box.width / svg.viewBox.baseVal.width;
+      const left = x * scale, top = y * scale;
+      tip.classList.add('is-on');
+      const w = tip.offsetWidth;
+      tip.style.transform = 'translate(' + Math.max(0, Math.min(box.width - w, left - w / 2)) + 'px,' + Math.max(0, top - 52) + 'px)';
+    }
+    function hide() {
+      hair.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden');
+      tip.classList.remove('is-on');
+    }
+    svg.addEventListener('pointermove', e => {
+      const box = svg.getBoundingClientRect();
+      const vx = (e.clientX - box.left) * svg.viewBox.baseVal.width / box.width;
+      place(Math.round((vx - cfg.x0) / (cfg.x1 - cfg.x0) * (n - 1)));
+    });
+    svg.addEventListener('pointerleave', hide);
+    svg.addEventListener('focus', () => place(idx));
+    svg.addEventListener('blur', hide);
+    svg.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); place(idx - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); place(idx + 1); }
+      if (e.key === 'Home') { e.preventDefault(); place(0); }
+      if (e.key === 'End') { e.preventDefault(); place(n - 1); }
+    });
   });
 })();

@@ -15,6 +15,7 @@ SELEQT is a private wealth advisory firm working with a deliberately small numbe
 
 ## Key pages
 - Home: https://seleqtwealth.in/
+- Services (all five practices): https://seleqtwealth.in/services
 - Investments: https://seleqtwealth.in/investments
 - Taxation: https://seleqtwealth.in/taxation
 - Insurance: https://seleqtwealth.in/insurance
