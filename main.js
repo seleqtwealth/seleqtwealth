@@ -844,6 +844,8 @@ function isInViewport(el) {
     const stats = document.querySelectorAll('.stat-num');
     if (!stats.length) return;
     stats.forEach(el => {
+      // data-no-count keeps figures like a founding year static.
+      if (el.hasAttribute('data-no-count')) return;
       const m = el.textContent.trim().match(/^([^\d]*)(\d+)(.*)$/);
       if (!m) return;
       el.dataset.prefix = m[1];
@@ -1639,4 +1641,102 @@ function isInViewport(el) {
   } else {
     setTimeout(openModal, 900);
   }
+})();
+
+// ── Monaco concierge bar ────────────────────────────────────────────
+// A slim bar above the nav while the founder is in Monaco. No end date:
+// set MONACO_BAR to false (or delete this block and the .mc-bar CSS) to
+// take it down. Skipped on unlisted (noindex) pages; a visitor who
+// dismisses it does not see it again on this device.
+(function() {
+  const MONACO_BAR = true;
+  if (!MONACO_BAR) return;
+  const robots = document.querySelector('meta[name="robots"]');
+  if (robots && /noindex/i.test(robots.content)) return;
+  const KEY = 'seleqt_monaco_bar';
+  try { if (localStorage.getItem(KEY) === 'dismissed') return; } catch (e) {}
+
+  const html = document.documentElement;
+  const subject = encodeURIComponent('Private meeting in Monaco');
+  const body = encodeURIComponent('Dear Ishit,\n\nI would welcome a private meeting while you are in Monaco.\n\nName:\nBest days and times:\nA little about what I would like to discuss:\n');
+  const bar = document.createElement('div');
+  bar.className = 'mc-bar';
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', 'SELEQT in Monaco');
+  bar.innerHTML = `
+    <div class="mc-inner">
+      <span class="mc-place" aria-hidden="true"><span class="mc-star">&#10022;</span>Monaco</span>
+      <p class="mc-msg"><em>SELEQT is presently in Monaco.</em><span class="mc-more"> Ishit Lakhani, our Founder &amp; CIO, is receiving a select number of private meetings.</span></p>
+      <a class="mc-cta" href="mailto:ishit@seleqtwealth.in?subject=${subject}&body=${body}"><span class="mc-cta-long">Arrange a private meeting</span><span class="mc-cta-short">Meet us</span> <span class="mc-arrow" aria-hidden="true">&rarr;</span></a>
+      <button class="mc-close" type="button" aria-label="Dismiss the Monaco notice">&times;</button>
+    </div>`;
+  document.body.appendChild(bar);
+
+  function syncHeight() { html.style.setProperty('--mc-bar-h', bar.offsetHeight + 'px'); }
+  function show() {
+    syncHeight();
+    html.classList.add('mc-on');
+    requestAnimationFrame(() => bar.classList.add('is-in'));
+  }
+  window.addEventListener('resize', () => { if (html.classList.contains('mc-on')) syncHeight(); }, { passive: true });
+
+  bar.querySelector('.mc-cta').addEventListener('click', () => window.seleqtTrack('monaco_meeting_click', { location: 'bar' }));
+  bar.querySelector('.mc-close').addEventListener('click', () => {
+    try { localStorage.setItem(KEY, 'dismissed'); } catch (e) {}
+    bar.classList.remove('is-in');
+    html.classList.remove('mc-on');
+    setTimeout(() => bar.remove(), 600);
+  });
+
+  // On the homepage, wait for the hero intro to finish so the bar never
+  // interrupts the masthead animation.
+  if (html.classList.contains('intro-active')) {
+    const mo = new MutationObserver(() => {
+      if (!html.classList.contains('intro-active')) { mo.disconnect(); setTimeout(show, 250); }
+    });
+    mo.observe(html, { attributes: true, attributeFilter: ['class'] });
+  } else {
+    setTimeout(show, 600);
+  }
+})();
+
+// ── Tabbed picker (GIFT City "pick your country") ───────────────────
+// Buttons with role="tab" inside [data-tabs] toggle their aria-controls
+// panel. Arrow keys move between tabs; a #hash matching a tab id opens it
+// on load so a specific country can be shared as a link.
+(function() {
+  document.querySelectorAll('[data-tabs]').forEach(group => {
+    const tabs = Array.from(group.querySelectorAll('[role="tab"]'));
+    if (!tabs.length) return;
+    function select(tab, focus) {
+      tabs.forEach(t => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        select(tab, false);
+        window.seleqtTrack('country_pick', { country: tab.id });
+        try { history.replaceState(null, '', '#' + tab.id); } catch (e) {}
+      });
+      tab.addEventListener('keydown', e => {
+        let j = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') j = 0;
+        if (e.key === 'End') j = tabs.length - 1;
+        if (j === null) return;
+        e.preventDefault();
+        select(tabs[j], true);
+      });
+    });
+    const fromHash = tabs.find(t => '#' + t.id === window.location.hash);
+    select(fromHash || tabs[0], false);
+    if (fromHash) setTimeout(() => group.scrollIntoView({ block: 'start' }), 300);
+  });
 })();

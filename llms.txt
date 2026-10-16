@@ -1,25 +1,50 @@
 # SELEQT
 
-> SELEQT is a boutique private wealth management firm based in Ahmedabad, India, serving Indian residents, NRIs, and globally mobile families. It operates on a fee-only, relationship-led basis and integrates investments, taxation, insurance, and succession planning under one platform, with particular focus on cross-border and NRI wealth.
+> SELEQT is a boutique private wealth management firm based in Ahmedabad, India, serving Indian residents, NRIs, and globally mobile families. It works on a relationship-led basis and integrates investments, taxation, insurance, succession planning, and family office services under one roof, with particular focus on cross-border and NRI wealth and on access to India through GIFT City.
 
 ## About
-SELEQT is a private wealth advisory firm working with a deliberately small number of families and individuals. It combines investments, tax structuring, insurance, and succession planning into a single coordinated relationship, designed for clients whose ambitions, businesses, and assets span generations and geographies. SELEQT operates on a fee-only advisory basis; all material conflicts of interest are disclosed in writing prior to engagement.
+SELEQT is a private wealth advisory firm working with a deliberately small number of families and individuals. It combines investments, tax structuring, insurance, and succession planning into a single coordinated relationship, designed for clients whose ambitions, businesses, and assets span generations and geographies. All material conflicts of interest are disclosed in writing prior to engagement.
 
 ## Services
 - Investments: portfolio management, mutual funds, PMS (Portfolio Management Services, ₹50 lakh minimum per SEBI), AIFs (Alternative Investment Funds), and curated global opportunities. Research-led and concentrated.
 - Taxation: personal and promoter tax structuring, NRI and global taxation, capital gains planning, cross-border structuring, and compliance coordination across jurisdictions.
 - Insurance: life, health, business and key-person protection, NRI protection planning, and legacy/liquidity planning, advised independently rather than sold.
 - Succession Planning: private family trusts, wills and estate planning, business succession, cross-border estate planning, family governance, and philanthropic structuring.
+- Family Office: single and multi-family office services; SELEQT acts as a multi-family office or designs and advises a family's own office (structure, family charter, investment policy, consolidated reporting), in India, through a GIFT City Family Investment Fund, or abroad.
+- GIFT City: access to India for foreign nationals, NRIs and family offices through India's International Financial Services Centre (dollar funds and deposits, managed portfolios, Family Investment Funds), with country-by-country guidance for Monaco, the EU, the UK, the US, the UAE and Singapore. SELEQT is setting up its own presence in GIFT City.
 
 ## Key pages
 - Home: https://seleqtwealth.in/
-- Investments: https://seleqtwealth.in/investments.html
-- Taxation: https://seleqtwealth.in/taxation.html
-- Insurance: https://seleqtwealth.in/insurance.html
-- Succession Planning: https://seleqtwealth.in/succession.html
-- About the firm and team: https://seleqtwealth.in/about.html
-- Blog: https://seleqtwealth.in/blogs.html
-- Article — Electronic Gold Receipts (EGRs) for Indian HNIs: https://seleqtwealth.in/blogs/electronic-gold-receipts.html
+- Investments: https://seleqtwealth.in/investments
+- Taxation: https://seleqtwealth.in/taxation
+- Insurance: https://seleqtwealth.in/insurance
+- Succession Planning: https://seleqtwealth.in/succession
+- Family Office: https://seleqtwealth.in/family-office
+- GIFT City (for global investors): https://seleqtwealth.in/gift-city
+- About the firm and team: https://seleqtwealth.in/about
+- Blog: https://seleqtwealth.in/blogs
+
+## Articles
+- ITR filing 2026: last date, how to file, and what HNIs should watch: https://seleqtwealth.in/blogs/itr-filing-2026
+- The NSE IPO: what India's largest listing means for investors: https://seleqtwealth.in/blogs/nse-ipo
+- Why the RBI stopped cutting rates: what it means for your money: https://seleqtwealth.in/blogs/rbi-rate-pause
+- Why is the rupee falling? What a weak currency means for your wealth: https://seleqtwealth.in/blogs/why-is-the-rupee-falling
+- Electronic Gold Receipts: what India's HNIs need to know in 2026: https://seleqtwealth.in/blogs/electronic-gold-receipts
+- Gold ETF vs Physical Gold: How to Own Gold After Sovereign Gold Bonds: https://seleqtwealth.in/blogs/gold-etf-vs-physical-gold
+- What a Falling Rupee Does to Your Returns, and Investing in US Stocks From India: https://seleqtwealth.in/blogs/falling-rupee-investment-returns
+- India Is Paying to Attract Foreign Capital, and What That Signals for You: https://seleqtwealth.in/blogs/india-attracting-foreign-capital
+- Investing in India Through GIFT City: Dollar Funds, Tax Neutrality, and the Mechanics: https://seleqtwealth.in/blogs/investing-in-india-gift-city
+- Moving Money Out of India as an NRI: The USD 1 Million Scheme and the Paperwork That Stalls It: https://seleqtwealth.in/blogs/nri-repatriation-money-out-of-india
+- The New Capital Gains Rules: What Changed for Equity, Debt, Gold and Property: https://seleqtwealth.in/blogs/new-capital-gains-rules-one-year-on
+- Do Debt Mutual Funds Still Make Sense Without Indexation?: https://seleqtwealth.in/blogs/debt-mutual-funds-after-indexation
+- The Tax on Your US Stocks and Foreign ETFs: What Indian Residents Owe and Often Forget: https://seleqtwealth.in/blogs/tax-on-us-stocks-foreign-etfs
+- Why a Will Alone Is Not Enough: https://seleqtwealth.in/blogs/why-a-will-is-not-enough
+- Private Family Trusts in India: When They Make Sense, and When They Don't: https://seleqtwealth.in/blogs/private-family-trusts-india
+- How Much Life Insurance You Actually Need: https://seleqtwealth.in/blogs/how-much-life-insurance-you-need
+- Family Health Cover in 2026: How Much You Need, and What to Check: https://seleqtwealth.in/blogs/family-health-insurance-2026
+- Building the Conservative Part of Your Portfolio Properly: https://seleqtwealth.in/blogs/building-conservative-portfolio
+- Higher Yield Is Not Higher Return: How to Invest in Bonds in India Without Getting Burned: https://seleqtwealth.in/blogs/higher-yield-is-not-higher-return
+- SIP in a Flat Market: Why Staying Invested Beats Trying to Time It: https://seleqtwealth.in/blogs/sip-in-a-flat-market
 
 ## Contact
 - Email: contact@seleqtwealth.in
