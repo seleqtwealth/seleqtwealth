@@ -5815,3 +5815,35 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
 }
 .contact-book { margin-top: 36px; }
 [data-booking][hidden] { display: none !important; }
+
+/* GIFT City hook: "under-owned" comparison (full width under the two charts) */
+.gc-card--under { margin-top: 18px; }
+.gc-ubars { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.gc-ubar {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr 64px;
+  align-items: center;
+  gap: 18px;
+}
+.gc-ubar-name { font-size: 0.92rem; font-weight: 300; color: rgba(244, 241, 234, 0.78); }
+.gc-ubar-track { height: 16px; position: relative; }
+.gc-ubar .gc-bar-fill { background: #5f6878; }
+.gc-ubar--hi .gc-bar-fill { background: #d4b06a; }
+.gc-ubar-val { font-size: 1rem; color: rgba(244, 241, 234, 0.85); font-variant-numeric: tabular-nums; text-align: right; }
+.gc-ubar--hi .gc-ubar-name, .gc-ubar--hi .gc-ubar-val { color: var(--white); font-weight: 500; }
+.gc-ubar:nth-child(2) .gc-bar-fill { transition-delay: 0.12s; }
+.gc-ubar:nth-child(3) .gc-bar-fill { transition-delay: 0.24s; }
+.gc-under-note {
+  margin: 26px 0 0;
+  max-width: 760px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--white);
+}
+@media (max-width: 640px) {
+  .gc-ubar { grid-template-columns: 1fr 52px; gap: 8px 12px; }
+  .gc-ubar-name { grid-column: 1 / -1; font-size: 0.84rem; }
+  .gc-under-note { font-size: 1.12rem; }
+}
