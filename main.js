@@ -18,7 +18,7 @@ window.seleqtTrack = function (name, params) {
 // button on the site is shown and pointed at it (visitors pick a slot in
 // their own time zone). Left empty, the bar falls back to email and the
 // booking buttons stay hidden.
-window.SELEQT_BOOKING_URL = '';
+window.SELEQT_BOOKING_URL = 'https://calendly.com/seleqt/private-conversation';
 
 (function() {
   const url = window.SELEQT_BOOKING_URL;
