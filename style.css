@@ -2659,8 +2659,8 @@ a, button { cursor: none; }
      normalize face size across photos with different source framings without
      pre-cropping each image. */
   --photo-scale: 1;
-  --photo-y: 22%;
-  --photo-origin: center 30%;
+  --photo-y: 40%;
+  --photo-origin: center top;
 
   background: var(--paper);
   padding: 22px 20px 22px;
@@ -2714,17 +2714,12 @@ a, button { cursor: none; }
   transform: scale(calc(var(--photo-scale) * 1.04));
 }
 
-/* ── Per-photo zoom calibration ──────────────────────────────────────
-   The 4 source photos have different framings (Ishit/Kalash are tight
-   chest-up; Aditya/Mihir are wider with body visible). These overrides
-   normalize the face size + eye-line position across all four. */
+/* ── Photo framing ─────────────────────────────────────────────────
+   Team photos are pre-cropped to one standard 4:5 frame (eyes at 40% of
+   the height, face about a quarter of the width), so every card can use
+   the same crop and people in a row line up at eye level. To add someone,
+   crop their photo the same way. Ishit's original keeps its own framing. */
 .team-card[data-member="ishit"]  { --photo-scale: 1.00; --photo-y: 18%; --photo-origin: center top; }
-.team-card[data-member="kalash"] { --photo-scale: 1.10; --photo-y: 68%; --photo-origin: center bottom; }
-.team-card[data-member="aditya"] { --photo-scale: 1.22; --photo-y: 18%; --photo-origin: center top; }
-.team-card[data-member="mihir"]  { --photo-scale: 1.14; --photo-y: 18%; --photo-origin: center top; }
-.team-card[data-member="kajal"]  { --photo-scale: 1.25; --photo-y: 12%; --photo-origin: center top; }
-.team-card[data-member="arun"]   { --photo-scale: 1.00; --photo-y: 0%; --photo-origin: center top; }
-.team-card[data-member="netra"]  { --photo-scale: 1.00; --photo-y: 0%; --photo-origin: center top; }
 .team-card-body { position: relative; }
 .team-name {
   font-family: var(--font-display);
@@ -5795,16 +5790,18 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
 
 /* ============================================
    ABOUT: team in tiers (founder; strategy and clients; research and
-   technology; operations), joined by a thin gold line.
+   technology; operations), joined by a short gold line. Every row spans the
+   full width: cards are horizontal (photo down the left edge, text beside
+   it) and share the row equally, so no row leaves empty sides.
    ============================================ */
-.org { max-width: 1120px; margin: 0 auto; }
+.org { max-width: 1160px; margin: 0 auto; }
 .org-tier { position: relative; display: flex; flex-direction: column; align-items: center; }
-.org-tier + .org-tier { margin-top: 26px; padding-top: 62px; }
+.org-tier + .org-tier { margin-top: 10px; padding-top: 38px; }
 .org-tier + .org-tier::before {
   content: '';
   position: absolute;
   top: 0; left: 50%;
-  width: 1px; height: 46px;
+  width: 1px; height: 26px;
   background: linear-gradient(to bottom, var(--gold-faint), var(--gold));
 }
 .org-label {
@@ -5816,17 +5813,45 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--gold-deep);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .org-label::before, .org-label::after { content: ''; width: 28px; height: 1px; background: var(--gold-dim); }
-.org-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 22px; width: 100%; }
-.org-row .team-card { flex: 0 1 280px; display: flex; flex-direction: column; }
-.org .team-card::before { left: 50%; transform: translateX(-50%); }
-.org .team-card-body { text-align: center; }
-.org-tier--lead .team-card { flex-basis: 340px; padding: 26px 24px 28px; }
-.org-tier--lead .team-name { font-size: 1.5rem; margin-bottom: 6px; }
-.org-tier--lead .team-role { font-size: 0.62rem; }
-.org-tier--lead .team-bio { font-size: 0.88rem; line-height: 1.7; }
+
+.org-row { display: grid; grid-template-columns: 1fr; gap: 18px; width: 100%; }
+.org-row--2 { grid-template-columns: repeat(2, 1fr); }
+.org-row--3 { grid-template-columns: repeat(3, 1fr); }
+
+.org .team-card {
+  display: grid;
+  grid-template-columns: 42% 1fr;
+  padding: 0 !important;          /* beats the older phone rule up to 900px */
+  overflow: hidden;
+}
+.org .team-card::before { left: calc(42% + 24px); top: 0; }
+.org .team-card:hover::before { width: 40px; }
+.org .team-photo { aspect-ratio: auto; height: 100%; min-height: 230px; margin: 0 !important; }
+.org .team-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 26px 24px 24px;
+  text-align: left;
+}
+
+/* Founder: one wide card across the whole row */
+.org-tier--lead .team-card { grid-template-columns: 38% 1fr; }
+.org-tier--lead .team-card::before { left: calc(38% + 48px); }
+.org-tier--lead .team-photo { min-height: 360px; }
+.org-tier--lead .team-card-body { padding: 44px 48px; }
+.org-tier--lead .team-name { font-size: 1.9rem; margin-bottom: 8px; }
+.org-tier--lead .team-role { font-size: 0.64rem; margin-bottom: 18px; }
+.org-tier--lead .team-bio { font-size: 0.98rem; line-height: 1.75; max-width: 52ch; }
+
+/* Three across: slightly smaller type so bios sit comfortably */
+.org-row--3 .team-photo { min-height: 220px; }
+.org-row--3 .team-card-body { padding: 22px 20px 20px; }
+.org-row--3 .team-bio { font-size: 0.76rem; }
+.org-row--3 .team-card::before { left: calc(42% + 20px); }
 
 /* Until a portrait is added: navy tile with gold initials */
 .team-photo--initials {
@@ -5849,31 +5874,43 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
   color: var(--gold-light);
 }
 
+/* Tablets: two across; a lone last card spans the row */
+@media (max-width: 1000px) {
+  .org-row--3 { grid-template-columns: repeat(2, 1fr); }
+  .org-row--3 .team-card:last-child {
+    grid-column: 1 / -1;
+    /* keep the photo the same width as the cards above it */
+    grid-template-columns: calc((100% - 18px) / 2 * 0.42) 1fr;
+  }
+  .org-row--3 .team-card:last-child::before { left: calc((100% - 18px) / 2 * 0.42 + 20px); }
+}
+
+/* Phones: one column, photo beside name and title, bio underneath */
 @media (max-width: 768px) {
-  .org-tier + .org-tier { margin-top: 18px; padding-top: 50px; }
-  .org-tier + .org-tier::before { height: 36px; }
-  .org-row { gap: 14px; }
-  /* Phones: photo beside the text, so eight people stay a short scroll */
-  .org-row .team-card {
-    flex-basis: 100%;
-    max-width: 440px;
-    display: grid;
+  .org-tier + .org-tier { margin-top: 6px; padding-top: 34px; }
+  .org-tier + .org-tier::before { height: 24px; }
+  .org-row, .org-row--2, .org-row--3 { grid-template-columns: 1fr; gap: 14px; }
+  .org-row--3 .team-card:last-child { grid-column: auto; grid-template-columns: 72px 1fr; }
+  .org-row--3 .team-card:last-child::before { left: 0; }
+  .org .team-card {
     grid-template-columns: 72px 1fr;
     column-gap: 16px;
     align-items: center;
+    padding: 18px !important;
   }
-  .org-row .team-card .team-photo { margin-bottom: 0 !important; grid-column: 1; grid-row: 1 / span 2; }
-  .org-row .team-card-body { display: contents; text-align: left; }
-  .org-row .team-name { grid-column: 2; grid-row: 1; align-self: end; }
-  .org-row .team-role { grid-column: 2; grid-row: 2; align-self: start; margin-bottom: 0 !important; }
-  .org-row .team-bio { grid-column: 1 / -1; grid-row: 3; margin-top: 14px; }
-  .org .team-card::before { left: 0; transform: none; }
+  .org .team-card::before { left: 0; }
+  .org .team-photo { aspect-ratio: 1 / 1; height: auto; min-height: 0; margin-bottom: 0 !important; grid-column: 1; grid-row: 1 / span 2; }
+  .org .team-card-body { display: contents; }
+  .org .team-name { grid-column: 2; grid-row: 1; align-self: end; }
+  .org .team-role { grid-column: 2; grid-row: 2; align-self: start; margin-bottom: 0 !important; }
+  .org .team-bio { grid-column: 1 / -1; grid-row: 3; margin-top: 14px; font-size: 0.82rem; }
   .team-photo--initials span { font-size: 1.35rem; }
-  /* The founder keeps the large portrait-on-top card */
-  .org-tier--lead .team-card { display: flex; max-width: 360px; }
-  .org-tier--lead .team-card .team-photo { margin-bottom: 14px !important; }
-  .org-tier--lead .team-card-body { display: block; text-align: center; }
-  .org-tier--lead .team-role { margin-bottom: 10px !important; }
-  .org-tier--lead .team-bio { margin-top: 0; }
+  /* The founder keeps a large portrait on top */
+  .org-tier--lead .team-card { display: flex; flex-direction: column; max-width: 400px; margin: 0 auto; }
   .org-tier--lead .team-card::before { left: 50%; transform: translateX(-50%); }
+  .org-tier--lead .team-photo { aspect-ratio: 1 / 1; min-height: 0; margin-bottom: 16px !important; }
+  .org-tier--lead .team-card-body { display: block; padding: 0; text-align: center; }
+  .org-tier--lead .team-name { font-size: 1.4rem; }
+  .org-tier--lead .team-role { margin-bottom: 10px !important; }
+  .org-tier--lead .team-bio { margin-top: 0; font-size: 0.86rem; }
 }
