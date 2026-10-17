@@ -1459,10 +1459,10 @@ function isInViewport(el) {
 // appearing after the last TRIP date. To take it down sooner:
 // set MONACO_BAR to false (or delete this block and the .mc-bar / .mc-pop
 // CSS) to take it down. Skipped on unlisted (noindex) pages.
-// On a fresh open or refresh it arrives as a small "Monaco" pill in the
-// middle of the screen (after the homepage intro, if any) that glides up and
-// stretches into the bar. Moving between pages inside the site shows the bar
-// straight away. Dismissing it only hides it until the next page load.
+// On a fresh open or refresh of the homepage it arrives as a small pill in
+// the middle of the screen (after the intro) that glides up and stretches
+// into the bar. Every other page, and moving between pages inside the site,
+// shows the bar straight away. Dismissing it only hides it until the next page load.
 (function() {
   const MONACO_BAR = true;
   if (!MONACO_BAR) return;
@@ -1570,7 +1570,10 @@ function isInViewport(el) {
     setTimeout(() => bar.remove(), 600);
   });
 
-  if (viaSite) { showInstant(); return; }
+  // The pill entrance belongs to the homepage hero only; every other page
+  // (and any page reached from inside the site) shows the bar in place.
+  const isHome = !!document.getElementById('hero');
+  if (viaSite || !isHome) { showInstant(); return; }
   let arrived = false;
   const arrive = () => { if (arrived) return; arrived = true; (reduced ? show : popThenShow)(); };
   // On the homepage the pill comes in with the hero title (about 3.5s into
