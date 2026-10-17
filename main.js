@@ -1454,8 +1454,9 @@ function isInViewport(el) {
   });
 })();
 
-// ── Monaco concierge bar ────────────────────────────────────────────
-// A slim bar above the nav while the founder is in Monaco. No end date:
+// ── Travel concierge bar (Monaco / London) ──────────────────────────
+// A slim bar above the nav while the founder is travelling. The city it
+// names follows TRIP below (dates in Monaco/London time). No end date:
 // set MONACO_BAR to false (or delete this block and the .mc-bar / .mc-pop
 // CSS) to take it down. Skipped on unlisted (noindex) pages.
 // On a fresh open or refresh it arrives as a small "Monaco" pill in the
@@ -1465,6 +1466,20 @@ function isInViewport(el) {
 (function() {
   const MONACO_BAR = true;
   if (!MONACO_BAR) return;
+  // Where Ishit is, by date (inclusive). Outside these dates the bar names
+  // the FALLBACK city.
+  const TRIP = [
+    { from: '2026-10-19', to: '2026-10-25', city: 'Monaco' },
+    { from: '2026-10-26', to: '2026-10-27', city: 'London' },
+    { from: '2026-10-28', to: '2026-10-30', city: 'Monaco' }
+  ];
+  const FALLBACK = 'Monaco';
+  let today;
+  try {
+    today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Monaco', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  } catch (e) { today = new Date().toISOString().slice(0, 10); }
+  const leg = TRIP.find(t => today >= t.from && today <= t.to);
+  const city = leg ? leg.city : FALLBACK;
   const robots = document.querySelector('meta[name="robots"]');
   if (robots && /noindex/i.test(robots.content)) return;
   // Older versions remembered a dismissal forever; clear that so the bar
@@ -1474,19 +1489,19 @@ function isInViewport(el) {
   const html = document.documentElement;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const viaSite = html.classList.contains('is-page-entering');
-  const subject = encodeURIComponent('Private meeting in Monaco');
+  const subject = encodeURIComponent('Private meeting in ' + city);
   const booking = window.SELEQT_BOOKING_URL || '';
-  const body = encodeURIComponent('Dear Ishit,\n\nI would welcome a private meeting while you are in Monaco.\n\nName:\nBest days and times:\nA little about what I would like to discuss:\n');
+  const body = encodeURIComponent('Dear Ishit,\n\nI would welcome a private meeting while you are in ' + city + '.\n\nName:\nBest days and times:\nA little about what I would like to discuss:\n');
   const bar = document.createElement('div');
   bar.className = 'mc-bar';
   bar.setAttribute('role', 'region');
-  bar.setAttribute('aria-label', 'SELEQT in Monaco');
+  bar.setAttribute('aria-label', 'SELEQT in ' + city);
   bar.innerHTML = `
     <div class="mc-inner">
-      <span class="mc-place" aria-hidden="true"><span class="mc-star">&#10022;</span>Monaco</span>
-      <p class="mc-msg"><em>SELEQT is presently visiting Monaco.</em></p>
+      <span class="mc-place" aria-hidden="true"><span class="mc-star">&#10022;</span>${city}</span>
+      <p class="mc-msg"><em>SELEQT is presently visiting ${city}.</em></p>
       <a class="mc-cta" href="${booking || `mailto:ishit@seleqtwealth.in?subject=${subject}&body=${body}`}"${booking ? ' target="_blank" rel="noopener noreferrer"' : ''}><span class="mc-cta-long">Arrange a private meeting</span><span class="mc-cta-short">Meet us</span> <span class="mc-arrow" aria-hidden="true">&rarr;</span></a>
-      <button class="mc-close" type="button" aria-label="Dismiss the Monaco notice">&times;</button>
+      <button class="mc-close" type="button" aria-label="Dismiss the ${city} notice">&times;</button>
     </div>`;
   document.body.appendChild(bar);
 
@@ -1514,7 +1529,8 @@ function isInViewport(el) {
     const pop = document.createElement('div');
     pop.className = 'mc-pop';
     pop.setAttribute('aria-hidden', 'true');
-    pop.innerHTML = '<span class="mc-pop-label"><span class="mc-star">&#10022;</span>Monaco</span>';
+    pop.innerHTML = '<span class="mc-pop-label"><span class="mc-star">&#10022;</span></span>';
+    pop.querySelector('.mc-pop-label').appendChild(document.createTextNode(city));
     document.body.appendChild(pop);
     requestAnimationFrame(() => requestAnimationFrame(() => pop.classList.add('is-shown')));
 
@@ -1545,7 +1561,7 @@ function isInViewport(el) {
     }, 1200);
   }
 
-  bar.querySelector('.mc-cta').addEventListener('click', () => window.seleqtTrack('monaco_meeting_click', { location: 'bar' }));
+  bar.querySelector('.mc-cta').addEventListener('click', () => window.seleqtTrack('travel_meeting_click', { location: 'bar', city: city }));
   bar.querySelector('.mc-close').addEventListener('click', () => {
     bar.classList.remove('is-in');
     html.classList.remove('mc-on');

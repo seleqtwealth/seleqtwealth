@@ -40,7 +40,7 @@ The nav and footer are written out in every page, not injected. A nav or footer 
 
 ## Things that change over time
 
-- **Monaco bar:** a notice above the nav, built in `main.js` (search "Monaco concierge bar"). It has no end date. To take it down, set `MONACO_BAR = false`. On a fresh load it arrives as a small pill that rises into the bar; the close button hides it only until the next load.
+- **Travel bar:** a gold notice above the nav, built in `main.js` (search "Travel concierge bar"). The city it names follows the `TRIP` dates there (Monaco time); outside them it shows the `FALLBACK` city. It has no end date. To take it down, set `MONACO_BAR = false`. "Arrange a private meeting" opens the booking link set in `SELEQT_BOOKING_URL`. On a fresh load it arrives as a small pill that rises into the bar; the close button hides it only until the next load.
 - **Blog schedule:** article pages already exist in `blogs/`. `scripts/schedule.json` lists when each one appears on the listing and in the sitemap; `.github/workflows/publish-blog.yml` runs `scripts/publish_next.py` every Wednesday at 09:00 IST and then fires the deploy hook. Add new entries to keep the weekly cadence going.
 - **GIFT City figures:** the growth chart (IMF World Economic Outlook) and the rupee chart (US Federal Reserve H.10 via FRED, series `DEXINUS`) are written into `gift-city.html` as static markup and data. Refresh them by hand when the IMF publishes a new outlook.
 - **Portfolio analyser data:** `data/*.json`, rebuilt by the scripts in `scripts/` (not deployed).
