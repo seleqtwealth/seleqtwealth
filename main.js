@@ -12,6 +12,26 @@ window.seleqtTrack = function (name, params) {
   }
 };
 
+// ── Meeting booking link ────────────────────────────────────────────
+// Paste the Calendly (or other booking) link here. When set, the Monaco
+// bar's "Arrange a private meeting" opens it, and every [data-booking]
+// button on the site is shown and pointed at it (visitors pick a slot in
+// their own time zone). Left empty, the bar falls back to email and the
+// booking buttons stay hidden.
+window.SELEQT_BOOKING_URL = '';
+
+(function() {
+  const url = window.SELEQT_BOOKING_URL;
+  if (!url) return;
+  document.querySelectorAll('[data-booking]').forEach(el => {
+    el.href = url;
+    el.target = '_blank';
+    el.rel = 'noopener noreferrer';
+    el.hidden = false;
+    el.addEventListener('click', () => window.seleqtTrack('booking_click', { location: el.getAttribute('data-booking') }));
+  });
+})();
+
 // ── Hero Intro (once per session) ──────────
 // The <html> element gets .intro-active if the intro should run (set pre-paint
 // in <head> based on sessionStorage + prefers-reduced-motion). We add .intro-running
@@ -1455,6 +1475,7 @@ function isInViewport(el) {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const viaSite = html.classList.contains('is-page-entering');
   const subject = encodeURIComponent('Private meeting in Monaco');
+  const booking = window.SELEQT_BOOKING_URL || '';
   const body = encodeURIComponent('Dear Ishit,\n\nI would welcome a private meeting while you are in Monaco.\n\nName:\nBest days and times:\nA little about what I would like to discuss:\n');
   const bar = document.createElement('div');
   bar.className = 'mc-bar';
@@ -1464,7 +1485,7 @@ function isInViewport(el) {
     <div class="mc-inner">
       <span class="mc-place" aria-hidden="true"><span class="mc-star">&#10022;</span>Monaco</span>
       <p class="mc-msg"><em>SELEQT is presently visiting Monaco.</em></p>
-      <a class="mc-cta" href="mailto:ishit@seleqtwealth.in?subject=${subject}&body=${body}"><span class="mc-cta-long">Arrange a private meeting</span><span class="mc-cta-short">Meet us</span> <span class="mc-arrow" aria-hidden="true">&rarr;</span></a>
+      <a class="mc-cta" href="${booking || `mailto:ishit@seleqtwealth.in?subject=${subject}&body=${body}`}"${booking ? ' target="_blank" rel="noopener noreferrer"' : ''}><span class="mc-cta-long">Arrange a private meeting</span><span class="mc-cta-short">Meet us</span> <span class="mc-arrow" aria-hidden="true">&rarr;</span></a>
       <button class="mc-close" type="button" aria-label="Dismiss the Monaco notice">&times;</button>
     </div>`;
   document.body.appendChild(bar);

@@ -4820,32 +4820,34 @@ html.intro-running .hero-wordmark-spotlight {
   bottom: 24px;
   right: 24px;
   z-index: 998;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: #25d366;
-  color: #ffffff;
+  background: var(--navy-deep);
+  color: var(--gold-light);
+  border: 1px solid rgba(212, 176, 106, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35), 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 26px -10px rgba(2, 8, 18, 0.6);
   text-decoration: none;
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background 0.25s;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background 0.25s, color 0.25s;
   cursor: pointer;
 }
 .whatsapp-fab:hover {
-  background: #20bd5a;
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 12px 32px rgba(37, 211, 102, 0.45), 0 3px 8px rgba(0, 0, 0, 0.2);
+  background: var(--gold);
+  color: var(--navy-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -10px rgba(2, 8, 18, 0.55);
 }
 .whatsapp-fab:focus-visible {
   outline: 3px solid var(--gold);
   outline-offset: 4px;
 }
-.whatsapp-fab svg { display: block; }
+.whatsapp-fab svg { display: block; width: 22px; height: 22px; }
 @media (max-width: 540px) {
-  .whatsapp-fab { width: 50px; height: 50px; bottom: 18px; right: 18px; }
-  .whatsapp-fab svg { width: 24px; height: 24px; }
+  .whatsapp-fab { width: 44px; height: 44px; bottom: 18px; right: 18px; }
+  .whatsapp-fab svg { width: 20px; height: 20px; }
 }
 @media print {
   .whatsapp-fab { display: none; }
@@ -5727,3 +5729,89 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
     padding-bottom: 5px;
   }
 }
+
+/* ============================================
+   INSIGHTS — "For global families" panel above the full list
+   ============================================ */
+.gf-block {
+  background: var(--navy);
+  color: var(--white);
+  border-radius: 8px;
+  padding: 56px 52px 52px;
+  margin-bottom: 88px;
+  position: relative;
+  overflow: hidden;
+}
+.gf-block::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 70% at 90% 0%, rgba(184, 146, 78, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.gf-head { position: relative; max-width: 720px; margin-bottom: 40px; }
+.gf-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.gf-head h2 em { font-style: italic; color: var(--gold); }
+.gf-head p { font-size: 1rem; font-weight: 300; line-height: 1.75; color: var(--white-dim); margin-bottom: 20px; }
+.gf-link {
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold-dim);
+  padding-bottom: 4px;
+}
+.gf-link:hover { color: var(--white); border-color: var(--gold-light); }
+.gf-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.gf-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 24px 22px;
+  background: rgba(244, 241, 234, 0.04);
+  border: 1px solid rgba(244, 241, 234, 0.1);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--white);
+  transition: background 0.35s var(--ease-out), border-color 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+}
+.gf-card:hover { background: rgba(244, 241, 234, 0.08); border-color: var(--gold-dim); transform: translateY(-3px); }
+.gf-cat { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-light); }
+.gf-title {
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--white);
+  flex: 1;
+}
+.gf-title em { font-style: italic; color: rgba(244, 241, 234, 0.72); }
+.gf-cta { font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold-light); }
+.gf-all {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-weight: 300;
+  color: var(--navy);
+  margin-bottom: 36px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ink-line);
+}
+@media (max-width: 1000px) { .gf-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .gf-block { padding: 36px 20px 24px; margin-bottom: 64px; border-radius: 6px; }
+  .gf-grid { grid-template-columns: 1fr; }
+}
+.contact-book { margin-top: 36px; }
+[data-booking][hidden] { display: none !important; }
