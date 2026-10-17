@@ -1760,3 +1760,25 @@ function isInViewport(el) {
     if (btn) btn.focus({ preventScroll: true });
   });
 })();
+
+// ── Photo heroes: gold glow under the cursor ────────────────────────
+// [data-glow] heroes hold a monochrome photo plus a gold-toned copy that is
+// revealed in a soft circle around the pointer (CSS mask at --gx/--gy).
+// Touch screens get a slow CSS drift instead (no pointer to follow).
+(function() {
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  document.querySelectorAll('[data-glow]').forEach(hero => {
+    let raf = null, x = 0, y = 0;
+    hero.addEventListener('pointermove', e => {
+      const r = hero.getBoundingClientRect();
+      x = e.clientX - r.left; y = e.clientY - r.top;
+      if (raf === null) raf = requestAnimationFrame(() => {
+        raf = null;
+        hero.style.setProperty('--gx', x + 'px');
+        hero.style.setProperty('--gy', y + 'px');
+      });
+      hero.classList.add('is-glowing');
+    });
+    hero.addEventListener('pointerleave', () => hero.classList.remove('is-glowing'));
+  });
+})();
