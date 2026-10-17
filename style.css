@@ -5964,7 +5964,7 @@ html.lg-open { overflow: hidden; }
 .sub-hero--photo .grid-streak { display: none !important; }
 
 /* framing per photo */
-.hero-photo--gift { --hp-x: 40%; --hp-y: 60%; }
+.hero-photo--gift { --hp-x: 50%; --hp-y: 60%; }
 .hero-photo--jali { --hp-x: 50%; --hp-y: 46%; --glow-r: 340px; }
 .hero-photo--jali .hero-photo-base { filter: brightness(0.42) contrast(1.18); }
 
@@ -5991,7 +5991,7 @@ html.lg-open { overflow: hidden; }
   100% { --gx: 82%; --gy: 62%; }
 }
 @media (max-width: 720px) {
-  .hero-photo--gift { --hp-x: 46%; }
+  .hero-photo--gift { --hp-x: 33%; }
   .hero-photo--jali { --glow-r: 220px; }
   .hero-photo::after {
     background:
