@@ -2654,94 +2654,6 @@ a, button { cursor: none; }
   margin: 0 auto;
 }
 
-.team-card {
-  /* Per-photo calibration vars. Overridden per [data-member]. The vars let us
-     normalize face size across photos with different source framings without
-     pre-cropping each image. */
-  --photo-scale: 1;
-  --photo-y: 40%;
-  --photo-origin: center top;
-
-  background: var(--paper);
-  padding: 22px 20px 22px;
-  position: relative;
-  transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
-}
-.team-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 24px;
-  height: 1px;
-  background: var(--gold);
-  transition: width 0.4s var(--ease-out);
-}
-.team-card:hover { transform: translateY(-3px); box-shadow: 0 18px 44px -28px rgba(10, 26, 53, 0.22); }
-.team-card:hover::before { width: 48px; }
-
-.team-photo {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: linear-gradient(135deg, var(--paper-soft) 0%, var(--paper-deep) 100%);
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.team-photo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(10, 26, 53, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(10, 26, 53, 0.04) 1px, transparent 1px);
-  background-size: 18px 18px;
-}
-.team-photo:has(img) { background: var(--paper-soft); }
-.team-photo:has(img)::after { display: none; }
-.team-photo img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center var(--photo-y);
-  transform: scale(var(--photo-scale));
-  transform-origin: var(--photo-origin);
-  display: block;
-  transition: transform 0.6s var(--ease-out);
-}
-.team-card:hover .team-photo img {
-  transform: scale(calc(var(--photo-scale) * 1.04));
-}
-
-/* ── Photo framing ─────────────────────────────────────────────────
-   Team photos are pre-cropped to one standard 4:5 frame (eyes at 40% of
-   the height, face about a quarter of the width), so every card can use
-   the same crop and people in a row line up at eye level. To add someone,
-   crop their photo the same way. Ishit's original keeps its own framing. */
-.team-card[data-member="ishit"]  { --photo-scale: 1.00; --photo-y: 18%; --photo-origin: center top; }
-.team-card-body { position: relative; }
-.team-name {
-  font-family: var(--font-display);
-  font-size: 1.08rem;
-  font-weight: 400;
-  color: var(--navy);
-  margin-bottom: 4px;
-  letter-spacing: -0.005em;
-}
-.team-role {
-  font-family: var(--font-body);
-  font-size: 0.56rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 10px;
-}
-.team-bio {
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  line-height: 1.6;
-}
 
 
 /* CTA — deep navy, matches contact section */
@@ -3362,11 +3274,6 @@ body > footer.footer .footer-bottom {
   .team-header { margin-bottom: 72px !important; gap: 22px !important; }
   .team-title { font-size: clamp(2.2rem, 8.5vw, 3rem) !important; }
   .team-lead { font-size: 1rem !important; line-height: 1.65 !important; }
-  .team-card { padding: 18px 18px !important; }
-  .team-photo { margin-bottom: 14px !important; }
-  .team-name { font-size: 1.05rem !important; margin-bottom: 4px !important; }
-  .team-role { font-size: 0.55rem !important; letter-spacing: 0.22em !important; margin-bottom: 10px !important; }
-  .team-bio { font-size: 0.82rem !important; line-height: 1.65 !important; }
 
   /* ── FLOATING BACK ───────────────────────────────────────────────────── */
   .floating-back {
@@ -4444,7 +4351,6 @@ html.intro-running .hero-wordmark-spotlight {
 /* Tilted cards need preserve-3d so the rotation actually feels 3D
    (children sit in the rotated plane) and overflow doesn't clip the
    subtle elevation shadow during tilt. */
-.team-card,
 .feature-item,
 .about-principle,
 .insight-card--featured,
@@ -5789,128 +5695,158 @@ html.mc-instant #navbar, html.mc-instant .floating-back { transition: none; }
 }
 
 /* ============================================
-   ABOUT: team in tiers (founder; strategy and clients; research and
-   technology; operations), joined by a short gold line. Every row spans the
-   full width: cards are horizontal (photo down the left edge, text beside
-   it) and share the row equally, so no row leaves empty sides.
+   ABOUT: leadership grid (4 by 2, in order of seniority). Identical 4:5
+   portraits in black and white, colour on hover; name and title centred
+   under a short gold rule. A click opens the bio panel (<dialog>).
    ============================================ */
-.org { max-width: 1160px; margin: 0 auto; }
-.org-tier { position: relative; display: flex; flex-direction: column; align-items: center; }
-.org-tier + .org-tier { margin-top: 10px; padding-top: 38px; }
-.org-tier + .org-tier::before {
+.lg-grid {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 56px 32px;
+}
+.lg-item { margin: 0; }
+.lg-person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  text-align: center;
+  color: inherit;
+  font: inherit;
+}
+.lg-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--paper-deep);
+  margin-bottom: 22px;
+}
+.lg-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.06) brightness(1.02);
+  transform: scale(1);
+  transition: filter 0.7s var(--ease-out), transform 0.9s var(--ease-out);
+}
+.lg-person:hover .lg-photo img,
+.lg-person:focus-visible .lg-photo img { filter: grayscale(0) contrast(1) brightness(1); transform: scale(1.035); }
+.lg-photo--none {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #2a2d33 0%, #15171b 100%);
+}
+.lg-initials {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.4vw, 2.9rem);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  color: rgba(244, 241, 234, 0.82);
+}
+.lg-name {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 1.32rem;
+  font-weight: 400;
+  color: var(--navy);
+  letter-spacing: 0.005em;
+  padding-top: 16px;
+  margin-bottom: 8px;
+}
+.lg-name::before {
   content: '';
   position: absolute;
   top: 0; left: 50%;
-  width: 1px; height: 26px;
-  background: linear-gradient(to bottom, var(--gold-faint), var(--gold));
+  width: 28px; height: 1px;
+  background: var(--gold);
+  transform: translateX(-50%);
+  transition: width 0.5s var(--ease-out);
 }
-.org-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
+.lg-person:hover .lg-name::before,
+.lg-person:focus-visible .lg-name::before { width: 56px; }
+.lg-role {
   font-family: var(--font-body);
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--gold-deep);
-  margin-bottom: 16px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 22ch;
 }
-.org-label::before, .org-label::after { content: ''; width: 28px; height: 1px; background: var(--gold-dim); }
+.lg-person:focus-visible { outline: 1px solid var(--gold); outline-offset: 8px; }
 
-.org-row { display: grid; grid-template-columns: 1fr; gap: 18px; width: 100%; }
-.org-row--2 { grid-template-columns: repeat(2, 1fr); }
-.org-row--3 { grid-template-columns: repeat(3, 1fr); }
-
-.org .team-card {
-  display: grid;
-  grid-template-columns: 42% 1fr;
-  padding: 0 !important;          /* beats the older phone rule up to 900px */
-  overflow: hidden;
+/* Bio panel */
+html.lg-open { overflow: hidden; }
+.lg-dialog {
+  margin: auto;                  /* the global reset removes the native centring */
+  width: min(920px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  padding: 0;
+  border: none;
+  background: var(--paper);
+  color: var(--ink-strong);
+  box-shadow: 0 40px 120px -30px rgba(2, 8, 18, 0.6);
+  overflow: auto;
 }
-.org .team-card::before { left: calc(42% + 24px); top: 0; }
-.org .team-card:hover::before { width: 40px; }
-.org .team-photo { aspect-ratio: auto; height: 100%; min-height: 230px; margin: 0 !important; }
-.org .team-card-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 26px 24px 24px;
-  text-align: left;
+.lg-dialog, .lg-dialog * { cursor: auto; }
+.lg-dialog button { cursor: pointer; }
+.lg-dialog::backdrop { background: rgba(6, 14, 28, 0.72); backdrop-filter: blur(6px); }
+.lg-dialog[open] { animation: lgIn 0.45s var(--ease-out); }
+@keyframes lgIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.lg-dialog-inner { position: relative; display: grid; grid-template-columns: 0.9fr 1.1fr; }
+.lg-dialog-photo { position: relative; aspect-ratio: 4 / 5; background: var(--paper-deep); }
+.lg-dialog-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.lg-dialog-photo.is-none { display: grid; place-items: center; background: linear-gradient(160deg, var(--navy) 0%, #15284d 100%); }
+.lg-dialog-photo.is-none span { font-family: var(--font-display); font-size: 3.6rem; font-weight: 300; letter-spacing: 0.1em; color: var(--gold-light); }
+.lg-dialog-body { padding: 56px 52px 44px; display: flex; flex-direction: column; justify-content: center; }
+.lg-dialog-kicker { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); margin-bottom: 18px; }
+.lg-dialog-name { font-family: var(--font-display); font-size: clamp(2rem, 3.4vw, 2.6rem); font-weight: 300; line-height: 1.1; color: var(--navy); margin-bottom: 10px; }
+.lg-dialog-role { font-size: 0.66rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold-deep); margin: 0; }
+.lg-dialog-rule { display: block; width: 44px; height: 1px; background: var(--gold); margin: 26px 0; }
+.lg-dialog-bio { font-size: 1rem; font-weight: 300; line-height: 1.85; color: var(--ink-soft); margin: 0 0 36px; }
+.lg-dialog-nav { display: flex; gap: 28px; margin-top: auto; }
+.lg-dialog-nav button {
+  background: none; border: none; padding: 0 0 4px;
+  font-family: var(--font-body); font-size: 0.66rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--navy); border-bottom: 1px solid var(--gold-dim);
 }
-
-/* Founder: one wide card across the whole row */
-.org-tier--lead .team-card { grid-template-columns: 38% 1fr; }
-.org-tier--lead .team-card::before { left: calc(38% + 48px); }
-.org-tier--lead .team-photo { min-height: 360px; }
-.org-tier--lead .team-card-body { padding: 44px 48px; }
-.org-tier--lead .team-name { font-size: 1.9rem; margin-bottom: 8px; }
-.org-tier--lead .team-role { font-size: 0.64rem; margin-bottom: 18px; }
-.org-tier--lead .team-bio { font-size: 0.98rem; line-height: 1.75; max-width: 52ch; }
-
-/* Three across: slightly smaller type so bios sit comfortably */
-.org-row--3 .team-photo { min-height: 220px; }
-.org-row--3 .team-card-body { padding: 22px 20px 20px; }
-.org-row--3 .team-bio { font-size: 0.76rem; }
-.org-row--3 .team-card::before { left: calc(42% + 20px); }
-
-/* Until a portrait is added: navy tile with gold initials */
-.team-photo--initials {
-  display: grid;
-  place-items: center;
-  background: linear-gradient(140deg, var(--navy) 0%, #15284d 100%);
+.lg-dialog-nav button:hover { color: var(--gold-deep); border-color: var(--gold); }
+.lg-dialog-close {
+  position: absolute; top: 14px; right: 16px;
+  width: 40px; height: 40px;
+  background: none; border: none;
+  font-size: 1.6rem; line-height: 1; color: var(--ink-soft);
 }
-.team-photo--initials::after {
-  background-image:
-    linear-gradient(rgba(244, 241, 234, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244, 241, 234, 0.035) 1px, transparent 1px);
-}
-.team-photo--initials span {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-display);
-  font-size: clamp(2.2rem, 3.6vw, 3rem);
-  font-weight: 300;
-  letter-spacing: 0.08em;
-  color: var(--gold-light);
-}
+.lg-dialog-close:hover { color: var(--navy); }
 
-/* Tablets: two across; a lone last card spans the row */
 @media (max-width: 1000px) {
-  .org-row--3 { grid-template-columns: repeat(2, 1fr); }
-  .org-row--3 .team-card:last-child {
-    grid-column: 1 / -1;
-    /* keep the photo the same width as the cards above it */
-    grid-template-columns: calc((100% - 18px) / 2 * 0.42) 1fr;
-  }
-  .org-row--3 .team-card:last-child::before { left: calc((100% - 18px) / 2 * 0.42 + 20px); }
+  .lg-grid { gap: 44px 22px; }
+  .lg-name { font-size: 1.16rem; }
 }
-
-/* Phones: one column, photo beside name and title, bio underneath */
-@media (max-width: 768px) {
-  .org-tier + .org-tier { margin-top: 6px; padding-top: 34px; }
-  .org-tier + .org-tier::before { height: 24px; }
-  .org-row, .org-row--2, .org-row--3 { grid-template-columns: 1fr; gap: 14px; }
-  .org-row--3 .team-card:last-child { grid-column: auto; grid-template-columns: 72px 1fr; }
-  .org-row--3 .team-card:last-child::before { left: 0; }
-  .org .team-card {
-    grid-template-columns: 72px 1fr;
-    column-gap: 16px;
-    align-items: center;
-    padding: 18px !important;
-  }
-  .org .team-card::before { left: 0; }
-  .org .team-photo { aspect-ratio: 1 / 1; height: auto; min-height: 0; margin-bottom: 0 !important; grid-column: 1; grid-row: 1 / span 2; }
-  .org .team-card-body { display: contents; }
-  .org .team-name { grid-column: 2; grid-row: 1; align-self: end; }
-  .org .team-role { grid-column: 2; grid-row: 2; align-self: start; margin-bottom: 0 !important; }
-  .org .team-bio { grid-column: 1 / -1; grid-row: 3; margin-top: 14px; font-size: 0.82rem; }
-  .team-photo--initials span { font-size: 1.35rem; }
-  /* The founder keeps a large portrait on top */
-  .org-tier--lead .team-card { display: flex; flex-direction: column; max-width: 400px; margin: 0 auto; }
-  .org-tier--lead .team-card::before { left: 50%; transform: translateX(-50%); }
-  .org-tier--lead .team-photo { aspect-ratio: 1 / 1; min-height: 0; margin-bottom: 16px !important; }
-  .org-tier--lead .team-card-body { display: block; padding: 0; text-align: center; }
-  .org-tier--lead .team-name { font-size: 1.4rem; }
-  .org-tier--lead .team-role { margin-bottom: 10px !important; }
-  .org-tier--lead .team-bio { margin-top: 0; font-size: 0.86rem; }
+@media (max-width: 720px) {
+  .lg-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 16px; }
+  .lg-photo { margin-bottom: 16px; }
+  .lg-name { font-size: 1.05rem; padding-top: 12px; margin-bottom: 6px; }
+  .lg-role { font-size: 0.54rem; letter-spacing: 0.18em; }
+  .lg-dialog-inner { grid-template-columns: 1fr; }
+  .lg-dialog-photo { aspect-ratio: 4 / 3; }
+  .lg-dialog-photo img { object-position: center 30%; }
+  .lg-dialog-body { padding: 30px 24px 28px; }
+  .lg-dialog-bio { font-size: 0.94rem; margin-bottom: 26px; }
+  .lg-dialog-close { top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: rgba(245, 241, 232, 0.9); color: var(--navy); font-size: 1.35rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-photo img, .lg-name::before { transition: none; }
+  .lg-dialog[open] { animation: none; }
 }

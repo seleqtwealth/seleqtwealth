@@ -131,108 +131,92 @@
         <p class="team-lead">The people who hold your wealth picture, end to end.</p>
       </div>
 
-      <!-- Team, in tiers (top to bottom). Cards without a photo show the
-           person's initials until a portrait is added to images/team/. -->
-      <div class="org">
-        <div class="org-tier org-tier--lead">
-          <p class="org-label reveal">Founder</p>
-          <div class="org-row org-row--1">
-          <article class="team-card" data-member="ishit">
-            <div class="team-photo">
-              <img src="images/team/ishit-lakhani.webp" alt="Ishit Lakhani, Founder and CIO at SELEQT" loading="lazy" />
+      <!-- Team: a formal 4 by 2 grid in order of seniority. Click a portrait for
+           the bio panel. Photos are pre-cropped to one 4:5 frame (eyes at 40%). -->
+      <ul class="lg-grid">
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="ishit" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/ishit-lakhani.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Ishit Lakhani</span>
+              <span class="lg-role">Founder &amp; CIO</span>
+            </button>
+            <p class="lg-bio" hidden>Leads SELEQT's investment philosophy, portfolio construction, and research framework across public and alternative markets.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="kalash" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/kalash-shah.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Kalash Shah</span>
+              <span class="lg-role">Founder's Office</span>
+            </button>
+            <p class="lg-bio" hidden>Works across client strategy, research, and day-to-day investment workflows in close coordination with the CIO.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="arun" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/arun-kukkar.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Arun Kukkar</span>
+              <span class="lg-role">Client Partner, Private Wealth</span>
+            </button>
+            <p class="lg-bio" hidden>Each family's constant counterpart at SELEQT, keeping relationships close, anticipating what clients need, and bringing the right specialist to every conversation.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="aditya" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/aditya-bhagchandani.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Aditya Bhagchandani</span>
+              <span class="lg-role">Private Market Analyst</span>
+            </button>
+            <p class="lg-bio" hidden>Covers private markets for the firm, researching and monitoring AIFs, private equity, and private credit opportunities for client portfolios.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="mihir" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/mihir-karia.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Mihir Karia</span>
+              <span class="lg-role">Public Market Analyst</span>
+            </button>
+            <p class="lg-bio" hidden>Covers listed markets, from equity and fund research to portfolio reviews and the analysis behind client reporting.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="netra" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/netra-vasoya.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Netra Vasoya</span>
+              <span class="lg-role">Head of Internal Platforms</span>
+            </button>
+            <p class="lg-bio" hidden>Builds the private technology SELEQT runs on, designing and engineering the firm's internal platforms from first sketch to everyday tool.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="himaxi" aria-haspopup="dialog">
+              <span class="lg-photo lg-photo--none"><span class="lg-initials" aria-hidden="true">HK</span></span>
+              <span class="lg-name">Himaxi Kanabar</span>
+              <span class="lg-role">Private Client Operations</span>
+            </button>
+            <p class="lg-bio" hidden>Runs the operational backbone behind every relationship: onboarding, documentation, transactions, and reporting, executed with precision.</p>
+          </li>
+          <li class="lg-item reveal">
+            <button class="lg-person" type="button" data-person="kajal" aria-haspopup="dialog">
+              <span class="lg-photo"><img src="images/team/kajal-rajput.webp" alt="" loading="lazy" /></span>
+              <span class="lg-name">Kajal Rajput</span>
+              <span class="lg-role">Private Client Operations</span>
+            </button>
+            <p class="lg-bio" hidden>Keeps every client relationship running smoothly behind the scenes, from onboarding and documentation to transactions and reporting.</p>
+          </li>
+      </ul>
+
+      <dialog class="lg-dialog" id="teamDialog" aria-labelledby="teamDialogName">
+        <div class="lg-dialog-inner">
+          <div class="lg-dialog-photo"></div>
+          <div class="lg-dialog-body">
+            <p class="lg-dialog-kicker">The SELEQT team</p>
+            <h3 class="lg-dialog-name" id="teamDialogName"></h3>
+            <p class="lg-dialog-role"></p>
+            <span class="lg-dialog-rule" aria-hidden="true"></span>
+            <p class="lg-dialog-bio"></p>
+            <div class="lg-dialog-nav">
+              <button type="button" class="lg-dialog-prev">&larr; Previous</button>
+              <button type="button" class="lg-dialog-next">Next &rarr;</button>
             </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Ishit Lakhani</h3>
-              <p class="team-role">Founder &amp; CIO</p>
-              <p class="team-bio">Leads SELEQT's investment philosophy, portfolio construction, and research framework across public and alternative markets.</p>
-            </div>
-          </article>
           </div>
+          <button type="button" class="lg-dialog-close" aria-label="Close">&times;</button>
         </div>
-        <div class="org-tier">
-          <p class="org-label reveal">Strategy &amp; Clients</p>
-          <div class="org-row org-row--2">
-          <article class="team-card" data-member="kalash">
-            <div class="team-photo">
-              <img src="images/team/kalash-shah.webp" alt="Kalash Shah, Founder's Office at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Kalash Shah</h3>
-              <p class="team-role">Founder's Office</p>
-              <p class="team-bio">Works across client strategy, research, and day-to-day investment workflows in close coordination with the CIO.</p>
-            </div>
-          </article>
-          <article class="team-card" data-member="arun">
-            <div class="team-photo">
-              <img src="images/team/arun-kukkar.webp" alt="Arun Kukkar, Client Partner, Private Wealth at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Arun Kukkar</h3>
-              <p class="team-role">Client Partner, Private Wealth</p>
-              <p class="team-bio">Each family's constant counterpart at SELEQT, keeping relationships close, anticipating what clients need, and bringing the right specialist to every conversation.</p>
-            </div>
-          </article>
-          </div>
-        </div>
-        <div class="org-tier">
-          <p class="org-label reveal">Research &amp; Technology</p>
-          <div class="org-row org-row--3">
-          <article class="team-card" data-member="aditya">
-            <div class="team-photo">
-              <img src="images/team/aditya-bhagchandani.webp" alt="Aditya Bhagchandani, Private Market Analyst at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Aditya Bhagchandani</h3>
-              <p class="team-role">Private Market Analyst</p>
-              <p class="team-bio">Covers private markets for the firm, researching and monitoring AIFs, private equity, and private credit opportunities for client portfolios.</p>
-            </div>
-          </article>
-          <article class="team-card" data-member="mihir">
-            <div class="team-photo">
-              <img src="images/team/mihir-karia.webp" alt="Mihir Karia, Public Market Analyst at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Mihir Karia</h3>
-              <p class="team-role">Public Market Analyst</p>
-              <p class="team-bio">Covers listed markets, from equity and fund research to portfolio reviews and the analysis behind client reporting.</p>
-            </div>
-          </article>
-          <article class="team-card" data-member="netra">
-            <div class="team-photo">
-              <img src="images/team/netra-vasoya.webp" alt="Netra Vasoya, Head of Internal Platforms at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Netra Vasoya</h3>
-              <p class="team-role">Head of Internal Platforms</p>
-              <p class="team-bio">Builds the private technology SELEQT runs on, designing and engineering the firm's internal platforms from first sketch to everyday tool.</p>
-            </div>
-          </article>
-          </div>
-        </div>
-        <div class="org-tier">
-          <p class="org-label reveal">Operations</p>
-          <div class="org-row org-row--2">
-          <article class="team-card" data-member="himaxi">
-            <div class="team-photo team-photo--initials" aria-hidden="true"><span>HK</span></div>
-            <div class="team-card-body">
-              <h3 class="team-name">Himaxi Kanabar</h3>
-              <p class="team-role">Private Client Operations</p>
-              <p class="team-bio">Runs the operational backbone behind every relationship: onboarding, documentation, transactions, and reporting, executed with precision.</p>
-            </div>
-          </article>
-          <article class="team-card" data-member="kajal">
-            <div class="team-photo">
-              <img src="images/team/kajal-rajput.webp" alt="Kajal Rajput, Private Client Operations at SELEQT" loading="lazy" />
-            </div>
-            <div class="team-card-body">
-              <h3 class="team-name">Kajal Rajput</h3>
-              <p class="team-role">Private Client Operations</p>
-              <p class="team-bio">Keeps every client relationship running smoothly behind the scenes, from onboarding and documentation to transactions and reporting.</p>
-            </div>
-          </article>
-          </div>
-        </div>
-      </div>
+      </dialog>
     </div>
   </section>
 

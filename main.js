@@ -1134,7 +1134,6 @@ function isInViewport(el) {
 
   // Each tilt-target gets a tuned maxTilt (degrees) and liftPx (-px to lift).
   [
-    ['.team-card',                 5, -4],
     ['.feature-item',              5, -3],
     ['.about-principle',           5, -3],
     ['.insight-card--featured',    4, -6],
@@ -1699,5 +1698,62 @@ function isInViewport(el) {
       if (e.key === 'Home') { e.preventDefault(); place(0); }
       if (e.key === 'End') { e.preventDefault(); place(n - 1); }
     });
+  });
+})();
+
+// ── Team: bio panel ─────────────────────────────────────────────────
+// Each portrait in the leadership grid opens a formal panel (native
+// <dialog>) with the colour portrait, name, title and bio. Previous / Next
+// step through the team; Escape or a click outside closes it.
+(function() {
+  const dialog = document.getElementById('teamDialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const items = Array.from(document.querySelectorAll('.lg-item'));
+  const photoBox = dialog.querySelector('.lg-dialog-photo');
+  const nameEl = dialog.querySelector('.lg-dialog-name');
+  const roleEl = dialog.querySelector('.lg-dialog-role');
+  const bioEl = dialog.querySelector('.lg-dialog-bio');
+  let current = 0;
+
+  function fill(i) {
+    current = (i + items.length) % items.length;
+    const item = items[current];
+    nameEl.textContent = item.querySelector('.lg-name').textContent;
+    roleEl.textContent = item.querySelector('.lg-role').textContent;
+    bioEl.textContent = item.querySelector('.lg-bio').textContent;
+    photoBox.textContent = '';
+    const img = item.querySelector('.lg-photo img');
+    if (img) {
+      const big = document.createElement('img');
+      big.src = img.getAttribute('src');
+      big.alt = nameEl.textContent + ', ' + roleEl.textContent + ' at SELEQT';
+      photoBox.appendChild(big);
+      photoBox.classList.remove('is-none');
+    } else {
+      const ini = document.createElement('span');
+      ini.textContent = item.querySelector('.lg-initials').textContent;
+      photoBox.appendChild(ini);
+      photoBox.classList.add('is-none');
+    }
+  }
+  function open(i) {
+    fill(i);
+    dialog.showModal();
+    document.documentElement.classList.add('lg-open');
+    window.seleqtTrack('team_bio_open', { person: items[current].querySelector('.lg-person').dataset.person });
+  }
+  items.forEach((item, i) => item.querySelector('.lg-person').addEventListener('click', () => open(i)));
+  dialog.querySelector('.lg-dialog-prev').addEventListener('click', () => fill(current - 1));
+  dialog.querySelector('.lg-dialog-next').addEventListener('click', () => fill(current + 1));
+  dialog.querySelector('.lg-dialog-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', e => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') fill(current - 1);
+    if (e.key === 'ArrowRight') fill(current + 1);
+  });
+  dialog.addEventListener('close', () => {
+    document.documentElement.classList.remove('lg-open');
+    const btn = items[current] && items[current].querySelector('.lg-person');
+    if (btn) btn.focus({ preventScroll: true });
   });
 })();
