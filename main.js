@@ -142,18 +142,6 @@ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
   });
 })();
 
-// ── Parallax Hero Orbs ─────────────────────
-const orbs = document.querySelectorAll('.orb');
-if (orbs.length) {
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    orbs.forEach((orb, i) => {
-      const speed = 0.08 + i * 0.04;
-      orb.style.transform = `translateY(${scrollY * speed}px)`;
-    });
-  }, { passive: true });
-}
-
 // ── Hero Title Letter Stagger ──────────────
 const heroLines = document.querySelectorAll('.hero-title .line');
 heroLines.forEach((line, i) => {
@@ -290,46 +278,6 @@ if (serviceCards.length) {
     card.classList.add('reveal');
     cardObserver.observe(card);
   });
-}
-
-// ── Scroll-triggered number counter ───────
-function animateCounter(el, target, suffix = '') {
-  let start = 0;
-  const duration = 1600;
-  const step = (timestamp) => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.round(eased * target) + suffix;
-    if (progress < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-}
-
-// ── Pillar cards stagger ───────────────────
-const pillars = document.querySelectorAll('.pillar');
-if (pillars.length) {
-  const pillarObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        pillars.forEach((p, i) => {
-          setTimeout(() => {
-            p.style.opacity = '1';
-            p.style.transform = 'translateY(0)';
-          }, i * 100);
-        });
-        pillarObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.2 });
-
-  pillars.forEach(p => {
-    p.style.opacity = '0';
-    p.style.transform = 'translateY(30px)';
-    p.style.transition = 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-  });
-
-  if (pillars[0]) pillarObserver.observe(pillars[0].closest('.why-section') || pillars[0]);
 }
 
 // ── Sub-page reveal on load ────────────────
