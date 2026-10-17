@@ -2722,6 +2722,7 @@ a, button { cursor: none; }
 .team-card[data-member="kalash"] { --photo-scale: 1.10; --photo-y: 68%; --photo-origin: center bottom; }
 .team-card[data-member="aditya"] { --photo-scale: 1.22; --photo-y: 18%; --photo-origin: center top; }
 .team-card[data-member="mihir"]  { --photo-scale: 1.14; --photo-y: 18%; --photo-origin: center top; }
+.team-card[data-member="kajal"]  { --photo-scale: 1.25; --photo-y: 12%; --photo-origin: center top; }
 .team-card-body { position: relative; }
 .team-name {
   font-family: var(--font-display);
