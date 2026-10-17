@@ -1456,7 +1456,8 @@ function isInViewport(el) {
 
 // ── Travel concierge bar (Monaco / London) ──────────────────────────
 // A slim bar above the nav while the founder is travelling. The city it
-// names follows TRIP below (dates in Monaco/London time). No end date:
+// names follows TRIP below (dates in Monaco/London time), and it stops
+// appearing after the last TRIP date. To take it down sooner:
 // set MONACO_BAR to false (or delete this block and the .mc-bar / .mc-pop
 // CSS) to take it down. Skipped on unlisted (noindex) pages.
 // On a fresh open or refresh it arrives as a small "Monaco" pill in the
@@ -1466,8 +1467,8 @@ function isInViewport(el) {
 (function() {
   const MONACO_BAR = true;
   if (!MONACO_BAR) return;
-  // Where Ishit is, by date (inclusive). Outside these dates the bar names
-  // the FALLBACK city.
+  // Where Ishit is, by date (inclusive). Before the first date the bar names
+  // the FALLBACK city; after the last date it no longer appears.
   const TRIP = [
     { from: '2026-10-19', to: '2026-10-25', city: 'Monaco' },
     { from: '2026-10-26', to: '2026-10-27', city: 'London' },
@@ -1478,6 +1479,8 @@ function isInViewport(el) {
   try {
     today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Monaco', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
   } catch (e) { today = new Date().toISOString().slice(0, 10); }
+  // The trip is over after the last date: the bar switches itself off.
+  if (today > TRIP[TRIP.length - 1].to) return;
   const leg = TRIP.find(t => today >= t.from && today <= t.to);
   const city = leg ? leg.city : FALLBACK;
   const robots = document.querySelector('meta[name="robots"]');
