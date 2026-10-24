@@ -70,6 +70,48 @@
     const i = r / 100 / 12, n = Math.round(Y * 12);
     return i === 0 ? target / n : target * i / ((Math.pow(1 + i, n) - 1) * (1 + i));
   }
+  /* Recurring deposit, compounded quarterly as Indian banks do: each monthly
+     instalment earns (1 + r/400) per quarter for the quarters it stays in. */
+  function rdFV(P, rate, months) {
+    const q = rate / 400; let val = 0;
+    for (let k = 1; k <= months; k++) val += P * Math.pow(1 + q, k / 3);
+    return val;
+  }
+  /* PPF: one deposit at the start of each year (before 5 April), interest
+     credited yearly. */
+  function ppfFV(yearly, rate, years) {
+    let bal = 0; for (let y = 0; y < years; y++) bal = (bal + yearly) * (1 + rate / 100);
+    return bal;
+  }
+  /* EPF as EPFO runs it: employee 12% of basic + DA; employer 12%, of which
+     8.33% of wages up to the 15,000 ceiling goes to the pension (EPS) and the
+     rest to EPF. Interest is worked out monthly on the running balance and
+     credited once a year, so it compounds yearly. */
+  const EPS_CEILING = 15000;
+  function epfRun(basic, growth, rate, years, opening) {
+    let balE = opening || 0, balR = 0, inv = 0, B = basic;
+    const r = rate / 100 / 12;
+    for (let y = 0; y < years; y++) {
+      const ce = B * 0.12;
+      const cr = Math.max(0, B * 0.12 - Math.min(B, EPS_CEILING) * 0.0833);
+      let intE = 0, intR = 0;
+      for (let m = 0; m < 12; m++) {
+        balE += ce; balR += cr; inv += ce + cr;
+        intE += balE * r; intR += balR * r;
+      }
+      balE += intE; balR += intR;
+      B *= (1 + growth / 100);
+    }
+    return { balE: balE, balR: balR, inv: inv, opening: opening || 0 };
+  }
+  /* NPS at 60: what the annuity share buys, and how the lump sum splits into
+     the tax-free part (up to 60% of the corpus) and the taxable rest. */
+  function npsSplit(corpus, annuityPct, annuityRate) {
+    const annuity = corpus * annuityPct / 100;
+    const lump = corpus - annuity;
+    const taxFree = Math.min(lump, corpus * 0.6);
+    return { annuity: annuity, lump: lump, taxFree: taxFree, taxable: lump - taxFree, pension: annuity * annuityRate / 100 / 12 };
+  }
   function realVal(fv, infl, years) { return fv / Math.pow(1 + infl / 100, years); }
   function yrsToDouble(rate) { return rate <= 0 ? Infinity : Math.log(2) / Math.log(1 + rate / 100); }
   function pctOf(part, whole) { return whole > 0 ? Math.round((part / whole) * 100) : 0; }
@@ -393,7 +435,7 @@
         { id: "corpus", label: "Corpus needed", kind: "grow" },
         { id: "savingsGrow", label: "Savings will become", kind: "plain" },
         { id: "sip", label: "Monthly SIP needed", kind: "gain" },
-        { id: "futMonthly", label: "Monthly need at 60", kind: "plain" }
+        { id: "futMonthly", label: "Monthly need at retirement", kind: "plain" }
       ],
       compute: function (v) {
         const yToRet = Math.max(1, v.retAge - v.curAge);
@@ -408,6 +450,7 @@
         const sip = sipFor(shortfall, v.preReturn, yToRet);
         const covered = pctOf(Math.min(fvCurrent, corpus), corpus);
         return {
+          _warn: v.retAge <= v.curAge ? "Your retirement age needs to be later than your current age." : "",
           corpus: fmtINR(corpus), savingsGrow: fmtINR(fvCurrent), sip: fmtINR(sip), futMonthly: fmtINR(futMonthly),
           _chart: [{ label: "From your savings", amount: Math.min(fvCurrent, corpus), tone: "in" }, { label: "From the new SIP", amount: shortfall, tone: "grow" }],
           _insight: "Your savings grow to <b>" + fmtINR(fvCurrent) + "</b>, covering " + covered + "% of the corpus. Invest <b>" + fmtINR(sip) + "</b> a month for the rest, over " + yToRet + " years."
@@ -417,14 +460,14 @@
     {
       id: "nps", name: "NPS", icon: icon(I.nps),
       tag: "A pension plus a lump sum",
-      about: "The National Pension System builds a retirement corpus through regular contributions until age 60. At retirement a part is taken as a lump sum and the rest buys an annuity that pays a monthly pension.",
+      about: "The National Pension System builds a retirement corpus through regular contributions until age 60. At exit, part of it buys an annuity that pays a monthly pension and the rest can be taken as a lump sum, up to 60% of the corpus tax-free.",
       how: ["Set your monthly contribution and current age.", "Choose an expected return on the corpus.", "Set the share used to buy an annuity and its rate.", "Add inflation to see the pension in today's money."],
-      note: "At least 40% of the corpus must buy an annuity; the other 60% is tax-free at exit. NPS also allows an extra ₹50,000 deduction under 80CCD(1B). " + DISC,
+      note: "Since December 2025, non-government subscribers with more than ₹12 lakh at exit must put at least 20% into an annuity (government subscribers 40%). Up to 60% of the corpus is tax-free at exit; any lump sum above that, and the pension itself, is taxed at your slab. The extra ₹50,000 deduction on your own contributions is available only under the old tax regime. " + DISC,
       inputs: [
         { id: "monthly", label: "Monthly contribution", type: "money", min: 500, max: 200000, step: 500, value: 10000 },
         { id: "curAge", label: "Current age", type: "age", min: 18, max: 59, step: 1, value: 30 },
         { id: "rate", label: "Expected return (p.a.)", type: "percent", min: 6, max: 14, step: 0.5, value: 10 },
-        { id: "annuityPct", label: "% used for annuity", type: "percent", min: 40, max: 100, step: 5, value: 40 },
+        { id: "annuityPct", label: "% used for annuity", type: "percent", min: 20, max: 100, step: 5, value: 40 },
         { id: "annuityRate", label: "Annuity return", type: "percent", min: 4, max: 9, step: 0.5, value: 6 },
         { id: "inflation", label: "Expected inflation", type: "percent", min: 0, max: 12, step: 0.5, value: 6 }
       ],
@@ -437,13 +480,17 @@
       compute: function (v) {
         const yToRet = Math.max(1, 60 - v.curAge);
         const corpus = sipFV(v.monthly, v.rate, yToRet);
-        const annuity = corpus * v.annuityPct / 100;
-        const pension = annuity * v.annuityRate / 100 / 12;
+        const sp = npsSplit(corpus, v.annuityPct, v.annuityRate);
+        const pension = sp.pension;
         const realPension = realVal(pension, v.inflation, yToRet);
+        const chart = [{ label: "Buys your pension", amount: sp.annuity, tone: "in" }, { label: "Tax-free lump sum", amount: sp.taxFree, tone: "grow" }];
+        if (sp.taxable > 0) chart.push({ label: "Taxable lump sum", amount: sp.taxable, tone: "warn" });
         return {
-          corpus: fmtINR(corpus), pension: fmtINR(pension), realPension: fmtINR(realPension), lump: fmtINR(corpus - annuity),
-          _chart: [{ label: "Buys your pension", amount: annuity, tone: "in" }, { label: "Tax-free lump sum", amount: corpus - annuity, tone: "grow" }],
-          _insight: "At 60 you would draw <b>" + fmtINR(pension) + "</b> a month, worth about <b>" + fmtINR(realPension) + "</b> in today's money, plus a " + fmtINR(corpus - annuity) + " tax-free lump sum."
+          corpus: fmtINR(corpus), pension: fmtINR(pension), realPension: fmtINR(realPension), lump: fmtINR(sp.lump),
+          _chart: chart,
+          _insight: "At 60 you would draw <b>" + fmtINR(pension) + "</b> a month, worth about <b>" + fmtINR(realPension) + "</b> in today's money, plus a " + fmtINR(sp.lump) + " lump sum" +
+            (sp.taxable > 0 ? ", of which " + fmtINR(sp.taxFree) + " is tax-free and " + fmtINR(sp.taxable) + " is taxed at your slab." : ", all of it tax-free.") +
+            (v.annuityPct < 40 ? " Less than 40% in an annuity is open only to non-government subscribers." : "")
         };
       }
     },
@@ -493,7 +540,7 @@
       tag: "Assured return, taxed at slab",
       about: "A fixed deposit locks a lump sum with a bank for a fixed term at a fixed rate, compounded quarterly. The return is assured, but the interest is taxed at your slab and can struggle to outpace inflation.",
       how: ["Enter the amount you would deposit.", "Set the interest rate offered.", "Choose the term in years.", "Set your tax slab and inflation to see what the maturity is really worth."],
-      note: "Interest is taxed at your income-tax slab; assumes quarterly compounding. Banks may differ. " + DISC,
+      note: "Interest is taxed at your income-tax slab plus 4% cess, shown here as one tax at maturity; banks compound quarterly and deduct TDS each year. " + DISC,
       inputs: [
         { id: "principal", label: "Deposit amount", type: "money", min: 5000, max: 10000000, step: 5000, value: 500000 },
         { id: "rate", label: "Interest rate (p.a.)", type: "percent", min: 3, max: 10, step: 0.1, value: 7 },
@@ -510,10 +557,10 @@
       compute: function (v) {
         const fv = v.principal * Math.pow(1 + v.rate / 100 / 4, 4 * v.years);
         const interest = fv - v.principal;
-        const tax = interest * v.taxSlab / 100;
+        const tax = interest * v.taxSlab / 100 * 1.04;
         const postTax = fv - tax;
         const real = realVal(postTax, v.inflation, v.years);
-        const postTaxRate = v.rate * (1 - v.taxSlab / 100);
+        const postTaxRate = v.rate * (1 - v.taxSlab * 1.04 / 100);
         const beatsInflation = postTaxRate >= v.inflation;
         return {
           value: fmtINR(fv), postTax: fmtINR(postTax), real: fmtINR(real), interest: fmtINR(interest),
@@ -528,9 +575,9 @@
     {
       id: "rd", name: "Recurring Deposit", icon: icon(I.rd),
       tag: "Save a fixed sum each month",
-      about: "A recurring deposit puts a fixed amount into a bank every month for a fixed term at a fixed rate. Compounded monthly, the quoted rate works out to a slightly higher effective yield over the year.",
+      about: "A recurring deposit puts a fixed amount into a bank every month for a fixed term at a fixed rate. Banks compound it quarterly, so the quoted rate works out to a slightly higher effective yield over the year.",
       how: ["Set your monthly deposit.", "Enter the interest rate offered.", "Choose the term in years.", "See the effective annual yield and the interest you earn."],
-      note: "Compounded monthly for simplicity. Banks may differ. " + DISC,
+      note: "Compounded quarterly, the way most Indian banks calculate it. Interest is taxable at your slab. " + DISC,
       inputs: [
         { id: "monthly", label: "Monthly deposit", type: "money", min: 500, max: 100000, step: 500, value: 5000 },
         { id: "rate", label: "Interest rate (p.a.)", type: "percent", min: 3, max: 9, step: 0.1, value: 6.5 },
@@ -543,15 +590,15 @@
         { id: "invested", label: "You deposit", kind: "plain" }
       ],
       compute: function (v) {
-        const i = v.rate / 100 / 12, n = Math.round(v.years * 12); let val = 0;
-        for (let m = 0; m < n; m++) val = (val + v.monthly) * (1 + i);
+        const n = Math.round(v.years * 12);
+        const val = rdFV(v.monthly, v.rate, n);
         const inv = v.monthly * n;
-        // effective annual yield: monthly compounding lifts the quoted rate slightly
-        const eff = (Math.pow(1 + i, 12) - 1) * 100;
+        // effective annual yield: quarterly compounding lifts the quoted rate slightly
+        const eff = (Math.pow(1 + v.rate / 400, 4) - 1) * 100;
         return {
           value: fmtINR(val), interest: fmtINR(val - inv), effYield: fmtPct(Math.round(eff * 100) / 100), invested: fmtINR(inv),
           _chart: [{ label: "You deposit", amount: inv, tone: "in" }, { label: "Interest", amount: val - inv, tone: "grow" }],
-          _insight: "Compounded monthly, the " + fmtPct(v.rate) + " rate works out to an effective yield of <b>" + fmtPct(Math.round(eff * 100) / 100) + "</b> a year. Saving " + fmtINR(v.monthly) + " a month for " + v.years + " years builds <b>" + fmtINR(val) + "</b>, of which <b>" + fmtINR(val - inv) + "</b> is interest."
+          _insight: "Compounded quarterly, the " + fmtPct(v.rate) + " rate works out to an effective yield of <b>" + fmtPct(Math.round(eff * 100) / 100) + "</b> a year. Saving " + fmtINR(v.monthly) + " a month for " + v.years + " years builds <b>" + fmtINR(val) + "</b>, of which <b>" + fmtINR(val - inv) + "</b> is interest."
         };
       }
     },
@@ -559,12 +606,12 @@
       id: "ppf", name: "PPF", icon: icon(I.ppf),
       tag: "Tax-free, government-backed",
       about: "The Public Provident Fund is a government savings scheme with a 15-year term, tax-free interest compounded yearly, and a deposit cap of ₹1.5 lakh a year. Because the interest is fully tax-free, its real value beats a bank FD paying the same rate.",
-      how: ["Set your yearly investment (up to ₹1.5 lakh).", "Enter the current PPF rate.", "Choose the duration (15 years or extended).", "Set your tax slab to see the taxable FD rate it really matches."],
-      note: "PPF interest is fully tax-free (EEE). Rates are set by the government and revised periodically. " + DISC,
+      how: ["Set your yearly investment (up to ₹1.5 lakh).", "Enter the current PPF rate.", "Choose the duration: 15 years, then extensions in blocks of 5.", "Set your tax slab to see the taxable FD rate it really matches."],
+      note: "PPF interest is fully tax-free (EEE). The default 7.1% is the rate for October to December 2026; the government reviews it every quarter. Assumes you deposit before 5 April each year. " + DISC,
       inputs: [
         { id: "yearly", label: "Yearly investment", type: "money", min: 500, max: 150000, step: 500, value: 150000 },
         { id: "rate", label: "Interest rate (p.a.)", type: "percent", min: 6, max: 9, step: 0.1, value: 7.1 },
-        { id: "years", label: "Duration", type: "years", min: 15, max: 50, step: 1, value: 15 },
+        { id: "years", label: "Duration", type: "years", min: 15, max: 50, step: 5, value: 15 },
         { id: "taxSlab", label: "Your tax slab", type: "percent", min: 0, max: 30, step: 5, value: 30 }
       ],
       outputs: [
@@ -574,9 +621,9 @@
         { id: "invested", label: "Total invested", kind: "plain" }
       ],
       compute: function (v) {
-        let bal = 0; for (let y = 0; y < v.years; y++) bal = (bal + v.yearly) * (1 + v.rate / 100);
+        const bal = ppfFV(v.yearly, v.rate, v.years);
         const inv = v.yearly * v.years;
-        const equiv = v.taxSlab >= 100 ? Infinity : v.rate / (1 - v.taxSlab / 100);
+        const equiv = v.taxSlab >= 100 ? Infinity : v.rate / (1 - v.taxSlab * 1.04 / 100);
         return {
           value: fmtINR(bal), interest: fmtINR(bal - inv), equivFD: fmtPct(Math.round(equiv * 100) / 100), invested: fmtINR(inv),
           _chart: [{ label: "You invest", amount: inv, tone: "in" }, { label: "Tax-free interest", amount: bal - inv, tone: "grow" }],
@@ -588,10 +635,11 @@
       id: "epf", name: "EPF", icon: icon(I.epf),
       tag: "Your salary's retirement share",
       about: "The Employees' Provident Fund builds a retirement corpus from monthly contributions out of your basic salary, matched in part by your employer, and compounded at a government-set rate. The employer's share is effectively free money on top of your own saving.",
-      how: ["Enter your monthly basic + DA.", "Set your expected annual increment.", "Enter the EPF interest rate and years of service.", "See how your share and your employer's each grow."],
-      note: "Simplified: 12% employee + 3.67% employer of basic, ignoring the pension (EPS) split and wage ceiling. " + DISC,
+      how: ["Enter your monthly basic + DA and any EPF balance you already have.", "Set your expected annual increment.", "Enter the EPF interest rate and years of service.", "See how your share and your employer's each grow."],
+      note: "You put in 12% of basic + DA. Your employer also puts in 12%, but 8.33% of wages up to ₹15,000 (₹1,250 a month) goes to the pension scheme (EPS), not your EPF. Interest is credited yearly; 8.25% is the rate for 2025-26. Assumes contributions on your full basic. " + DISC,
       inputs: [
         { id: "basic", label: "Monthly basic + DA", type: "money", min: 5000, max: 500000, step: 1000, value: 30000 },
+        { id: "opening", label: "EPF balance today", type: "money", min: 0, max: 20000000, step: 10000, value: 0 },
         { id: "growth", label: "Annual increment", type: "percent", min: 0, max: 15, step: 1, value: 6 },
         { id: "rate", label: "Interest rate (p.a.)", type: "percent", min: 7, max: 9, step: 0.05, value: 8.25 },
         { id: "years", label: "Years of service", type: "years", min: 1, max: 40, step: 1, value: 30 }
@@ -603,30 +651,22 @@
         { id: "interest", label: "Interest earned", kind: "plain" }
       ],
       compute: function (v) {
-        const i = v.rate / 100 / 12; let balE = 0, balR = 0, inv = 0, B = v.basic;
-        for (let y = 0; y < v.years; y++) {
-          const ce = B * 0.12, cr = B * 0.0367;
-          for (let m = 0; m < 12; m++) {
-            balE = (balE + ce) * (1 + i);
-            balR = (balR + cr) * (1 + i);
-            inv += ce + cr;
-          }
-          B *= (1 + v.growth / 100);
-        }
-        const bal = balE + balR;
+        const e = epfRun(v.basic, v.growth, v.rate, v.years, v.opening);
+        const balE = e.balE, balR = e.balR, bal = balE + balR, inv = e.inv + e.opening;
+        const erPct = Math.round((v.basic * 0.12 - Math.min(v.basic, EPS_CEILING) * 0.0833) / v.basic * 1000) / 10;
         return {
           value: fmtINR(bal), yours: fmtINR(balE), employer: fmtINR(balR), interest: fmtINR(bal - inv),
           _chart: [{ label: "Your share", amount: balE, tone: "in" }, { label: "Employer's share", amount: balR, tone: "grow" }],
-          _insight: "Your 12% grows to <b>" + fmtINR(balE) + "</b>, and your employer's 3.67% adds another <b>" + fmtINR(balR) + "</b> you never paid in, about " + pctOf(balR, bal) + "% of the corpus."
+          _insight: "Your 12% grows to <b>" + fmtINR(balE) + "</b>. After the pension share, your employer puts about " + erPct + "% of your basic into EPF today, which adds another <b>" + fmtINR(balR) + "</b> you never paid in, about " + pctOf(balR, bal) + "% of the corpus."
         };
       }
     },
     {
       id: "ssy", name: "Sukanya Samriddhi", icon: icon(I.ssy),
       tag: "For your daughter's future",
-      about: "Sukanya Samriddhi Yojana is a government scheme for a girl child. You deposit for 15 years and the account matures 21 years after opening, with tax-free interest compounded yearly. The long horizon means inflation matters as much as the rate.",
+      about: "Sukanya Samriddhi Yojana is a government scheme for a girl child, opened before she turns 10. You deposit for 15 years and the account matures 21 years after opening, with tax-free interest compounded yearly. The long horizon means inflation matters as much as the rate.",
       how: ["Set the amount you would deposit each year.", "Enter the current scheme rate.", "Add expected inflation to see the real maturity value.", "Deposits run for the first 15 years; the account matures at 21."],
-      note: "SSY interest is tax-free; rates are set by the government and revised periodically. " + DISC,
+      note: "SSY interest is tax-free. The default 8.2% is the rate for October to December 2026; the government reviews it every quarter. Deposits run from ₹250 to ₹1.5 lakh a year. " + DISC,
       inputs: [
         { id: "yearly", label: "Yearly deposit", type: "money", min: 250, max: 150000, step: 250, value: 150000 },
         { id: "rate", label: "Interest rate (p.a.)", type: "percent", min: 7, max: 9, step: 0.1, value: 8.2 },
@@ -709,12 +749,12 @@
     {
       id: "gratuity", name: "Gratuity", icon: icon(I.gratuity),
       tag: "Your reward for long service",
-      about: "Gratuity is a lump sum an employer pays for long service, payable after five years. It is calculated as fifteen days of your last drawn salary for every completed year of service, and is tax-free up to twenty lakh.",
-      how: ["Enter your last drawn monthly basic + DA.", "Set your years of service.", "Read the gratuity payable and the part that is tax-free.", "Note: you are eligible only after five years."],
-      note: "Formula: (15/26) × last salary × years, capped at ₹20 L. Eligible after 5 years of service.",
+      about: "Gratuity is a lump sum an employer pays for long service: fifteen days of your last drawn wages for every completed year. Permanent employees qualify after five years; since the labour codes took effect on 21 November 2025, fixed-term employees qualify after one.",
+      how: ["Enter your last drawn monthly basic + DA.", "Set your completed years of service (more than six months counts as a year).", "Read the gratuity payable.", "Check you qualify: five years if permanent, one if on a fixed-term contract."],
+      note: "Formula for employers covered by the law: (15/26) × last monthly wages × years, capped at ₹20 lakh. For private-sector employees, up to ₹20 lakh of gratuity is tax-free over a whole career; government employees follow separate rules. Illustrative only.",
       inputs: [
         { id: "salary", label: "Last monthly basic + DA", type: "money", min: 10000, max: 1000000, step: 1000, value: 50000 },
-        { id: "years", label: "Years of service", type: "years", min: 5, max: 40, step: 1, value: 10 }
+        { id: "years", label: "Years of service", type: "years", min: 1, max: 40, step: 1, value: 10 }
       ],
       outputs: [
         { id: "gratuity", label: "Gratuity payable", kind: "grow" },
@@ -729,12 +769,13 @@
         return {
           gratuity: fmtINR(g), uncapped: fmtINR(raw), perYear: fmtINR((15 / 26) * v.salary),
           _chart: [
-            { label: "You receive (tax-free)", amount: g, tone: "grow" },
+            { label: "You receive", amount: g, tone: "grow" },
             { label: "Trimmed by the cap", amount: Math.max(0, raw - CAP), tone: "warn" }
           ],
-          _insight: capped
-            ? "The formula gives " + fmtINR(raw) + ", but gratuity is capped at <b>" + fmtINR(CAP) + "</b>, so that is what you receive, all of it tax-free."
-            : "You earn 15 days' pay for each of " + v.years + " years, a tax-free <b>" + fmtINR(g) + "</b>, well within the " + fmtINR(CAP) + " cap."
+          _insight: (capped
+            ? "The formula gives " + fmtINR(raw) + ", but gratuity is capped at <b>" + fmtINR(CAP) + "</b>, so that is what you receive."
+            : "You earn 15 days' pay for each of " + v.years + " years: <b>" + fmtINR(g) + "</b>, within the " + fmtINR(CAP) + " cap.") +
+            (v.years < 5 ? " With under five years, this applies only if you are on a fixed-term contract." : "")
         };
       }
     },
@@ -767,6 +808,7 @@
         const lump = shortfall / Math.pow(1 + v.rate / 100, years);
         const mult = Math.round(futureCost / v.costToday * 10) / 10;
         return {
+          _warn: v.startAge <= v.childAge ? "The course needs to start after your child's current age." : "",
           futureCost: fmtINR(futureCost), monthly: fmtINR(monthly), lump: fmtINR(lump), multiple: mult + "×",
           _chart: [{ label: "Your savings cover", amount: Math.min(fvCurrent, futureCost), tone: "in" }, { label: "New SIP must fund", amount: shortfall, tone: "grow" }],
           _insight: "At " + fmtPct(v.eduInflation) + " education inflation, a " + fmtINR(v.costToday) + " course will cost <b>" + fmtINR(futureCost) + "</b> in " + years + " years, " + mult + "× today. Starting now needs <b>" + fmtINR(monthly) + "</b> a month."
@@ -789,7 +831,7 @@
         { id: "futureCost", label: "Budget on the day", kind: "grow" },
         { id: "monthly", label: "Monthly SIP needed", kind: "gain" },
         { id: "lump", label: "Or invest today", kind: "plain" },
-        { id: "delayCost", label: "If you start 2 yrs late", kind: "plain" }
+        { id: "delayCost", label: "Monthly SIP if you start 2 yrs late", kind: "plain" }
       ],
       compute: function (v) {
         const futureCost = v.costToday * Math.pow(1 + v.inflation / 100, v.years);
@@ -797,13 +839,14 @@
         const shortfall = Math.max(0, futureCost - fvCurrent);
         const monthly = sipFor(shortfall, v.rate, v.years);
         const lump = shortfall / Math.pow(1 + v.rate / 100, v.years);
-        const lateYears = Math.max(1, v.years - 2);
-        const lateShort = Math.max(0, futureCost - v.current * Math.pow(1 + v.rate / 100, lateYears));
-        const lateMonthly = sipFor(lateShort, v.rate, lateYears);
+        const canDelay = v.years > 2;
+        const lateYears = v.years - 2;
+        const lateShort = canDelay ? Math.max(0, futureCost - v.current * Math.pow(1 + v.rate / 100, lateYears)) : 0;
+        const lateMonthly = canDelay ? sipFor(lateShort, v.rate, lateYears) : 0;
         return {
-          futureCost: fmtINR(futureCost), monthly: fmtINR(monthly), lump: fmtINR(lump), delayCost: fmtINR(lateMonthly),
+          futureCost: fmtINR(futureCost), monthly: fmtINR(monthly), lump: fmtINR(lump), delayCost: canDelay ? fmtINR(lateMonthly) : "No time to wait",
           _chart: [{ label: "Your savings cover", amount: Math.min(fvCurrent, futureCost), tone: "in" }, { label: "New SIP must fund", amount: shortfall, tone: "grow" }],
-          _insight: "A " + fmtINR(v.costToday) + " wedding in " + v.years + " years will cost <b>" + fmtINR(futureCost) + "</b>. Starting now needs <b>" + fmtINR(monthly) + "</b> a month; waiting two years pushes it to " + fmtINR(lateMonthly) + "."
+          _insight: "A " + fmtINR(v.costToday) + " wedding in " + v.years + " years will cost <b>" + fmtINR(futureCost) + "</b>. Starting now needs <b>" + fmtINR(monthly) + "</b> a month" + (canDelay ? "; waiting two years pushes it to " + fmtINR(lateMonthly) + "." : ".")
         };
       }
     },
@@ -985,35 +1028,28 @@
       field: "years", durLabel: "Term", cols: ["Maturity", "After tax"],
       row: function (v, n) {
         const fv = v.principal * Math.pow(1 + v.rate / 100 / 4, 4 * n);
-        const tax = (fv - v.principal) * v.taxSlab / 100;
+        const tax = (fv - v.principal) * v.taxSlab / 100 * 1.04;
         return [fmtINR(fv), fmtINR(fv - tax)];
       }
     },
     rd: {
       field: "years", durLabel: "Term", cols: ["You deposit", "Maturity"],
       row: function (v, n) {
-        const i = v.rate / 100 / 12, N = Math.round(n * 12); let val = 0;
-        for (let m = 0; m < N; m++) val = (val + v.monthly) * (1 + i);
-        return [fmtINR(v.monthly * N), fmtINR(val)];
+        const N = Math.round(n * 12);
+        return [fmtINR(v.monthly * N), fmtINR(rdFV(v.monthly, v.rate, N))];
       }
     },
     ppf: {
       field: "years", durLabel: "Years", cols: ["You invest", "Maturity"],
       row: function (v, n) {
-        let bal = 0; for (let y = 0; y < n; y++) bal = (bal + v.yearly) * (1 + v.rate / 100);
-        return [fmtINR(v.yearly * n), fmtINR(bal)];
+        return [fmtINR(v.yearly * n), fmtINR(ppfFV(v.yearly, v.rate, n))];
       }
     },
     epf: {
       field: "years", durLabel: "Service", cols: ["You invest", "Corpus"],
       row: function (v, n) {
-        const i = v.rate / 100 / 12; let balE = 0, balR = 0, inv = 0, B = v.basic;
-        for (let y = 0; y < n; y++) {
-          const ce = B * 0.12, cr = B * 0.0367;
-          for (let m = 0; m < 12; m++) { balE = (balE + ce) * (1 + i); balR = (balR + cr) * (1 + i); inv += ce + cr; }
-          B *= (1 + v.growth / 100);
-        }
-        return [fmtINR(inv), fmtINR(balE + balR)];
+        const e = epfRun(v.basic, v.growth, v.rate, n, v.opening);
+        return [fmtINR(e.inv), fmtINR(e.balE + e.balR)];
       }
     },
     goal: {
@@ -1060,8 +1096,7 @@
       row: function (v, n) {
         const yToRet = Math.max(1, 60 - n);
         const corpus = sipFV(v.monthly, v.rate, yToRet);
-        const pension = corpus * v.annuityPct / 100 * v.annuityRate / 100 / 12;
-        return [fmtINR(corpus), fmtINR(pension)];
+        return [fmtINR(corpus), fmtINR(npsSplit(corpus, v.annuityPct, v.annuityRate).pension)];
       }
     },
     swp: {
@@ -1236,6 +1271,30 @@
   const headOut = c.outputs.filter(function (o) { return o.kind === "grow"; })[0] || c.outputs[0];
   const restOuts = c.outputs.filter(function (o) { return o !== headOut; });
 
+  /* ---- slider scale ----
+     Money ranges can span 5,000 to 2 crore. On a straight scale the usual
+     amounts crowd into the first few pixels, so wide money ranges use a cubic
+     curve: fine control low down, big strides near the top. The slider then
+     snaps to round figures (two significant digits). Typed values stay exact. */
+  const POS = 1000;
+  function curved(f) { return f.type === "money" && f.max / Math.max(f.min, 1) >= 50; }
+  function niceRound(f, v) {
+    if (v <= 0) return 0;
+    const mag = Math.pow(10, Math.floor(Math.log10(v)) - 1);
+    const step = Math.max(f.step || 1, mag);
+    return Math.round(v / step) * step;
+  }
+  function toPos(f, v) {
+    const t = Math.min(1, Math.max(0, (v - f.min) / (f.max - f.min)));
+    return Math.round((curved(f) ? Math.cbrt(t) : t) * POS);
+  }
+  function fromPos(f, pos) {
+    const t = pos / POS;
+    const raw = f.min + (f.max - f.min) * (curved(f) ? t * t * t : t);
+    const snapped = curved(f) ? niceRound(f, raw) : Math.round(raw / f.step) * f.step;
+    return Math.min(f.max, Math.max(f.min, Math.round(snapped * 1000) / 1000));
+  }
+
   function renderTool() {
     const inputs = c.inputs.map(function (f) {
       const pre = unitPre(f) ? '<span class="cx-pre">' + unitPre(f) + "</span>" : "";
@@ -1245,10 +1304,10 @@
         '<div class="cx-ctrl-top">' +
           '<label for="cx_' + f.id + '">' + f.label + "</label>" +
           '<span class="cx-field">' + pre +
-            '<input class="cx-val" id="val_' + f.id + '" type="text" inputmode="' + mode + '" autocomplete="off" spellcheck="false" aria-label="' + f.label + ' value" />' +
+            '<input class="cx-val" id="val_' + f.id + '" type="text" inputmode="' + mode + '" autocomplete="off" spellcheck="false" aria-label="' + f.label + ', type a value" />' +
           suf + "</span>" +
         "</div>" +
-        '<input id="cx_' + f.id + '" class="cx-range" type="range" min="' + f.min + '" max="' + f.max + '" step="' + f.step + '" value="' + f.value + '" />' +
+        '<input id="cx_' + f.id + '" class="cx-range" type="range" min="0" max="' + POS + '" step="1" />' +
         '<div class="cx-scale"><span>' + fmtScale(f, f.min) + "</span><span>" + fmtScale(f, f.max) + "</span></div>" +
       "</div>";
     }).join("");
@@ -1260,11 +1319,13 @@
     return '' +
       '<div class="cx-tool">' +
         '<div class="cx-panel cx-inputs">' +
-          '<p class="cx-kicker">Your numbers</p>' + inputs +
+          '<div class="cx-panel-top"><p class="cx-kicker">Your numbers</p>' +
+          '<button type="button" class="cx-reset" id="cxReset" hidden>Reset</button></div>' + inputs +
         "</div>" +
-        '<div class="cx-panel cx-results" aria-live="polite">' +
+        '<div class="cx-panel cx-results" id="cxResults">' +
           '<p class="cx-kicker">The result</p>' +
-          '<div class="cx-head">' +
+          '<p class="cx-warn" id="cxWarn" role="alert" hidden></p>' +
+          '<div class="cx-head" aria-live="polite" aria-atomic="true">' +
             '<span class="cx-head-lbl">' + headOut.label + "</span>" +
             '<span class="cx-head-val" id="res_' + headOut.id + '">&ndash;</span>' +
           "</div>" +
@@ -1274,7 +1335,13 @@
           '<button type="button" class="cx-share" id="cxShare">Copy a link to these numbers</button>' +
         "</div>" +
       "</div>" +
-      '<div class="cx-proj" id="cxProj" hidden></div>';
+      '<div class="cx-proj" id="cxProj" hidden></div>' +
+      /* phone-only bar: keeps the headline figure in sight while the inputs scroll */
+      '<button type="button" class="cx-dock" id="cxDock" aria-hidden="true" tabindex="-1">' +
+        '<span class="cx-dock-lbl">' + headOut.label + '</span>' +
+        '<span class="cx-dock-val" id="cxDockVal">&ndash;</span>' +
+        '<span class="cx-dock-go">See all &darr;</span>' +
+      "</button>";
   }
 
   mount.innerHTML = renderTool();
@@ -1287,15 +1354,20 @@
       last: preset(f)
     };
   });
+  const resetBtn = mount.querySelector("#cxReset");
   let used = false;
   function clampF(x) { return Math.min(x.f.max, Math.max(x.f.min, x.last)); }
-  function trackFill(x) {
-    const pct = ((clampF(x) - x.f.min) / (x.f.max - x.f.min)) * 100;
-    x.range.style.setProperty("--p", Math.max(0, Math.min(100, pct)) + "%");
+  function syncRange(x) {
+    const pos = toPos(x.f, clampF(x));
+    x.range.value = pos;
+    x.range.style.setProperty("--p", (pos / POS * 100) + "%");
+    x.range.setAttribute("aria-valuetext", fmtVal(x.f, clampF(x)));
   }
   function sizeField(x, text) { x.val.style.width = Math.max(2, (text || "").length + 0.5) + "ch"; }
   function writeField(x, v) { const t = fieldFmt(x.f, v); x.val.value = t; sizeField(x, t); }
+  function refreshReset() { resetBtn.hidden = !fields.some(function (x) { return clampF(x) !== x.f.value; }); }
   function markUsed() {
+    refreshReset();
     if (used) return;
     used = true;
     if (typeof window.seleqtTrack === "function") window.seleqtTrack("calculator_use", { calculator: c.id });
@@ -1305,6 +1377,10 @@
     fields.forEach(function (x) { vals[x.f.id] = clampF(x); });
     return vals;
   }
+
+  const warnEl = mount.querySelector("#cxWarn");
+  const resultsEl = mount.querySelector("#cxResults");
+  const dockVal = mount.querySelector("#cxDockVal");
   function recompute() {
     const vals = currentVals();
     const res = c.compute(vals);
@@ -1312,35 +1388,48 @@
       const el = mount.querySelector("#res_" + o.id);
       if (el) el.textContent = res[o.id] !== undefined ? res[o.id] : "–";
     });
+    const warn = res._warn || "";
+    dockVal.textContent = warn ? "Check your inputs" : (res[headOut.id] !== undefined ? res[headOut.id] : "–");
+    warnEl.textContent = warn; warnEl.hidden = !warn;
+    resultsEl.classList.toggle("is-invalid", !!warn);
     const chart = mount.querySelector("#cxChart");
-    if (res._chart && res._chart.length) {
+    if (!warn && res._chart && res._chart.length) {
       const html = buildChart(res._chart);
       chart.innerHTML = html ? '<p class="cx-chart-title">Where the money comes from</p><div class="cx-chart-body">' + html + "</div>" : "";
       chart.hidden = !html;
     } else { chart.hidden = true; chart.innerHTML = ""; }
     const ins = mount.querySelector("#cxInsight");
-    if (res._insight) { ins.innerHTML = res._insight; ins.hidden = false; } else { ins.hidden = true; }
+    if (!warn && res._insight) { ins.innerHTML = res._insight; ins.hidden = false; } else { ins.hidden = true; }
     const proj = mount.querySelector("#cxProj");
-    if (c.project) { proj.innerHTML = buildProjection(c, vals); proj.hidden = !proj.innerHTML; }
+    if (!warn && c.project) { proj.innerHTML = buildProjection(c, vals); proj.hidden = !proj.innerHTML; }
     else { proj.hidden = true; proj.innerHTML = ""; }
+  }
+
+  /* recompute at most once per frame while a slider is dragged */
+  let queued = false;
+  function schedule() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () { queued = false; recompute(); });
   }
 
   fields.forEach(function (x) {
     x.range.addEventListener("input", function () {
-      x.last = parseFloat(x.range.value);
+      x.last = fromPos(x.f, parseFloat(x.range.value));
       writeField(x, x.last);
-      trackFill(x);
-      recompute();
+      x.range.style.setProperty("--p", (parseFloat(x.range.value) / POS * 100) + "%");
+      x.range.setAttribute("aria-valuetext", fmtVal(x.f, clampF(x)));
+      schedule();
       markUsed();
     });
+    x.val.addEventListener("focus", function () { x.val.select(); });
     x.val.addEventListener("input", function () {
       sizeField(x, x.val.value);
       const num = parseFloat(x.val.value.replace(/[^0-9.\-]/g, ""));
       if (isNaN(num)) return;
       x.last = num;
-      x.range.value = num;
-      trackFill(x);
-      recompute();
+      syncRange(x);
+      schedule();
       markUsed();
     });
     function commit() {
@@ -1348,20 +1437,37 @@
       if (isNaN(num)) num = x.last;
       num = Math.min(x.f.max, Math.max(x.f.min, num));
       x.last = num;
-      x.range.value = num;
-      trackFill(x);
+      syncRange(x);
       writeField(x, num);
       recompute();
+      markUsed();
     }
     x.val.addEventListener("blur", commit);
     x.val.addEventListener("keydown", function (e) {
       if (e.key === "Enter") { e.preventDefault(); x.val.blur(); }
     });
-    x.range.value = x.last;
     writeField(x, x.last);
-    trackFill(x);
+    syncRange(x);
   });
   recompute();
+  refreshReset();
+
+  resetBtn.addEventListener("click", function () {
+    fields.forEach(function (x) { x.last = x.f.value; writeField(x, x.last); syncRange(x); });
+    recompute();
+    resetBtn.hidden = true;
+  });
+
+  /* phone dock: shown while the inputs are on screen but the results are not */
+  const dock = mount.querySelector("#cxDock");
+  const inputsEl = mount.querySelector(".cx-inputs");
+  if ("IntersectionObserver" in window) {
+    let inputsVisible = false, resultsVisible = false;
+    const update = function () { dock.classList.toggle("is-on", inputsVisible && !resultsVisible); };
+    new IntersectionObserver(function (es) { es.forEach(function (e) { inputsVisible = e.isIntersecting; }); update(); }, { rootMargin: "-80px 0px -40% 0px" }).observe(inputsEl);
+    new IntersectionObserver(function (es) { es.forEach(function (e) { resultsVisible = e.isIntersecting; }); update(); }, { threshold: 0.15 }).observe(resultsEl);
+  }
+  dock.addEventListener("click", function () { resultsEl.scrollIntoView({ behavior: "smooth", block: "start" }); });
 
   /* copy a link that reopens the page on the current numbers */
   const share = mount.querySelector("#cxShare");
