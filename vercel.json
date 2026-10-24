@@ -2,6 +2,12 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.seleqtwealth.in" }],
+      "destination": "https://seleqtwealth.in/:path*",
+      "permanent": true
+    },
     { "source": "/calculators", "destination": "/", "permanent": false }
   ]
 }
