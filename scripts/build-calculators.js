@@ -53,57 +53,33 @@ const HEAD_COMMON = `  <link rel="icon" type="image/svg+xml" href="/favicon.svg"
     })();
   </script>`;
 
-const NAV = `  <!-- NAV -->
-  <nav id="navbar">
+/* Calculator pages stand on their own: no route back into seleqtwealth.in.
+   The wordmark is not a link; the only ways out are off-site contact options
+   (a booking call, email, phone, and the WhatsApp button main.js adds). */
+const BOOKING = "https://calendly.com/seleqt/private-conversation";
+
+const NAV = `  <!-- NAV: standalone, no links into the website -->
+  <nav id="navbar" class="cx-nav">
     <div class="nav-inner">
-      <a href="/" class="logo">SELEQT</a>
+      <span class="logo">SELEQT</span>
       <div class="nav-links">
-        <a href="/services">Services</a>
-        <a href="/gift-city">GIFT City</a>
-        <a href="/blogs">Blogs</a>
-        <a href="/about">About</a>
-        <a href="/#contact" class="nav-cta">Speak With Us</a>
+        <a href="${BOOKING}" class="nav-cta" target="_blank" rel="noopener noreferrer">Book a call</a>
       </div>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="/services">Services</a>
-      <a href="/gift-city">GIFT City</a>
-      <a href="/blogs">Blogs</a>
-      <a href="/about">About</a>
-      <a href="/#contact">Speak With Us</a>
     </div>
   </nav>`;
 
-const FOOTER = `  <!-- FOOTER -->
-  <footer class="footer">
+const FOOTER = `  <!-- FOOTER: standalone, contact details only -->
+  <footer class="footer cx-footer">
     <div class="container">
       <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">SELEQT</a>
+          <span class="logo">SELEQT</span>
           <p>Private wealth, considered from every angle.</p>
         </div>
         <div class="footer-col">
-          <h2>Practice</h2>
-          <a href="/investments">Investments</a>
-          <a href="/taxation">Taxation</a>
-          <a href="/insurance">Insurance</a>
-          <a href="/succession">Succession Planning</a>
-          <a href="/family-office">Family Office</a>
-        </div>
-        <div class="footer-col">
-          <h2>Firm</h2>
-          <a href="/about">About</a>
-          <a href="/gift-city">GIFT City</a>
-          <a href="/blogs">Blogs</a>
-          <a href="/#contact">Contact</a>
-        </div>
-        <div class="footer-col">
           <h2>Reach</h2>
-          <span>contact@seleqtwealth.in</span>
-          <span>+91 99981 39596</span>
+          <a href="mailto:contact@seleqtwealth.in">contact@seleqtwealth.in</a>
+          <a href="tel:+919998139596">+91 99981 39596</a>
           <span>313, Arista Business Space, Ahmedabad, Gujarat, 380059</span>
         </div>
       </div>
@@ -232,8 +208,8 @@ ${more}
   <section class="sub-cta-section">
     <div class="container">
       <h3>Turn the numbers<br/><em>into a plan</em></h3>
-      <p>A calculator shows one path. We build the whole picture around your goals, your tax position and your family.</p>
-      <a href="/#contact" class="btn-primary">Speak With Us</a>
+      <p>A calculator shows one path. We build the whole picture around your goals, your tax position and your family. Book a private call, or write to <a class="cx-mail" href="mailto:contact@seleqtwealth.in">contact@seleqtwealth.in</a>.</p>
+      <a href="${BOOKING}" class="btn-primary" target="_blank" rel="noopener noreferrer">Book a call</a>
     </div>
   </section>
 
@@ -246,32 +222,36 @@ ${FOOTER}
 `;
 }
 
+/* The internal list, styled as a desktop "workspace": a window with traffic
+   lights, a greeting, and every calculator as an app icon. Clicking an app
+   opens a small window with its link, copy buttons and preset names. It does
+   not load main.js, so it carries no site chrome at all. */
 function linksPage() {
-  const data = CALCS.map(function (c) {
-    return { id: c.id, name: c.name, url: SITE + c.url, keys: c.inputs.map(function (f) { return f.id; }) };
+  const data = {};
+  CALCS.forEach(function (c) {
+    data[c.id] = {
+      name: c.name, tag: lead(c), url: SITE + c.url, path: c.url, slug: c.slug, icon: c.icon,
+      keys: c.inputs.map(function (f) { return f.id; }),
+      eg: c.inputs.slice(0, 2).map(function (f) { return f.id + "=" + f.value; }).join("&")
+    };
   });
+  let n = 0;
   const groups = GROUPS.map(function (g) {
-    const rows = g.ids.map(function (id) {
+    const apps = g.ids.map(function (id, i) {
       const c = byId[id];
-      const full = SITE + c.url;
-      return `        <div class="cl-row" data-q="${esc((c.name + " " + c.tag + " " + c.slug).toLowerCase())}">
-          <span class="cl-ico" aria-hidden="true">${c.icon}</span>
-          <div>
-            <span class="cl-name">${esc(c.name)}</span> <span class="cl-tag">&middot; ${esc(c.tag)}</span>
-            <a class="cl-url" href="${c.url}" target="_blank" rel="noopener">${full.replace("https://", "")}</a>
-            <span class="cl-keys">Presets: ${c.inputs.map(function (f) { return esc(f.id); }).join(", ")}</span>
-          </div>
-          <div class="cl-row-actions">
-            <button type="button" class="cl-btn is-primary" data-copy="${full}">Copy link</button>
-            <button type="button" class="cl-btn" data-copy="${full}?utm_source=linkedin&amp;utm_medium=social&amp;utm_campaign=calculators&amp;utm_content=${c.slug}">Copy LinkedIn link</button>
-            <a class="cl-btn" href="${c.url}" target="_blank" rel="noopener">Open</a>
+      const tone = i % 2 ? "gold" : "navy";
+      return `          <button type="button" class="app tone-${tone}" data-id="${c.id}" data-q="${esc((c.name + " " + c.tag + " " + c.slug).toLowerCase())}" style="--app-i:${n++}" aria-label="${esc(c.name)} calculator link">
+            <span class="app-icon" aria-hidden="true">${c.icon}</span>
+            <span class="app-name">${esc(c.name)}</span>
+            <span class="app-tag">${esc(c.tag)}</span>
+          </button>`;
+    }).join("\n");
+    return `        <div class="app-group">
+          <h2 class="app-group-title"><span class="agt-label">${esc(g.title)}</span><span class="agt-count">${g.ids.length}</span></h2>
+          <div class="app-grid">
+${apps}
           </div>
         </div>`;
-    }).join("\n");
-    return `      <div class="cl-group">
-        <p class="cl-group-title">${esc(g.title)} <span>${g.ids.length}</span></p>
-${rows}
-      </div>`;
   }).join("\n");
   return `<!DOCTYPE html>
 <html lang="en-IN">
@@ -283,68 +263,155 @@ ${rows}
   <!-- Unlisted internal page: every calculator link in one place. Not linked from
        the site, not in the sitemap, kept out of search results. -->
   <meta name="robots" content="noindex, nofollow" />
-${HEAD_COMMON}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/calculators/calc.css" />
 </head>
-<body>
-${NAV}
-
+<body class="ws-body">
   <!-- Generated by scripts/build-calculators.js. Edit that, not this file. -->
-  <main class="cl-page">
-    <div class="container">
-      <div class="cl-wrap">
-        <div class="cl-top">
-          <div>
-            <h1>Calculator <em>links</em></h1>
-            <p>All ${CALCS.length} calculators, each on its own page on seleqtwealth.in. This page is not linked anywhere on the site and is hidden from search engines.</p>
+  <main class="ws-page">
+    <div class="ws-brand">SELEQT</div>
+    <div class="workspace">
+      <div class="workspace-bar">
+        <span class="ws-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="ws-title">SELEQT Workspace</span>
+        <span class="ws-clock" id="wsClock" aria-hidden="true">--:--</span>
+      </div>
+      <div class="workspace-screen">
+        <div class="ws-toolbar">
+          <div class="ws-greet">
+            <p class="ws-hello" id="wsHello">Hello.</p>
+            <p class="ws-sub"><span>${CALCS.length} calculators</span> &middot; <span id="wsDate"></span> &middot; click any app for its link</p>
           </div>
-          <div class="cl-actions">
-            <input type="search" class="cl-search" id="clSearch" placeholder="Search calculators" aria-label="Search calculators" />
-            <button type="button" class="cl-btn" id="clCopyAll">Copy all links</button>
+          <div class="ws-tools">
+            <label class="ws-search">
+              <svg class="ws-search-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <input type="search" id="appSearch" placeholder="Search calculators" autocomplete="off" spellcheck="false" aria-label="Search calculators" />
+            </label>
+            <button type="button" class="ws-btn" id="wsCopyAll">Copy all links</button>
           </div>
         </div>
+        <div class="app-deck" id="appDeck">
 ${groups}
-        <p class="cl-foot">
-          <b>Copy LinkedIn link</b> adds a tag so visits from each post show up in Google Analytics under the campaign <code>calculators</code>.<br />
-          <b>Presets:</b> add numbers to any link to open it already filled in, for example <code>seleqtwealth.in/calculators/sip?monthly=10000&amp;years=20</code>. The names you can use are listed under each calculator. On every calculator page, the &ldquo;Copy a link to these numbers&rdquo; button builds this for you.
-        </p>
+          <p class="app-empty" id="appEmpty" hidden>No calculators match that search.</p>
+        </div>
       </div>
     </div>
+    <p class="ws-foot">Unlisted page: not linked anywhere and hidden from search engines. &ldquo;Copy LinkedIn link&rdquo; tags the visit so Google Analytics shows it under the campaign <code>calculators</code>.</p>
   </main>
+
+  <!-- the app window -->
+  <div class="ws-modal" id="wsModal" hidden>
+    <div class="ws-modal-backdrop" data-close></div>
+    <div class="ws-win" role="dialog" aria-modal="true" aria-labelledby="wsWinTitle">
+      <div class="ws-win-bar">
+        <span class="ws-dots"><button type="button" class="ws-dot-close" data-close aria-label="Close"></button><i></i><i></i></span>
+        <span class="ws-win-bar-title" id="wsWinBarTitle"></span>
+        <span></span>
+      </div>
+      <div class="ws-win-body">
+        <div class="ws-win-head">
+          <span class="app-icon" id="wsWinIcon" aria-hidden="true"></span>
+          <div>
+            <h3 class="ws-win-title" id="wsWinTitle"></h3>
+            <p class="ws-win-tag" id="wsWinTag"></p>
+          </div>
+        </div>
+        <a class="ws-win-url" id="wsWinUrl" target="_blank" rel="noopener"></a>
+        <div class="ws-win-actions">
+          <button type="button" class="ws-btn is-primary" data-copy-kind="plain">Copy link</button>
+          <button type="button" class="ws-btn" data-copy-kind="linkedin">Copy LinkedIn link</button>
+          <a class="ws-btn" id="wsWinOpen" target="_blank" rel="noopener">Open &rarr;</a>
+        </div>
+        <div class="ws-win-presets">
+          <p class="ws-win-label">Open it pre-filled</p>
+          <p>Add any of these to the link: <span id="wsWinKeys"></span>.</p>
+          <p class="ws-win-eg">For example <code id="wsWinEg"></code></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
   (function () {
     var DATA = ${JSON.stringify(data)};
+    var UTM = "?utm_source=linkedin&utm_medium=social&utm_campaign=calculators&utm_content=";
     function copy(text, btn) {
-      var label = btn.textContent;
+      var label = btn.innerHTML;
       function done(ok) {
         btn.textContent = ok ? "Copied" : "Copy failed";
         btn.classList.add("is-done");
-        setTimeout(function () { btn.textContent = label; btn.classList.remove("is-done"); }, 1800);
+        setTimeout(function () { btn.innerHTML = label; btn.classList.remove("is-done"); }, 1600);
       }
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
       else done(false);
     }
-    document.querySelectorAll("[data-copy]").forEach(function (b) {
-      b.addEventListener("click", function () { copy(b.getAttribute("data-copy"), b); });
-    });
-    document.getElementById("clCopyAll").addEventListener("click", function () {
-      copy(DATA.map(function (d) { return d.name + ": " + d.url; }).join("\\n"), this);
-    });
-    var q = document.getElementById("clSearch");
+
+    /* greeting, date, clock */
+    var now = new Date(), h = now.getHours();
+    document.getElementById("wsHello").textContent = (h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening") + ".";
+    document.getElementById("wsDate").textContent = now.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" });
+    var clock = document.getElementById("wsClock");
+    function tick() { clock.textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }); }
+    tick(); setInterval(tick, 15000);
+
+    /* search */
+    var q = document.getElementById("appSearch");
     q.addEventListener("input", function () {
-      var v = q.value.trim().toLowerCase();
-      document.querySelectorAll(".cl-group").forEach(function (g) {
+      var v = q.value.trim().toLowerCase(), total = 0;
+      document.querySelectorAll(".app-group").forEach(function (g) {
         var shown = 0;
-        g.querySelectorAll(".cl-row").forEach(function (r) {
-          var hit = !v || r.getAttribute("data-q").indexOf(v) > -1;
-          r.hidden = !hit; if (hit) shown++;
+        g.querySelectorAll(".app").forEach(function (a) {
+          var hit = !v || a.getAttribute("data-q").indexOf(v) > -1;
+          a.hidden = !hit; if (hit) shown++;
         });
-        g.hidden = shown === 0;
+        g.hidden = shown === 0; total += shown;
+      });
+      document.getElementById("appEmpty").hidden = total > 0;
+    });
+
+    document.getElementById("wsCopyAll").addEventListener("click", function () {
+      copy(Object.keys(DATA).map(function (k) { return DATA[k].name + ": " + DATA[k].url; }).join("\\n"), this);
+    });
+
+    /* app window */
+    var modal = document.getElementById("wsModal"), current = null, lastFocus = null;
+    function open(id, from) {
+      var d = DATA[id]; if (!d) return;
+      current = d; lastFocus = from;
+      var icon = document.getElementById("wsWinIcon");
+      icon.innerHTML = d.icon;
+      icon.className = "app-icon " + (from && from.classList.contains("tone-gold") ? "is-gold" : "is-navy");
+      document.getElementById("wsWinBarTitle").textContent = d.name + " Calculator";
+      document.getElementById("wsWinTitle").textContent = d.name;
+      document.getElementById("wsWinTag").textContent = d.tag;
+      var u = document.getElementById("wsWinUrl");
+      u.href = d.path; u.textContent = d.url.replace("https://", "");
+      document.getElementById("wsWinOpen").href = d.path;
+      document.getElementById("wsWinKeys").textContent = d.keys.join(", ");
+      document.getElementById("wsWinEg").textContent = d.url.replace("https://", "") + "?" + d.eg;
+      modal.hidden = false;
+      document.body.classList.add("ws-locked");
+      modal.querySelector(".ws-btn.is-primary").focus();
+    }
+    function close() {
+      modal.hidden = true;
+      document.body.classList.remove("ws-locked");
+      if (lastFocus) lastFocus.focus();
+    }
+    document.querySelectorAll(".app").forEach(function (a) {
+      a.addEventListener("click", function () { open(a.getAttribute("data-id"), a); });
+    });
+    modal.addEventListener("click", function (e) { if (e.target.closest("[data-close]")) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) close(); });
+    modal.querySelectorAll("[data-copy-kind]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!current) return;
+        copy(b.getAttribute("data-copy-kind") === "linkedin" ? current.url + UTM + current.slug : current.url, b);
       });
     });
   })();
   </script>
-  <script src="/main.js"></script>
 </body>
 </html>
 `;
