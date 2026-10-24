@@ -9,6 +9,7 @@ A static HTML/CSS/JS site with no build step. Edit the files directly, commit, a
 - Hosted on **Vercel**. A push to `main` deploys in about 30 seconds.
 - The Git to Vercel webhook has been unreliable. If the live site does not update after a push, trigger the project's **Deploy Hook** (Vercel project Settings, Git, Deploy Hooks). The same URL is stored as the repo secret `VERCEL_DEPLOY_HOOK` for the blog scheduler.
 - `vercel.json` turns on clean URLs (`/about` serves `about.html`).
+- `www.seleqtwealth.in` is still attached to an older Vercel project (`seleqtwealth` in the aditya20-12-05 account). Since 24 Oct 2026 that project's domain setting redirects www to `seleqtwealth.in` (308), so nothing is served from it. The host rule in `vercel.json` is a backup in case www is ever moved to the live project. Never deploy to the old project: it still lists the apex and could take it back.
 - `.vercelignore` keeps `scripts/`, `_castest/`, `_local/`, `brand/`, `.claude/` and the internal docs off the live site.
 - DNS for `seleqtwealth.in` is managed at Hostinger. Email is Zoho: never touch its MX, SPF or verification records.
 
