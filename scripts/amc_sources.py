@@ -348,7 +348,7 @@ def kotak(r):
     except ValueError:
         raise Skip('listing answered with a bot check instead of data')
     pairs = [(it['content'], it.get('subHeaderTitle') or '') for it in json.loads(raw.decode('utf-8'))['subHeaderList']]
-    got = newest(pairs, label_rx=r'consolidated sebi portfolio')[:1]
+    got = newest(pairs, label_rx=r'consolidated (?:sebi )?portfolio')[:1]  # 'SEBI' dropped from the title in Sep 2026
     return ['https://vatseelabs-s3.kotakmf.com/' + urllib.parse.quote(u, safe='/,') for u in got]
 
 
@@ -458,8 +458,11 @@ def hsbc(r):
     if start is None:
         raise ValueError("'Fund portfolios' section not found")
     end = next((p for p, t in heads if p > start), len(page))
+    # Links lost their .xlsx extension in Sep 2026; the reader sniffs the file type, so any
+    # link under /portfolios/ counts, with or without an extension.
     pairs = [(u, re.sub(r'<[^>]+>', '', lab).strip())
-             for u, lab in re.findall(r'<a href="([^"]+\.xlsx?)"[^>]*>(.*?)</a>', page[start:end], re.S)]
+             for u, lab in re.findall(r'<a href="([^"]+)"[^>]*>(.*?)</a>', page[start:end], re.S)
+             if re.search(r'\.xlsx?$|/portfolios/', u, re.I)]
     return newest([(u, lab) for u, lab in pairs if re.search(r'\d{1,2}\s+[A-Za-z]+\s+\d{4}$', lab)], base=base)
 
 
@@ -972,16 +975,18 @@ def nj(r):
 
 @recipe(74)
 def samco(r):
-    """Samco: one very large static page; the Portfolio Disclosure tab's 'Monthly'
-    accordion lists one file per scheme (media1.samco.in serves the same files)."""
+    """Samco: one very large static page; the Portfolio Disclosure tab lists one file per
+    scheme per period, titled 'IN_MF_MONTHLY_PORTFOLIO_<Month>_<Year>_<scheme>' (fortnightly
+    ones say FORTNIGHTLY). The accordion markup changed in Oct 2026, so the titles are read
+    straight from the section's table. media1.samco.in serves the same files."""
     html = get_text('https://www.samcomf.com/StatutoryDisclosure', _HTML, cache_hours=6, timeout=150)
     a = html.find('id ="option2"')
     sec = html[a:html.find('id ="option3"', a)] if a >= 0 else ''
-    monthly = next((p for p in re.split(r'<a class="toggle bgm" href=#>\s*', sec)[1:]
-                    if p[:p.find('<')].strip().lower() == 'monthly'), '')
     pairs = []
     for title, fname in re.findall(r'<td data-th="Document Title">\s*(.*?)\s*</td>\s*<td data-th="Action">\s*'
-                                   r'<a href="/amc-document-download/([^"]+)"', monthly, re.S):
+                                   r'<a href="/amc-document-download/([^"]+)"', sec, re.S):
+        if not re.search(r'monthly', title, re.I) or re.search(r'fortnight', title, re.I):
+            continue
         label = re.sub(r'_\d{9,}\.', '.', title + ' ' + fname)  # drop the upload timestamp
         pairs.append(('https://media1.samco.in/scomamc/amc_documents/' + fname.strip(), label))
     return newest(pairs)
