@@ -451,9 +451,41 @@
       plan.sip.rows.push({ label: a.label, monthly: a.monthly, into: a.topUp || (a.pick && a.pick.n) || null, months: Math.ceil(a.gap / a.monthly) });
     });
 
+    // Every fund being replaced names where the money goes: a better fund already held in the
+    // same category, else the sleeve's pick, else the best unheld fund in its category.
+    F.forEach(function (f) {
+      if (f.verdict !== 'replace') return;
+      var dest = null;
+      if (f.rival) dest = { name: f.rival, held: true };
+      else {
+        var cand = plan.additions.filter(function (a) { return a.pick && f.rec && SUBCATS[a.sub] && SUBCATS[a.sub].indexOf(f.rec.cat) >= 0; })[0];
+        if (cand) dest = { name: cand.pick.n, isin: cand.pick.isin, held: false };
+        else if (f.rec) { var best = (S.picks[f.rec.cat] || []).filter(function (i) { return !heldDg[i] && S.funds[i]; })[0]; if (best) dest = { name: S.funds[best].n, isin: best, held: false }; }
+        if (!dest) { var keep = F.filter(function (g) { return g !== f && g.verdict === 'keep' && g.cls.sub === f.cls.sub; }).sort(function (a, b) { return (b.rec ? b.rec.score : 0) - (a.rec ? a.rec.score : 0); })[0]; if (keep) dest = { name: keep.name, held: true }; }
+      }
+      f.replaceWith = dest;
+    });
+
     // Sleeves above target: no forced selling, but new money and sale proceeds should go elsewhere.
     plan.over = [];
     ['equity', 'hybrid', 'debt'].forEach(function (k) { var d = (plan.mix.current[k] || 0) - (tm[k] || 0); if (d > A.gap_threshold) plan.over.push({ sleeve: k, by: d }); });
+    // Rebalancing: how much each sleeve is over by, what the scheduled sales already free up, and
+    // which fund to trim if that is not enough (the weakest keep in the sleeve). New money first.
+    plan.rebalance = plan.over.filter(function (o) { return o.by > ips.band; }).map(function (o) {
+      var inSleeve = F.filter(function (f) { return f.cls.sleeve === o.sleeve; }), amount = o.by * total;
+      var proceeds = inSleeve.filter(function (f) { return f.verdict === 'replace' || f.verdict === 'reduce'; }).reduce(function (s, f) { return s + f.value; }, 0);
+      var trim = inSleeve.filter(function (f) { return f.verdict === 'keep'; }).sort(function (a, b) { return (a.rec ? a.rec.score : 0) - (b.rec ? b.rec.score : 0); })[0];
+      return { sleeve: o.sleeve, by: o.by, amount: amount, proceeds: Math.min(proceeds, amount), remaining: Math.max(0, amount - proceeds), trim: trim && amount > proceeds ? trim.name : null };
+    });
+
+    // Hygiene read straight from the statement: nominee, KYC, payout options.
+    plan.hygiene = [];
+    var noNom = held.filter(function (h) { return h.nominee === false; }), badKyc = held.filter(function (h) { return h.kyc && !/^ok$/i.test(h.kyc); });
+    var idcw = held.filter(function (h) { return /\bIDCW\b|dividend/i.test(h.name || '') && !/reinvest/i.test(h.name || ''); });
+    var uniq = function (arr) { var seen = {}; return arr.filter(function (h) { var k = (h.folio || '') + '|' + h.isin; if (seen[k]) return false; seen[k] = 1; return true; }); };
+    if (noNom.length) plan.hygiene.push({ k: 'nominee', n: uniq(noNom).length, names: uniq(noNom).map(function (h) { return h.name; }), text: 'No nominee on ' + uniq(noNom).length + (uniq(noNom).length === 1 ? ' folio' : ' folios') + '. Without one, your family needs a succession certificate to claim the units.' });
+    if (badKyc.length) plan.hygiene.push({ k: 'kyc', n: uniq(badKyc).length, names: uniq(badKyc).map(function (h) { return h.name; }), text: 'KYC is not marked OK on ' + uniq(badKyc).length + (uniq(badKyc).length === 1 ? ' folio' : ' folios') + '. Fresh purchases and switches will be rejected until it is.' });
+    if (idcw.length && +ans.incomeNeed !== 2) plan.hygiene.push({ k: 'idcw', n: idcw.length, names: idcw.map(function (h) { return h.name; }), text: idcw.length + (idcw.length === 1 ? ' fund pays' : ' funds pay') + ' out gains as IDCW, taxed at your slab each year. The growth option compounds instead.' });
 
     // ---- 5. switch costs and timing ----
     var exemptLeft = {}; exemptLeft[fyStart(today)] = Math.max(0, cfg.tax.ltcg_exemption - prof.booked);
@@ -543,7 +575,7 @@
       }
       Object.keys(pool).forEach(function (k) { exemptLeft[k] = pool[k]; });
       steps.forEach(function (st) {
-        plan.stages[st.stage].push({ name: f.name, action: label, date: st.date, part: !!st.part, units: st.c.units, value: st.c.gross, load: st.c.load, tax: st.c.tax, cost: st.c.cost, exemptUsed: st.c.exemptUsed, why: st.why });
+        plan.stages[st.stage].push({ name: f.name, action: label, into: f.verdict === 'replace' && f.replaceWith ? f.replaceWith.name : null, date: st.date, part: !!st.part, units: st.c.units, value: st.c.gross, load: st.c.load, tax: st.c.tax, cost: st.c.cost, exemptUsed: st.c.exemptUsed, why: st.why });
       });
     });
     plan.stages.after.sort(function (a, b) { return t(a.date) - t(b.date); });
@@ -585,7 +617,7 @@
     plan.funds = F.map(function (f) {
       return { isin: f.isin, name: f.name, statementValue: f.h.value, value: f.value, verdict: f.verdict, direct: !!f.direct, hold: !!f.hold, tooNew: !!f.tooNew,
         reasons: f.reasons, compared: f.compared, bsrc: f.rec ? f.rec.bsrc : null, score: f.rec ? f.rec.score : null, catLabel: f.rec ? f.rec.catLabel : null,
-        sleeve: f.cls.sleeve, sub: f.cls.sub, lotNotes: f.lotNotes || [], exitLoadSource: f.exitLoadSource, navMismatch: !!f.h._navMismatch };
+        sleeve: f.cls.sleeve, sub: f.cls.sub, lotNotes: f.lotNotes || [], exitLoadSource: f.exitLoadSource, navMismatch: !!f.h._navMismatch, replaceWith: f.replaceWith || null };
     });
     if (F.some(function (f) { return f.h.opening > 0.0005; })) plan.notes.push('history');
     if (I.parsed.source !== 'cams') plan.notes.push('no_lots');

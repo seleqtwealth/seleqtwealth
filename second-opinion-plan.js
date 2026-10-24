@@ -234,7 +234,7 @@
   function stageTable(rows, withDate) {
     if (!rows.length) return '<p class="sp-none">Nothing at this stage.</p>';
     return table((withDate ? ['Date'] : []).concat(['Fund', 'Step', 'Value', 'Exit load', 'Tax', 'Cost']), rows.map(function (s) {
-      return '<tr>' + (withDate ? '<td>' + nice(s.date) + '</td>' : '') + '<td>' + esc(s.name) + '</td><td>' + esc(s.action) + (s.part ? ' (part)' : '') + (s.why ? '<span class="sp-why">' + esc(s.why) + '</span>' : '') +
+      return '<tr>' + (withDate ? '<td>' + nice(s.date) + '</td>' : '') + '<td>' + esc(s.name) + '</td><td>' + esc(s.action) + (s.part ? ' (part)' : '') + (s.into ? '<span class="sp-why">into ' + esc(s.into) + '</span>' : '') + (s.why ? '<span class="sp-why">' + esc(s.why) + '</span>' : '') +
         '</td><td>' + inr(s.value) + '</td><td>' + inr(s.load) + '</td><td>' + inr(s.tax) + '</td><td><strong>' + inr(s.cost) + '</strong></td></tr>';
     }));
   }
@@ -305,6 +305,7 @@
       '<li>Direct plans, growth option. At most ' + plan.maxEq + ' equity funds, one per category, two per fund house. Index funds wherever no active fund shows a durable edge.</li>' +
       '<li>Sector and theme funds only as a satellite, within ' + pct(cfg.satellite.thematic_max_share_of_equity) + ' of equity, and only for growth and aggressive policies.</li>' +
       '<li>Review ' + esc(ips.review) + ', and on a life event: a new goal, a job change, a windfall, a health event.</li></ul>' +
+      ((plan.hygiene || []).length ? '<p class="sp-h">Housekeeping from your statement</p><ul class="sp-list">' + plan.hygiene.map(function (h) { return '<li>' + esc(h.text) + (h.names.length ? ' <span class="sp-why">' + esc(h.names.join(', ')) + '</span>' : '') + '</li>'; }).join('') + '</ul>' : '') +
       (plan.notes.indexOf('history') >= 0 ? '<p class="sp-why">Part of your history is missing: this statement starts part way through, so units held at its start count as bought on or before ' + nice(L.parsed.period && L.parsed.period.from) + '. A statement from your first investment gives exact dates.</p>' : '') +
       (plan.notes.indexOf('no_lots') >= 0 ? '<p class="sp-why">Depository statements carry no purchase dates, so switch costs and tax timing below are estimates. A Detailed CAMS statement gives exact figures.</p>' : '');
     out.push(acc('policy', 'Your written policy', cap(pr.key) + ' mix, ' + ips.goals.length + (ips.goals.length === 1 ? ' goal' : ' goals') + (ips.liquidFloor > 0 ? ', ' + pct(ips.liquidFloor) + ' kept liquid' : '') + '. Objectives, constraints and rules.', policyBody, false));
@@ -327,6 +328,7 @@
       if (f.exitLoadSource === 'estimate') rest.push('Exit load is an estimate for its category; the statement does not state it.');
       if (f.navMismatch) rest.push('Today\'s NAV did not match the statement\'s units closely, so the statement value is used.');
       return '<article class="sp-fund"><div class="sp-fund-top"><h4>' + esc(f.name) + '</h4>' + vchip(f) + '<span class="sp-fund-val">' + inr(f.value) + (f.catLabel ? ' · ' + esc(f.catLabel) : '') + '</span></div>' +
+        (f.verdict === 'replace' && f.replaceWith ? '<p class="sp-fund-why"><strong>Into ' + esc(f.replaceWith.name) + '</strong>' + (f.replaceWith.held ? ', which you already hold.' : ', the policy\'s pick for this sleeve.') + '</p>' : '') +
         '<p class="sp-fund-why">' + esc(f.reasons[0] || '') + '</p>' +
         '<details class="sp-more"><summary>Why, in full</summary><ul>' + rest.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ul></details></article>';
     }).join('');
@@ -379,7 +381,7 @@
     });
     plan.funds.forEach(function (f) {
       if (f.hold) return;
-      if (f.verdict === 'replace') m.push({ icon: 'swap', t: 'Replace ' + f.name + (f.rival ? ' with ' + f.rival + ', which you already hold' : '') + '.', w: f.reasons[0] });
+      if (f.verdict === 'replace') m.push({ icon: 'swap', t: 'Replace ' + f.name + (f.replaceWith ? ' with ' + f.replaceWith.name + (f.replaceWith.held ? ', which you already hold' : '') : '') + '.', w: f.reasons[0] });
       else if (f.verdict === 'reduce') m.push({ icon: 'minus', t: 'Reduce ' + f.name + '.', w: f.reasons[0] });
     });
     plan.funds.forEach(function (f) { if (f.direct && !f.hold && f.verdict !== 'replace' && f.verdict !== 'reduce') m.push({ icon: 'swap', t: 'Move ' + f.name + ' to its direct plan.', w: 'Same fund, no distributor commission.' }); });
@@ -387,12 +389,16 @@
       var into = a.topUp || (a.pick && a.pick.n); if (!into) return;
       m.push({ icon: 'check', t: (a.monthly ? inr(a.monthly) + ' a month' : 'New money') + ' into ' + a.label.toLowerCase() + ': ' + into + '.', w: 'Short by ' + inr(a.gap) + ' against the policy.' });
     });
+    (plan.rebalance || []).forEach(function (r) {
+      m.push({ icon: 'minus', t: cap(r.sleeve) + ' is ' + pct(r.by) + ' over its band: send new money elsewhere' + (r.remaining > 0 && r.trim ? ', and trim ' + r.trim + ' by about ' + inr(r.remaining) : '') + '.', w: r.proceeds > 0 ? 'The sales above already free up ' + inr(r.proceeds) + '.' : 'No forced selling; drift closes with new money first.' });
+    });
+    (plan.hygiene || []).forEach(function (h) { m.push({ icon: 'alert', t: h.text.split('. ')[0] + '.', w: h.text.split('. ').slice(1).join('. ') + (h.names.length ? ' (' + h.names.slice(0, 3).join(', ') + (h.names.length > 3 ? ', ...' : '') + ')' : '') }); });
     var holds = plan.funds.filter(function (f) { return f.hold; });
     if (holds.length) m.push({ icon: 'eye', t: 'Leave ' + holds.map(function (f) { return f.name; }).join(', ') + ' alone for now.', w: 'Switching would cost more in exit load and tax than it gains over three years.' });
     var reviews = plan.funds.filter(function (f) { return f.verdict === 'review'; });
     if (reviews.length) m.push({ icon: 'eye', t: reviews.length + (reviews.length === 1 ? ' fund needs' : ' funds need') + ' a human look: ' + reviews.map(function (f) { return f.name; }).join(', ') + '.', w: 'Too new, borderline, or outside what the rules can judge.' });
     if (!m.length) m.push({ icon: 'check', t: 'Nothing to change. Keep investing to the policy.', w: 'Every fund earns its place and the mix is inside its bands.' });
-    m = m.slice(0, 6);
+    m = m.slice(0, 8);
     return '<div class="sp-moves"><p class="sp-h" style="margin-top:18px">Your next moves</p><ol class="sp-movelist">' + m.map(function (x) {
       return '<li><span class="sp-move-icon sp-mi-' + x.icon + '">' + ICON[x.icon] + '</span><span><strong>' + esc(x.t) + '</strong><span class="sp-why">' + esc(x.w || '') + '</span></span></li>';
     }).join('') + '</ol></div>';

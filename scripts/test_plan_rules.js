@@ -251,4 +251,32 @@ test('policy: no goal given falls back to ten-year general wealth, and an empty 
   const e = build([]); assert.strictEqual(e.empty, true); assert.ok(e.ips && e.ips.mix);
 });
 
+
+test('replace verdicts name their destination: the held rival, else the sleeve pick', () => {
+  const b = find(main, 'Beta Large Cap Fund');
+  assert.ok(b.replaceWith && b.replaceWith.name === 'Alpha Large Cap Fund' && b.replaceWith.held, JSON.stringify(b.replaceWith));
+  const w = find(main, 'Weak Mid Cap Fund');
+  assert.ok(w.verdict === 'replace', w.verdict);
+  const row = main.stages.after.find((s) => s.name === 'Beta Large Cap Fund');
+  assert.ok(row && row.into === 'Alpha Large Cap Fund', JSON.stringify(row));
+});
+
+test('hygiene: folios without a nominee, KYC not OK, and IDCW payouts are flagged', () => {
+  const p = build([
+    { isin: 'A', name: 'Alpha Large Cap Fund', type: 'mf', value: 100000, units: 1000, cost: 90000, folio: '111', nominee: false, kyc: 'OK', txns: [lot('2021-01-01', 1000, 90000)] },
+    { isin: 'C', name: 'Gamma Flexi Cap Fund IDCW', type: 'mf', value: 100000, units: 1000, cost: 90000, folio: '222', nominee: true, kyc: 'NOT OK', txns: [lot('2021-01-01', 1000, 90000)] },
+    { isin: 'G', name: 'Steady Corporate Bond Fund', type: 'mf', value: 100000, units: 1000, cost: 90000, folio: '333', nominee: null, txns: [lot('2024-01-01', 1000, 90000)] }
+  ]);
+  assert.deepStrictEqual(p.hygiene.map((h) => h.k), ['nominee', 'kyc', 'idcw']);
+  assert.strictEqual(p.hygiene[0].n, 1); assert.ok(/succession/.test(p.hygiene[0].text));
+});
+
+test('rebalancing: a sleeve over its band names the proceeds and the weakest keep to trim', () => {
+  const p = build(core, { answers: ans(Object.assign({}, strong, { fall: 0, drawdown: 0, exp: 0, tradeoff: 0, behaviour: 1 })) }); // conservative: equity target 30%, held 67%
+  assert.strictEqual(p.profile.key, 'conservative');
+  const r = p.rebalance.find((x) => x.sleeve === 'equity');
+  assert.ok(r && r.by > 0.3 && r.amount > 0, JSON.stringify(r));
+  assert.ok(r.trim === 'Gamma Flexi Cap Fund' || r.proceeds > 0, JSON.stringify(r));
+});
+
 console.log('\n' + passed + ' fixture tests passed');

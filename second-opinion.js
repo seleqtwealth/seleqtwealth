@@ -192,6 +192,11 @@
       var before = text.slice(i ? marks[i - 1].at : 0, marks[i].at), fm, folio = null;
       var frx = /Folio No\s*:?\s*([0-9][0-9\/ ]*)/gi;
       while ((fm = frx.exec(before))) folio = fm[1].trim();
+      // Hygiene: the folio header carries 'KYC: OK'; the scheme block carries 'Nominee 1: <name>' or a
+      // 'not registered' wording. No nominee line at all is left unknown rather than flagged.
+      var kycM = before.match(/KYC\s*:\s*([A-Za-z][A-Za-z ]{0,12}?)(?=\s{2,}|\s*PAN|\s*$|\n)/i), kyc = kycM ? kycM[1].trim() : null;
+      var nomM = block.match(/Nominee\s*\d*\s*:\s*([^\n]*)/i), nominee = null;
+      if (nomM) { var nv = nomM[1].replace(/Nominee\s*\d\s*:.*$/i, '').trim(); nominee = !(/not\s*registered|no\s*nominee|\bnone\b|\bnil\b|^-?$/i.test(nv)); }
       holdings.push({
         isin: marks[i].isin,
         name: nameRaw,
@@ -205,7 +210,8 @@
         exitLoadClause: /Exit Load\s*:?\s*1(?:\.00)?%|within\s*(?:1 ?year|365 days)/i.test(block),
         opening: f(/Opening Unit Balance\s*:?\s*([\d,]+\.?\d*)/i),
         exitLoad: exitLoadOf(block),
-        txns: camsTxns(block)
+        txns: camsTxns(block),
+        kyc: kyc, nominee: nominee
       });
     }
     var per = text.match(/(\d{2}-[A-Za-z]{3}-\d{4})\s+To\s+(\d{2}-[A-Za-z]{3}-\d{4})/);
@@ -644,6 +650,10 @@
     var tiny = cur.filter(function (x) { return x.value < 1000; });
     if (tiny.length) m.tidy.push({ icon: 'coin', title: tiny.length === 1 ? '1 tiny holding' : tiny.length + ' tiny holdings',
       detail: tiny.map(function (x) { return shortName(x.name) + ' (' + fmtINR(x.value) + ')'; }).join(', ') + '. Too small to matter, but still on your statement.' });
+    var noNom = {}; cur.forEach(function (x) { if (x.nominee === false) noNom[(x.folio || '') + '|' + (x.amc || '')] = shortName(x.name); });
+    var noNomN = Object.keys(noNom).length;
+    if (noNomN) m.tidy.push({ icon: 'folder', title: noNomN === 1 ? 'No nominee on 1 folio' : 'No nominee on ' + noNomN + ' folios',
+      detail: Object.keys(noNom).map(function (k) { return noNom[k]; }).join(', ') + '. Adding one takes a minute online and saves your family a succession certificate.' });
     var amcFolios = {};
     cur.forEach(function (x) { if (x.amc && x.folio) (amcFolios[x.amc] = amcFolios[x.amc] || {})[x.folio] = 1; });
     Object.keys(amcFolios).forEach(function (a) {
