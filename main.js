@@ -1406,7 +1406,8 @@ function isInViewport(el) {
 // names follows TRIP below (dates in Monaco/London time), and it stops
 // appearing after the last TRIP date. To take it down sooner:
 // set MONACO_BAR to false (or delete this block and the .mc-bar / .mc-pop
-// CSS) to take it down. Skipped on unlisted (noindex) pages.
+// CSS) to take it down. Skipped on unlisted (noindex) pages and on pages
+// whose <body> carries data-no-travel-bar.
 // On a fresh open or refresh of the homepage it arrives as a small pill in
 // the middle of the screen (after the intro) that glides up and stretches
 // into the bar. Every other page, and moving between pages inside the site,
@@ -1432,6 +1433,8 @@ function isInViewport(el) {
   const city = leg ? leg.city : FALLBACK;
   const robots = document.querySelector('meta[name="robots"]');
   if (robots && /noindex/i.test(robots.content)) return;
+  // Pages that opt out (the standalone calculators) never show it.
+  if (document.body.hasAttribute('data-no-travel-bar')) return;
   // Older versions remembered a dismissal forever; clear that so the bar
   // comes back for those visitors too.
   try { localStorage.removeItem('seleqt_monaco_bar'); } catch (e) {}
