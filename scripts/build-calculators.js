@@ -297,7 +297,7 @@ ${groups}
         </div>
       </div>
     </div>
-    <p class="ws-foot">Unlisted page: not linked anywhere and hidden from search engines. &ldquo;Copy LinkedIn link&rdquo; tags the visit so Google Analytics shows it under the campaign <code>calculators</code>.</p>
+    <p class="ws-foot">Unlisted page: not linked anywhere and hidden from search engines.</p>
   </main>
 
   <!-- the app window -->
@@ -320,7 +320,6 @@ ${groups}
         <a class="ws-win-url" id="wsWinUrl" target="_blank" rel="noopener"></a>
         <div class="ws-win-actions">
           <button type="button" class="ws-btn is-primary" data-copy-kind="plain">Copy link</button>
-          <button type="button" class="ws-btn" data-copy-kind="linkedin">Copy LinkedIn link</button>
           <a class="ws-btn" id="wsWinOpen" target="_blank" rel="noopener">Open &rarr;</a>
         </div>
         <div class="ws-win-presets">
@@ -335,7 +334,6 @@ ${groups}
   <script>
   (function () {
     var DATA = ${JSON.stringify(data)};
-    var UTM = "?utm_source=linkedin&utm_medium=social&utm_campaign=calculators&utm_content=";
     function copy(text, btn) {
       var label = btn.innerHTML;
       function done(ok) {
@@ -407,7 +405,7 @@ ${groups}
     modal.querySelectorAll("[data-copy-kind]").forEach(function (b) {
       b.addEventListener("click", function () {
         if (!current) return;
-        copy(b.getAttribute("data-copy-kind") === "linkedin" ? current.url + UTM + current.slug : current.url, b);
+        copy(current.url, b);
       });
     });
   })();
