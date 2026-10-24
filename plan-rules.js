@@ -44,7 +44,8 @@
     { id: 'insurance', short: 'insurance', sec: 'about', dim: 'ability', q: 'Term life and health insurance', a: ['Both in place', 'Only one of them', 'Neither', 'Not needed: no dependants, or covered otherwise'], p: [2, 1, 0, 2] },
     { id: 'share', short: 'share of your wealth', sec: 'about', dim: 'ability', q: 'This portfolio, as a share of everything you own apart from your home', a: ['Under a quarter', 'About half', 'Most of it', 'Nearly all of it'], p: [3, 2, 1, 0] },
     { id: 'surplus', sec: 'about', type: 'amount', q: 'Money you can invest each month after expenses and EMIs', hint: 'Turns the gaps in your mix into a monthly plan.' },
-    { id: 'goals', sec: 'goals', type: 'goals', q: 'Your goals for this money', hint: 'Up to four. Amounts in today\'s money; the policy adds inflation.' },
+    { id: 'hasGoal', sec: 'goals', q: 'Do you have a specific goal for this money?', a: ['Yes, one or more specific goals', 'No, I just want it to grow', 'No, I want to keep it safe'] },
+    { id: 'goals', sec: 'goals', type: 'goals', q: 'Your goals for this money', hint: 'Up to four. Amounts in today\'s money; the policy adds inflation.', showIf: function (a) { return +a.hasGoal === 0; } },
     { id: 'returnNeed', sec: 'goals', q: 'The return you need from this money, above inflation', a: ['Protect it: keep pace with inflation', 'Beat inflation a little, 1 to 3% a year', 'Grow it meaningfully, 3 to 6% a year', 'Grow it as fast as possible, 6% or more'], real: [0.005, 0.02, 0.045, 0.07] },
     { id: 'incomeNeed', sec: 'goals', q: 'Do you draw income from this portfolio?', a: ['No', 'A little, under 4% of it a year', 'It is my main source of income'] },
     { id: 'fall', short: 'reaction to a fall', sec: 'attitude', dim: 'willingness', q: 'If your investments fell 20% in a few months, you would', a: ['Sell everything', 'Sell some', 'Hold and wait', 'Invest more'], p: [0, 1, 3, 4] },
@@ -93,13 +94,14 @@
   // floor, the return objective against expectations, and the flags an adviser would raise first.
   R.ips = function (ans, cfg, total, prof, today) {
     var I = cfg.ips, A = I.assumptions, year = +String(today).slice(0, 4), ex = ans.exclude || {};
-    var goals = (ans.goals || []).filter(function (g) { return g && +g.amount > 0 && +g.year; }).map(function (g) {
+    var goals = (+ans.hasGoal === 1 || +ans.hasGoal === 2 ? [] : (ans.goals || [])).filter(function (g) { return g && +g.amount > 0 && +g.year; }).map(function (g) {
       var years = Math.max(0, +g.year - year), cap = horizonCap(years, cfg), key = prof.key;
       if (cap && ordIdx(cap) < ordIdx(key) && (+g.priority !== 2 || years < 3)) key = cap; // flexible goals keep the profile mix unless very near
       return { label: R.GOAL_TYPES[+g.type] || String(g.type || 'Goal'), year: +g.year, years: years, amount: +g.amount, priority: +g.priority || 0, mixKey: key, capped: key !== prof.key };
     });
-    var assumed = !goals.length;
-    if (assumed) goals.push({ label: 'General wealth', year: year + 10, years: 10, amount: total || 1, priority: 1, mixKey: prof.key, capped: false });
+    var assumed = !goals.length, assumedKind = null;
+    if (assumed && +ans.hasGoal === 2) { assumedKind = 'preserve'; goals.push({ label: 'Keeping the money safe', year: year + 5, years: 5, amount: total || 1, priority: 0, mixKey: 'conservative', capped: prof.key !== 'conservative' }); }
+    else if (assumed) { assumedKind = 'grow'; goals.push({ label: 'General wealth', year: year + 10, years: 10, amount: total || 1, priority: 1, mixKey: prof.key, capped: false }); }
     var sumAmt = goals.reduce(function (s, g) { return s + g.amount; }, 0), mix = { equity: 0, hybrid: 0, debt: 0 };
     goals.forEach(function (g) {
       g.share = g.amount / sumAmt;
@@ -137,7 +139,7 @@
     if (need != null && need > real + 0.005) flags.push({ k: 'return', text: 'Your goals ask for about ' + Math.round(need * 100) + '% a year above inflation, but a ' + prof.key + ' mix can be expected to earn about ' + (real * 100).toFixed(1) + '%. Something has to give: invest more each month, push a goal out, or accept more risk than you said you were comfortable with.' });
     if (surplus > 0 && sipNeeded > surplus * 1.1) flags.push({ k: 'sip', text: 'Reaching every goal on time needs about ' + inr(sipNeeded) + ' a month against the ' + inr(surplus) + ' you can invest. Fund the goals marked must first, and push the flexible ones out.' });
     if (+ans.residency === 1) flags.push({ k: 'nri', text: 'As a non-resident, some fund houses will not take fresh money from certain countries, and redemptions attract TDS. Every suggestion below is subject to that check.' });
-    return { goals: goals, assumed: assumed, mix: mix, equitySplit: es, debtSplit: debtSplit, liquidFloor: liquidFloor, reserve: reserve, withdrawals: withdrawals,
+    return { goals: goals, assumed: assumed, assumedKind: assumedKind, mix: mix, equitySplit: es, debtSplit: debtSplit, liquidFloor: liquidFloor, reserve: reserve, withdrawals: withdrawals,
       expected: { nominal: nominal, real: real, need: need, worstYear: A.worst_year[prof.key] }, sip: { needed: sipNeeded, surplus: surplus },
       maxFunds: maxFunds, exclude: ex, flags: flags, band: I.rebalance_band, review: I.review };
   };

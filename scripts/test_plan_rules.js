@@ -33,7 +33,7 @@ const scores = {
 const H = { i: { C: 0, D: 1 }, f: [[null, 98, [[0, 30], [1, 25], [2, 20]]], [null, 97, [[0, 28], [1, 24], [2, 20], [3, 5]]]], s: [] };
 const schemes = { A_REG: { plan: 'regular', ter: 1.6 }, G_REG: { plan: 'regular', ter: 0.9 }, T_REG: { plan: 'regular', ter: 2.0 } };
 // Ability 14 of 20 -> 17 of 24 (growth); willingness 8 of 20 -> 10 of 24 (moderate); the lower sets the policy.
-const moderate = { age: 1, dependants: 1, income: 1, expenses: 0, emergency: 2, emi: 1, insurance: 0, share: 1, surplus: 0,
+const moderate = { age: 1, dependants: 1, income: 1, expenses: 0, emergency: 2, emi: 1, insurance: 0, share: 1, surplus: 0, hasGoal: 0,
   goals: [{ type: 7, year: 2036, amount: 2000000, priority: 1 }], returnNeed: 1, incomeNeed: 0,
   fall: 1, drawdown: 1, exp: 2, tradeoff: 1, behaviour: 2, slab: 6, regime: 1, residency: 0, simplicity: 2, exclude: {}, withdrawals: 0, booked: 0 };
 const ans = (o) => Object.assign({}, moderate, o);
@@ -277,6 +277,18 @@ test('rebalancing: a sleeve over its band names the proceeds and the weakest kee
   const r = p.rebalance.find((x) => x.sleeve === 'equity');
   assert.ok(r && r.by > 0.3 && r.amount > 0, JSON.stringify(r));
   assert.ok(r.trim === 'Gamma Flexi Cap Fund' || r.proceeds > 0, JSON.stringify(r));
+});
+
+
+test('goal gate: no goal means grow at the profile mix, or keep safe at the conservative mix', () => {
+  const grow = build(core, { answers: ans(Object.assign({}, strong, bold, { hasGoal: 1 })) });
+  assert.strictEqual(grow.profile.key, 'aggressive'); assert.strictEqual(grow.ips.assumedKind, 'grow');
+  assert.ok(Math.abs(grow.ips.mix.equity - 0.85) < 1e-9, JSON.stringify(grow.ips.mix));
+  const safe = build(core, { answers: ans(Object.assign({}, strong, bold, { hasGoal: 2 })) });
+  assert.strictEqual(safe.ips.assumedKind, 'preserve'); assert.ok(Math.abs(safe.ips.mix.equity - 0.30) < 1e-9, JSON.stringify(safe.ips.mix));
+  assert.strictEqual(safe.ips.goals[0].capped, true);
+  const q = R.QUESTIONS.find((x) => x.id === 'goals');
+  assert.strictEqual(q.showIf({ hasGoal: 0 }), true); assert.strictEqual(q.showIf({ hasGoal: 1 }), false);
 });
 
 console.log('\n' + passed + ' fixture tests passed');

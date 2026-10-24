@@ -63,13 +63,13 @@
     wrap.id = 'spWrap'; wrap.className = 'sp-wrap';
     wrap.innerHTML = '<p class="so-eyebrow">Next step, internal test</p><h2 class="sp-title">Now, what should you do about it?</h2>' +
       '<p class="sp-lede">A few questions about you, your goals and how you handle falls. One at a time, about four minutes, and you can skip anything you would rather not answer. You get a written investment policy and a plan: which funds to keep, review or replace, what to add, and what each move costs in exit load and tax. Nothing leaves this device.</p>' +
-      '<div class="sp-start"><button type="button" class="btn-primary" id="spStart">Start</button><small>24 quick taps</small>' + (local ? '<button type="button" class="sp-dev" id="spDemo">Fill with sample answers</button>' : '') + '</div><div id="spBody"></div>';
+      '<div class="sp-start"><button type="button" class="btn-primary" id="spStart">Start</button><small>About four minutes</small>' + (local ? '<button type="button" class="sp-dev" id="spDemo">Fill with sample answers</button>' : '') + '</div><div id="spBody"></div>';
     var lead = $('soLead');
     lead.parentNode.insertBefore(wrap, lead);
     $('spStart').addEventListener('click', function () { $('spStart').parentNode.hidden = true; startWizard(); });
     if ($('spDemo')) $('spDemo').addEventListener('click', function () {
       $('spStart').parentNode.hidden = true;
-      answers = { age: 1, dependants: 1, income: 0, expenses: 120000, emergency: 1, emi: 1, insurance: 1, share: 1, surplus: 60000,
+      answers = { age: 1, dependants: 1, income: 0, expenses: 120000, emergency: 1, emi: 1, insurance: 1, share: 1, surplus: 60000, hasGoal: 0,
         goals: [{ type: 0, year: new Date().getFullYear() + 20, amount: 50000000, priority: 0 }, { type: 1, year: new Date().getFullYear() + 8, amount: 5000000, priority: 0 }, { type: 4, year: new Date().getFullYear() + 2, amount: 1500000, priority: 2 }],
         returnNeed: 2, incomeNeed: 0, fall: 2, drawdown: 2, exp: 3, tradeoff: 2, behaviour: 2, slab: 6, regime: 0, residency: 0, simplicity: 1, exclude: {}, withdrawals: 0, booked: 0 };
       $('spBody').innerHTML = '<p class="sp-lede">Loading the fund data...</p>';
@@ -91,6 +91,7 @@
     return '₹' + Math.round(n / 1000) + 'k';
   }
   var step = 0, SECTION = {};
+  function visible() { return R.QUESTIONS.filter(function (q) { return !q.showIf || q.showIf(answers); }); }
   function startWizard() {
     $('spBody').innerHTML = '<p class="sp-lede">Loading the fund data...</p>';
     load().then(function () {
@@ -101,7 +102,8 @@
   }
   function chip(label, on, attrs) { return '<button type="button" class="sp-chip' + (on ? ' is-on' : '') + '" ' + attrs + '>' + esc(label) + '</button>'; }
   function screen() {
-    var N = R.QUESTIONS.length, q = R.QUESTIONS[step], sec = SECTION[q.sec], body = '', needsNext = q.type != null;
+    var V = visible(), N = V.length; if (step >= N) step = N - 1;
+    var q = V[step], sec = SECTION[q.sec], body = '', needsNext = q.type != null;
     if (q.type === 'amount') {
       var cur = answers[q.id];
       body = '<div class="sp-chips">' + PRESETS[q.id].map(function (v) { return chip(v === 0 ? (ZERO_LABEL[q.id] || 'None') : short(v), cur === v, 'data-amt="' + v + '"'); }).join('') +
@@ -196,14 +198,14 @@
   function skip(q) {
     answers[q.id] = SKIP_DEFAULT[q.id] === undefined ? null : SKIP_DEFAULT[q.id];
     answers._skipped = answers._skipped || {}; answers._skipped[q.id] = true;
-    if (step < R.QUESTIONS.length - 1) { step++; screen(); } else finish();
+    if (step < visible().length - 1) { step++; screen(); } else finish();
   }
   function finish() {
     $('spBody').innerHTML = '<div class="sp-wiz"><div class="sp-progress"><span style="width:100%"></span></div><p class="sp-lede">Writing your policy...</p></div>';
     setTimeout(render, 350);
   }
   function advance() {
-    var q = R.QUESTIONS[step], err = $('spErr');
+    var q = visible()[step], err = $('spErr');
     if (q.type === 'amount' && answers[q.id] == null) { err.textContent = 'Pick an amount, or type one.'; err.hidden = false; return; }
     if (q.type === 'multi' && !answers[q.id]) answers[q.id] = {};
     if (q.type === 'goals') {
@@ -212,7 +214,7 @@
       answers.goals = G;
     }
     if (q.type == null && answers[q.id] == null) { err.textContent = 'Tap one of the answers.'; err.hidden = false; return; }
-    if (step < R.QUESTIONS.length - 1) { step++; screen(); return; }
+    if (step < visible().length - 1) { step++; screen(); return; }
     finish();
   }
 
@@ -292,7 +294,7 @@
       '<li><strong>Return.</strong> ' + (ips.expected.need != null ? 'You need about ' + Math.round(ips.expected.need * 100) + '% a year above inflation. ' : '') + 'This mix can be expected to earn about ' + (ips.expected.nominal * 100).toFixed(1) + '% a year over a full cycle, ' + (ips.expected.real * 100).toFixed(1) + '% above ' + (A.inflation * 100).toFixed(1) + '% inflation. A planning figure, not a promise.</li>' +
       '<li><strong>Risk.</strong> A ' + esc(pr.key) + ' mix' + (worst != null ? ' should be expected to fall about ' + worst + '% in a bad year' : '') + '. You said you could sit through ' + esc((Qx.drawdown.a[+answers.drawdown] || 'a fall').toLowerCase()) + '.</li>' +
       '<li><strong>Income.</strong> ' + incomeTxt + '</li></ul>' +
-      '<p class="sp-h">Goals</p>' + (ips.assumed ? '<p class="sp-text">No goal was given, so the policy assumes general wealth building over ten years.</p>' : '') +
+      '<p class="sp-h">Goals</p>' + (ips.assumed ? '<p class="sp-text">' + (ips.assumedKind === 'preserve' ? 'You asked to keep the money safe, so the policy uses the conservative mix whatever your profile, over a five-year view.' : 'You asked for growth without a specific goal, so the policy plans for general wealth over ten years at your profile\'s mix.') + '</p>' : '') +
       table(['Goal', 'By', 'Needs then', 'Share of portfolio', 'Mix', 'Monthly to stay on track'], goalsRows) +
       '<p class="sp-why">"Needs then" adds ' + (A.inflation * 100).toFixed(1) + '% inflation a year. Each goal\'s share of the portfolio is grown at its mix\'s expected return; the monthly figure closes any gap.' + (ips.sip.surplus > 0 ? ' Together the goals need about ' + inr(ips.sip.needed) + ' a month against the ' + inr(ips.sip.surplus) + ' you can invest.' : '') + '</p>' +
       '<p class="sp-h">Constraints</p><ul class="sp-list">' +
