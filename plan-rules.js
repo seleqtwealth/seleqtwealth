@@ -20,26 +20,128 @@
   function addYears(d, n) { return (+d.slice(0, 4) + n) + d.slice(4); }
   function nextFy(d) { return (+fyStart(d).slice(0, 4) + 1) + '-04-01'; }
   R.dates = { t: t, iso: iso, days: days, addDays: addDays, fyStart: fyStart, nextFy: nextFy };
+  function pct(x) { return Math.round(x * 100) + '%'; }
+  function inr(n) { return '\u20b9' + Math.round(n).toLocaleString('en-IN'); }
 
-  // ---------- 1. risk profile ----------
-  R.QUESTIONS = [
-    { id: 'age', q: 'Your age', a: ['Under 30', '30 to 44', '45 to 59', '60 to 69', '70 or over'], p: [4, 3, 2, 1, 0] },
-    { id: 'horizon', q: 'When will you need most of this money?', a: ['Within 3 years', 'In 3 to 5 years', 'In 5 to 10 years', 'In more than 10 years'], p: [0, 1, 3, 4] },
-    { id: 'goal', q: 'Your main goal for this money', a: ['Keep it safe', 'Regular income', 'Steady growth with some safety', 'Long-term growth', 'The highest growth, with large swings'], p: [0, 1, 2, 3, 4] },
-    { id: 'income', q: 'How stable is your income?', a: ['No regular income', 'Variable', 'Stable', 'Very stable, with savings to spare'], p: [0, 1, 3, 4] },
-    { id: 'fall', q: 'If your investments fell 20% in a few months, you would', a: ['Sell everything', 'Sell some', 'Hold and wait', 'Invest more'], p: [0, 1, 3, 4] },
-    { id: 'exp', q: 'Your investing experience', a: ['None', 'Fixed deposits and insurance only', 'Mutual funds for under 3 years', 'Mutual funds for 3 years or more', 'Shares, and funds, for many years'], p: [0, 1, 2, 3, 4] },
-    { id: 'slab', q: 'Your income tax slab (used only for debt fund tax)', a: ['Nil', '5%', '10%', '15%', '20%', '25%', '30%'], scored: false }
+  // ---------- 1. investment policy intake ----------
+  // Shaped like an Investment Policy Statement: who the investor is (ability to take risk),
+  // what the money is for (objectives, each goal with its own horizon), how they behave when
+  // markets fall (willingness), and the constraints (liquidity, tax, residency, preferences).
+  // Points only place ability and willingness on one four-step scale; the lower sets the profile.
+  R.SECTIONS = [
+    { id: 'about', title: 'About you', lede: 'What you can afford to risk.' },
+    { id: 'goals', title: 'What this money is for', lede: 'Each goal gets its own horizon and mix.' },
+    { id: 'attitude', title: 'How you handle risk', lede: 'What you would actually do, not what you hope you would.' },
+    { id: 'constraints', title: 'Constraints and preferences', lede: 'Tax, residency, liquidity, and how you like to invest.' }
   ];
+  R.QUESTIONS = [
+    { id: 'age', short: 'age', sec: 'about', dim: 'ability', q: 'Your age', a: ['Under 30', '30 to 44', '45 to 59', '60 to 69', '70 or over'], p: [4, 3, 2, 1, 0] },
+    { id: 'dependants', short: 'dependants', sec: 'about', dim: 'ability', q: 'People who depend on your income', a: ['None', 'One or two', 'Three or more'], p: [2, 1, 0] },
+    { id: 'income', short: 'income', sec: 'about', dim: 'ability', q: 'Your income', a: ['Salaried, stable', 'Business or professional, variable', 'Salaried, but uncertain', 'Retired, or no regular income'], p: [3, 2, 1, 0] },
+    { id: 'expenses', sec: 'about', type: 'amount', q: 'Your household spends each month, roughly', hint: 'Sets the size of the cash reserve the policy keeps aside.' },
+    { id: 'emergency', short: 'cash reserve', sec: 'about', dim: 'ability', q: 'Months of expenses you hold in cash or liquid funds outside this portfolio', a: ['None', 'Under 3 months', '3 to 6 months', 'Over 6 months'], p: [0, 1, 2, 3], months: [0, 1.5, 4.5, 6] },
+    { id: 'emi', short: 'EMIs', sec: 'about', dim: 'ability', q: 'Loan EMIs as a share of take-home income', a: ['None', 'Under 20%', '20 to 40%', 'Over 40%'], p: [3, 2, 1, 0] },
+    { id: 'insurance', short: 'insurance', sec: 'about', dim: 'ability', q: 'Term life and health insurance', a: ['Both in place', 'Only one of them', 'Neither', 'Not needed: no dependants, or covered otherwise'], p: [2, 1, 0, 2] },
+    { id: 'share', short: 'share of your wealth', sec: 'about', dim: 'ability', q: 'This portfolio, as a share of everything you own apart from your home', a: ['Under a quarter', 'About half', 'Most of it', 'Nearly all of it'], p: [3, 2, 1, 0] },
+    { id: 'surplus', sec: 'about', type: 'amount', q: 'Money you can invest each month after expenses and EMIs', hint: 'Turns the gaps in your mix into a monthly plan.' },
+    { id: 'goals', sec: 'goals', type: 'goals', q: 'Your goals for this money', hint: 'Up to four. Amounts in today\'s money; the policy adds inflation.' },
+    { id: 'returnNeed', sec: 'goals', q: 'The return you need from this money, above inflation', a: ['Protect it: keep pace with inflation', 'Beat inflation a little, 1 to 3% a year', 'Grow it meaningfully, 3 to 6% a year', 'Grow it as fast as possible, 6% or more'], real: [0.005, 0.02, 0.045, 0.07] },
+    { id: 'incomeNeed', sec: 'goals', q: 'Do you draw income from this portfolio?', a: ['No', 'A little, under 4% of it a year', 'It is my main source of income'] },
+    { id: 'fall', short: 'reaction to a fall', sec: 'attitude', dim: 'willingness', q: 'If your investments fell 20% in a few months, you would', a: ['Sell everything', 'Sell some', 'Hold and wait', 'Invest more'], p: [0, 1, 3, 4] },
+    { id: 'drawdown', short: 'drawdown tolerance', sec: 'attitude', dim: 'willingness', q: 'The largest fall in value you could sit through without changing plan', a: ['About 5%', 'About 10%', 'About 20%', '35% or more'], p: [0, 1, 3, 4] },
+    { id: 'exp', short: 'experience', sec: 'attitude', dim: 'willingness', q: 'Your investing experience', a: ['None', 'Fixed deposits and insurance only', 'Mutual funds for under 3 years', 'Mutual funds for 3 years or more', 'Shares, and funds, for many years'], p: [0, 1, 2, 3, 4] },
+    { id: 'tradeoff', short: 'return trade-off', sec: 'attitude', dim: 'willingness', q: 'Over ten years, which would you rather hold?', a: ['A steady 7% every year', 'Mostly 9%, with a worst year of minus 10%', 'Mostly 11%, with a worst year of minus 25%', 'Mostly 13%, with a worst year of minus 40%'], p: [0, 1, 3, 4] },
+    { id: 'behaviour', short: 'past behaviour', sec: 'attitude', dim: 'willingness', q: 'In the 2020 crash, or the 2022 fall, you', a: ['Were not invested then', 'Sold', 'Held on', 'Bought more'], p: [2, 0, 3, 4] },
+    { id: 'slab', sec: 'constraints', q: 'Your income tax slab', a: ['Nil', '5%', '10%', '15%', '20%', '25%', '30%'] },
+    { id: 'regime', sec: 'constraints', q: 'Your tax regime', a: ['New regime, no 80C deductions', 'Old regime, 80C and 80D claimed'] },
+    { id: 'residency', sec: 'constraints', q: 'Tax residency', a: ['Resident Indian', 'Non-resident Indian'] },
+    { id: 'simplicity', sec: 'constraints', q: 'How many funds are you happy to hold in all?', a: ['Up to 5', 'Up to 8', 'No preference'], maxFunds: [5, 8, null] },
+    { id: 'exclude', sec: 'constraints', type: 'multi', q: 'Preferences, tick any that apply', a: ['Avoid sector and theme funds', 'Avoid small cap funds', 'Prefer index funds where they do the job', 'Avoid international funds'] },
+    { id: 'withdrawals', sec: 'constraints', type: 'amount', q: 'Money you plan to take out of this portfolio in the next 12 months', hint: 'Kept in liquid funds, outside the risk mix.' },
+    { id: 'booked', sec: 'constraints', type: 'amount', q: 'Equity gains already booked this financial year', hint: 'The ₹1.25 lakh tax-free allowance is shared with gains you have taken elsewhere.' }
+  ];
+  R.GOAL_TYPES = ['Retirement', 'Child\'s education', 'Child\'s wedding', 'Buying a home', 'Vehicle or travel', 'Starting a business', 'Regular income', 'General wealth', 'Other'];
+  R.PRIORITIES = ['Must happen', 'Important', 'Flexible'];
+  R.ORDER = ['conservative', 'moderate', 'growth', 'aggressive'];
+  var Q = {}; R.QUESTIONS.forEach(function (q) { Q[q.id] = q; });
+  function ordIdx(key) { return key === 'cash' ? -1 : R.ORDER.indexOf(key); }
+  function bandOf(points, cfg) { var b = cfg.risk_profile.bands; for (var i = 0; i < b.length; i++) if (points <= b[i].max_points) return b[i].profile; return b[b.length - 1].profile; }
+  // One dimension's points, scaled to 24, with the answers that pulled it down (half marks or less).
+  function scoreDim(ans, dim) {
+    var pts = 0, max = 0, drags = [];
+    R.QUESTIONS.forEach(function (q) {
+      if (q.dim !== dim) return;
+      var top = Math.max.apply(null, q.p); max += top;
+      if (ans[q.id] == null) return;
+      var got = q.p[+ans[q.id]] || 0; pts += got;
+      if (got <= top / 2) drags.push((q.short || q.id) + ' (' + q.a[+ans[q.id]].toLowerCase() + ')');
+    });
+    return { points: Math.round(pts * 24 / max), max: 24, drags: drags };
+  }
   R.profile = function (ans, cfg) {
-    var pts = 0;
-    R.QUESTIONS.forEach(function (q) { if (q.scored !== false) pts += q.p[ans[q.id] || 0] || 0; });
-    var bands = cfg.risk_profile.bands, key = bands[bands.length - 1].profile;
-    for (var i = 0; i < bands.length; i++) if (pts <= bands[i].max_points) { key = bands[i].profile; break; }
-    var order = bands.map(function (b) { return b.profile; }), cap = cfg.risk_profile.horizon_caps[String(ans.horizon || 0)], capped = false;
-    if (cap && order.indexOf(key) > order.indexOf(cap)) { key = cap; capped = true; }
-    return { key: key, points: pts, max: 24, capped: capped, slab: cfg.tax.slabs[ans.slab || 0] || 0, booked: +ans.booked || 0 };
+    var ab = scoreDim(ans, 'ability'), wi = scoreDim(ans, 'willingness');
+    ab.key = bandOf(ab.points, cfg); wi.key = bandOf(wi.points, cfg);
+    var key = R.ORDER[Math.min(ordIdx(ab.key), ordIdx(wi.key))], capped = null;
+    if (+ans.incomeNeed === 2 && ordIdx(key) > 1) { key = 'moderate'; capped = 'income'; } // the portfolio pays the bills
+    return { key: key, ability: ab, willingness: wi, limiter: ordIdx(ab.key) <= ordIdx(wi.key) ? 'ability' : 'willingness',
+      points: Math.min(ab.points, wi.points), max: 24, capped: !!capped, cappedWhy: capped,
+      slab: cfg.tax.slabs[+ans.slab || 0] || 0, booked: +ans.booked || 0 };
   };
+  function horizonCap(years, cfg) { var caps = cfg.ips.horizon_caps; for (var i = 0; i < caps.length; i++) if (years < caps[i].under_years) return caps[i].profile; return null; }
+  function mixFor(key, cfg) { return key === 'cash' ? { equity: 0, hybrid: 0, debt: 1 } : cfg.target_mix[key]; }
+  // The written policy: goals with horizons and funding, the blended target mix, the liquidity
+  // floor, the return objective against expectations, and the flags an adviser would raise first.
+  R.ips = function (ans, cfg, total, prof, today) {
+    var I = cfg.ips, A = I.assumptions, year = +String(today).slice(0, 4), ex = ans.exclude || {};
+    var goals = (ans.goals || []).filter(function (g) { return g && +g.amount > 0 && +g.year; }).map(function (g) {
+      var years = Math.max(0, +g.year - year), cap = horizonCap(years, cfg), key = prof.key;
+      if (cap && ordIdx(cap) < ordIdx(key) && (+g.priority !== 2 || years < 3)) key = cap; // flexible goals keep the profile mix unless very near
+      return { label: R.GOAL_TYPES[+g.type] || String(g.type || 'Goal'), year: +g.year, years: years, amount: +g.amount, priority: +g.priority || 0, mixKey: key, capped: key !== prof.key };
+    });
+    var assumed = !goals.length;
+    if (assumed) goals.push({ label: 'General wealth', year: year + 10, years: 10, amount: total || 1, priority: 1, mixKey: prof.key, capped: false });
+    var sumAmt = goals.reduce(function (s, g) { return s + g.amount; }, 0), mix = { equity: 0, hybrid: 0, debt: 0 };
+    goals.forEach(function (g) {
+      g.share = g.amount / sumAmt;
+      var m = mixFor(g.mixKey, cfg); g.mix = m;
+      ['equity', 'hybrid', 'debt'].forEach(function (k) { mix[k] += g.share * m[k]; });
+      var nominal = m.equity * A.equity + m.hybrid * A.hybrid + m.debt * A.debt, r = nominal / 12, n = g.years * 12;
+      g.expectedReturn = nominal;
+      g.target = g.amount * Math.pow(1 + A.inflation, g.years);          // what the goal costs when it falls due
+      g.funded = (total || 0) * g.share;                                   // its share of the portfolio today
+      g.fundedAt = g.funded * Math.pow(1 + nominal, g.years);              // what that share grows to
+      g.shortfall = Math.max(0, g.target - g.fundedAt);
+      g.sip = n > 0 ? (r > 0 ? g.shortfall * r / (Math.pow(1 + r, n) - 1) : g.shortfall / n) : g.shortfall;
+    });
+    // Liquidity: a reserve of N months of expenses not already held outside, plus planned withdrawals.
+    var expenses = +ans.expenses || 0, covered = Q.emergency.months[+ans.emergency || 0] || 0;
+    var reserve = Math.max(0, (I.liquidity.reserve_months - covered) * expenses), withdrawals = +ans.withdrawals || 0;
+    var liquidFloor = total > 0 ? Math.min(1, (reserve + withdrawals) / total) : 0, ds = cfg.debt_split;
+    if (liquidFloor > mix.debt * ds.liquid) { // the extra liquid money comes out of equity first, then hybrid
+      var extra = liquidFloor - mix.debt * ds.liquid, fromEq = Math.min(extra, mix.equity); mix.equity -= fromEq; extra -= fromEq;
+      var fromHy = Math.min(extra, mix.hybrid); mix.hybrid -= fromHy;
+      mix.debt = 1 - mix.equity - mix.hybrid;
+    }
+    var debtSplit = { liquid: mix.debt > 0 ? Math.max(ds.liquid, Math.min(1, liquidFloor / mix.debt)) : ds.liquid };
+    debtSplit.core = 1 - debtSplit.liquid;
+    var es = {}; Object.keys(cfg.equity_split[prof.key]).forEach(function (k) { es[k] = cfg.equity_split[prof.key][k]; });
+    if (ex[1]) { es.mid += es.small; es.small = 0; } // asked to avoid small caps
+    var nominal = mix.equity * A.equity + mix.hybrid * A.hybrid + mix.debt * A.debt, real = nominal - A.inflation;
+    var need = ans.returnNeed == null ? null : Q.returnNeed.real[+ans.returnNeed];
+    var sipNeeded = goals.reduce(function (s, g) { return s + g.sip; }, 0), surplus = +ans.surplus || 0;
+    var maxFunds = ans.simplicity == null ? null : Q.simplicity.maxFunds[+ans.simplicity];
+    var flags = [];
+    if (+ans.insurance === 1 || +ans.insurance === 2) flags.push({ k: 'insurance', text: (+ans.insurance === 2 ? 'Neither term life nor health insurance is in place.' : 'One of term life or health insurance is missing.') + ' Insurance is what stops a bad year from forcing a sale; put it in place before adding to this portfolio.' });
+    if (reserve > 0) flags.push({ k: 'reserve', text: 'Your cash reserve is short by about ' + inr(reserve) + ' of a ' + I.liquidity.reserve_months + '-month cushion. The policy holds that much in liquid funds before anything else.' });
+    if (+ans.emi === 3) flags.push({ k: 'emi', text: 'EMIs take over 40% of take-home income. Clearing expensive loans is a guaranteed return, so the policy stays cautious until that eases.' });
+    if (need != null && need > real + 0.005) flags.push({ k: 'return', text: 'Your goals ask for about ' + Math.round(need * 100) + '% a year above inflation, but a ' + prof.key + ' mix can be expected to earn about ' + (real * 100).toFixed(1) + '%. Something has to give: invest more each month, push a goal out, or accept more risk than you said you were comfortable with.' });
+    if (surplus > 0 && sipNeeded > surplus * 1.1) flags.push({ k: 'sip', text: 'Reaching every goal on time needs about ' + inr(sipNeeded) + ' a month against the ' + inr(surplus) + ' you can invest. Fund the goals marked must first, and push the flexible ones out.' });
+    if (+ans.residency === 1) flags.push({ k: 'nri', text: 'As a non-resident, some fund houses will not take fresh money from certain countries, and redemptions attract TDS. Every suggestion below is subject to that check.' });
+    return { goals: goals, assumed: assumed, mix: mix, equitySplit: es, debtSplit: debtSplit, liquidFloor: liquidFloor, reserve: reserve, withdrawals: withdrawals,
+      expected: { nominal: nominal, real: real, need: need, worstYear: A.worst_year[prof.key] }, sip: { needed: sipNeeded, surplus: surplus },
+      maxFunds: maxFunds, exclude: ex, flags: flags, band: I.rebalance_band, review: I.review };
+  };
+  R.inr = function (n) { return inr(n); };
 
   // ---------- classification ----------
   var EQ_SUB = { large_cap: 'large', large_mid: 'large_mid', mid_cap: 'mid', small_cap: 'small', flexi_cap: 'flexi', multi_cap: 'flexi',
@@ -162,8 +264,6 @@
   }
   R.xirr = xirr;
 
-  function pct(x) { return Math.round(x * 100) + '%'; }
-  function inr(n) { return '\u20b9' + Math.round(n).toLocaleString('en-IN'); }
 
   // ---------- the plan ----------
   R.build = function (I) {
@@ -173,6 +273,8 @@
     var plan = { profile: prof, asOn: asOn, stale: asOn ? days(asOn, today) > 30 : false, notes: [], funds: [], additions: [], gaps: {}, missed: [], holds: [],
       stages: { now: [], after: [], next: [] }, navDate: I.latest ? I.latest.date : null };
     var held = (I.parsed.holdings || []).filter(function (h) { return (h.type || 'mf') === 'mf' && h.value > 0; });
+    var stmtTotal = held.reduce(function (s, h) { return s + h.value; }, 0);
+    var ips = R.ips(ans, cfg, stmtTotal, prof, today); plan.ips = ips;
     if (!held.length) { plan.empty = true; return plan; }
 
     // Revalue to the latest NAV where the units are known
@@ -185,7 +287,8 @@
       if (nav && h.value > 0 && asOn && days(asOn, today) <= 60 && Math.abs(h._today / h.value - 1) > 0.25) { h._today = h.value; h._navMismatch = true; }
     });
     var total = held.reduce(function (s, h) { return s + h._today; }, 0);
-    plan.total = total; plan.statementTotal = held.reduce(function (s, h) { return s + h.value; }, 0);
+    plan.total = total; plan.statementTotal = stmtTotal;
+    ips = R.ips(ans, cfg, total, prof, today); plan.ips = ips; // the policy sizes its liquidity floor on today's value
 
     // Classify each holding against its scored direct growth sibling
     var F = held.map(function (h) {
@@ -198,7 +301,7 @@
     });
 
     // ---- target and current mix ----
-    var tm = cfg.target_mix[prof.key], es = cfg.equity_split[prof.key], ds = cfg.debt_split;
+    var tm = ips.mix, es = ips.equitySplit, ds = ips.debtSplit; // from the written policy, not a flat profile table
     var target = { large: tm.equity * es.large, flexi: tm.equity * es.flexi, mid: tm.equity * es.mid, small: tm.equity * es.small,
       hybrid: tm.hybrid, liquid: tm.debt * ds.liquid, core: tm.debt * ds.core };
     function bucketsOf(list) {
@@ -214,9 +317,16 @@
     F.forEach(function (f) { var k = f.cls.sleeve === 'other' ? 'other' : f.cls.sleeve; plan.mix.current[k] += f.value / total; });
     Object.keys(cur).forEach(function (k) { plan.mix.subsCurrent[k] = cur[k] / total; });
 
+    // Theme funds: a satellite allowance for growth and aggressive policies, if the fund earns its place.
+    var SAT = cfg.satellite || {}, eqTotal = F.filter(function (f) { return f.cls.sleeve === 'equity'; }).reduce(function (s, f) { return s + f.value; }, 0) || 1;
+    var thematicShare = F.filter(function (f) { return f.cls.sub === 'thematic'; }).reduce(function (s, f) { return s + f.value; }, 0) / eqTotal;
+    var allowThematic = !ips.exclude[0] && (SAT.allow_for || []).indexOf(prof.key) >= 0 && thematicShare <= (SAT.thematic_max_share_of_equity || 0);
+    if (+ans.regime === 0 && F.some(function (f) { return f.rec && f.rec.cat === 'elss'; })) ips.flags.push({ k: 'elss', text: 'Under the new tax regime an ELSS fund earns no deduction, so it is judged here purely as an equity fund with a three-year lock on each purchase.' });
+
     // ---- 3. verdicts ----
     function fits(f) {
-      if (f.cls.sub === 'outside' || f.cls.sub === 'thematic') return false;
+      if (f.cls.sub === 'outside') return false;
+      if (f.cls.sub === 'thematic') return allowThematic && !!(f.rec && f.rec.score != null && S.cats[f.rec.cat] && f.rec.score >= S.cats[f.rec.cat].median);
       if (f.cls.sub === 'large_mid') return target.large > 0 && target.mid > 0;
       return (target[f.cls.sub] || 0) > 0;
     }
@@ -248,7 +358,11 @@
       }
       if (!fits(f)) {
         f.verdict = 'reduce';
-        f.reasons.push(f.cls.sub === 'thematic' ? 'A sector or theme fund: a concentrated bet that has no place in the target mix for a ' + prof.key + ' profile.'
+        f.reasons.push(f.cls.sub === 'thematic' ? (ips.exclude[0] ? 'A sector or theme fund, and your policy says to avoid them.'
+            : (SAT.allow_for || []).indexOf(prof.key) < 0 ? 'A sector or theme fund: a concentrated bet with no place in a ' + prof.key + ' policy.'
+            : thematicShare > (SAT.thematic_max_share_of_equity || 0) ? 'Sector and theme funds are ' + pct(thematicShare) + ' of your equity, above the ' + pct(SAT.thematic_max_share_of_equity) + ' satellite your policy allows.'
+            : 'A sector or theme fund scoring below its category median; the policy keeps only theme funds that earn their place.')
+          : f.cls.sub === 'small' && ips.exclude[1] ? 'You asked to avoid small cap funds, so they have no share in your mix.'
           : (f.cls.sub === 'outside' ? 'Its category (' + rec.catLabel + ') is outside the target mix.' : 'Its category (' + rec.catLabel + ') has no share in the target mix for a ' + prof.key + ' profile.'));
         f.reasons.push(consText(rec));
         return;
@@ -280,6 +394,7 @@
       f.verdict = 'review'; f.reasons.push(consText(rec)); if (rec.score != null) f.reasons.push('Scores ' + Math.round(rec.score) + ' out of 100, below the category median of ' + Math.round(med) + '.');
     });
     F.forEach(function (f) { if (f.regular) f.direct = true; });
+    F.forEach(function (f) { if (f.cls.sub === 'thematic' && f.verdict !== 'reduce') f.reasons.unshift('Held as a satellite: sector and theme funds are ' + pct(thematicShare) + ' of your equity, within the ' + pct(SAT.thematic_max_share_of_equity) + ' your policy allows.'); });
 
     // ---- 4. additions ----
     var kept = F.filter(function (f) { return f.verdict !== 'replace' && f.verdict !== 'reduce'; });
@@ -290,6 +405,8 @@
       liquid: ['liquid', 'money_market'], core: ['short_duration', 'corporate_bond'] };
     var LABELS = { large: 'Large cap', flexi: 'Flexi or multi cap', mid: 'Mid cap', small: 'Small cap', hybrid: 'Hybrid', liquid: 'Liquid or money market', core: 'Short duration or corporate bond' };
     var eqFunds = kept.filter(function (f) { return f.cls.sleeve === 'equity'; }).length;
+    var maxEq = ips.maxFunds ? Math.max(2, Math.min(cfg.ceilings.max_equity_funds, ips.maxFunds - 2)) : cfg.ceilings.max_equity_funds; // room for debt and hybrid
+    plan.maxEq = maxEq;
     Object.keys(SUBCATS).forEach(function (sub) {
       var gap = target[sub] * total - keptB[sub];
       if (gap <= A.gap_threshold * total) return;
@@ -297,7 +414,7 @@
       var add = { sub: sub, label: LABELS[sub], gap: gap, gapPct: gap / total };
       if (existing) { add.topUp = existing.name; add.reason = 'You already hold a good ' + LABELS[sub].toLowerCase() + ' fund, so add to it rather than open another.'; plan.additions.push(add); return; }
       var isEq = ['large', 'flexi', 'mid', 'small'].indexOf(sub) >= 0;
-      if (isEq && eqFunds >= cfg.ceilings.max_equity_funds) { add.skipped = 'You are keeping ' + eqFunds + ' equity funds, ' + (eqFunds > cfg.ceilings.max_equity_funds ? 'more than' : 'already') + ' the ' + cfg.ceilings.max_equity_funds + ' this plan allows, so it does not suggest another. Close this gap by adding to the funds you keep.'; plan.additions.push(add); return; }
+      if (isEq && eqFunds >= maxEq) { add.skipped = 'You are keeping ' + eqFunds + ' equity funds, ' + (eqFunds > maxEq ? 'more than' : 'already') + ' the ' + maxEq + ' your policy allows, so it does not suggest another. Close this gap by adding to the funds you keep.'; plan.additions.push(add); return; }
       var pool = [];
       SUBCATS[sub].forEach(function (c) { (S.picks[c] || []).forEach(function (i) { if (S.funds[i]) pool.push(i); }); });
       pool.sort(function (a, b) { return S.funds[b].score - S.funds[a].score; });
@@ -316,13 +433,22 @@
         var ci = S.cheapestIndex[cfg.benchmarks.large_cap.index] || S.cheapestIndex['Nifty 50'];
         if (ci && S.funds[ci] && !picks.some(function (p) { return p.isin === ci; })) {
           var r = S.funds[ci], idx = { isin: ci, n: r.n, score: r.score, ter: r.ter, aum: r.aum, catLabel: 'Index fund', compared: compared(r), index: true, why: 'The cheapest index fund on the ' + cfg.benchmarks.large_cap.index + ' (expense ratio ' + r.ter + '%): the market return at the lowest cost.' };
-          if (picks.length > A.alternatives) picks[picks.length - 1] = idx; else picks.push(idx);
+          if (ips.exclude[2]) { picks.unshift(idx); picks = picks.slice(0, 1 + A.alternatives); } // asked to prefer index funds
+          else if (picks.length > A.alternatives) picks[picks.length - 1] = idx; else picks.push(idx);
         }
       }
       add.pick = picks[0] || null; add.alts = picks.slice(1); add.skippedWhy = skippedWhy;
       if (isEq && add.pick) eqFunds++;
       if (add.pick) amcCount[S.funds[add.pick.isin] ? S.funds[add.pick.isin].amc : ''] = (amcCount[S.funds[add.pick.isin] ? S.funds[add.pick.isin].amc : ''] || 0) + 1;
       plan.additions.push(add);
+    });
+
+    // Monthly plan: the stated surplus goes to the sleeves that are short, in proportion to the gap.
+    var gapAdds = plan.additions.filter(function (a) { return a.gap > 0; }), sumGap = gapAdds.reduce(function (s, a) { return s + a.gap; }, 0);
+    plan.sip = { surplus: ips.sip.surplus, rows: [] };
+    if (ips.sip.surplus > 0 && sumGap > 0) gapAdds.forEach(function (a) {
+      a.monthly = ips.sip.surplus * a.gap / sumGap;
+      plan.sip.rows.push({ label: a.label, monthly: a.monthly, into: a.topUp || (a.pick && a.pick.n) || null, months: Math.ceil(a.gap / a.monthly) });
     });
 
     // Sleeves above target: no forced selling, but new money and sale proceeds should go elsewhere.

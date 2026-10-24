@@ -22,16 +22,23 @@ const scores = {
     I1: rec({ n: 'Uno Nifty 50 Index Fund', cat: 'index', catLabel: 'Index Fund', score: 70, isIndex: true, indexGroup: 'nifty 50', ter: 0.2, td: -0.1, bsrc: 'index_peers', bvia: '6 direct index funds on the same index', amc: 'Uno Mutual Fund' }),
     E: rec(Object.assign({ n: 'Echo Small Cap Fund', cat: 'small_cap', catLabel: 'Small Cap', score: 75, cons: 0.8, beat: 39, margin: 3.0, amc: 'Echo Mutual Fund' }, P, { bname: 'Nifty Smallcap 250' })),
     T: rec(Object.assign({ n: 'Tango ELSS Tax Saver Fund', cat: 'elss', catLabel: 'ELSS', score: 80, cons: 0.85, beat: 42, margin: 2.0, amc: 'Tango Mutual Fund' }, P, { bname: 'Nifty 500' })),
-    FOC1: rec(Object.assign({ n: 'Fox Flexi Cap Fund', cat: 'flexi_cap', catLabel: 'Flexi Cap', score: 90, cons: 0.95, beat: 47, margin: 3.0, amc: 'Fox Mutual Fund' }, P))
+    FOC1: rec(Object.assign({ n: 'Fox Flexi Cap Fund', cat: 'flexi_cap', catLabel: 'Flexi Cap', score: 90, cons: 0.95, beat: 47, margin: 3.0, amc: 'Fox Mutual Fund' }, P)),
+    TH: rec(Object.assign({ n: 'Theta Infrastructure Fund', cat: 'thematic', catLabel: 'Sectoral / Thematic', score: 70, cons: 0.7, beat: 34, margin: 1.0, amc: 'Theta Mutual Fund' }, P, { bname: 'Nifty 500' }))
   },
   sib: { A_REG: 'A', G_REG: 'G', T_REG: 'T' },
-  cats: { large_cap: { median: 55 }, flexi_cap: { median: 55 }, focused: { median: 55 }, mid_cap: { median: 50 }, corporate_bond: { median: 50 }, index: { median: 50 }, small_cap: { median: 50 }, elss: { median: 50 } },
+  cats: { large_cap: { median: 55 }, flexi_cap: { median: 55 }, focused: { median: 55 }, mid_cap: { median: 50 }, corporate_bond: { median: 50 }, index: { median: 50 }, small_cap: { median: 50 }, elss: { median: 50 }, thematic: { median: 50 } },
   picks: { large_cap: ['A', 'B'], flexi_cap: ['FOC1', 'C'], focused: ['FOC1'], mid_cap: ['W'], small_cap: ['E'], corporate_bond: ['G'], short_duration: [], liquid: [], money_market: [], aggressive_hybrid: [], balanced_advantage: [], multi_asset: [] },
   cheapestIndex: {}, gf2018: {}
 };
 const H = { i: { C: 0, D: 1 }, f: [[null, 98, [[0, 30], [1, 25], [2, 20]]], [null, 97, [[0, 28], [1, 24], [2, 20], [3, 5]]]], s: [] };
 const schemes = { A_REG: { plan: 'regular', ter: 1.6 }, G_REG: { plan: 'regular', ter: 0.9 }, T_REG: { plan: 'regular', ter: 2.0 } };
-const moderate = { age: 1, horizon: 2, goal: 2, income: 1, fall: 1, exp: 2, slab: 6, booked: 0 };
+// Ability 14 of 20 -> 17 of 24 (growth); willingness 8 of 20 -> 10 of 24 (moderate); the lower sets the policy.
+const moderate = { age: 1, dependants: 1, income: 1, expenses: 0, emergency: 2, emi: 1, insurance: 0, share: 1, surplus: 0,
+  goals: [{ type: 7, year: 2036, amount: 2000000, priority: 1 }], returnNeed: 1, incomeNeed: 0,
+  fall: 1, drawdown: 1, exp: 2, tradeoff: 1, behaviour: 2, slab: 6, regime: 1, residency: 0, simplicity: 2, exclude: {}, withdrawals: 0, booked: 0 };
+const ans = (o) => Object.assign({}, moderate, o);
+const bold = { fall: 3, drawdown: 3, exp: 4, tradeoff: 3, behaviour: 3 };            // willingness 20 of 20
+const strong = { age: 0, dependants: 0, income: 0, emergency: 3, emi: 0, insurance: 0, share: 0 }; // ability 20 of 20
 const today = '2026-10-10';
 const lot = (d, units, amt) => ({ d, units, amt, price: amt / units, kind: units > 0 ? 'buy' : 'redeem' });
 const build = (holdings, extra) => R.build(Object.assign({ cfg, scores, H, schemes, today, answers: moderate, latest: null, proxyNavs: {},
@@ -155,6 +162,93 @@ test('missed gains: no yearly rate for purchases under a year old', () => {
   const px = { PX: { n: 'Axis Nifty 100 Index Fund', index: 'Nifty 100', d0: '2026-01-01', nav: new Array(400).fill(10) } };
   const m = build([h], { proxyNavs: px }).missed.find((r) => r.name === 'Alpha Large Cap Fund');
   assert.ok(m && !m.skip && m.months === 4 && m.xirrFund == null, JSON.stringify(m));
+});
+
+
+// ---- investment policy intake ----
+const core = [{ isin: 'C', name: 'Gamma Flexi Cap Fund', type: 'mf', value: 1000000, units: 5000, cost: 600000, txns: [lot('2020-01-10', 5000, 600000)] },
+  { isin: 'G', name: 'Steady Corporate Bond Fund', type: 'mf', value: 500000, units: 5000, cost: 450000, txns: [lot('2022-01-10', 5000, 450000)] }];
+
+test('policy: the lower of ability and willingness sets the profile', () => {
+  const a = build(core, { answers: ans(Object.assign({}, strong, { fall: 0, drawdown: 0, exp: 0, tradeoff: 0, behaviour: 1 })) });
+  assert.strictEqual(a.profile.ability.key, 'aggressive'); assert.strictEqual(a.profile.willingness.key, 'conservative');
+  assert.strictEqual(a.profile.key, 'conservative'); assert.strictEqual(a.profile.limiter, 'willingness');
+  const b = build(core, { answers: ans(Object.assign({}, bold, { age: 4, dependants: 2, income: 3, emergency: 0, emi: 3, insurance: 2, share: 3 })) });
+  assert.strictEqual(b.profile.key, 'conservative'); assert.strictEqual(b.profile.limiter, 'ability');
+  assert.ok(b.profile.ability.drags.length >= 5, 'drags listed: ' + b.profile.ability.drags.join(', '));
+});
+
+test('policy: a portfolio that is the main income is capped at moderate', () => {
+  const p = build(core, { answers: ans(Object.assign({}, strong, bold, { incomeNeed: 2 })) });
+  assert.strictEqual(p.profile.key, 'moderate'); assert.strictEqual(p.profile.capped, true);
+});
+
+test('policy: a near goal is held in cash and debt, and the mix is the goal-weighted blend', () => {
+  const p = build(core, { answers: ans(Object.assign({}, strong, bold, { goals: [{ type: 3, year: 2028, amount: 1000000, priority: 0 }, { type: 0, year: 2045, amount: 1000000, priority: 0 }] })) });
+  assert.strictEqual(p.profile.key, 'aggressive');
+  assert.strictEqual(p.ips.goals[0].mixKey, 'cash'); assert.strictEqual(p.ips.goals[1].mixKey, 'aggressive');
+  assert.ok(Math.abs(p.ips.mix.equity - 0.425) < 1e-9 && Math.abs(p.ips.mix.debt - 0.55) < 1e-9, JSON.stringify(p.ips.mix));
+  assert.ok(p.ips.goals[1].target > 1000000 && p.ips.goals[1].sip >= 0, 'goal funding worked out');
+});
+
+test('policy: a flexible far goal keeps the profile mix; a must goal inside seven years is capped', () => {
+  const p = build(core, { answers: ans(Object.assign({}, strong, bold, { goals: [{ type: 1, year: 2032, amount: 1000000, priority: 0 }, { type: 7, year: 2032, amount: 1000000, priority: 2 }] })) });
+  assert.strictEqual(p.ips.goals[0].mixKey, 'moderate'); assert.strictEqual(p.ips.goals[1].mixKey, 'aggressive');
+});
+
+test('policy: the cash reserve and planned withdrawals become a liquid floor', () => {
+  const p = build(core, { answers: ans({ expenses: 100000, emergency: 0, withdrawals: 150000 }) });
+  assert.ok(Math.abs(p.ips.reserve - 600000) < 1, 'reserve ' + p.ips.reserve);
+  assert.ok(Math.abs(p.ips.liquidFloor - 0.5) < 1e-9, 'floor ' + p.ips.liquidFloor);
+  assert.ok(p.ips.mix.debt >= 0.5 && p.ips.mix.equity < 0.5, JSON.stringify(p.ips.mix));
+  assert.ok(p.ips.flags.some((f) => f.k === 'reserve'));
+  assert.ok(Math.abs(p.ips.mix.debt * p.ips.debtSplit.liquid - 0.5) < 1e-9, 'liquid share of the mix equals the floor');
+});
+
+test('policy: return objective above what the mix can earn raises a flag', () => {
+  const p = build(core, { answers: ans({ returnNeed: 3 }) });
+  assert.ok(p.ips.flags.some((f) => f.k === 'return'), p.ips.flags.map((f) => f.k).join(','));
+  assert.ok(!build(core, { answers: ans({ returnNeed: 0 }) }).ips.flags.some((f) => f.k === 'return'));
+});
+
+test('policy: missing insurance and heavy EMIs are flagged first', () => {
+  const p = build(core, { answers: ans({ insurance: 2, emi: 3 }) });
+  assert.deepStrictEqual(p.ips.flags.map((f) => f.k).filter((k) => k === 'insurance' || k === 'emi'), ['insurance', 'emi']);
+});
+
+test('satellite: a good theme fund is kept within the allowance for a growth policy, reduced for a moderate one', () => {
+  const withTheme = core.concat([{ isin: 'TH', name: 'Theta Infrastructure Fund', type: 'mf', value: 80000, units: 800, cost: 60000, txns: [lot('2021-03-01', 800, 60000)] }]);
+  const growth = build(withTheme, { answers: ans(Object.assign({}, strong, { fall: 3, drawdown: 3, exp: 3, tradeoff: 1, behaviour: 2 })) });
+  assert.strictEqual(growth.profile.key, 'growth');
+  const t = find(growth, 'Theta Infrastructure Fund');
+  assert.strictEqual(t.verdict, 'keep'); assert.ok(/satellite/.test(t.reasons[0]), t.reasons[0]);
+  const mod = find(build(withTheme), 'Theta Infrastructure Fund');
+  assert.strictEqual(mod.verdict, 'reduce'); assert.ok(/no place in a moderate policy/.test(mod.reasons[0]), mod.reasons[0]);
+  const big = find(build(core.concat([{ isin: 'TH', name: 'Theta Infrastructure Fund', type: 'mf', value: 400000, units: 4000, cost: 300000, txns: [lot('2021-03-01', 4000, 300000)] }]),
+    { answers: ans(Object.assign({}, strong, { fall: 3, drawdown: 3, exp: 3, tradeoff: 1, behaviour: 2 })) }), 'Theta Infrastructure Fund');
+  assert.strictEqual(big.verdict, 'reduce'); assert.ok(/above the 10% satellite/.test(big.reasons[0]), big.reasons[0]);
+});
+
+test('preferences: avoiding small caps reduces them, preferring index puts the index fund first', () => {
+  const small = find(build(core.concat([{ isin: 'E', name: 'Echo Small Cap Fund', type: 'mf', value: 60000, units: 600, cost: 50000, txns: [lot('2021-07-01', 600, 50000)] }]),
+    { answers: ans({ exclude: { 1: true } }) }), 'Echo Small Cap Fund');
+  assert.strictEqual(small.verdict, 'reduce'); assert.ok(/avoid small cap/.test(small.reasons[0]), small.reasons[0]);
+  const p = build(core, { answers: ans({ exclude: { 2: true } }), scores: Object.assign({}, scores, { cheapestIndex: { 'Nifty 100': 'I1' } }) });
+  const large = p.additions.find((a) => a.sub === 'large');
+  assert.ok(large && large.pick && large.pick.isin === 'I1', JSON.stringify(large && large.pick));
+});
+
+test('policy: the monthly surplus is split across the sleeves that are short, and the fund cap follows the preference', () => {
+  const p = build(core, { answers: ans({ surplus: 50000, simplicity: 0 }) });
+  assert.strictEqual(p.maxEq, 3);
+  const total = p.sip.rows.reduce((s, r) => s + r.monthly, 0);
+  assert.ok(p.sip.rows.length >= 2 && Math.abs(total - 50000) < 1, JSON.stringify(p.sip));
+});
+
+test('policy: no goal given falls back to ten-year general wealth, and an empty statement still gets a policy', () => {
+  const p = build(core, { answers: ans({ goals: [] }) });
+  assert.strictEqual(p.ips.assumed, true); assert.strictEqual(p.ips.goals[0].years, 10);
+  const e = build([]); assert.strictEqual(e.empty, true); assert.ok(e.ips && e.ips.mix);
 });
 
 console.log('\n' + passed + ' fixture tests passed');
