@@ -4009,6 +4009,26 @@ html.intro-running .hero-wordmark-spotlight {
   font-weight: 500;
 }
 
+/* In-text links (cross-links and the closing call to action) */
+.article-body a {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+.article-body a:hover { color: var(--gold); }
+
+/* Disclaimer and sources line under the FAQ */
+.article-body .article-note {
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 2em 0 0;
+}
+
 @media (max-width: 768px) {
   .article-header { padding: 110px 0 40px; }
   .article-body { padding: 20px 0 56px; }
