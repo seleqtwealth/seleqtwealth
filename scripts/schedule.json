@@ -187,7 +187,7 @@
     "date_display": "28 October 2026",
     "read": 6,
     "excerpt": "Most return figures you see are quoted before anything is taken out. The bank quotes 7%. The fund factsheet quotes 14%. The property broker quotes how much the flat has \"doubled\". None of these is the number...",
-    "published": false,
+    "published": true,
     "listing_card": "        <article class=\"insight-card insight-card--featured reveal\">\n          <div class=\"insight-card-meta\">\n            <span class=\"insight-category\">Investments</span>\n            <span class=\"insight-meta-dot\">·</span>\n            <time datetime=\"2026-10-28\">28 October 2026</time>\n            <span class=\"insight-meta-dot\">·</span>\n            <span class=\"insight-read-time\">6 min read</span>\n          </div>\n          <h2 class=\"insight-title\">\n            <a href=\"/blogs/real-return-after-tax-and-inflation\">Your Real Return: <em>What Is Left After Tax and Inflation</em></a>\n          </h2>\n          <p class=\"insight-excerpt\">Most return figures you see are quoted before anything is taken out. The bank quotes 7%. The fund factsheet quotes 14%. The property broker quotes how much the flat has \"doubled\". None of these is the number...</p>\n          <a href=\"/blogs/real-return-after-tax-and-inflation\" class=\"insight-cta\">Read the piece <span class=\"insight-cta-arrow\">&rarr;</span></a>\n        </article>\n",
     "sitemap_url": "  <url>\n    <loc>https://seleqtwealth.in/blogs/real-return-after-tax-and-inflation</loc>\n    <lastmod>2026-10-28</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n"
   },
