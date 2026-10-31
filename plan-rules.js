@@ -48,10 +48,10 @@
     { id: 'goals', sec: 'goals', type: 'goals', q: 'Your goals for this money', hint: 'Up to four. Amounts in today\'s money; the policy adds inflation.', showIf: function (a) { return +a.hasGoal === 0; } },
     { id: 'returnNeed', sec: 'goals', q: 'The return you need from this money, above inflation', a: ['Protect it: keep pace with inflation', 'Beat inflation a little, 1 to 3% a year', 'Grow it meaningfully, 3 to 6% a year', 'Grow it as fast as possible, 6% or more'], real: [0.005, 0.02, 0.045, 0.07] },
     { id: 'incomeNeed', sec: 'goals', q: 'Do you draw income from this portfolio?', a: ['No', 'A little, under 4% of it a year', 'It is my main source of income'] },
-    { id: 'fall', short: 'reaction to a fall', sec: 'attitude', dim: 'willingness', q: 'If your investments fell 20% in a few months, you would', a: ['Sell everything', 'Sell some', 'Hold and wait', 'Invest more'], p: [0, 1, 3, 4] },
-    { id: 'drawdown', short: 'drawdown tolerance', sec: 'attitude', dim: 'willingness', q: 'The largest fall in value you could sit through without changing plan', a: ['About 5%', 'About 10%', 'About 20%', '35% or more'], p: [0, 1, 3, 4] },
+    { id: 'fall', short: 'reaction to a fall', sec: 'attitude', dim: 'willingness', q: 'If your investments fell 20% in a few months (10 lakh becomes 8 lakh), you would', a: ['Sell everything', 'Sell some', 'Hold and wait', 'Invest more'], p: [0, 1, 3, 4] },
+    { id: 'drawdown', short: 'drawdown tolerance', sec: 'attitude', dim: 'willingness', q: 'The largest fall in value you could sit through without changing plan', a: ['About 5%: 10 lakh to 9.5 lakh', 'About 10%: 10 lakh to 9 lakh', 'About 20%: 10 lakh to 8 lakh', '35% or more: 10 lakh to 6.5 lakh or less'], p: [0, 1, 3, 4] },
     { id: 'exp', short: 'experience', sec: 'attitude', dim: 'willingness', q: 'Your investing experience', a: ['None', 'Fixed deposits and insurance only', 'Mutual funds for under 3 years', 'Mutual funds for 3 years or more', 'Shares, and funds, for many years'], p: [0, 1, 2, 3, 4] },
-    { id: 'tradeoff', short: 'return trade-off', sec: 'attitude', dim: 'willingness', q: 'Over ten years, which would you rather hold?', a: ['A steady 7% every year', 'Mostly 9%, with a worst year of minus 10%', 'Mostly 11%, with a worst year of minus 25%', 'Mostly 13%, with a worst year of minus 40%'], p: [0, 1, 3, 4] },
+    { id: 'tradeoff', short: 'return trade-off', sec: 'attitude', dim: 'willingness', q: 'Over ten years, which would you rather hold?', a: ['A steady 7% every year', 'Mostly 9%, with a worst year of minus 10% (10 lakh to 9 lakh)', 'Mostly 11%, with a worst year of minus 25% (10 lakh to 7.5 lakh)', 'Mostly 13%, with a worst year of minus 40% (10 lakh to 6 lakh)'], p: [0, 1, 3, 4] },
     { id: 'behaviour', short: 'past behaviour', sec: 'attitude', dim: 'willingness', q: 'In the 2020 crash, or the 2022 fall, you', a: ['Were not invested then', 'Sold', 'Held on', 'Bought more'], p: [2, 0, 3, 4] },
     { id: 'slab', sec: 'constraints', q: 'Your income tax slab', a: ['Nil', '5%', '10%', '15%', '20%', '25%', '30%'] },
     { id: 'regime', sec: 'constraints', q: 'Your tax regime', a: ['New regime, no 80C deductions', 'Old regime, 80C and 80D claimed'] },
@@ -63,7 +63,9 @@
   ];
   R.GOAL_TYPES = ['Retirement', 'Child\'s education', 'Child\'s wedding', 'Buying a home', 'Vehicle or travel', 'Starting a business', 'Regular income', 'General wealth', 'Other'];
   R.PRIORITIES = ['Must happen', 'Important', 'Flexible'];
-  R.ORDER = ['conservative', 'moderate', 'growth', 'aggressive'];
+  R.ORDER = ['conservative', 'cautious', 'balanced', 'growth', 'high_growth', 'aggressive'];
+  R.LABELS = { conservative: 'Conservative', cautious: 'Cautious', balanced: 'Balanced', growth: 'Growth', high_growth: 'High growth', aggressive: 'Aggressive' };
+  R.label = function (key, cfg) { return ((cfg && cfg.risk_profile.labels) || R.LABELS)[key] || key; };
   var Q = {}; R.QUESTIONS.forEach(function (q) { Q[q.id] = q; });
   function ordIdx(key) { return key === 'cash' ? -1 : R.ORDER.indexOf(key); }
   function bandOf(points, cfg) { var b = cfg.risk_profile.bands; for (var i = 0; i < b.length; i++) if (points <= b[i].max_points) return b[i].profile; return b[b.length - 1].profile; }
@@ -83,7 +85,8 @@
     var ab = scoreDim(ans, 'ability'), wi = scoreDim(ans, 'willingness');
     ab.key = bandOf(ab.points, cfg); wi.key = bandOf(wi.points, cfg);
     var key = R.ORDER[Math.min(ordIdx(ab.key), ordIdx(wi.key))], capped = null;
-    if (+ans.incomeNeed === 2 && ordIdx(key) > 1) { key = 'moderate'; capped = 'income'; } // the portfolio pays the bills
+    var capKey = cfg.risk_profile.income_cap || 'balanced';
+    if (+ans.incomeNeed === 2 && ordIdx(key) > ordIdx(capKey)) { key = capKey; capped = 'income'; } // the portfolio pays the bills
     return { key: key, ability: ab, willingness: wi, limiter: ordIdx(ab.key) <= ordIdx(wi.key) ? 'ability' : 'willingness',
       points: Math.min(ab.points, wi.points), max: 24, capped: !!capped, cappedWhy: capped,
       slab: cfg.tax.slabs[+ans.slab || 0] || 0, booked: +ans.booked || 0 };
@@ -117,7 +120,8 @@
     });
     // Liquidity: a reserve of N months of expenses not already held outside, plus planned withdrawals.
     var expenses = +ans.expenses || 0, covered = Q.emergency.months[+ans.emergency || 0] || 0;
-    var reserve = Math.max(0, (I.liquidity.reserve_months - covered) * expenses), withdrawals = +ans.withdrawals || 0;
+    var months = (I.liquidity.reserve_months_by_income || [])[+ans.income]; if (months == null) months = I.liquidity.reserve_months;
+    var reserve = Math.max(0, (months - covered) * expenses), withdrawals = +ans.withdrawals || 0;
     var liquidFloor = total > 0 ? Math.min(1, (reserve + withdrawals) / total) : 0, ds = cfg.debt_split;
     if (liquidFloor > mix.debt * ds.liquid) { // the extra liquid money comes out of equity first, then hybrid
       var extra = liquidFloor - mix.debt * ds.liquid, fromEq = Math.min(extra, mix.equity); mix.equity -= fromEq; extra -= fromEq;
@@ -134,12 +138,12 @@
     var maxFunds = ans.simplicity == null ? null : Q.simplicity.maxFunds[+ans.simplicity];
     var flags = [];
     if (+ans.insurance === 1 || +ans.insurance === 2) flags.push({ k: 'insurance', text: (+ans.insurance === 2 ? 'Neither term life nor health insurance is in place.' : 'One of term life or health insurance is missing.') + ' Insurance is what stops a bad year from forcing a sale; put it in place before adding to this portfolio.' });
-    if (reserve > 0) flags.push({ k: 'reserve', text: 'Your cash reserve is short by about ' + inr(reserve) + ' of a ' + I.liquidity.reserve_months + '-month cushion. The policy holds that much in liquid funds before anything else.' });
+    if (reserve > 0) flags.push({ k: 'reserve', text: 'Your cash reserve is short by about ' + inr(reserve) + ' of a ' + months + '-month cushion (' + months + ' months of expenses for your kind of income). The policy holds that much in liquid funds before anything else.' });
     if (+ans.emi === 3) flags.push({ k: 'emi', text: 'EMIs take over 40% of take-home income. Clearing expensive loans is a guaranteed return, so the policy stays cautious until that eases.' });
-    if (need != null && need > real + 0.005) flags.push({ k: 'return', text: 'Your goals ask for about ' + Math.round(need * 100) + '% a year above inflation, but a ' + prof.key + ' mix can be expected to earn about ' + (real * 100).toFixed(1) + '%. Something has to give: invest more each month, push a goal out, or accept more risk than you said you were comfortable with.' });
+    if (need != null && need > real + 0.005) flags.push({ k: 'return', text: 'Your goals ask for about ' + Math.round(need * 100) + '% a year above inflation, but a ' + R.label(prof.key, cfg).toLowerCase() + ' mix can be expected to earn about ' + (real * 100).toFixed(1) + '%. Something has to give: invest more each month, push a goal out, or accept more risk than you said you were comfortable with.' });
     if (surplus > 0 && sipNeeded > surplus * 1.1) flags.push({ k: 'sip', text: 'Reaching every goal on time needs about ' + inr(sipNeeded) + ' a month against the ' + inr(surplus) + ' you can invest. Fund the goals marked must first, and push the flexible ones out.' });
     if (+ans.residency === 1) flags.push({ k: 'nri', text: 'As a non-resident, some fund houses will not take fresh money from certain countries, and redemptions attract TDS. Every suggestion below is subject to that check.' });
-    return { goals: goals, assumed: assumed, assumedKind: assumedKind, mix: mix, equitySplit: es, debtSplit: debtSplit, liquidFloor: liquidFloor, reserve: reserve, withdrawals: withdrawals,
+    return { goals: goals, assumed: assumed, assumedKind: assumedKind, reserveMonths: months, mix: mix, equitySplit: es, debtSplit: debtSplit, liquidFloor: liquidFloor, reserve: reserve, withdrawals: withdrawals,
       expected: { nominal: nominal, real: real, need: need, worstYear: A.worst_year[prof.key] }, sip: { needed: sipNeeded, surplus: surplus },
       maxFunds: maxFunds, exclude: ex, flags: flags, band: I.rebalance_band, review: I.review };
   };
@@ -170,6 +174,7 @@
     }
     if (c === 'arbitrage') return { sleeve: 'debt', sub: 'liquid', tax: 'equity' };
     if (c === 'conservative_hybrid') return { sleeve: 'debt', sub: 'core', tax: 'debt' };
+    if (c === 'credit_risk') return { sleeve: 'debt', sub: 'core', tax: 'debt' }; // judged like any core debt fund, and flagged
     if (cfg.debt_liquid_categories.indexOf(c) >= 0) return { sleeve: 'debt', sub: 'liquid', tax: 'debt' };
     if (cfg.debt_core_categories.indexOf(c) >= 0) return { sleeve: 'debt', sub: 'core', tax: 'debt' };
     if (c && /duration|gilt|bond|credit|floater|dynamic/.test(c)) return { sleeve: 'debt', sub: 'outside', tax: 'debt' };
@@ -326,9 +331,22 @@
     if (+ans.regime === 0 && F.some(function (f) { return f.rec && f.rec.cat === 'elss'; })) ips.flags.push({ k: 'elss', text: 'Under the new tax regime an ELSS fund earns no deduction, so it is judged here purely as an equity fund with a three-year lock on each purchase.' });
 
     // ---- 3. verdicts ----
+    // Keep line: the score at the keep_from_rank point of the fund's category (0.40 means the top 60% are kept).
+    var keepFrom = V.keep_from_rank == null ? 0.5 : V.keep_from_rank, lineCache = {};
+    function keepLine(rec) {
+      if (!rec) return null;
+      var grp = rec.isIndex ? 'index:' + (rec.indexGroup || rec.cat) : rec.cat;
+      if (lineCache[grp] !== undefined) return lineCache[grp];
+      var scores = Object.keys(S.funds).map(function (i) { return S.funds[i]; }).filter(function (r) {
+        return r && r.score != null && !r.tooNew && (rec.isIndex ? (r.isIndex && (r.indexGroup || r.cat) === (rec.indexGroup || rec.cat)) : (!r.isIndex && r.cat === rec.cat));
+      }).map(function (r) { return r.score; }).sort(function (a, b) { return a - b; });
+      lineCache[grp] = scores.length ? scores[Math.min(scores.length - 1, Math.floor(keepFrom * scores.length))] : null;
+      return lineCache[grp];
+    }
+    var pl = R.label(prof.key, cfg).toLowerCase();
     function fits(f) {
       if (f.cls.sub === 'outside') return false;
-      if (f.cls.sub === 'thematic') return allowThematic && !!(f.rec && f.rec.score != null && S.cats[f.rec.cat] && f.rec.score >= S.cats[f.rec.cat].median);
+      if (f.cls.sub === 'thematic') return allowThematic && !!(f.rec && f.rec.score != null && keepLine(f.rec) != null && f.rec.score >= keepLine(f.rec));
       if (f.cls.sub === 'large_mid') return target.large > 0 && target.mid > 0;
       return (target[f.cls.sub] || 0) > 0;
     }
@@ -350,9 +368,10 @@
     function better(a, b) { return (a.rec && a.rec.score != null ? a.rec.score : -1) > (b.rec && b.rec.score != null ? b.rec.score : -1); }
 
     F.forEach(function (f) {
-      var rec = f.rec, med = rec && S.cats[rec.cat] ? S.cats[rec.cat].median : null;
+      var rec = f.rec, line = keepLine(rec);
       f.compared = compared(rec);
-      if (!rec) { f.verdict = 'review'; f.reasons.push('Not in the scored universe (it may be closed-ended, a fund of funds, or merged into another scheme), so it is left for a person to review.'); return; }
+      if (!rec) { f.verdict = 'unscored'; f.reasons.push('Not in the scored universe (it may be closed-ended, a fund of funds, or merged into another scheme), so the rules cannot judge it.'); return; }
+      if (rec.cat === 'credit_risk' && V.credit_risk_flag) { f.flag = 'credit'; f.reasons.push('A credit risk fund: it lends to lower-rated borrowers, so a credit event can hurt in ways past returns do not show. Scored like any debt fund, but worth a closer look.'); }
       if (rec.tooNew || rec.months < V.review_history_below_months || (!rec.isIndex && rec.cons == null)) {
         f.verdict = 'review'; f.tooNew = true;
         f.reasons.push('Too new to judge: ' + Math.floor(rec.months / 12) + ' years ' + (rec.months % 12) + ' months of history, and at least ' + cfg.scoring.min_windows + ' three-year periods are needed.');
@@ -361,11 +380,11 @@
       if (!fits(f)) {
         f.verdict = 'reduce';
         f.reasons.push(f.cls.sub === 'thematic' ? (ips.exclude[0] ? 'A sector or theme fund, and your policy says to avoid them.'
-            : (SAT.allow_for || []).indexOf(prof.key) < 0 ? 'A sector or theme fund: a concentrated bet with no place in a ' + prof.key + ' policy.'
+            : (SAT.allow_for || []).indexOf(prof.key) < 0 ? 'A sector or theme fund: a concentrated bet with no place in a ' + pl + ' policy.'
             : thematicShare > (SAT.thematic_max_share_of_equity || 0) ? 'Sector and theme funds are ' + pct(thematicShare) + ' of your equity, above the ' + pct(SAT.thematic_max_share_of_equity) + ' satellite your policy allows.'
-            : 'A sector or theme fund scoring below its category median; the policy keeps only theme funds that earn their place.')
+            : 'A sector or theme fund scoring below its category keep line; the policy keeps only theme funds that earn their place.')
           : f.cls.sub === 'small' && ips.exclude[1] ? 'You asked to avoid small cap funds, so they have no share in your mix.'
-          : (f.cls.sub === 'outside' ? 'Its category (' + rec.catLabel + ') is outside the target mix.' : 'Its category (' + rec.catLabel + ') has no share in the target mix for a ' + prof.key + ' profile.'));
+          : (f.cls.sub === 'outside' ? 'Its category (' + rec.catLabel + ') is outside the target mix.' : 'Its category (' + rec.catLabel + ') has no share in the target mix for a ' + pl + ' profile.'));
         f.reasons.push(consText(rec));
         return;
       }
@@ -390,12 +409,14 @@
         f.reasons.push(consText(rec));
         return;
       }
-      if (rec.cat === 'credit_risk' && V.credit_risk_review) { f.verdict = 'review'; f.reasons.push('A credit risk fund: it lends to lower-rated companies, so it is always left for a person to review.'); f.reasons.push(consText(rec)); return; }
       if (!rec.isIndex && rec.cons < V.review_consistency_below) { f.verdict = 'review'; f.reasons.push(consText(rec) + ' Borderline, so it is left for review.'); return; }
-      if (rec.score != null && med != null && rec.score >= med) { f.verdict = 'keep'; f.reasons.push(consText(rec)); f.reasons.push('Scores ' + Math.round(rec.score) + ' out of 100 among ' + rec.catLabel.toLowerCase() + ' funds (category median ' + Math.round(med) + ').'); return; }
-      f.verdict = 'review'; f.reasons.push(consText(rec)); if (rec.score != null) f.reasons.push('Scores ' + Math.round(rec.score) + ' out of 100, below the category median of ' + Math.round(med) + '.');
+      if (rec.score != null && line != null && rec.score >= line) { f.verdict = 'keep'; f.reasons.push(consText(rec)); f.reasons.push('Scores ' + Math.round(rec.score) + ' out of 100 among ' + rec.catLabel.toLowerCase() + ' funds, above the keep line of ' + Math.round(line) + '.'); return; }
+      if (rec.score == null || line == null) { f.verdict = 'review'; f.reasons.push(consText(rec)); f.reasons.push('No score could be worked out, so it is left for a person to review.'); return; }
+      f.verdict = V.below_keep_line || 'review';
+      f.reasons.push('Scores ' + Math.round(rec.score) + ' out of 100 among ' + rec.catLabel.toLowerCase() + ' funds, below the keep line of ' + Math.round(line) + ' (the top ' + Math.round(100 * (1 - keepFrom)) + '% of the category are kept).');
+      f.reasons.push(consText(rec));
     });
-    F.forEach(function (f) { if (f.regular) f.direct = true; });
+    if (cfg.switching.suggest_direct !== false) F.forEach(function (f) { if (f.regular) f.direct = true; });
     F.forEach(function (f) { if (f.cls.sub === 'thematic' && f.verdict !== 'reduce') f.reasons.unshift('Held as a satellite: sector and theme funds are ' + pct(thematicShare) + ' of your equity, within the ' + pct(SAT.thematic_max_share_of_equity) + ' your policy allows.'); });
 
     // ---- 4. additions ----
@@ -619,8 +640,11 @@
     plan.funds = F.map(function (f) {
       return { isin: f.isin, name: f.name, statementValue: f.h.value, value: f.value, verdict: f.verdict, direct: !!f.direct, hold: !!f.hold, tooNew: !!f.tooNew,
         reasons: f.reasons, compared: f.compared, bsrc: f.rec ? f.rec.bsrc : null, score: f.rec ? f.rec.score : null, catLabel: f.rec ? f.rec.catLabel : null,
-        sleeve: f.cls.sleeve, sub: f.cls.sub, lotNotes: f.lotNotes || [], exitLoadSource: f.exitLoadSource, navMismatch: !!f.h._navMismatch, replaceWith: f.replaceWith || null };
+        sleeve: f.cls.sleeve, sub: f.cls.sub, lotNotes: f.lotNotes || [], exitLoadSource: f.exitLoadSource, navMismatch: !!f.h._navMismatch, replaceWith: f.replaceWith || null, flag: f.flag || null };
     });
+    var kinds = { equity: 'a share held directly', bond: 'a bond', sgb: 'a gold bond', other: 'another security' };
+    plan.unjudged = F.filter(function (f) { return f.verdict === 'unscored'; }).map(function (f) { return { name: f.name, value: f.value, why: 'a fund the rules cannot score' }; })
+      .concat((I.parsed.holdings || []).filter(function (h) { return (h.type || 'mf') !== 'mf' && h.value > 0; }).map(function (h) { return { name: h.name, value: h.value, why: kinds[h.type] || kinds.other }; }));
     if (F.some(function (f) { return f.h.opening > 0.0005; })) plan.notes.push('history');
     if (I.parsed.source !== 'cams') plan.notes.push('no_lots');
     return plan;

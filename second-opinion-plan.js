@@ -220,11 +220,13 @@
 
   // ---- output: reveal, glance, then sections on demand ----
   var cap = function (s) { return String(s || '').charAt(0).toUpperCase() + String(s || '').slice(1); };
-  var VERDICT = { keep: ['Keep', 'keep'], review: ['Review', 'eye'], replace: ['Replace', 'swap'], reduce: ['Reduce', 'minus'] };
+  var VERDICT = { keep: ['Keep', 'keep'], review: ['Review', 'eye'], replace: ['Replace', 'swap'], reduce: ['Reduce', 'minus'], unscored: ['Not judged', 'eye'] };
+  var label = function (key) { return R.label(key, DATA.cfg); };
   function vchip(f) {
     var v = VERDICT[f.verdict] || [f.verdict, 'eye'], out = '<span class="sp-chip-v sp-v-' + f.verdict + '">' + ICON[v[1] === 'keep' ? 'check' : v[1]] + v[0] + '</span>';
     if (f.direct && f.verdict !== 'replace' && f.verdict !== 'reduce') out += '<span class="sp-chip-v sp-v-direct">' + ICON.swap + 'Go direct</span>';
     if (f.hold) out += '<span class="sp-chip-v sp-v-hold">Hold for now</span>';
+    if (f.flag === 'credit') out += '<span class="sp-chip-v sp-v-review">Credit risk</span>';
     return out;
   }
   function acc(id, title, summary, body, open) {
@@ -242,7 +244,7 @@
   }
   var flagHtml = function (text) { return '<div class="sp-flag">' + ICON.alert + '<span>' + text + '</span></div>'; };
   var meter = function (label, d) {
-    return '<div class="sp-meter"><span class="sp-meter-label">' + label + '</span><strong>' + cap(d.key) + '</strong><div class="sp-meter-bar"><span style="width:' + (100 * d.points / d.max).toFixed(0) + '%"></span></div>' +
+    return '<div class="sp-meter"><span class="sp-meter-label">' + label + '</span><strong>' + esc(R.label(d.key, DATA.cfg)) + '</strong><div class="sp-meter-bar"><span style="width:' + (100 * d.points / d.max).toFixed(0) + '%"></span></div>' +
       '<small>' + (d.drags.length ? 'Held back by ' + esc(d.drags.slice(0, 2).join(' and ').toLowerCase()) + '.' : 'Nothing holding it back.') + '</small></div>';
   };
 
@@ -251,10 +253,11 @@
     var plan = R.build({ cfg: D.cfg, scores: D.scores, H: L.data.holdings, schemes: L.data.schemes, proxyNavs: D.proxy, latest: D.latest, parsed: L.parsed, answers: answers, today: today });
     var cfg = D.cfg, ips = plan.ips, pr = plan.profile, A = cfg.ips.assumptions, out = [];
     var Qx = {}; R.QUESTIONS.forEach(function (q) { Qx[q.id] = q; });
-    var line = { conservative: 'Steady first. Growth is welcome, but never at the cost of sleep.', moderate: 'A balanced hand: enough equity to grow, enough debt to stay calm.', growth: 'Built to grow. You can afford the swings, and you said you can live with them.', aggressive: 'All in on growth. Long horizon, strong finances, steady nerves.' }[pr.key];
+    var line = { conservative: 'Steady first. Growth is welcome, but never at the cost of sleep.', cautious: 'Mostly steady, with a measured share in equity for growth.', balanced: 'A balanced hand: enough equity to grow, enough debt to stay calm.', growth: 'Built to grow. You can afford the swings, and you said you can live with them.', high_growth: 'Firmly tilted to growth, with just enough debt to steady the ride.', aggressive: 'All in on growth. Long horizon, strong finances, steady nerves.' }[pr.key] || '';
+    var pl = label(pr.key).toLowerCase();
 
     // 1. The reveal
-    out.push('<div class="sp-reveal"><p class="sp-reveal-eyebrow">Your investment policy</p><h3>You are a ' + esc(pr.key) + ' investor.</h3><p>' + line + ' Your ' + esc(pr.limiter) + ' to take risk sets the pace' + (pr.capped ? ', capped at moderate because this portfolio pays your bills' : '') + '.</p>' +
+    out.push('<div class="sp-reveal"><p class="sp-reveal-eyebrow">Your investment policy</p><h3>You are a ' + esc(pl) + ' investor.</h3><p>' + line + ' Your ' + esc(pr.limiter) + ' to take risk sets the pace' + (pr.capped ? ', capped at ' + esc(label(DATA.cfg.risk_profile.income_cap || 'balanced').toLowerCase()) + ' because this portfolio pays your bills' : '') + '.</p>' +
       '<div class="sp-meters">' + meter('Ability to take risk', pr.ability) + meter('Willingness to take risk', pr.willingness) + '</div></div>');
 
     if (plan.empty) {
@@ -265,20 +268,24 @@
     }
 
     // 2. At a glance
-    var counts = { keep: 0, review: 0, replace: 0, reduce: 0 }; plan.funds.forEach(function (f) { counts[f.verdict] = (counts[f.verdict] || 0) + 1; });
+    var counts = { keep: 0, review: 0, replace: 0, reduce: 0, unscored: 0 }; plan.funds.forEach(function (f) { counts[f.verdict] = (counts[f.verdict] || 0) + 1; });
     var eqT = plan.mix.target.equity || 0, eqC = plan.mix.current.equity || 0, band = ips.band;
     var eqState = eqC > eqT + band ? 'above the policy band' : eqC < eqT - band ? 'below the policy band' : 'inside the policy band';
     var allSteps = plan.stages.now.concat(plan.stages.after, plan.stages.next), totalCost = allSteps.reduce(function (s, x) { return s + x.cost; }, 0);
     out.push('<div class="sp-glance">' +
       '<div class="sp-tile"><span class="sp-tile-label">Equity today</span><span class="sp-tile-num">' + pct(eqC) + '</span><span class="sp-tile-sub">Policy says ' + pct(eqT) + ', so ' + eqState + '.</span></div>' +
-      '<div class="sp-tile"><span class="sp-tile-label">Your funds</span><span class="sp-tile-num">' + counts.keep + ' to keep</span><span class="sp-tile-sub">' + [counts.review ? counts.review + ' to review' : '', counts.replace ? counts.replace + ' to replace' : '', counts.reduce ? counts.reduce + ' to reduce' : ''].filter(Boolean).join(', ') + (counts.review + counts.replace + counts.reduce ? '.' : 'Nothing to change.') + '</span></div>' +
+      '<div class="sp-tile"><span class="sp-tile-label">Your funds</span><span class="sp-tile-num">' + counts.keep + ' to keep</span><span class="sp-tile-sub">' + [counts.review ? counts.review + ' to review' : '', counts.replace ? counts.replace + ' to replace' : '', counts.reduce ? counts.reduce + ' to reduce' : ''].filter(Boolean).join(', ') + (counts.review + counts.replace + counts.reduce ? '.' : 'Nothing to change.') + (counts.unscored ? ' ' + counts.unscored + ' not judged.' : '') + '</span></div>' +
       (plan.sip && plan.sip.rows.length ? '<div class="sp-tile"><span class="sp-tile-label">Each month</span><span class="sp-tile-num">' + inr(plan.sip.surplus) + '</span><span class="sp-tile-sub">Into ' + plan.sip.rows.length + (plan.sip.rows.length === 1 ? ' sleeve that is' : ' sleeves that are') + ' short of target.</span></div>'
         : '<div class="sp-tile"><span class="sp-tile-label">Cost of the moves</span><span class="sp-tile-num">' + inr(totalCost) + '</span><span class="sp-tile-sub">' + (allSteps.length ? 'Exit load and tax across ' + allSteps.length + (allSteps.length === 1 ? ' step.' : ' steps.') : 'No switches needed.') + '</span></div>') + '</div>');
     if (plan.stale) out.push(flagHtml('<strong>This statement is more than 30 days old.</strong> Funds bought or sold since then are not in this plan.'));
-    out.push(ips.flags.map(function (f) { return flagHtml(esc(f.text)); }).join(''));
-    out.push(nextMoves(plan));
+    out.push(ips.flags.slice(0, 2).map(function (f) { return flagHtml(esc(f.text)); }).join(''));
+    var moves = nextMoves(plan, ips.flags.slice(2)), firstMoves = moves.slice(0, 5), moreMoves = moves.slice(5);
+    out.push(movesHtml(firstMoves, 'Your next moves'));
+    out.push('<div class="sp-cta"><a class="sp-next sp-book" href="#soLead">Book a review with SELEQT</a><span class="sp-why">A thirty-minute look at this plan with an adviser' + (plan.unjudged && plan.unjudged.length ? ', including the holdings the rules could not judge' : '') + '.</span></div>');
+    if (plan.unjudged && plan.unjudged.length) out.push(unjudgedHtml(plan));
     out.push('<div class="sp-more-all"><button type="button" class="sp-next sp-next-ghost" id="spDetails">Show the full policy and workings</button><span class="sp-why">The written policy, every fund with its reasons, the switch costs and dates, and how it was all worked out.</span></div>');
     out.push('<div id="spDetailsBody" hidden>');
+    if (moreMoves.length) out.push(movesHtml(moreMoves, 'More moves'));
     var skipped = Object.keys(answers._skipped || {});
     if (skipped.length) out.push('<p class="sp-why" style="margin:10px 0 0">Skipped and assumed: ' + esc(skipped.map(function (k) { return Qx[k] ? Qx[k].q.toLowerCase() : k; }).join('; ')) + '.</p>');
 
@@ -288,29 +295,29 @@
     var prefs = []; Object.keys(ips.exclude || {}).forEach(function (k) { if (ips.exclude[k]) prefs.push(Qx.exclude.a[+k].toLowerCase()); }); if (ips.maxFunds) prefs.push('at most ' + ips.maxFunds + ' funds in all');
     var goalsRows = ips.goals.map(function (g) {
       return '<tr><td>' + esc(g.label) + (g.priority === 0 ? '<span class="sp-tag">Must</span>' : g.priority === 2 ? '<span class="sp-tag">Flexible</span>' : '') + '</td><td>' + g.year + '</td><td>' + inr(g.target) + '</td><td>' + pct(g.share) + '</td>' +
-        '<td>' + (g.mixKey === 'cash' ? 'Cash and debt only' : cap(g.mixKey)) + (g.capped ? '<span class="sp-why">capped by its horizon</span>' : '') + '</td><td>' + (g.sip > 0.5 ? inr(g.sip) : 'On track') + '</td></tr>';
+        '<td>' + (g.mixKey === 'cash' ? 'Cash and debt only' : label(g.mixKey)) + (g.capped ? '<span class="sp-why">capped by its horizon</span>' : '') + '</td><td>' + (g.sip > 0.5 ? inr(g.sip) : 'On track') + '</td></tr>';
     });
     var policyBody = '<p class="sp-h">Objectives</p><ul class="sp-list">' +
       '<li><strong>Return.</strong> ' + (ips.expected.need != null ? 'You need about ' + Math.round(ips.expected.need * 100) + '% a year above inflation. ' : '') + 'This mix can be expected to earn about ' + (ips.expected.nominal * 100).toFixed(1) + '% a year over a full cycle, ' + (ips.expected.real * 100).toFixed(1) + '% above ' + (A.inflation * 100).toFixed(1) + '% inflation. A planning figure, not a promise.</li>' +
-      '<li><strong>Risk.</strong> A ' + esc(pr.key) + ' mix' + (worst != null ? ' should be expected to fall about ' + worst + '% in a bad year' : '') + '. You said you could sit through ' + esc((Qx.drawdown.a[+answers.drawdown] || 'a fall').toLowerCase()) + '.</li>' +
+      '<li><strong>Risk.</strong> A ' + esc(pl) + ' mix' + (worst != null ? ' should be expected to fall about ' + worst + '% in a bad year' : '') + '. You said you could sit through ' + esc((Qx.drawdown.a[+answers.drawdown] || 'a fall').toLowerCase()) + '.</li>' +
       '<li><strong>Income.</strong> ' + incomeTxt + '</li></ul>' +
       '<p class="sp-h">Goals</p>' + (ips.assumed ? '<p class="sp-text">' + (ips.assumedKind === 'preserve' ? 'You asked to keep the money safe, so the policy uses the conservative mix whatever your profile, over a five-year view.' : 'You asked for growth without a specific goal, so the policy plans for general wealth over ten years at your profile\'s mix.') + '</p>' : '') +
       table(['Goal', 'By', 'Needs then', 'Share of portfolio', 'Mix', 'Monthly to stay on track'], goalsRows) +
       '<p class="sp-why">"Needs then" adds ' + (A.inflation * 100).toFixed(1) + '% inflation a year. Each goal\'s share of the portfolio is grown at its mix\'s expected return; the monthly figure closes any gap.' + (ips.sip.surplus > 0 ? ' Together the goals need about ' + inr(ips.sip.needed) + ' a month against the ' + inr(ips.sip.surplus) + ' you can invest.' : '') + '</p>' +
       '<p class="sp-h">Constraints</p><ul class="sp-list">' +
-      '<li><strong>Liquidity.</strong> ' + (ips.reserve > 0 ? inr(ips.reserve) + ' to complete a ' + cfg.ips.liquidity.reserve_months + '-month cash reserve' : 'Your cash reserve is in place') + (ips.withdrawals > 0 ? ', plus ' + inr(ips.withdrawals) + ' you plan to take out within a year' : '') + (ips.liquidFloor > 0 ? '. So ' + pct(ips.liquidFloor) + ' of the portfolio stays in liquid funds, outside the risk mix.' : '.') + '</li>' +
+      '<li><strong>Liquidity.</strong> ' + (ips.reserve > 0 ? inr(ips.reserve) + ' to complete a ' + ips.reserveMonths + '-month cash reserve' : 'Your cash reserve is in place') + (ips.withdrawals > 0 ? ', plus ' + inr(ips.withdrawals) + ' you plan to take out within a year' : '') + (ips.liquidFloor > 0 ? '. So ' + pct(ips.liquidFloor) + ' of the portfolio stays in liquid funds, outside the risk mix.' : '.') + '</li>' +
       '<li><strong>Tax.</strong> ' + pct(pr.slab) + ' slab, ' + (+answers.regime === 1 ? 'old' : 'new') + ' regime. ' + inr(Math.max(0, cfg.tax.ltcg_exemption - pr.booked)) + ' of this year\'s tax-free equity allowance is still available to the plan.</li>' +
       '<li><strong>Legal.</strong> ' + (+answers.residency === 1 ? 'Non-resident Indian: fund eligibility and TDS on redemptions apply.' : 'Resident Indian.') + '</li>' +
       '<li><strong>Preferences.</strong> ' + (prefs.length ? cap(prefs.join('; ')) + '.' : 'None stated.') + '</li></ul>' +
       '<p class="sp-h">Rules</p><ul class="sp-list">' +
       '<li>Hold each sleeve within ' + pct(band) + ' of its target. Fix drift with new money first, then with sales, the cheapest in tax first.</li>' +
-      '<li>Direct plans, growth option. At most ' + plan.maxEq + ' equity funds, one per category, two per fund house. Index funds wherever no active fund shows a durable edge.</li>' +
-      '<li>Sector and theme funds only as a satellite, within ' + pct(cfg.satellite.thematic_max_share_of_equity) + ' of equity, and only for growth and aggressive policies.</li>' +
+      '<li>Growth option. At most ' + plan.maxEq + ' equity funds, one per category, two per fund house. Index funds wherever no active fund shows a durable edge. A fund in the top ' + Math.round(100 * (1 - (cfg.verdict.keep_from_rank == null ? 0.5 : cfg.verdict.keep_from_rank))) + '% of its category is kept; below that it is replaced.</li>' +
+      '<li>Sector and theme funds only as a satellite, within ' + pct(cfg.satellite.thematic_max_share_of_equity) + ' of equity, and only from ' + esc(label(cfg.satellite.allow_for[0])) + ' upward.</li>' +
       '<li>Review ' + esc(ips.review) + ', and on a life event: a new goal, a job change, a windfall, a health event.</li></ul>' +
       ((plan.hygiene || []).length ? '<p class="sp-h">Housekeeping from your statement</p><ul class="sp-list">' + plan.hygiene.map(function (h) { return '<li>' + esc(h.text) + (h.names.length ? ' <span class="sp-why">' + esc(h.names.join(', ')) + '</span>' : '') + '</li>'; }).join('') + '</ul>' : '') +
       (plan.notes.indexOf('history') >= 0 ? '<p class="sp-why">Part of your history is missing: this statement starts part way through, so units held at its start count as bought on or before ' + nice(L.parsed.period && L.parsed.period.from) + '. A statement from your first investment gives exact dates.</p>' : '') +
       (plan.notes.indexOf('no_lots') >= 0 ? '<p class="sp-why">Depository statements carry no purchase dates, so switch costs and tax timing below are estimates. A Detailed CAMS statement gives exact figures.</p>' : '');
-    out.push(acc('policy', 'Your written policy', cap(pr.key) + ' mix, ' + ips.goals.length + (ips.goals.length === 1 ? ' goal' : ' goals') + (ips.liquidFloor > 0 ? ', ' + pct(ips.liquidFloor) + ' kept liquid' : '') + '. Objectives, constraints and rules.', policyBody, false));
+    out.push(acc('policy', 'Your written policy', label(pr.key) + ' mix, ' + ips.goals.length + (ips.goals.length === 1 ? ' goal' : ' goals') + (ips.liquidFloor > 0 ? ', ' + pct(ips.liquidFloor) + ' kept liquid' : '') + '. Objectives, constraints and rules.', policyBody, false));
 
     // 4. Allocation
     var mixRow = function (k, label) {
@@ -324,7 +331,7 @@
       '<p class="sp-text" style="margin-top:12px">Your mutual funds total <strong>' + inr(plan.total) + '</strong> at today\'s NAVs (' + inr(plan.statementTotal) + ' in the statement). Within equity the policy splits ' + splitTxt + '; within debt ' + pct(ips.debtSplit.liquid) + ' liquid and ' + pct(ips.debtSplit.core) + ' short duration or corporate bond. Shares, bonds and gold come in a later version.</p>', false));
 
     // 5. Funds
-    var fundsBody = plan.funds.map(function (f) {
+    var fundsBody = plan.funds.filter(function (f) { return f.verdict !== 'unscored'; }).map(function (f) {
       var rest = f.reasons.slice(1).concat(['Compared against: ' + f.compared]);
       if (f.direct && f.verdict !== 'replace' && f.verdict !== 'reduce') rest.push('A regular plan. The plan moves it to the direct plan of the same fund, which pays no distributor commission.');
       if (f.exitLoadSource === 'estimate') rest.push('Exit load is an estimate for its category; the statement does not state it.');
@@ -344,7 +351,7 @@
         var months = a.monthly ? '<p class="sp-why">At ' + inr(a.monthly) + ' a month this gap closes in about ' + Math.ceil(a.gap / a.monthly) + ' months, sooner with sale proceeds.</p>' : '';
         if (a.topUp) return '<article class="sp-fund">' + head + '<p class="sp-fund-why">' + esc(a.reason) + ' Add to <strong>' + esc(a.topUp) + '</strong>.</p>' + months + '</article>';
         if (a.skipped || !a.pick) return '<article class="sp-fund">' + head + '<p class="sp-fund-why">' + esc(a.skipped || 'No eligible fund passed the screen.') + '</p>' + months + '</article>';
-        var opt = function (p, tag) { return '<li><strong>' + esc(p.n) + '</strong> (direct, growth)<span class="sp-tag">' + tag + '</span><span class="sp-why">' + esc(p.why) + ' Compared against: ' + esc(p.compared) + '.</span></li>'; };
+        var opt = function (p, tag) { return '<li><strong>' + esc(p.n) + '</strong><span class="sp-tag">' + tag + '</span><span class="sp-why">' + esc(p.why) + ' Compared against: ' + esc(p.compared) + '.</span></li>'; };
         return '<article class="sp-fund">' + head + '<p class="sp-fund-why">Pick: <strong>' + esc(a.pick.n) + '</strong>.</p><details class="sp-more"><summary>Why this one, and the alternatives</summary><ul>' + opt(a.pick, 'Pick') + a.alts.map(function (p) { return opt(p, p.index ? 'Index alternative' : 'Alternative'); }).join('') +
           (a.skippedWhy && a.skippedWhy.length ? '<li>Passed over: ' + esc(a.skippedWhy.slice(0, 3).join('; ')) + '.</li>' : '') + '</ul></details>' + months + '</article>';
       }).join('') : '<p class="sp-none">No sleeve is short of its target by more than ' + pct(cfg.additions.gap_threshold) + ' of the portfolio.</p>');
@@ -366,6 +373,7 @@
 
     out.push(method(plan, cfg) + '</div>');
     $('spBody').innerHTML = out.join('');
+    [].forEach.call(document.querySelectorAll('.sp-book'), function (a) { a.addEventListener('click', function (e) { e.preventDefault(); $('soLead').scrollIntoView({ block: 'start', behavior: 'smooth' }); }); });
     $('spDetails').addEventListener('click', function () {
       var b = $('spDetailsBody'); b.hidden = !b.hidden;
       this.textContent = b.hidden ? 'Show the full policy and workings' : 'Hide the workings';
@@ -374,13 +382,11 @@
     $('spWrap').scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
 
-  // The short list a person acts on: at most six moves, in the order that matters.
-  function nextMoves(plan) {
-    var m = [], ips = plan.ips;
-    ips.flags.forEach(function (f) {
-      if (f.k === 'insurance') m.push({ icon: 'alert', t: 'Put insurance in place before adding to this portfolio.', w: 'Term life and health cover is what stops a bad year from forcing a sale.' });
-      if (f.k === 'reserve') m.push({ icon: 'alert', t: 'Build the cash reserve: ' + inr(ips.reserve) + ' in a liquid fund.', w: 'Six months of expenses, before any risk is taken.' });
-    });
+  // The list a person acts on: warnings beyond the two shown as cards, then sales, then
+  // additions, rebalancing, housekeeping, holds and reviews. The first five show at once.
+  function nextMoves(plan, extraFlags) {
+    var m = [];
+    (extraFlags || []).forEach(function (f) { var parts = f.text.split('. '); m.push({ icon: 'alert', t: parts[0] + (/[.!?]$/.test(parts[0]) ? '' : '.'), w: parts.slice(1).join('. ') }); });
     plan.funds.forEach(function (f) {
       if (f.hold) return;
       if (f.verdict === 'replace') m.push({ icon: 'swap', t: 'Replace ' + f.name + (f.replaceWith ? ' with ' + f.replaceWith.name + (f.replaceWith.held ? ', which you already hold' : '') : '') + '.', w: f.reasons[0] });
@@ -395,15 +401,27 @@
       m.push({ icon: 'minus', t: cap(r.sleeve) + ' is ' + pct(r.by) + ' over its band: send new money elsewhere' + (r.remaining > 0 && r.trim ? ', and trim ' + r.trim + ' by about ' + inr(r.remaining) : '') + '.', w: r.proceeds > 0 ? 'The sales above already free up ' + inr(r.proceeds) + '.' : 'No forced selling; drift closes with new money first.' });
     });
     (plan.hygiene || []).forEach(function (h) { m.push({ icon: 'alert', t: h.text.split('. ')[0] + '.', w: h.text.split('. ').slice(1).join('. ') + (h.names.length ? ' (' + h.names.slice(0, 3).join(', ') + (h.names.length > 3 ? ', ...' : '') + ')' : '') }); });
+    plan.funds.forEach(function (f) { if (f.flag === 'credit' && f.verdict === 'keep') m.push({ icon: 'eye', t: 'Keep an eye on ' + f.name + ': a credit risk fund.', w: 'Scored like any debt fund, but a credit event can hurt in ways past returns do not show.' }); });
     var holds = plan.funds.filter(function (f) { return f.hold; });
     if (holds.length) m.push({ icon: 'eye', t: 'Leave ' + holds.map(function (f) { return f.name; }).join(', ') + ' alone for now.', w: 'Switching would cost more in exit load and tax than it gains over three years.' });
     var reviews = plan.funds.filter(function (f) { return f.verdict === 'review'; });
-    if (reviews.length) m.push({ icon: 'eye', t: reviews.length + (reviews.length === 1 ? ' fund needs' : ' funds need') + ' a human look: ' + reviews.map(function (f) { return f.name; }).join(', ') + '.', w: 'Too new, borderline, or outside what the rules can judge.' });
+    if (reviews.length) m.push({ icon: 'eye', t: reviews.length + (reviews.length === 1 ? ' fund needs' : ' funds need') + ' a human look: ' + reviews.map(function (f) { return f.name; }).join(', ') + '.', w: 'Too new, or borderline. Book a review and we go through them with you.' });
     if (!m.length) m.push({ icon: 'check', t: 'Nothing to change. Keep investing to the policy.', w: 'Every fund earns its place and the mix is inside its bands.' });
-    m = m.slice(0, 8);
-    return '<div class="sp-moves"><p class="sp-h" style="margin-top:18px">Your next moves</p><ol class="sp-movelist">' + m.map(function (x) {
+    return m;
+  }
+  function movesHtml(list, title) {
+    if (!list.length) return '';
+    return '<div class="sp-moves"><p class="sp-h" style="margin-top:18px">' + esc(title) + '</p><ol class="sp-movelist">' + list.map(function (x) {
       return '<li><span class="sp-move-icon sp-mi-' + x.icon + '">' + ICON[x.icon] + '</span><span><strong>' + esc(x.t) + '</strong><span class="sp-why">' + esc(x.w || '') + '</span></span></li>';
     }).join('') + '</ol></div>';
+  }
+  // Holdings the rules cannot judge: unscored funds, shares, bonds, gold bonds. Counted, not advised on.
+  function unjudgedHtml(plan) {
+    var total = plan.unjudged.reduce(function (s, u) { return s + (u.value || 0); }, 0);
+    return '<div class="sp-unjudged"><p class="sp-h">Not judged by the rules</p><p class="sp-text">' + inr(total) + ' across ' + plan.unjudged.length + (plan.unjudged.length === 1 ? ' holding' : ' holdings') +
+      ' is counted in your totals but not advised on here: the rules only judge mutual funds they can score.</p><ul class="sp-list">' +
+      plan.unjudged.map(function (u) { return '<li><strong>' + esc(u.name) + '</strong> ' + inr(u.value) + ', ' + esc(u.why) + '</li>'; }).join('') +
+      '</ul><p class="sp-text" style="margin-top:10px">For a review that includes these, <a class="sp-book" href="#soLead">book a meeting</a>.</p></div>';
   }
 
   function method(plan, cfg) {
@@ -414,12 +432,12 @@
       '<li><strong>The thresholds and weights are starting values awaiting sign-off by the SELEQT investment team.</strong> They live in one configuration file (version ' + esc(cfg.version) + ').</li>' +
       '<li>The policy scores ability to take risk (age, dependants, income, cash reserve, EMIs, insurance, this portfolio\'s share of your wealth) and willingness (your answers on falls, drawdowns, experience, trade-offs and past behaviour) separately, each out of 24, and takes the lower. Each goal is capped by its horizon: under 3 years cash and debt only, under 5 at most conservative, under 7 at most moderate, under 10 at most growth. The target mix is the goal-weighted blend, then lifted to hold your cash reserve and planned withdrawals in liquid funds.</li>' +
       '<li>Planning assumptions, not forecasts: equity ' + (A.equity * 100).toFixed(1) + '%, hybrid ' + (A.hybrid * 100).toFixed(1) + '%, debt ' + (A.debt * 100).toFixed(1) + '% a year over a full cycle, inflation ' + (A.inflation * 100).toFixed(1) + '%.</li>' +
-      '<li>Rules, not AI. Each fund is scored 0 to 100 within its SEBI category from three-year periods stepped monthly over seven years: consistency in beating its benchmark (35%), the median margin (20%), downside capture (15%), expense ratio (15%) and fund size (15%). Index funds are judged only on cost and tracking.</li>' +
+      '<li>Rules, not AI. Each fund is scored 0 to 100 within its SEBI category from three-year periods stepped monthly over seven years: consistency in beating its benchmark (35%), the median margin (20%), downside capture (15%), expense ratio (15%) and fund size (15%). Index funds are judged only on cost and tracking. A fund scoring in the top ' + Math.round(100 * (1 - (cfg.verdict.keep_from_rank == null ? 0.5 : cfg.verdict.keep_from_rank))) + '% of its category is kept; below that line it is replaced. Regular plans are not moved to direct plans.</li>' +
       '<li>Benchmarks: licensed index data is not used yet. Where an index fund on the right index has enough history, it stands in for the index (index_fund_proxy). Otherwise, and for every debt and hybrid fund, the fund is compared with the median of its direct-plan peers (category_peers), which is a peer comparison, not a benchmark comparison.</li>' +
       (per ? '<li>Benchmark source per fund:<ul>' + per + '</ul></li>' : '') +
       (gaps ? '<li>Funds in this plan compared with peers, by the benchmark that would replace the peer comparison:<ul>' + gaps + '</ul></li>' : '') +
       '<li>Data: AMFI NAV history and scheme master, AMFI expense ratios and average AUM, and each fund\'s published portfolio for overlap (top holdings only, so overlap is understated). Built ' + esc(DATA.scores.built) + ', NAVs to ' + esc(DATA.scores.asof) + '.</li>' +
-      '<li>Additions are direct plans, growth option, at least five years old and ' + cfg.additions.min_aum_cr.toLocaleString('en-IN') + ' crore in size, the best score in their category, skipping fund houses you already hold twice and funds overlapping more than ' + pct(cfg.additions.max_overlap_with_holdings) + ' with your equity funds. Your monthly surplus is split across the sleeves that are short, in proportion to the gap.</li>' +
+      '<li>Additions are growth-option funds, at least five years old and ' + cfg.additions.min_aum_cr.toLocaleString('en-IN') + ' crore in size, the best score in their category, skipping fund houses you already hold twice and funds overlapping more than ' + pct(cfg.additions.max_overlap_with_holdings) + ' with your equity funds. Your monthly surplus is split across the sleeves that are short, in proportion to the gap.</li>' +
       '<li>A switch is skipped when its cost is more than a conservative three-year estimate of what it gains, counting only half of the historical edge.</li>' +
       '</ul></details>';
   }

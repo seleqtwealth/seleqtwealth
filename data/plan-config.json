@@ -1,26 +1,43 @@
 {
   "_about": "SELEQT action plan rules (Phase 1, mutual funds). One file, read by the weekly scoring script and by the page. Every number is a STARTING VALUE awaiting sign-off by the SELEQT investment team. Change values here, never in code. Each section's _why explains it.",
-  "version": "2026-10-draft-2",
+  "version": "2026-10-draft-3",
   "risk_profile": {
-    "_why": "Investment policy intake. Ability to take risk (age, dependants, income stability, cash reserve, EMIs, insurance, this portfolio's share of wealth) and willingness (reaction to a fall, drawdown tolerance, experience, return trade-off, past behaviour) are scored separately, each scaled to 24 points and placed in these bands; the lower of the two is the profile. A portfolio that is the investor's main income is capped at moderate.",
+    "_why": "Investment policy intake. Ability to take risk and willingness to take risk are scored separately, each scaled to 24 points, and placed in six equal bands; the lower of the two is the profile. A portfolio that is the investor's main income is capped at the income_cap profile. Reviewed with Aditya on 31 Oct 2026.",
     "bands": [
       {
         "profile": "conservative",
+        "max_points": 4
+      },
+      {
+        "profile": "cautious",
         "max_points": 8
       },
       {
-        "profile": "moderate",
-        "max_points": 14
+        "profile": "balanced",
+        "max_points": 12
       },
       {
         "profile": "growth",
-        "max_points": 19
+        "max_points": 16
+      },
+      {
+        "profile": "high_growth",
+        "max_points": 20
       },
       {
         "profile": "aggressive",
         "max_points": 24
       }
-    ]
+    ],
+    "labels": {
+      "conservative": "Conservative",
+      "cautious": "Cautious",
+      "balanced": "Balanced",
+      "growth": "Growth",
+      "high_growth": "High growth",
+      "aggressive": "Aggressive"
+    },
+    "income_cap": "balanced"
   },
   "ips": {
     "_why": "Everything the written policy needs beyond the profile bands: horizon caps per goal, long-run return assumptions, the liquidity reserve, rebalancing bands and the review cadence.",
@@ -31,11 +48,11 @@
       },
       {
         "under_years": 5,
-        "profile": "conservative"
+        "profile": "cautious"
       },
       {
         "under_years": 7,
-        "profile": "moderate"
+        "profile": "balanced"
       },
       {
         "under_years": 10,
@@ -50,34 +67,52 @@
       "debt": 0.065,
       "inflation": 0.055,
       "worst_year": {
-        "conservative": -0.08,
-        "moderate": -0.15,
-        "growth": -0.25,
+        "conservative": -0.05,
+        "cautious": -0.1,
+        "balanced": -0.15,
+        "growth": -0.22,
+        "high_growth": -0.28,
         "aggressive": -0.35
       }
     },
     "liquidity": {
-      "_why": "Months of household expenses to hold in liquid funds before any risk is taken; what is already held outside the portfolio counts.",
-      "reserve_months": 6
+      "_why": "Months of household expenses to hold in liquid funds before any risk is taken, by the income answer (stable salaried, variable, uncertain, retired or none); what is already held outside the portfolio counts.",
+      "reserve_months": 6,
+      "reserve_months_by_income": [
+        6,
+        9,
+        9,
+        12
+      ]
     },
     "rebalance_band": 0.05,
     "review": "every quarter"
   },
   "target_mix": {
-    "_why": "Share of the mutual fund portfolio in each sleeve, by profile.",
+    "_why": "Share of the mutual fund portfolio in each sleeve, by profile. Equity 20, 35, 50, 65, 75, 85; hybrid fades from 20 to 5; debt never below 10.",
     "conservative": {
-      "equity": 0.3,
+      "equity": 0.2,
       "hybrid": 0.2,
-      "debt": 0.5
+      "debt": 0.6
     },
-    "moderate": {
-      "equity": 0.5,
+    "cautious": {
+      "equity": 0.35,
       "hybrid": 0.2,
-      "debt": 0.3
+      "debt": 0.45
+    },
+    "balanced": {
+      "equity": 0.5,
+      "hybrid": 0.15,
+      "debt": 0.35
     },
     "growth": {
-      "equity": 0.7,
+      "equity": 0.65,
       "hybrid": 0.1,
+      "debt": 0.25
+    },
+    "high_growth": {
+      "equity": 0.75,
+      "hybrid": 0.05,
       "debt": 0.2
     },
     "aggressive": {
@@ -87,14 +122,20 @@
     }
   },
   "equity_split": {
-    "_why": "Split within the equity sleeve. Flexi includes multi cap, focused, value, contra, dividend yield and ELSS. Large and mid cap funds count half large, half mid.",
+    "_why": "Split within the equity sleeve. Flexi includes multi cap, focused, value, contra, dividend yield and ELSS. Large and mid cap funds count half large, half mid. Small cap only from Balanced upward.",
     "conservative": {
       "large": 0.7,
       "flexi": 0.3,
       "mid": 0.0,
       "small": 0.0
     },
-    "moderate": {
+    "cautious": {
+      "large": 0.6,
+      "flexi": 0.3,
+      "mid": 0.1,
+      "small": 0.0
+    },
+    "balanced": {
       "large": 0.5,
       "flexi": 0.3,
       "mid": 0.15,
@@ -105,6 +146,12 @@
       "flexi": 0.3,
       "mid": 0.2,
       "small": 0.1
+    },
+    "high_growth": {
+      "large": 0.35,
+      "flexi": 0.3,
+      "mid": 0.23,
+      "small": 0.12
     },
     "aggressive": {
       "large": 0.3,
@@ -137,7 +184,7 @@
   },
   "ceilings": {
     "_why": "Simplicity limits. More funds in one category rarely add anything but cost.",
-    "max_equity_funds": 6,
+    "max_equity_funds": 8,
     "max_per_category": 1,
     "max_per_amc": 2
   },
@@ -228,12 +275,15 @@
     }
   },
   "verdict": {
-    "_why": "Applied in this order: too new, category outside the target mix, weak consistency, a better fund held in the same category or overlapping heavily, borderline consistency, then keep if at or above the category median. Switching a regular plan to direct is a separate instruction added on top.",
+    "_why": "Applied in this order: unscored (own section), too new, category outside the target mix or a theme fund beyond the satellite, weak consistency, a better fund held in the same category or overlapping heavily, borderline consistency, then keep if the score is at or above the category's keep line (keep_from_rank: the fraction of the category below the line), else replace. Credit risk funds are scored like any debt fund and flagged.",
     "replace_consistency_below": 0.4,
     "review_consistency_below": 0.55,
     "overlap_replace_above": 0.6,
     "review_history_below_months": 36,
-    "credit_risk_review": true
+    "credit_risk_review": false,
+    "credit_risk_flag": true,
+    "keep_from_rank": 0.4,
+    "below_keep_line": "replace"
   },
   "additions": {
     "_why": "Fill a sleeve when it is short of target by more than this share of the portfolio. Candidates are direct growth funds, five years old, at least 1,000 crore, best score in the category.",
@@ -291,16 +341,18 @@
     }
   },
   "switching": {
-    "_why": "Do not sell an equity lot held under a year unless the fund is clearly broken. Skip a switch whose cost is more than a conservative three-year estimate of what it gains; the estimate takes only half of the historical edge.",
+    "_why": "Do not sell an equity lot held under a year unless the fund is clearly broken. Skip a switch whose cost is more than a conservative three-year estimate of what it gains; the estimate takes only half of the historical edge. suggest_direct false: regular plans are left alone (decided 31 Oct 2026); additions name the fund without a plan.",
     "sell_young_lot_if_consistency_below": 0.25,
     "benefit_years": 3,
-    "benefit_haircut": 0.5
+    "benefit_haircut": 0.5,
+    "suggest_direct": false
   },
   "satellite": {
-    "_why": "Sector and theme funds are concentrated bets. Growth and aggressive profiles may hold them as a satellite up to this share of their equity, provided the fund scores at or above its category median and the investor has not asked to avoid them; otherwise they are reduced.",
+    "_why": "Sector and theme funds are concentrated bets. Growth, High growth and Aggressive profiles may hold them as a satellite up to this share of their equity, provided the fund scores at or above its category's keep line and the investor has not asked to avoid them; otherwise they are reduced.",
     "thematic_max_share_of_equity": 0.1,
     "allow_for": [
       "growth",
+      "high_growth",
       "aggressive"
     ]
   }

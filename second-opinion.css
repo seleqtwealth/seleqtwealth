@@ -613,6 +613,12 @@
 .sp-move-icon { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; }
 .sp-move-icon svg { width: 18px; height: 18px; }
 .sp-mi-check { background: #e7f3ec; color: #1f5d3a; } .sp-mi-swap { background: #e9eef6; color: #1f3a5f; } .sp-mi-minus { background: #f8e9e6; color: #8f3a30; } .sp-mi-eye { background: var(--gold-faint); color: var(--gold-deep); } .sp-mi-alert { background: #f8e9e6; color: #8f3a30; }
+.sp-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 4px 0 16px; }
+.sp-cta .sp-why { flex: 1 1 240px; margin: 0; }
+a.sp-next { text-decoration: none; display: inline-block; }
+.sp-unjudged { margin: 0 0 18px; padding: 18px 20px; border: 1px dashed var(--ink-line-strong); border-radius: 16px; background: var(--paper); }
+.sp-unjudged .sp-h { margin-top: 0; }
+.sp-unjudged a { color: var(--gold-deep); font-weight: 500; }
 .sp-more-all { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 6px 0 10px; }
 .sp-more-all .sp-why { flex: 1 1 260px; margin: 0; }
 .sp-next-ghost { background: var(--paper); color: var(--ink-strong); border: 1.5px solid var(--ink-strong); }
