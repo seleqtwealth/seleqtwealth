@@ -53,7 +53,7 @@
 
   // ── Sky lanterns drifting up, and embers trailing the cursor ──────────
   function startSky() {
-    if (reduce || sky) return;
+    if (reduce || sky || document.body.hasAttribute('data-dw-page')) return;
     const c = document.createElement('canvas');
     c.id = 'dw-sky';
     c.setAttribute('aria-hidden', 'true');
@@ -175,18 +175,21 @@
     };
   }
 
-  // ── The switch ────────────────────────────────────────────────────────
-  const btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'dw-toggle';
-  btn.innerHTML =
-    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-      '<path class="dw-flame" d="M12 3.5c2.1 2.9 3.1 5 3.1 6.8a3.1 3.1 0 0 1-6.2 0c0-1.8 1-3.9 3.1-6.8z" fill="#f2c25c"/>' +
-      '<path d="M2.8 14.6h18.4c0 3.3-4.1 5.9-9.2 5.9s-9.2-2.6-9.2-5.9z" fill="#b8924e"/>' +
-      '<path d="M7 14.6c1.4-1.1 3.1-1.6 5-1.6s3.6.5 5 1.6" fill="none" stroke="#d4b06a" stroke-width=".9"/>' +
-    '</svg>' +
-    '<span>Shubh Deepavali</span><span class="dw-toggle-state"></span>';
-  const state = btn.querySelector('.dw-toggle-state');
+  // ── The switch: "Shubh Deepavali" opens the festive page, the state toggles ──
+  const pill = document.createElement('div');
+  pill.className = 'dw-toggle';
+  pill.innerHTML =
+    '<a class="dw-toggle-link" href="/diwali">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        '<path class="dw-flame" d="M12 3.5c2.1 2.9 3.1 5 3.1 6.8a3.1 3.1 0 0 1-6.2 0c0-1.8 1-3.9 3.1-6.8z" fill="#f2c25c"/>' +
+        '<path d="M2.8 14.6h18.4c0 3.3-4.1 5.9-9.2 5.9s-9.2-2.6-9.2-5.9z" fill="#b8924e"/>' +
+        '<path d="M7 14.6c1.4-1.1 3.1-1.6 5-1.6s3.6.5 5 1.6" fill="none" stroke="#d4b06a" stroke-width=".9"/>' +
+      '</svg>' +
+      '<span>Shubh Deepavali</span>' +
+    '</a>' +
+    '<button type="button" class="dw-toggle-state"></button>';
+  const btn = pill.querySelector('.dw-toggle-state');
+  const state = btn;
 
   function apply(on) {
     root.classList.toggle('diwali', on);
@@ -194,6 +197,7 @@
     heroLights(on);
     if (on) startSky(); else if (sky) sky.stop();
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    pill.classList.toggle('is-off', !on);
     btn.setAttribute('aria-label', on ? 'Diwali lights are on. Switch them off' : 'Diwali lights are off. Switch them on');
     state.textContent = on ? 'Lights on' : 'Lights off';
   }
@@ -208,17 +212,32 @@
     window.seleqtTrack && window.seleqtTrack('diwali_lights', { on: on });
   });
 
+  // during the festival, a quiet way into the festive page from the homepage hero
+  function heroLink() {
+    const actions = document.querySelector('#hero .hero-actions, .hero .hero-actions');
+    if (!actions || document.querySelector('.dw-hero-link')) return;
+    const row = document.createElement('div');
+    row.className = 'dw-hero-row';
+    row.innerHTML = '<a class="dw-hero-link" href="/diwali">This Diwali: five small things to play with <span aria-hidden="true">&rarr;</span></a>';
+    actions.appendChild(row);
+  }
+
   function init() {
-    document.body.appendChild(btn);
+    if (document.body.hasAttribute('data-dw-page')) {   // the festive page dresses itself
+      torans(true);
+      return;
+    }
+    document.body.appendChild(pill);
+    heroLink();
     apply(root.classList.contains('diwali'));
     // where a hero carries a photo credit, wait until the hero is scrolled past
     // so the switch never sits on top of the credit line
     if (document.querySelector('.hero-credit')) {
-      const show = () => btn.classList.toggle('is-in', window.scrollY > window.innerHeight * 0.5);
+      const show = () => pill.classList.toggle('is-in', window.scrollY > window.innerHeight * 0.5);
       window.addEventListener('scroll', show, { passive: true });
       show();
     } else {
-      setTimeout(() => btn.classList.add('is-in'), 1200);
+      setTimeout(() => pill.classList.add('is-in'), 1200);
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -108,44 +108,81 @@ html.diwali .lg-dialog-close { background: rgba(11, 21, 38, 0.9); }
   mix-blend-mode: screen;
 }
 
-/* ── The festival switch (bottom left) ── */
+/* ── The festival switch (bottom left): greeting links to /diwali, state toggles ── */
 .dw-toggle {
   position: fixed;
   left: 22px;
   bottom: 26px;
   z-index: 997;
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 14px 9px 11px;
+  align-items: stretch;
   border: 1px solid rgba(212, 176, 106, 0.4);
   border-radius: 999px;
   background: rgba(6, 12, 24, 0.78);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  color: rgba(244, 241, 234, 0.86);
   font: 400 0.7rem/1 var(--font-body);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  cursor: pointer;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out), border-color 0.3s;
 }
 .dw-toggle.is-in { opacity: 1; transform: none; }
+.dw-toggle:hover { border-color: var(--gold-light); }
 /* out of the way while the cookie choice is on screen */
 body:has(.cookie-banner.is-visible) .dw-toggle { opacity: 0; pointer-events: none; }
-.dw-toggle:hover { border-color: var(--gold-light); }
-.dw-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.dw-toggle-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px 9px 11px;
+  color: rgba(244, 241, 234, 0.88);
+  text-decoration: none;
+  border-radius: 999px 0 0 999px;
+  transition: color 0.3s;
+}
+.dw-toggle-link:hover { color: var(--white); }
+.dw-toggle-state {
+  padding: 9px 14px 9px 12px;
+  border: 0;
+  border-left: 1px solid rgba(212, 176, 106, 0.28);
+  border-radius: 0 999px 999px 0;
+  background: none;
+  color: var(--gold-light);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.dw-toggle-state:hover { color: var(--white); }
+.dw-toggle a:focus-visible,
+.dw-toggle button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .dw-toggle svg { width: 18px; height: 18px; flex: none; }
 .dw-toggle .dw-flame { transform-origin: 12px 14px; animation: dw-flicker 2.4s ease-in-out infinite; }
-.dw-toggle[aria-pressed="false"] .dw-flame { opacity: 0; animation: none; }
-.dw-toggle-state { color: var(--gold-light); }
+.dw-toggle.is-off .dw-flame { opacity: 0; animation: none; }
 @keyframes dw-flicker {
   0%, 100% { transform: scale(1, 1); opacity: 1; }
   30% { transform: scale(0.94, 1.06) rotate(-2deg); opacity: 0.9; }
   60% { transform: scale(1.04, 0.96) rotate(2deg); opacity: 1; }
 }
+
+/* homepage hero: the way into the festive page */
+.dw-hero-row { flex-basis: 100%; text-align: center; }
+@media (max-width: 900px) { .dw-hero-row { display: none; } }   /* the switch already leads there on phones */
+.dw-hero-link {
+  display: inline-block;
+  margin-top: 26px;
+  color: var(--gold-light);
+  font: 400 0.72rem/1.4 var(--font-body);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.4);
+  padding-bottom: 4px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.dw-hero-link:hover { color: var(--white); border-color: var(--gold-light); }
 
 /* ── GIFT City hero: night falls, then the towers light up floor by floor ── */
 html.diwali .hero-photo--gift .hero-photo-base { filter: brightness(0.24) contrast(1.15) sepia(0.35) hue-rotate(185deg) saturate(1.6); }
@@ -199,7 +236,9 @@ html.diwali .hero-photo--jali .hero-photo-base { filter: brightness(0.3) contras
 }
 
 @media (max-width: 720px) {
-  .dw-toggle { left: 14px; bottom: 22px; padding: 8px 12px 8px 9px; font-size: 0.62rem; }
+  .dw-toggle { left: 14px; bottom: 22px; font-size: 0.62rem; }
+  .dw-toggle-link { padding: 8px 10px 8px 9px; }
+  .dw-toggle-state { padding: 8px 12px 8px 10px; }
   .dw-toran { height: 32px; background-size: 160px 32px; }
 }
 

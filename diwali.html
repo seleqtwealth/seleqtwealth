@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a1a35" />
+  <title>Shubh Deepavali · SELEQT</title>
+  <meta name="description" content="Five small things to play with this Diwali from SELEQT: a raga of lamps, strings of light, sparkler writing, fireworks over the Sabarmati, and Gujarat seen from space at night." />
+  <link rel="canonical" href="https://seleqtwealth.in/diwali" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SELEQT" />
+  <meta property="og:title" content="Shubh Deepavali · SELEQT" />
+  <meta property="og:description" content="Light a lamp, play the strings of light, write with a sparkler, set off fireworks over the Sabarmati, and watch Gujarat glow from space. Shubh Deepavali from SELEQT." />
+  <meta property="og:url" content="https://seleqtwealth.in/diwali" />
+  <meta property="og:image" content="https://seleqtwealth.in/og-image.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="SELEQT — Private Wealth, considered from every angle." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shubh Deepavali · SELEQT" />
+  <meta name="twitter:description" content="Light a lamp, play the strings of light, write with a sparkler, set off fireworks over the Sabarmati, and watch Gujarat glow from space. Shubh Deepavali from SELEQT." />
+  <meta name="twitter:image" content="https://seleqtwealth.in/og-image.jpg" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/diwali.css" />
+  <link rel="stylesheet" href="/diwali-experiences.css" />
+  <script>document.documentElement.classList.add('diwali', 'diwali-season');</script>
+  <link rel="preload" href="/fonts/outfit-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/cormorant-garamond-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Page-transition pre-paint: applies entering-curtain class if the user
+       just clicked through from another page on the site. Cleared by main.js. -->
+  <script>
+    (function() {
+      if (sessionStorage.getItem('seleqt_transitioning')) {
+        document.documentElement.classList.add('is-page-entering');
+        sessionStorage.removeItem('seleqt_transitioning');
+      }
+    })();
+  </script>
+</head>
+<body data-dw-page>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="logo">SELEQT</a>
+      <div class="nav-links">
+        <a href="/services">Services</a>
+        <a href="/gift-city">GIFT City</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/about">About</a>
+        <a href="/#contact" class="nav-cta">Speak With Us</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/services">Services</a>
+      <a href="/gift-city">GIFT City</a>
+      <a href="/blogs">Blogs</a>
+      <a href="/about">About</a>
+      <a href="/#contact">Speak With Us</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="sub-hero dwp-hero">
+    <div class="container sub-hero-content">
+      <p class="section-tag">Deepavali 2026</p>
+      <h1>Shubh <em>Deepavali</em></h1>
+      <p class="lead">Five small things to play with this Diwali, made with care by the SELEQT team. Turn your sound on, find a quiet moment, and light something.</p>
+      <nav class="dwp-chips" aria-label="On this page">
+        <a href="#raag">Raag of Lamps</a>
+        <a href="#strings">Strings of Light</a>
+        <a href="#sparkler">Sparkler Writing</a>
+        <a href="#fireworks">Fireworks over Sabarmati</a>
+        <a href="#night-lights">Gujarat After Dark</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- 01 RAAG OF LAMPS -->
+  <section class="dwp-xp" id="raag">
+    <div class="container">
+      <header class="dwp-head reveal">
+        <span class="dwp-num">01</span>
+        <div>
+          <h2 class="dwp-title">Raag of <em>Lamps</em></h2>
+          <p class="dwp-desc">Tap the river to set a diya afloat. Each one sings a note of Raag Yaman, the evening raga, over a soft tanpura, lower to the left and higher to the right. Leave them be, and they drift downstream and slowly fall into rhythm with one another.</p>
+        </div>
+      </header>
+      <div class="dwp-stage" data-xp="raag">
+        <canvas aria-label="Raag of Lamps: tap to place a lamp that plays a note" role="img"></canvas>
+        <p class="dwp-hint">Tap the water to float a diya</p>
+      </div>
+      <p class="dwp-credit">Diya photograph by <a href="https://unsplash.com/photos/a-small-lamp-burns-brightly-in-the-darkness-VCrr6eAH94c" target="_blank" rel="noopener">Abhishek Soni</a> and river by <a href="https://unsplash.com/photos/body-of-water-photo-wfh8dDlNFOk" target="_blank" rel="noopener">Mike Iukhtenko</a>, on Unsplash.</p>
+      <div class="dwp-controls">
+        <button type="button" class="dwp-btn" data-act="record">Save a 30-second clip</button>
+        <button type="button" class="dwp-btn" data-act="clear">Let the lamps rest</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 STRINGS OF LIGHT -->
+  <section class="dwp-xp" id="strings">
+    <div class="container">
+      <header class="dwp-head reveal">
+        <span class="dwp-num">02</span>
+        <div>
+          <h2 class="dwp-title">Strings of <em>Light</em></h2>
+          <p class="dwp-desc">Strings of lights hang before the tree of life jali of the Sidi Saiyyed Mosque, strung like a sitar. Sweep your finger or cursor across them: each string sings a note of the same raga, and the light ripples along it as it sounds.</p>
+        </div>
+      </header>
+      <div class="dwp-stage" data-xp="strings">
+        <canvas aria-label="Strings of Light: sweep across the hanging lights to play them" role="img"></canvas>
+        <p class="dwp-hint">Sweep across the lights</p>
+      </div>
+      <p class="dwp-credit">Tree of life jali, Sidi Saiyyed Mosque, Ahmedabad. Photo: Bernard Gagnon, <a href="https://commons.wikimedia.org/wiki/File:Jali_at_Sidi_Saiyyed_Mosque_02.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>; cropped, converted to monochrome and relit.</p>
+    </div>
+  </section>
+
+  <!-- 03 SPARKLER WRITING -->
+  <section class="dwp-xp" id="sparkler">
+    <div class="container">
+      <header class="dwp-head reveal">
+        <span class="dwp-num">03</span>
+        <div>
+          <h2 class="dwp-title">Sparkler <em>Writing</em></h2>
+          <p class="dwp-desc">Press and draw with a phuljhadi on the riverfront at night. Write a name, a wish, a shape: it lingers like a long-exposure photograph. Save the picture and send it home.</p>
+        </div>
+      </header>
+      <div class="dwp-stage dwp-stage--draw" data-xp="sparkler">
+        <canvas aria-label="Sparkler Writing: press and drag to draw with a sparkler" role="img"></canvas>
+        <p class="dwp-hint">Press and draw</p>
+      </div>
+      <p class="dwp-credit">Background: the Atal Bridge by <a href="https://unsplash.com/photos/a-bridge-with-lights-at-night-VEIPDEgiHOM" target="_blank" rel="noopener">Sahil Parmar on Unsplash</a>, defocused.</p>
+      <div class="dwp-controls">
+        <button type="button" class="dwp-btn" data-act="save">Save the picture</button>
+        <button type="button" class="dwp-btn" data-act="clear">Start again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 FIREWORKS OVER SABARMATI -->
+  <section class="dwp-xp" id="fireworks">
+    <div class="container">
+      <header class="dwp-head reveal">
+        <span class="dwp-num">04</span>
+        <div>
+          <h2 class="dwp-title">Fireworks over <em>Sabarmati</em></h2>
+          <p class="dwp-desc">The Atal Bridge on the Sabarmati, Ahmedabad, on Diwali night. Tap the sky to send up a shell and watch it bloom over the riverfront, light the clouds and shimmer in the river.</p>
+        </div>
+      </header>
+      <div class="dwp-stage" data-xp="fireworks">
+        <canvas aria-label="Fireworks over the Atal Bridge on the Sabarmati: tap the sky to launch fireworks" role="img"></canvas>
+        <p class="dwp-hint">Tap the sky</p>
+      </div>
+      <p class="dwp-credit">Photograph of the Atal Bridge by <a href="https://unsplash.com/photos/a-bridge-with-lights-at-night-VEIPDEgiHOM" target="_blank" rel="noopener">Sahil Parmar on Unsplash</a>.</p>
+    </div>
+  </section>
+
+  <!-- 05 GUJARAT AFTER DARK -->
+  <section class="dwp-xp dwp-xp--data" id="night-lights">
+    <div class="container">
+      <header class="dwp-head reveal">
+        <span class="dwp-num">05</span>
+        <div>
+          <h2 class="dwp-title">Gujarat <em>After Dark</em></h2>
+          <p class="dwp-desc">Every Diwali, a picture of India "lit up from space" does the rounds. It isn't Diwali: <a href="https://earthobservatory.nasa.gov/images/79682/south-asian-night-lights" target="_blank" rel="noopener">NASA explains</a> it is a 2003 composite of weather-satellite data, coloured by the year each light first appeared, and that Diwali's extra light is "likely imperceptible" from orbit. What the satellites really show is better: how much brighter Gujarat has grown at night. Economists read night lights as a measure of growth.</p>
+        </div>
+      </header>
+      <div class="dwp-nl" data-nl>
+        <div>
+          <div class="dwp-stage dwp-nl-stage" role="img" aria-label="Satellite images of Gujarat at night, one for each year from 2012 to 2026, showing city lights spreading and brightening"><span class="dwp-nl-year"></span></div>
+          <div class="dwp-nl-slider">
+            <button type="button" class="dwp-btn" data-act="play">Play the years</button>
+            <input type="range" aria-label="Year">
+            <output></output>
+          </div>
+        </div>
+        <aside class="dwp-nl-side">
+          <h3>How much brighter, 2012 to 2026</h3>
+          <ul></ul>
+          <p>Each frame is the median of about 45 nights from January to March, after Diwali, so festival lighting never inflates a year. The brightest city cores reach the satellite's ceiling, so their growth is understated; Ahmedabad is measured across its metro for that reason.</p>
+        </aside>
+      </div>
+      <p class="dwp-src">Night-light imagery: NASA Black Marble (VNP46A2, VIIRS on Suomi NPP) via NASA Global Imagery Browse Services (GIBS); yearly January to March median composites processed by SELEQT. We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS). On night lights and growth: Henderson, Storeygard and Weil, <em>American Economic Review</em>, 2012. Brightness is not income; this is a picture of change, not a forecast.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sub-cta-section">
+    <div class="container">
+      <h3>From our family <em>to yours.</em></h3>
+      <p>However far from home you celebrate this year, we wish you and yours a bright and prosperous year ahead.</p>
+      <a href="/#contact" class="btn-primary">Begin a Conversation</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="logo">SELEQT</a>
+          <p>Private wealth, considered from every angle.</p>
+        </div>
+        <div class="footer-col">
+          <h2>Practice</h2>
+          <a href="/investments">Investments</a>
+          <a href="/taxation">Taxation</a>
+          <a href="/insurance">Insurance</a>
+          <a href="/succession">Succession Planning</a>
+          <a href="/family-office">Family Office</a>
+        </div>
+        <div class="footer-col">
+          <h2>Firm</h2>
+          <a href="/about">About</a>
+          <a href="/gift-city">GIFT City</a>
+          <a href="/blogs">Blogs</a>
+          <a href="/#contact">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h2>Reach</h2>
+          <span>contact@seleqtwealth.in</span>
+          <span>+91 99981 39596</span>
+          <span>313, Arista Business Space, Ahmedabad, Gujarat, 380059</span>
+        </div>
+      </div>
+
+      <div class="footer-wordmark">SELEQT</div>
+
+      <div class="footer-bottom">
+        <p>&copy; <span class="footer-year">2026</span> SELEQT Private Wealth. All rights reserved.</p>
+        <p class="disclaimer">
+          Investments in securities markets are subject to market risks. Read all related documents carefully before investing. Past performance is not indicative of future results. All material conflicts of interest are disclosed in writing prior to engagement.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script src="/diwali-experiences.js" defer></script>
+  <script type="module" src="/diwali-webgl.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+{
+ "years": [
+  2012,
+  2013,
+  2014,
+  2015,
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "cities": [
+  {
+   "name": "Ahmedabad",
+   "x": 0.6927,
+   "y": 0.3703,
+   "left": true
+  },
+  {
+   "name": "GIFT City",
+   "x": 0.7097,
+   "y": 0.3415,
+   "left": false
+  },
+  {
+   "name": "Surat",
+   "x": 0.732,
+   "y": 0.7562,
+   "left": false
+  },
+  {
+   "name": "Vadodara",
+   "x": 0.785,
+   "y": 0.5194,
+   "left": false
+  },
+  {
+   "name": "Rajkot",
+   "x": 0.4245,
+   "y": 0.52,
+   "left": false
+  },
+  {
+   "name": "Dholera",
+   "x": 0.6356,
+   "y": 0.5317,
+   "left": false,
+   "minor": true
+  },
+  {
+   "name": "Mundra",
+   "x": 0.2608,
+   "y": 0.4085,
+   "left": true,
+   "minor": true
+  },
+  {
+   "name": "Kandla",
+   "x": 0.3359,
+   "y": 0.3681,
+   "left": false,
+   "minor": true
+  }
+ ],
+ "growth": [
+  {
+   "name": "GIFT City core (3 km)",
+   "label": "5.4x"
+  },
+  {
+   "name": "Gandhinagar (10 km)",
+   "label": "3.3x"
+  },
+  {
+   "name": "Kandla and Gandhidham (25 km)",
+   "label": "2.8x"
+  },
+  {
+   "name": "Mundra port area (25 km)",
+   "label": "2.6x"
+  },
+  {
+   "name": "Rajkot (10 km)",
+   "label": "2.5x"
+  },
+  {
+   "name": "Ahmedabad metro (25 km)",
+   "label": "2.4x"
+  },
+  {
+   "name": "Surat (10 km)",
+   "label": "2.1x"
+  },
+  {
+   "name": "Vadodara (10 km)",
+   "label": "1.8x"
+  },
+  {
+   "name": "Dholera",
+   "label": "newly lit"
+  },
+  {
+   "name": "This whole view",
+   "label": "2.7 to 3x"
+  }
+ ]
+}
