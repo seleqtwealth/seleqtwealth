@@ -1,0 +1,212 @@
+/* ==========================================================================
+   Diwali night (6 to 11 November 2026)
+   Every rule is scoped to html.diwali, which the small script in each page's
+   <head> sets only during the festival, or with ?diwali=on to preview it.
+   The decorations themselves (lanterns, embers, torans, the hero lights) are
+   added by diwali.js, which main.js loads only while the festival is on.
+   ========================================================================== */
+
+/* ── Night palette: the light "paper" surfaces turn to a deep night blue ── */
+html.diwali {
+  --paper: #0b1526;
+  --paper-soft: #101d33;
+  --paper-deep: #17263f;
+  --ink-strong: #f4f1ea;
+  --ink-soft: rgba(244, 241, 234, 0.7);
+  --ink-faint: rgba(244, 241, 234, 0.48);
+  --ink-line: rgba(244, 241, 234, 0.12);
+  --ink-line-strong: rgba(244, 241, 234, 0.22);
+  --border: rgba(244, 241, 234, 0.1);
+  --border-strong: rgba(244, 241, 234, 0.22);
+  --gold-deep: #d4b06a;
+  color-scheme: dark;
+}
+
+/* text that was navy on cream */
+html.diwali .section-title,
+html.diwali #navbar.scrolled .logo,
+html.diwali #navbar.scrolled .nav-links a,
+html.diwali .btn-ghost.on-paper,
+html.diwali .about-title,
+html.diwali .stat-num,
+html.diwali .sc-title,
+html.diwali .sc-item .sc-name,
+html.diwali .sub-intro,
+html.diwali .feature-item h2,
+html.diwali .faq-heading,
+html.diwali .faq-q,
+html.diwali .about-section-title,
+html.diwali .about-principle h3,
+html.diwali .team-title,
+html.diwali .floating-back.is-on-paper:hover,
+html.diwali .insight-title,
+html.diwali .insight-upcoming h2,
+html.diwali .article-title,
+html.diwali .article-body p strong,
+html.diwali .article-body li strong,
+html.diwali .article-body h2,
+html.diwali .article-body .article-ol li strong,
+html.diwali .article-footer-about h2,
+html.diwali .article-footer-next-link,
+html.diwali .article-body table th,
+html.diwali .article-body table td:first-child,
+html.diwali .article-body .article-faq dt,
+html.diwali .article-body a,
+html.diwali .xp-title,
+html.diwali .xp-steps h3,
+html.diwali .sub-body p strong,
+html.diwali .sv-name,
+html.diwali .gf-all,
+html.diwali .lg-lead-cta,
+html.diwali .lg-name,
+html.diwali .lg-dialog-name,
+html.diwali .lg-dialog-nav button,
+html.diwali .lg-dialog-close,
+html.diwali .lg-dialog-close:hover { color: var(--white); }
+html.diwali .article-body a:hover { color: var(--gold-light); }
+html.diwali #navbar.scrolled .mobile-menu a { color: var(--white) !important; }
+html.diwali #navbar.scrolled .hamburger span { background: var(--white); }
+
+/* surfaces that were cream with transparency */
+html.diwali #navbar.scrolled { background: rgba(8, 15, 28, 0.84); border-bottom-color: rgba(244, 241, 234, 0.08); }
+html.diwali #navbar.scrolled .mobile-menu { background: rgba(8, 15, 28, 0.98) !important; }
+html.diwali .sc-item[data-i="0"].is-active::after,
+html.diwali .sc-item[data-i="1"].is-active::after,
+html.diwali .sc-item[data-i="2"].is-active::after { background: rgba(11, 21, 38, 0.65); }
+html.diwali .sc-item[data-i="0"].is-near::after,
+html.diwali .sc-item[data-i="1"].is-near::after,
+html.diwali .sc-item[data-i="2"].is-near::after { background: rgba(11, 21, 38, 0.25); }
+html.diwali .sc-item + .sc-item::before { background: rgba(244, 241, 234, 0.1); }
+html.diwali .services-carousel { background: linear-gradient(to bottom, var(--paper) 0%, var(--paper) 10%, #0d182c 45%, #091224 75%, var(--ink) 94%); }
+html.diwali .floating-back.is-on-paper { background: rgba(11, 21, 38, 0.82); border-color: rgba(244, 241, 234, 0.14); }
+html.diwali .floating-back.is-on-paper:hover { background: rgba(11, 21, 38, 0.95); }
+html.diwali .lg-dialog-close { background: rgba(11, 21, 38, 0.9); }
+
+/* ── Toran: a fine gold marigold garland along the top of each section ── */
+.dw-toran {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  z-index: 3;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40' viewBox='0 0 200 40'%3E%3Cpath d='M0 3H200' stroke='%23b8924e' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 3Q100 30 200 3' fill='none' stroke='%23b8924e' stroke-width='1.1' opacity='.85'/%3E%3Cg fill='%23d98c2b'%3E%3Ccircle cx='20' cy='7.9' r='3'/%3E%3Ccircle cx='40' cy='11.6' r='3.2'/%3E%3Ccircle cx='60' cy='14.3' r='3.3'/%3E%3Ccircle cx='80' cy='16' r='3.4'/%3E%3Ccircle cx='100' cy='16.5' r='3.6'/%3E%3Ccircle cx='120' cy='16' r='3.4'/%3E%3Ccircle cx='140' cy='14.3' r='3.3'/%3E%3Ccircle cx='160' cy='11.6' r='3.2'/%3E%3Ccircle cx='180' cy='7.9' r='3'/%3E%3C/g%3E%3Cg fill='%23f2c25c'%3E%3Ccircle cx='20' cy='7.9' r='1.2'/%3E%3Ccircle cx='40' cy='11.6' r='1.3'/%3E%3Ccircle cx='60' cy='14.3' r='1.3'/%3E%3Ccircle cx='80' cy='16' r='1.4'/%3E%3Ccircle cx='100' cy='16.5' r='1.5'/%3E%3Ccircle cx='120' cy='16' r='1.4'/%3E%3Ccircle cx='140' cy='14.3' r='1.3'/%3E%3Ccircle cx='160' cy='11.6' r='1.3'/%3E%3Ccircle cx='180' cy='7.9' r='1.2'/%3E%3C/g%3E%3Cg fill='%23d4b06a'%3E%3Ccircle cx='30' cy='9.9' r='1.1'/%3E%3Ccircle cx='50' cy='13.1' r='1.1'/%3E%3Ccircle cx='70' cy='15.3' r='1.1'/%3E%3Ccircle cx='90' cy='16.4' r='1.1'/%3E%3Ccircle cx='110' cy='16.4' r='1.1'/%3E%3Ccircle cx='130' cy='15.3' r='1.1'/%3E%3Ccircle cx='150' cy='13.1' r='1.1'/%3E%3Ccircle cx='170' cy='9.9' r='1.1'/%3E%3C/g%3E%3Cpath d='M100 20.5V23' stroke='%23b8924e' stroke-width='.8'/%3E%3Cpath d='M100 23C103.6 27 103.6 32 100 36.5C96.4 32 96.4 27 100 23Z' fill='%23b8924e' fill-opacity='.28' stroke='%23d4b06a' stroke-width='.8'/%3E%3Cpath d='M100 24.5V35' stroke='%23d4b06a' stroke-width='.5' opacity='.7'/%3E%3C/svg%3E") repeat-x center top / 200px 40px;
+  opacity: 0;
+  animation: dw-fade 1.4s 0.2s var(--ease-out) forwards;
+}
+@keyframes dw-fade { to { opacity: 0.9; } }
+
+/* ── Lanterns and embers share one canvas, above content, below the nav ── */
+#dw-sky {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* ── The festival switch (bottom left) ── */
+.dw-toggle {
+  position: fixed;
+  left: 22px;
+  bottom: 26px;
+  z-index: 997;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px 9px 11px;
+  border: 1px solid rgba(212, 176, 106, 0.4);
+  border-radius: 999px;
+  background: rgba(6, 12, 24, 0.78);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: rgba(244, 241, 234, 0.86);
+  font: 400 0.7rem/1 var(--font-body);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out), border-color 0.3s;
+}
+.dw-toggle.is-in { opacity: 1; transform: none; }
+/* out of the way while the cookie choice is on screen */
+body:has(.cookie-banner.is-visible) .dw-toggle { opacity: 0; pointer-events: none; }
+.dw-toggle:hover { border-color: var(--gold-light); }
+.dw-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.dw-toggle svg { width: 18px; height: 18px; flex: none; }
+.dw-toggle .dw-flame { transform-origin: 12px 14px; animation: dw-flicker 2.4s ease-in-out infinite; }
+.dw-toggle[aria-pressed="false"] .dw-flame { opacity: 0; animation: none; }
+.dw-toggle-state { color: var(--gold-light); }
+@keyframes dw-flicker {
+  0%, 100% { transform: scale(1, 1); opacity: 1; }
+  30% { transform: scale(0.94, 1.06) rotate(-2deg); opacity: 0.9; }
+  60% { transform: scale(1.04, 0.96) rotate(2deg); opacity: 1; }
+}
+
+/* ── GIFT City hero: night falls, then the towers light up floor by floor ── */
+html.diwali .hero-photo--gift .hero-photo-base { filter: brightness(0.24) contrast(1.15) sepia(0.35) hue-rotate(185deg) saturate(1.6); }
+html.diwali .hero-photo--gift .hero-photo-glow { filter: sepia(0.9) saturate(1.6) hue-rotate(-10deg) brightness(0.7); }
+.hero-photo img.dw-lights {
+  mix-blend-mode: screen;
+  filter: brightness(1.25) saturate(1.1);
+  transform: scale(1.03);
+  transition: transform 1.6s var(--ease-out);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 var(--rise), transparent calc(var(--rise) + 3%));
+  mask-image: linear-gradient(to top, #000 0%, #000 var(--rise), transparent calc(var(--rise) + 3%));
+}
+.sub-hero--photo.is-glowing .hero-photo img.dw-lights { transform: scale(1); }
+@property --rise { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+.dw-lights--a { --rise: 0%; animation: dw-rise 4.2s 0.9s steps(26, end) forwards; }
+.dw-lights--b { --rise: 105%; opacity: 0; animation: dw-twinkle 9s 5s ease-in-out infinite alternate; }
+@keyframes dw-rise { to { --rise: 105%; } }
+@keyframes dw-twinkle { 0%, 30% { opacity: 0; } 70%, 100% { opacity: 0.9; } }
+
+/* ── Family Office hero: a lamp lit behind the jali ── */
+html.diwali .hero-photo--jali .hero-photo-base { filter: brightness(0.3) contrast(1.2); }
+.dw-jali-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse 34% 46% at 50% 74%, rgba(255, 214, 140, 0.95), rgba(255, 170, 80, 0.55) 45%, rgba(214, 120, 40, 0) 100%),
+    radial-gradient(ellipse 70% 70% at 50% 60%, rgba(240, 150, 60, 0.45), rgba(240, 150, 60, 0) 75%);
+  -webkit-mask-image: url("/images/diwali/jali-light-mask.webp");
+  mask-image: url("/images/diwali/jali-light-mask.webp");
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: var(--hp-x, 50%) var(--hp-y, 50%);
+  mask-position: var(--hp-x, 50%) var(--hp-y, 50%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transform: scale(1.03);
+  transition: transform 1.6s var(--ease-out);
+  opacity: 0;
+  animation: dw-lamp 2.6s 0.6s var(--ease-out) forwards, dw-lamp-flicker 3.7s 3.2s ease-in-out infinite;
+}
+.sub-hero--photo.is-glowing .dw-jali-light { transform: scale(1); }
+@keyframes dw-lamp { to { opacity: 1; } }
+@keyframes dw-lamp-flicker {
+  0%, 100% { opacity: 1; }
+  22% { opacity: 0.86; }
+  41% { opacity: 0.97; }
+  63% { opacity: 0.82; }
+  80% { opacity: 0.94; }
+}
+
+@media (max-width: 720px) {
+  .dw-toggle { left: 14px; bottom: 22px; padding: 8px 12px 8px 9px; font-size: 0.62rem; }
+  .dw-toran { height: 32px; background-size: 160px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dw-toran { animation: none; opacity: 0.9; }
+  .dw-lights--a { animation: none; --rise: 105%; }
+  .dw-lights--b { animation: none; }
+  .dw-jali-light { animation: none; opacity: 1; }
+  .dw-toggle .dw-flame { animation: none; }
+}

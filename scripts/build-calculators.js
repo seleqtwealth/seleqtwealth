@@ -40,6 +40,7 @@ function lead(c) { return c.tag.charAt(0).toUpperCase() + c.tag.slice(1) + "."; 
 const HEAD_COMMON = `  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/style.css" />
   <link rel="stylesheet" href="/calculators/calc.css" />
+  <script>/* Diwali night, 6 to 11 Nov 2026 IST. Preview: ?diwali=on (off: ?diwali=off). See diwali.css / diwali.js */(function(){try{var d=document.documentElement,s=sessionStorage,l=localStorage,q=location.search,t=Date.now(),w=t>=Date.UTC(2026,10,5,18,30)&&t<Date.UTC(2026,10,11,18,30);if(/[?&]diwali=on/.test(q)){s.setItem('seleqt_dw','on');l.removeItem('seleqt_dw_off')}else if(/[?&]diwali=off/.test(q)){s.removeItem('seleqt_dw');l.setItem('seleqt_dw_off','1')}var p=s.getItem('seleqt_dw')==='on';if(w||p){d.classList.add('diwali-season');document.write('<link rel="stylesheet" href="/diwali.css" />');if(p||l.getItem('seleqt_dw_off')!=='1')d.classList.add('diwali')}}catch(e){}})();</script>
   <link rel="preload" href="/fonts/outfit-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Page-transition pre-paint: applies entering-curtain class if the user
