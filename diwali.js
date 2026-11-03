@@ -28,9 +28,9 @@
     });
   }
 
-  // ── Hero photos: towers light up, a lamp glows behind the jali ────────
+  // ── Hero photos: towers light up, diyas light the haveli door ─────────
   function heroLights(on) {
-    document.querySelectorAll('.dw-lights, .dw-jali-light').forEach(n => n.remove());
+    document.querySelectorAll('.dw-lights, .dw-haveli-light, .dw-haveli-brass').forEach(n => n.remove());
     if (!on) return;
     const gift = document.querySelector('.hero-photo--gift .hero-photo');
     if (gift) {
@@ -43,11 +43,13 @@
         gift.appendChild(img);
       });
     }
-    const jali = document.querySelector('.hero-photo--jali .hero-photo');
-    if (jali) {
-      const lamp = document.createElement('div');
-      lamp.className = 'dw-jali-light';
-      jali.insertBefore(lamp, jali.querySelector('.hero-photo-glow'));
+    const haveli = document.querySelector('.hero-photo--haveli .hero-photo');
+    if (haveli) {
+      ['dw-haveli-light', 'dw-haveli-brass'].forEach(cls => {
+        const layer = document.createElement('div');
+        layer.className = cls;
+        haveli.insertBefore(layer, haveli.querySelector('.hero-photo-glow'));
+      });
     }
   }
 

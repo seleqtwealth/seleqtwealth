@@ -202,30 +202,32 @@ html.diwali .hero-photo--gift .hero-photo-glow { filter: sepia(0.9) saturate(1.6
 @keyframes dw-rise { to { --rise: 105%; } }
 @keyframes dw-twinkle { 0%, 30% { opacity: 0; } 70%, 100% { opacity: 0.9; } }
 
-/* ── Family Office hero: a lamp lit behind the jali ── */
-html.diwali .hero-photo--jali .hero-photo-base { filter: brightness(0.3) contrast(1.2); }
-.dw-jali-light {
+/* ── Family Office hero: diyas lit on the haveli threshold, just below the frame.
+   Their light warms the foot of the door and catches the brass bands and studs
+   (the door's own brass, lit: images/diwali/haveli-brass-lit.webp). ── */
+html.diwali .hero-photo--haveli .hero-photo-base { filter: brightness(0.27) contrast(1.2); }
+.dw-haveli-light,
+.dw-haveli-brass {
   position: absolute;
   inset: 0;
   pointer-events: none;
   mix-blend-mode: screen;
-  background:
-    radial-gradient(ellipse 34% 46% at 50% 74%, rgba(255, 214, 140, 0.95), rgba(255, 170, 80, 0.55) 45%, rgba(214, 120, 40, 0) 100%),
-    radial-gradient(ellipse 70% 70% at 50% 60%, rgba(240, 150, 60, 0.45), rgba(240, 150, 60, 0) 75%);
-  -webkit-mask-image: url("/images/diwali/jali-light-mask.webp");
-  mask-image: url("/images/diwali/jali-light-mask.webp");
-  -webkit-mask-size: cover;
-  mask-size: cover;
-  -webkit-mask-position: var(--hp-x, 50%) var(--hp-y, 50%);
-  mask-position: var(--hp-x, 50%) var(--hp-y, 50%);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
   transform: scale(1.03);
   transition: transform 1.6s var(--ease-out);
   opacity: 0;
   animation: dw-lamp 2.6s 0.6s var(--ease-out) forwards, dw-lamp-flicker 3.7s 3.2s ease-in-out infinite;
 }
-.sub-hero--photo.is-glowing .dw-jali-light { transform: scale(1); }
+.dw-haveli-light {
+  background:
+    radial-gradient(ellipse 30% 26% at 51% 100%, rgba(255, 196, 120, 0.5), rgba(255, 160, 70, 0) 100%),
+    radial-gradient(ellipse 58% 62% at 51% 104%, rgba(240, 140, 60, 0.32), rgba(214, 120, 40, 0) 100%);
+}
+.dw-haveli-brass {
+  z-index: 1;                       /* above the hero's legibility shade, so the glints read */
+  background: url("/images/diwali/haveli-brass-lit.webp") var(--hp-x, 50%) var(--hp-y, 50%) / cover no-repeat;
+}
+.sub-hero--photo.is-glowing .dw-haveli-light,
+.sub-hero--photo.is-glowing .dw-haveli-brass { transform: scale(1); }
 @keyframes dw-lamp { to { opacity: 1; } }
 @keyframes dw-lamp-flicker {
   0%, 100% { opacity: 1; }
@@ -246,6 +248,6 @@ html.diwali .hero-photo--jali .hero-photo-base { filter: brightness(0.3) contras
   .dw-toran { animation: none; opacity: 0.9; }
   .dw-lights--a { animation: none; --rise: 105%; }
   .dw-lights--b { animation: none; }
-  .dw-jali-light { animation: none; opacity: 1; }
+  .dw-haveli-light, .dw-haveli-brass { animation: none; opacity: 1; }
   .dw-toggle .dw-flame { animation: none; }
 }

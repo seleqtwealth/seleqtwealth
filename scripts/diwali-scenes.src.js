@@ -4,7 +4,8 @@
    Each scene is a real photograph plus light rendered in HDR:
    - Raag of Lamps: a real lit diya (Abhishek Soni, Unsplash) floating on a night river
      (Mike Iukhtenko, Unsplash); flames mirror and streak in the water, warm the ripple crests
-   - Strings of Light: fairy lights in front of the Sidi Saiyyed jali, lighting the stone
+   - Strings of Light: fairy lights before a carved haveli doorway (Sarthak Shah, Wikimedia Commons),
+     lighting the stone and catching the brass on the door
    - Sparkler Writing: a long-exposure buffer over a defocused Atal Bridge riverfront
    finished with bloom, neutral tone mapping, grain and vignette. Sound comes from
    window.SELEQT_DW (diwali-experiences.js). */
@@ -322,44 +323,47 @@ function raag(el) {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-// Strings of Light: fairy lights in front of the jali
+// Strings of Light: fairy lights before a haveli doorway
 // ════════════════════════════════════════════════════════════════════════
 function strings(el) {
-  const K = kit(el, { photo: '/images/heroes/family-office-jali@2x.webp', photoSmall: '/images/heroes/family-office-jali.webp', aspect: 1600 / 1206,
-    focus: [0.5, 0.42], bloom: { intensity: 1.25, luminanceThreshold: 0.75, radius: 0.8 }, fallback: '/images/heroes/family-office-jali.webp' });
+  const K = kit(el, { photo: '/images/diwali/haveli-door.webp', photoSmall: '/images/diwali/haveli-door-small.webp', aspect: 4 / 3,
+    focus: [0.51, 0.45], bloom: { intensity: 1.25, luminanceThreshold: 0.75, radius: 0.8 }, fallback: '/images/diwali/haveli-door-small.webp' });
   if (!K) return;
-  const holes = K.loader.load('/images/diwali/jali-light-mask.webp');
+  const brass = K.loader.load('/images/diwali/haveli-brass-mask.webp');      // the door's brass bands, studs and rings
   const bulbRT = K.rt(true);
   const BULBS = K.points(900, /* glsl */`
     out vec4 fragColor; in vec3 vCol; in vec2 vAux;
     void main(){
       vec2 p = gl_PointCoord * 2.0 - 1.0; float r = length(p);
       if (r > 1.0) discard;
-      float blur = vAux.x;                                   // 0 in focus, 1 fully out of focus
+      float blur = smoothstep(0.3, 0.8, vAux.x);             // 0 in focus, 1 fully out of focus
       float sharp = exp(-r * r * 14.0) * 1.4 + exp(-r * r * 3.0) * 0.18;
-      float disc = smoothstep(1.0, 0.86, r) * (0.55 + 0.45 * smoothstep(0.55, 0.95, r)) * 0.2;    // lens bokeh with a brighter rim
-      fragColor = vec4(vCol * mix(sharp, disc, blur), 1.0);
+      float disc = smoothstep(1.0, 0.72, r) * (0.66 + 0.34 * smoothstep(0.45, 0.95, r)) * 0.1 * vAux.y;   // soft lens bokeh, faintly brighter at the rim
+      fragColor = vec4(mix(vCol * sharp, vCol * vec3(1.0, 0.8, 0.52) * disc, blur), 1.0);   // no sharp core inside a bokeh disc
     }`);
   const WIRE = K.points(3000, /* glsl */`
     out vec4 fragColor; in vec3 vCol;
     void main(){ vec2 p = gl_PointCoord * 2.0 - 1.0; float a = exp(-dot(p, p) * 3.0); fragColor = vec4(vCol * a, 1.0); }`);
   const comp = new ShaderMaterial({
     glslVersion: GLSL3, depthTest: false, depthWrite: false,
-    uniforms: { tPhoto: { value: K.tex }, tHoles: { value: holes }, tBulb: { value: null }, uCover: { value: K.cover }, uGlow: { value: 0.25 }, uTime: { value: 0 } },
+    uniforms: { tPhoto: { value: K.tex }, tBrass: { value: brass }, tBulb: { value: null }, uCover: { value: K.cover }, uGlow: { value: 0.3 }, uTime: { value: 0 } },
     vertexShader: VERT,
     fragmentShader: /* glsl */`
       out vec4 fragColor; in vec2 vUv;
-      uniform sampler2D tPhoto, tHoles, tBulb; uniform vec4 uCover; uniform float uGlow, uTime;
+      uniform sampler2D tPhoto, tBrass, tBulb; uniform vec4 uCover; uniform float uGlow, uTime;
       void main(){
         vec2 iuv = uCover.zw + vUv * uCover.xy;
         vec3 stone = texture(tPhoto, iuv).rgb;
         float lum = dot(stone, vec3(0.3333));
-        vec3 col = stone * vec3(0.32, 0.36, 0.48) * 0.55;                 // moonlit sandstone
-        float hole = texture(tHoles, iuv).a;
-        float fall = exp(-pow(length((iuv - vec2(0.5, 0.32)) * vec2(1.0, 1.3)) * 2.6, 2.0));
-        col += hole * vec3(1.0, 0.55, 0.22) * uGlow * fall * (0.9 + 0.1 * sin(uTime * 3.1));   // a lamp lit far behind the jali
+        vec3 col = stone * vec3(0.3, 0.34, 0.46) * 0.36;                  // the doorway by moonlight
+        float brass = texture(tBrass, iuv).a;
+        // diyas on the step just below the frame warm the foot of the door
+        float fall = exp(-pow(length((iuv - vec2(0.51, -0.08)) * vec2(1.3, 1.0)) * 2.7, 2.0));
+        vec3 lamp = vec3(1.0, 0.55, 0.22) * uGlow * fall * (0.92 + 0.08 * sin(uTime * 3.1) * sin(uTime * 4.7));
+        col += stone * lamp * 2.2 + brass * lamp * 2.4;
         vec3 light = textureLod(tBulb, vUv, 5.5).rgb * 1.6 + textureLod(tBulb, vUv, 3.5).rgb * 0.6;
         col += stone * light * 2.6 + light * lum * 0.4;                    // the carved stone warms up near the lights
+        col += brass * stone * (textureLod(tBulb, vUv, 3.0).rgb * 5.0 + textureLod(tBulb, vUv, 1.5).rgb * 1.5);   // brass catches the bulbs
         col += texture(tBulb, vUv).rgb;
         fragColor = vec4(col, 1.0);
       }`
@@ -427,8 +431,10 @@ function strings(el) {
         const base = 1.45 + 0.14 * Math.sin(t * 2.1 + b * 1.7 + s.sway);
         const k = base + wave * 3.5 + env * 0.6;
         const tint = s.warm > 0.5 ? [1.0, 0.72, 0.38] : [1.0, 0.82, 0.55];
-        const size = s.depth ? 7 + s.depth * 13 : 6.5;
-        BULBS.push(x, y, tint[0] * k, tint[1] * k, tint[2] * k, size, s.depth, 0);
+        // strings near the lens blur into large, overlapping, unevenly bright discs (scaled down on narrow stages)
+        const size = s.depth ? (9 + s.depth * 28) * clamp(K.W / 1100, 0.6, 1) : 6.5;
+        const vary = s.depth ? 0.7 + 0.3 * Math.abs(Math.sin(b * 12.9898 + s.sway * 7.1)) : 1;
+        BULBS.push(x, y, tint[0] * k, tint[1] * k, tint[2] * k, size, s.depth, vary);
       }
     }
     BULBS.end(); WIRE.end();
@@ -436,7 +442,7 @@ function strings(el) {
     r.setRenderTarget(bulbRT); r.clear(); r.render(WIRE.s, K.cam); r.render(BULBS.s, K.cam);
     r.setRenderTarget(null);
     comp.uniforms.tBulb.value = bulbRT.texture; comp.uniforms.uTime.value = t;
-    comp.uniforms.uGlow.value = 0.09 + Math.min(0.12, energy * 0.02);
+    comp.uniforms.uGlow.value = 0.26 + Math.min(0.16, energy * 0.03);
     K.composer.render(dt);
   });
 }

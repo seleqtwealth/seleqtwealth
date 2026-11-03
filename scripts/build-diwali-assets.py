@@ -4,16 +4,27 @@ Diwali night assets for the photo heroes (run once; outputs are committed).
 
   images/diwali/gift-lights-a.webp   lit office windows for the GIFT City skyline
   images/diwali/gift-lights-b.webp   a second, sparser set used for a slow twinkle
-  images/diwali/jali-light-mask.webp the openings of the Sidi Saiyyed jali, used as
-                                     a CSS mask so lamplight shows through the stone
+  images/diwali/haveli-brass-mask.webp the brass bands, studs and rings on the haveli door, used by
+                                     Strings of Light so they catch the lamplight while the
+                                     dark wood and stone do not
+  images/diwali/haveli-brass-lit.webp the door's own brass, warmed and fading upward from lamps
+                                     on the step: screened over the Family Office hero at night
 
 Every layer has the same size and framing as its hero photo, so it lines up with
 object-fit: cover and the same object-position. Window shapes come from the
 photo itself: by day the glass is darker than the frames and the sky, so the
 dark panes inside each tower become the windows that light up at night.
 
+The haveli door plates come from the original photo, which is not kept in the repo
+("Haveli Door.JPG", Sarthak Shah, Wikimedia Commons, CC BY-SA 3.0). Pass it once:
+
+  python3 scripts/build-diwali-assets.py --haveli /path/to/Haveli_Door.JPG
+  -> images/heroes/family-office-haveli.webp, @2x   (cropped to 4:3, monochrome)
+     images/diwali/haveli-door.webp, -small.webp     (cropped to 4:3, colour, for the WebGL scene)
+
 Run: python3 scripts/build-diwali-assets.py   (needs Pillow + numpy)
 """
+import sys
 import os
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -70,29 +81,58 @@ def lights(lum, p_lit, b_range):
     halo = np.asarray(Image.fromarray((alpha * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(7)), float) / 255
     a = np.clip(np.maximum(alpha, halo * 0.35), 0, 1)
     out = np.dstack([rgb, a * 255]).astype(np.uint8)
-    return Image.fromarray(out, "RGBA")
+    return Image.fromarray(out)
 
 
-def jali_mask(lum):
-    h, w = lum.shape
-    dark = (lum < 70).astype(float)
-    dens = np.asarray(Image.fromarray((dark * 255).astype(np.uint8)).filter(ImageFilter.BoxBlur(18)), float) / 255
-    region = (dens > 0.28).astype(np.uint8) * 255
-    region = Image.fromarray(region).filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.MinFilter(15))
-    region = np.asarray(region.filter(ImageFilter.GaussianBlur(6)), float) / 255
+HAVELI_CROP = (0, 420, 2736, 2472)          # 4:3 box in the original: the elephant arch down to the door rings
+
+
+def haveli_plates(src):
+    im = Image.open(src).convert("RGB").crop(HAVELI_CROP)
+    heroes = os.path.join(ROOT, "images", "heroes")
+    im.resize((2400, 1800), Image.LANCZOS).save(os.path.join(OUT, "haveli-door.webp"), "WEBP", quality=82, method=6)
+    im.resize((1400, 1050), Image.LANCZOS).save(os.path.join(OUT, "haveli-door-small.webp"), "WEBP", quality=82, method=6)
+    # monochrome hero, stretched to the same full tonal range as the GIFT City hero
+    g = np.asarray(im.convert("L"), float)
+    lo, hi = np.percentile(g, 0.5), np.percentile(g, 99.6)
+    g = np.clip((g - lo) / (hi - lo), 0, 1) ** 1.12 * 255
+    mono = Image.fromarray(g.astype(np.uint8)).convert("RGB")
+    mono.save(os.path.join(heroes, "family-office-haveli@2x.webp"), "WEBP", quality=80, method=6)
+    mono.resize((1600, 1200), Image.LANCZOS).save(os.path.join(heroes, "family-office-haveli.webp"), "WEBP", quality=80, method=6)
+
+
+def brass_lit(rgb, mask):
+    """Lamplight on the brass: the photo's own (sharp) texture in gold, inside the band mask, lit from below."""
+    h, w = mask.shape
+    ys = np.mgrid[0:h, 0:w][0] / h
+    fall = np.clip((ys - 0.43) / 0.57, 0, 1) ** 2.2 * 0.9 + 0.1            # much stronger towards the step
+    lum = (0.2126 * rgb[..., 0] + 0.7152 * rgb[..., 1] + 0.0722 * rgb[..., 2]) / 255.0
+    lit = np.clip((lum ** 0.9)[..., None] * np.array([1.0, 0.7, 0.34]) * 2.1, 0, 1)    # lamplight gold, the metal's own texture
+    out = np.dstack([lit * 255, np.clip(mask * fall * 1.8, 0, 1) * 255]).astype(np.uint8)
+    return Image.fromarray(out)
+
+
+def brass_mask(rgb):
+    """Brass is saturated yellow-gold; the stone is pale and the wood is dark and dull."""
+    a = rgb / 255.0
+    mx, mn = a.max(-1), a.min(-1)
+    sat = (mx - mn) / np.maximum(mx, 1e-6)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    yellow = np.clip((g - b) / np.maximum(mx - mn, 1e-6), 0, 1) * (r >= g * 0.92)
+    m = np.clip((sat - 0.24) / 0.18, 0, 1) * np.clip((mx - 0.34) / 0.18, 0, 1) * yellow
+    h, w = m.shape
     ys, xs = np.mgrid[0:h, 0:w]
-    arch = Image.new("L", (w, h), 0)
-    pts = [(90, 530), (92, 420), (110, 330), (150, 250), (210, 190), (280, 146), (350, 124), (405, 116),
-           (460, 124), (530, 146), (600, 190), (660, 250), (700, 330), (718, 420), (722, 530)]
-    ImageDraw.Draw(arch).polygon([(x * w / 800, y * h / 603) for x, y in pts], fill=255)
-    region *= np.asarray(arch.filter(ImageFilter.MinFilter(5)), float) / 255
-    opening = np.clip((95 - lum) / 60.0, 0, 1)
-    m = np.clip(opening * region, 0, 1)
-    m = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.8)), float)
-    a = np.zeros((h, w, 4), np.uint8)
+    door = ((xs > 0.262 * w) & (xs < 0.787 * w) & (ys > 0.43 * h)).astype(float)   # the two door leaves only
+    m *= np.asarray(Image.fromarray((door * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(4)), float) / 255
+    m = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MedianFilter(3)), float) / 255
+    # tarnish breaks the bands into patches; light runs along polished metal, so smooth along each band
+    k = np.ones(11) / 11
+    m = np.maximum(m, np.apply_along_axis(lambda r: np.convolve(r, k, "same"), 1, m) * 1.5)
+    m = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.9)), float)
+    a = np.zeros(rgb.shape[:2] + (4,), np.uint8)
     a[..., :3] = 255
-    a[..., 3] = m.astype(np.uint8)
-    return Image.fromarray(a, "RGBA")
+    a[..., 3] = np.clip(m * 1.3, 0, 255).astype(np.uint8)
+    return Image.fromarray(a)
 
 
 def main():
@@ -100,8 +140,13 @@ def main():
     gift = np.asarray(Image.open(os.path.join(ROOT, "images/heroes/gift-city-skyline.webp")).convert("L"), float)
     lights(gift, 0.5, (0.5, 0.95)).save(os.path.join(OUT, "gift-lights-a.webp"), "WEBP", quality=80, method=6)
     lights(gift, 0.22, (0.6, 1.0)).save(os.path.join(OUT, "gift-lights-b.webp"), "WEBP", quality=80, method=6)
-    jali = np.asarray(Image.open(os.path.join(ROOT, "images/heroes/family-office-jali.webp")).convert("L"), float)
-    jali_mask(jali).save(os.path.join(OUT, "jali-light-mask.webp"), "WEBP", quality=80, method=6)
+    if "--haveli" in sys.argv:
+        haveli_plates(sys.argv[sys.argv.index("--haveli") + 1])
+    door = Image.open(os.path.join(OUT, "haveli-door.webp")).convert("RGB").resize((1600, 1200), Image.LANCZOS)
+    rgb = np.asarray(door, float)
+    mask = brass_mask(rgb)
+    mask.save(os.path.join(OUT, "haveli-brass-mask.webp"), "WEBP", quality=80, method=6)
+    brass_lit(rgb, np.asarray(mask, float)[..., 3] / 255).save(os.path.join(OUT, "haveli-brass-lit.webp"), "WEBP", quality=84, method=6)
     for f in sorted(os.listdir(OUT)):
         print(f, os.path.getsize(os.path.join(OUT, f)) // 1024, "KB")
 
