@@ -197,7 +197,6 @@
     root.classList.toggle('diwali', on);
     nightLights(on);
     torans(on);
-    rangoli(on);
     gilt(on);
     heroLights(on);
     if (on) startSky(); else if (sky) sky.stop();
@@ -216,33 +215,6 @@
     apply(on);
     window.seleqtTrack && window.seleqtTrack('diwali_lights', { on: on });
   });
-
-  // ── Rangoli: a real flower rangoli, ringed with lit diyas, at a few section breaks ──
-  // One just before the footer, and one halfway down a long page.
-  let rangoliSeen = null;
-  function rangoli(on) {
-    document.querySelectorAll('.dw-rangoli-band').forEach(b => b.remove());
-    if (rangoliSeen) { rangoliSeen.disconnect(); rangoliSeen = null; }
-    if (!on) return;
-    const secs = [...document.querySelectorAll('section, footer.footer')].filter(el =>
-      !el.matches('.hero, #hero, .sub-hero') && !el.hidden && !(el.parentElement && el.parentElement.closest('section')) && el.offsetHeight > 140);
-    const at = new Set();
-    const foot = secs.find(el => el.matches('footer.footer'));
-    if (foot) at.add(foot);
-    const body = secs.filter(el => el !== foot);
-    if (body.length >= 4) at.add(body[Math.floor(body.length / 2)]);
-    rangoliSeen = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('is-in'); rangoliSeen.unobserve(e.target); }
-    }), { threshold: 0.4 }) : null;
-    at.forEach(el => {
-      const band = document.createElement('div');
-      band.className = 'dw-rangoli-band';
-      band.setAttribute('aria-hidden', 'true');
-      band.innerHTML = '<div class="dw-rangoli"></div>';
-      el.parentNode.insertBefore(band, el);
-      if (rangoliSeen) rangoliSeen.observe(band); else band.classList.add('is-in');
-    });
-  }
 
   // ── Gilded words: each heading's gold leaf glints on its own clock ──
   const GILT = '.section-title em, .hero .hero-title em.italic, .hero-title-center em.italic, .principle h3 em, .sub-hero h1 em, ' +
