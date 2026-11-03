@@ -108,7 +108,7 @@ html.diwali .lg-dialog-close { background: rgba(11, 21, 38, 0.9); }
   mix-blend-mode: screen;
 }
 
-/* ── The festival switch (bottom left): greeting links to /diwali, state toggles ── */
+/* ── The festival switch (bottom left): greeting links to the night-lights map, state toggles ── */
 .dw-toggle {
   position: fixed;
   left: 22px;
@@ -167,23 +167,6 @@ body:has(.cookie-banner.is-visible) .dw-toggle { opacity: 0; pointer-events: non
   60% { transform: scale(1.04, 0.96) rotate(2deg); opacity: 1; }
 }
 
-/* homepage hero: the way into the festive page */
-.dw-hero-row { flex-basis: 100%; text-align: center; }
-@media (max-width: 900px) { .dw-hero-row { display: none; } }   /* the switch already leads there on phones */
-.dw-hero-link {
-  display: inline-block;
-  margin-top: 26px;
-  color: var(--gold-light);
-  font: 400 0.72rem/1.4 var(--font-body);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(212, 176, 106, 0.4);
-  padding-bottom: 4px;
-  transition: color 0.3s, border-color 0.3s;
-}
-.dw-hero-link:hover { color: var(--white); border-color: var(--gold-light); }
-
 /* ── GIFT City hero: night falls, then the towers light up floor by floor ── */
 html.diwali .hero-photo--gift .hero-photo-base { filter: brightness(0.24) contrast(1.15) sepia(0.35) hue-rotate(185deg) saturate(1.6); }
 html.diwali .hero-photo--gift .hero-photo-glow { filter: sepia(0.9) saturate(1.6) hue-rotate(-10deg) brightness(0.7); }
@@ -202,12 +185,12 @@ html.diwali .hero-photo--gift .hero-photo-glow { filter: sepia(0.9) saturate(1.6
 @keyframes dw-rise { to { --rise: 105%; } }
 @keyframes dw-twinkle { 0%, 30% { opacity: 0; } 70%, 100% { opacity: 0.9; } }
 
-/* ── Family Office hero: diyas lit on the haveli threshold, just below the frame.
-   Their light warms the foot of the door and catches the brass bands and studs
-   (the door's own brass, lit: images/diwali/haveli-brass-lit.webp). ── */
-html.diwali .hero-photo--haveli .hero-photo-base { filter: brightness(0.27) contrast(1.2); }
-.dw-haveli-light,
-.dw-haveli-brass {
+/* ── Family Office hero: diyas lit at the foot of the banyan. Their light warms
+   the ground and catches the bark of the roots and the trunk (the photo's own
+   bark, lit: images/diwali/banyan-bark-lit.webp); the leaves stay in the dark. ── */
+html.diwali .hero-photo--banyan .hero-photo-base { filter: brightness(0.26) contrast(1.2); }
+.dw-banyan-light,
+.dw-banyan-bark {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -217,17 +200,17 @@ html.diwali .hero-photo--haveli .hero-photo-base { filter: brightness(0.27) cont
   opacity: 0;
   animation: dw-lamp 2.6s 0.6s var(--ease-out) forwards, dw-lamp-flicker 3.7s 3.2s ease-in-out infinite;
 }
-.dw-haveli-light {
+.dw-banyan-light {
   background:
-    radial-gradient(ellipse 30% 26% at 51% 100%, rgba(255, 196, 120, 0.5), rgba(255, 160, 70, 0) 100%),
-    radial-gradient(ellipse 58% 62% at 51% 104%, rgba(240, 140, 60, 0.32), rgba(214, 120, 40, 0) 100%);
+    radial-gradient(ellipse 26% 20% at 50% 100%, rgba(255, 196, 120, 0.55), rgba(255, 160, 70, 0) 100%),
+    radial-gradient(ellipse 52% 46% at 50% 104%, rgba(240, 140, 60, 0.3), rgba(214, 120, 40, 0) 100%);
 }
-.dw-haveli-brass {
-  z-index: 1;                       /* above the hero's legibility shade, so the glints read */
-  background: url("/images/diwali/haveli-brass-lit.webp") var(--hp-x, 50%) var(--hp-y, 50%) / cover no-repeat;
+.dw-banyan-bark {
+  z-index: 1;                       /* above the hero's legibility shade, so the lit bark reads */
+  background: url("/images/diwali/banyan-bark-lit.webp") var(--hp-x, 50%) var(--hp-y, 50%) / cover no-repeat;
 }
-.sub-hero--photo.is-glowing .dw-haveli-light,
-.sub-hero--photo.is-glowing .dw-haveli-brass { transform: scale(1); }
+.sub-hero--photo.is-glowing .dw-banyan-light,
+.sub-hero--photo.is-glowing .dw-banyan-bark { transform: scale(1); }
 @keyframes dw-lamp { to { opacity: 1; } }
 @keyframes dw-lamp-flicker {
   0%, 100% { opacity: 1; }
@@ -248,6 +231,182 @@ html.diwali .hero-photo--haveli .hero-photo-base { filter: brightness(0.27) cont
   .dw-toran { animation: none; opacity: 0.9; }
   .dw-lights--a { animation: none; --rise: 105%; }
   .dw-lights--b { animation: none; }
-  .dw-haveli-light, .dw-haveli-brass { animation: none; opacity: 1; }
+  .dw-banyan-light, .dw-banyan-bark { animation: none; opacity: 1; }
   .dw-toggle .dw-flame { animation: none; }
 }
+
+/* ── Gujarat After Dark: satellite night lights, on the homepage below the hero ── */
+.dw-nl-section {
+  position: relative;
+  padding: 96px 0 80px;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 0%, rgba(212, 176, 106, 0.06), transparent 70%),
+    #070e1b;
+}
+.dw-nl-head { max-width: 760px; margin-bottom: 34px; }
+.dw-nl-kicker {
+  margin: 0 0 14px;
+  color: var(--gold);
+  font: 400 0.7rem/1 var(--font-body);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.dw-nl-title {
+  margin: 0 0 14px;
+  color: var(--white);
+  font: 400 clamp(2.1rem, 4.4vw, 3.3rem)/1.08 var(--font-display);
+  text-wrap: balance;
+}
+.dw-nl-title em { color: var(--gold-light); font-style: italic; }
+.dw-nl-desc { margin: 0; max-width: 660px; color: rgba(244, 241, 234, 0.72); font: 300 1rem/1.75 var(--font-body); }
+.dw-nl-desc a, .dw-nl-src a { color: rgba(244, 241, 234, 0.88); text-decoration-color: rgba(212, 176, 106, 0.6); text-underline-offset: 3px; }
+.dw-nl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 30px;
+  align-items: start;
+}
+.dw-nl > * { min-width: 0; }
+.dw-nl-stage {
+  position: relative;
+  max-width: 100%;
+  aspect-ratio: 1320 / 960;
+  border: 1px solid rgba(212, 176, 106, 0.18);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #03060c;
+  box-shadow: 0 40px 80px -50px rgba(0, 0, 0, 0.85);
+}
+.dw-nl-stage img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-out);
+}
+.dw-nl-stage img.is-on { opacity: 1; }
+.dw-nl-year {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  z-index: 2;
+  color: var(--gold-light);
+  font: 400 clamp(1.8rem, 4vw, 2.8rem)/1 var(--font-display);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+.dw-nl-pin { position: absolute; z-index: 1; transform: translate(-50%, -50%); pointer-events: none; }
+.dw-nl-pin::before { content: ''; display: block; width: 7px; height: 7px; border: 1px solid rgba(244, 241, 234, 0.9); border-radius: 50%; }
+.dw-nl-pin span {
+  position: absolute;
+  left: 12px;
+  top: -5px;
+  color: rgba(244, 241, 234, 0.92);
+  font: 400 0.62rem/1 var(--font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
+}
+.dw-nl-pin.is-left span { left: auto; right: 12px; }
+.dw-nl-slider { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+.dw-nl-slider input { flex: 1; min-width: 0; accent-color: var(--gold); }
+.dw-nl-slider output { min-width: 4ch; color: var(--gold-light); font: 400 0.9rem/1 var(--font-body); font-variant-numeric: tabular-nums; }
+.dw-nl-btn {
+  padding: 11px 18px;
+  border: 1px solid rgba(212, 176, 106, 0.4);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gold-light);
+  font: 400 0.68rem/1 var(--font-body);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.dw-nl-btn:hover { border-color: var(--gold-light); color: var(--white); background: rgba(212, 176, 106, 0.08); }
+.dw-nl-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.dw-nl-side h3 { margin: 0 0 14px; color: var(--white); font: 400 1.4rem/1.2 var(--font-display); }
+.dw-nl-side p, .dw-nl-side li { color: rgba(244, 241, 234, 0.72); font: 300 0.92rem/1.7 var(--font-body); }
+.dw-nl-side ul { margin: 0 0 14px; padding: 0; list-style: none; }
+.dw-nl-side li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid rgba(244, 241, 234, 0.08); }
+.dw-nl-side li b { color: var(--gold-light); font-weight: 400; font-variant-numeric: tabular-nums; }
+.dw-nl-src { margin: 24px 0 0; max-width: 900px; color: rgba(244, 241, 234, 0.5); font: 300 0.74rem/1.6 var(--font-body); }
+@media (max-width: 900px) {
+  .dw-nl { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .dw-nl-section { padding: 72px 0 60px; }
+  .dw-nl-pin span { font-size: 0.5rem; }
+  .dw-nl-pin.is-minor span { display: none; }   /* dots only for the smaller places on phones */
+}
+
+/* ── Fireworks (diwali-fx.js): one canvas over every page; taps light it ── */
+#dw-fx {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2147483001;
+  pointer-events: none;
+}
+
+/* ── Opening, first page of a visit: a rocket in the dark, gold over the name,
+   then the page. The head script adds html.dw-opening before first paint, so the
+   cover is there from the first frame; diwali-fx.js plays it and lifts it. ── */
+html.dw-opening::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: radial-gradient(ellipse 90% 70% at 50% 36%, #0c1628 0%, #060b16 52%, #02050b 100%);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: dw-cover-safety 0.6s 9s forwards;      /* if the script never runs, the page is never trapped */
+}
+html.dw-opening.dw-live::before { animation: none; }
+html.dw-opening.dw-reveal::before { opacity: 0; }
+@keyframes dw-cover-safety { to { opacity: 0; visibility: hidden; } }
+.dw-open {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483002;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+  transition: opacity 0.8s ease, transform 1.1s var(--ease-out);
+}
+.dw-open.is-out { opacity: 0; transform: translateY(-16px); }
+.dw-open-mark {
+  margin-right: -0.62em;                             /* the trailing letter-space, so the name sits centred */
+  color: #f7eddb;
+  font: 500 clamp(2.4rem, 7.4vw, 5.4rem)/1 var(--font-display);
+  letter-spacing: 0.62em;
+  opacity: 0;
+  filter: blur(12px);
+  text-shadow: 0 0 0 rgba(255, 190, 110, 0);
+  transition: opacity 1.2s var(--ease-out), filter 1.4s var(--ease-out), letter-spacing 2.6s var(--ease-out), margin 2.6s var(--ease-out), text-shadow 2.2s ease;
+}
+.dw-open.is-lit .dw-open-mark {
+  margin-right: -0.36em;
+  letter-spacing: 0.36em;
+  opacity: 1;
+  filter: blur(0);
+  text-shadow: 0 0 26px rgba(255, 196, 120, 0.5), 0 0 80px rgba(255, 150, 60, 0.3);
+}
+.dw-open-sub {
+  margin-top: 22px;
+  color: var(--gold-light);
+  font: italic 400 clamp(1.1rem, 2.4vw, 1.6rem)/1 var(--font-display);
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1s var(--ease-out) 0.6s, transform 1.2s var(--ease-out) 0.6s;
+}
+.dw-open.is-lit .dw-open-sub { opacity: 0.92; transform: none; }

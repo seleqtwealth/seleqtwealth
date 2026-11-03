@@ -60,7 +60,7 @@
   </script>
 
   <link rel="stylesheet" href="style.css" />
-  <script>/* Diwali night, 6 to 11 Nov 2026 IST. Preview: ?diwali=on (off: ?diwali=off). See diwali.css / diwali.js */(function(){try{var d=document.documentElement,s=sessionStorage,l=localStorage,q=location.search,t=Date.now(),w=t>=Date.UTC(2026,10,5,18,30)&&t<Date.UTC(2026,10,11,18,30);if(/[?&]diwali=on/.test(q)){s.setItem('seleqt_dw','on');l.removeItem('seleqt_dw_off')}else if(/[?&]diwali=off/.test(q)){s.removeItem('seleqt_dw');l.setItem('seleqt_dw_off','1')}var p=s.getItem('seleqt_dw')==='on';if(w||p){d.classList.add('diwali-season');document.write('<link rel="stylesheet" href="/diwali.css" />');if(p||l.getItem('seleqt_dw_off')!=='1')d.classList.add('diwali')}}catch(e){}})();</script>
+  <script>/* Diwali night, 6 to 11 Nov 2026 IST. Preview: ?diwali=on (off: ?diwali=off). First page of a visit opens on fireworks. See diwali.css / diwali.js / diwali-fx.js */(function(){try{var d=document.documentElement,s=sessionStorage,l=localStorage,q=location.search,t=Date.now(),w=t>=Date.UTC(2026,10,5,18,30)&&t<Date.UTC(2026,10,11,18,30);if(/[?&]diwali=on/.test(q)){s.setItem('seleqt_dw','on');l.removeItem('seleqt_dw_off')}else if(/[?&]diwali=off/.test(q)){s.removeItem('seleqt_dw');l.setItem('seleqt_dw_off','1')}var p=s.getItem('seleqt_dw')==='on';if(w||p){d.classList.add('diwali-season');document.write('<link rel="stylesheet" href="/diwali.css" />');if(p||l.getItem('seleqt_dw_off')!=='1'){d.classList.add('diwali');if(!s.getItem('seleqt_dw_open')&&!s.getItem('seleqt_transitioning')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('dw-opening')}}}catch(e){}})();</script>
   <link rel="preload" href="/fonts/outfit-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/cormorant-garamond-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Decide intro state before paint to avoid a flash. -->
@@ -71,7 +71,9 @@
       // navigates between pages via the curtain, the entering-page flag below
       // suppresses the intro so the curtain reveal isn't interrupted.
       var entering = sessionStorage.getItem('seleqt_transitioning');
-      if (!reducedMotion && !entering) {
+      // During Diwali the first page of a visit opens on fireworks instead (diwali-fx.js).
+      var dwOpening = document.documentElement.classList.contains('dw-opening');
+      if (!reducedMotion && !entering && !dwOpening) {
         document.documentElement.classList.add('intro-active');
       }
     })();
@@ -163,6 +165,33 @@
     <div class="hero-scroll-hint">
       <span>Scroll</span>
       <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- GUJARAT AFTER DARK (Diwali only: diwali.js unhides it and loads the satellite frames) -->
+  <section class="dw-nl-section" id="night-lights" hidden>
+    <div class="container">
+      <header class="dw-nl-head">
+        <p class="dw-nl-kicker">This Diwali</p>
+        <h2 class="dw-nl-title">Gujarat <em>After Dark</em></h2>
+        <p class="dw-nl-desc">Every Diwali, a picture of India "lit up from space" does the rounds. It isn't Diwali: <a href="https://earthobservatory.nasa.gov/images/79682/south-asian-night-lights" target="_blank" rel="noopener">NASA explains</a> it is a 2003 composite of weather-satellite data, coloured by the year each light first appeared, and that Diwali's extra light is "likely imperceptible" from orbit. What the satellites really show is better: how much brighter Gujarat has grown at night. Economists read night lights as a measure of growth.</p>
+      </header>
+      <div class="dw-nl" data-nl>
+        <div>
+          <div class="dw-nl-stage" role="img" aria-label="Satellite images of Gujarat at night, one for each year from 2012 to 2026, showing city lights spreading and brightening"><span class="dw-nl-year"></span></div>
+          <div class="dw-nl-slider">
+            <button type="button" class="dw-nl-btn" data-act="play">Play the years</button>
+            <input type="range" id="dw-nl-year" aria-label="Year">
+            <output for="dw-nl-year"></output>
+          </div>
+        </div>
+        <aside class="dw-nl-side">
+          <h3>How much brighter, 2012 to 2026</h3>
+          <ul></ul>
+          <p>Each frame is the median of about 45 nights from January to March, after Diwali, so festival lighting never inflates a year. The brightest city cores reach the satellite's ceiling, so their growth is understated; Ahmedabad is measured across its metro for that reason.</p>
+        </aside>
+      </div>
+      <p class="dw-nl-src">Night-light imagery: NASA Black Marble (VNP46A2, VIIRS on Suomi NPP) via NASA Global Imagery Browse Services (GIBS); yearly January to March median composites processed by SELEQT. We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS). On night lights and growth: Henderson, Storeygard and Weil, <em>American Economic Review</em>, 2012. Brightness is not income; this is a picture of change, not a forecast.</p>
     </div>
   </section>
 

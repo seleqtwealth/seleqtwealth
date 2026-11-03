@@ -24,10 +24,12 @@ window.SELEQT_BOOKING_URL = 'https://calendly.com/seleqt/private-conversation';
 // The head script on each page marks the festival (html.diwali-season);
 // the decorations live in diwali.js so they cost nothing the rest of the year.
 if (document.documentElement.classList.contains('diwali-season')) {
-  const dw = document.createElement('script');
-  dw.src = '/diwali.js';
-  dw.defer = true;
-  document.head.appendChild(dw);
+  ['/diwali.js', '/diwali-fx.js'].forEach(src => {    // decorations, and the fireworks + opening
+    const dw = document.createElement('script');
+    dw.src = src;
+    dw.async = false;
+    document.head.appendChild(dw);
+  });
 }
 
 (function() {

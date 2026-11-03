@@ -28,9 +28,9 @@
     });
   }
 
-  // ── Hero photos: towers light up, diyas light the haveli door ─────────
+  // ── Hero photos: towers light up, diyas light the banyan ──────────────
   function heroLights(on) {
-    document.querySelectorAll('.dw-lights, .dw-haveli-light, .dw-haveli-brass').forEach(n => n.remove());
+    document.querySelectorAll('.dw-lights, .dw-banyan-light, .dw-banyan-bark').forEach(n => n.remove());
     if (!on) return;
     const gift = document.querySelector('.hero-photo--gift .hero-photo');
     if (gift) {
@@ -43,19 +43,19 @@
         gift.appendChild(img);
       });
     }
-    const haveli = document.querySelector('.hero-photo--haveli .hero-photo');
-    if (haveli) {
-      ['dw-haveli-light', 'dw-haveli-brass'].forEach(cls => {
+    const banyan = document.querySelector('.hero-photo--banyan .hero-photo');
+    if (banyan) {
+      ['dw-banyan-light', 'dw-banyan-bark'].forEach(cls => {
         const layer = document.createElement('div');
         layer.className = cls;
-        haveli.insertBefore(layer, haveli.querySelector('.hero-photo-glow'));
+        banyan.insertBefore(layer, banyan.querySelector('.hero-photo-glow'));
       });
     }
   }
 
   // ── Sky lanterns drifting up, and embers trailing the cursor ──────────
   function startSky() {
-    if (reduce || sky || document.body.hasAttribute('data-dw-page')) return;
+    if (reduce || sky) return;
     const c = document.createElement('canvas');
     c.id = 'dw-sky';
     c.setAttribute('aria-hidden', 'true');
@@ -177,11 +177,11 @@
     };
   }
 
-  // ── The switch: "Shubh Deepavali" opens the festive page, the state toggles ──
+  // ── The switch: "Shubh Deepavali" opens the night-lights map, the state toggles ──
   const pill = document.createElement('div');
   pill.className = 'dw-toggle';
   pill.innerHTML =
-    '<a class="dw-toggle-link" href="/diwali">' +
+    '<a class="dw-toggle-link" href="/#night-lights">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true">' +
         '<path class="dw-flame" d="M12 3.5c2.1 2.9 3.1 5 3.1 6.8a3.1 3.1 0 0 1-6.2 0c0-1.8 1-3.9 3.1-6.8z" fill="#f2c25c"/>' +
         '<path d="M2.8 14.6h18.4c0 3.3-4.1 5.9-9.2 5.9s-9.2-2.6-9.2-5.9z" fill="#b8924e"/>' +
@@ -195,6 +195,7 @@
 
   function apply(on) {
     root.classList.toggle('diwali', on);
+    nightLights(on);
     torans(on);
     heroLights(on);
     if (on) startSky(); else if (sky) sky.stop();
@@ -214,23 +215,75 @@
     window.seleqtTrack && window.seleqtTrack('diwali_lights', { on: on });
   });
 
-  // during the festival, a quiet way into the festive page from the homepage hero
-  function heroLink() {
-    const actions = document.querySelector('#hero .hero-actions, .hero .hero-actions');
-    if (!actions || document.querySelector('.dw-hero-link')) return;
-    const row = document.createElement('div');
-    row.className = 'dw-hero-row';
-    row.innerHTML = '<a class="dw-hero-link" href="/diwali">This Diwali: five small things to play with <span aria-hidden="true">&rarr;</span></a>';
-    actions.appendChild(row);
+  // ── Gujarat After Dark: satellite night lights under the homepage hero ──
+  // Reads /images/diwali/nightlights/data.json (built from NASA imagery).
+  let nlReady = false;
+  function nightLights(on) {
+    const sec = document.getElementById('night-lights');
+    if (!sec) return;
+    sec.hidden = !on;
+    if (!on || nlReady) return;
+    nlReady = true;
+    const box = sec.querySelector('[data-nl]');
+    const stage = box.querySelector('.dw-nl-stage');
+    const slider = box.querySelector('input[type=range]');
+    const out = box.querySelector('output');
+    const yearEl = box.querySelector('.dw-nl-year');
+    const list = box.querySelector('.dw-nl-side ul');
+    const play = box.querySelector('[data-act="play"]');
+    fetch('/images/diwali/nightlights/data.json').then(r => r.json()).then(data => {
+      const years = data.years;
+      const imgs = new Map();
+      function img(y) {
+        if (!imgs.has(y)) {
+          const i = new Image();
+          i.alt = '';
+          i.decoding = 'async';
+          i.src = '/images/diwali/nightlights/gujarat-' + y + '.webp';
+          stage.insertBefore(i, yearEl);
+          imgs.set(y, i);
+        }
+        return imgs.get(y);
+      }
+      data.cities.forEach(c => {
+        const p = document.createElement('span');
+        p.className = 'dw-nl-pin' + (c.left ? ' is-left' : '') + (c.minor ? ' is-minor' : '');
+        p.style.left = (c.x * 100) + '%';
+        p.style.top = (c.y * 100) + '%';
+        p.innerHTML = '<span>' + c.name + '</span>';
+        stage.appendChild(p);
+      });
+      list.innerHTML = data.growth.map(g => '<li><span>' + g.name + '</span><b>' + g.label + '</b></li>').join('');
+      slider.min = 0; slider.max = years.length - 1; slider.step = 1;
+      let cur = -1, timer = 0;
+      function show(i) {
+        i = Math.max(0, Math.min(years.length - 1, i));
+        if (i === cur) return;
+        cur = i;
+        const y = years[i];
+        imgs.forEach((el, k) => el.classList.toggle('is-on', k === y));
+        img(y).classList.add('is-on');
+        if (years[i + 1]) img(years[i + 1]);          // preload the next year
+        slider.value = i; out.textContent = y; yearEl.textContent = y;
+      }
+      function stop() { clearInterval(timer); timer = 0; play.textContent = 'Play the years'; }
+      slider.addEventListener('input', () => { stop(); show(+slider.value); });
+      play.addEventListener('click', () => {
+        if (timer) return stop();
+        if (cur >= years.length - 1) show(0);
+        play.textContent = 'Pause';
+        timer = setInterval(() => { if (cur >= years.length - 1) stop(); else show(cur + 1); }, 1100);
+      });
+      show(0);
+      // play once when it first comes into view
+      new IntersectionObserver((es, o) => {
+        if (es[0].isIntersecting && !reduce) { o.disconnect(); play.click(); }
+      }, { threshold: 0.5 }).observe(stage);
+    }).catch(() => { sec.hidden = true; });
   }
 
   function init() {
-    if (document.body.hasAttribute('data-dw-page')) {   // the festive page dresses itself
-      torans(true);
-      return;
-    }
     document.body.appendChild(pill);
-    heroLink();
     apply(root.classList.contains('diwali'));
     // where a hero carries a photo credit, wait until the hero is scrolled past
     // so the switch never sits on top of the credit line

@@ -4,30 +4,28 @@ Diwali night assets for the photo heroes (run once; outputs are committed).
 
   images/diwali/gift-lights-a.webp   lit office windows for the GIFT City skyline
   images/diwali/gift-lights-b.webp   a second, sparser set used for a slow twinkle
-  images/diwali/haveli-brass-mask.webp the brass bands, studs and rings on the haveli door, used by
-                                     Strings of Light so they catch the lamplight while the
-                                     dark wood and stone do not
-  images/diwali/haveli-brass-lit.webp the door's own brass, warmed and fading upward from lamps
-                                     on the step: screened over the Family Office hero at night
+  images/diwali/banyan-bark-lit.webp the photo's own bark texture in lamplight gold, fading out from
+                                     diyas at the foot of the trunk: screened over the Family
+                                     Office hero at night
 
 Every layer has the same size and framing as its hero photo, so it lines up with
 object-fit: cover and the same object-position. Window shapes come from the
 photo itself: by day the glass is darker than the frames and the sky, so the
 dark panes inside each tower become the windows that light up at night.
 
-The haveli door plates come from the original photo, which is not kept in the repo
-("Haveli Door.JPG", Sarthak Shah, Wikimedia Commons, CC BY-SA 3.0). Pass it once:
+The banyan plates come from the original photo, which is not kept in the repo
+(Brandon Green, Unsplash, unsplash.com/photos/GEyXGTY2e9w, Unsplash licence). Pass it once:
 
-  python3 scripts/build-diwali-assets.py --haveli /path/to/Haveli_Door.JPG
-  -> images/heroes/family-office-haveli.webp, @2x   (cropped to 4:3, monochrome)
-     images/diwali/haveli-door.webp, -small.webp     (cropped to 4:3, colour, for the WebGL scene)
+  python3 scripts/build-diwali-assets.py --banyan /path/to/banyan.jpg
+  -> images/heroes/family-office-banyan.webp, @2x   (cropped to 4:3 on the trunk, monochrome)
+     images/diwali/banyan-bark-lit.webp              (the Diwali lamplight layer for that hero)
 
 Run: python3 scripts/build-diwali-assets.py   (needs Pillow + numpy)
 """
 import sys
 import os
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "images", "diwali")
@@ -84,55 +82,54 @@ def lights(lum, p_lit, b_range):
     return Image.fromarray(out)
 
 
-HAVELI_CROP = (0, 420, 2736, 2472)          # 4:3 box in the original: the elephant arch down to the door rings
+BANYAN_CROP = (265, 0, 5578, 3985)          # 4:3 box in the 5961 x 3985 original, centred on the trunk
+LAMP = (0.5, 0.97)                           # diyas at the foot of the trunk, as fractions of the crop
 
 
-def haveli_plates(src):
-    im = Image.open(src).convert("RGB").crop(HAVELI_CROP)
-    heroes = os.path.join(ROOT, "images", "heroes")
-    im.resize((2400, 1800), Image.LANCZOS).save(os.path.join(OUT, "haveli-door.webp"), "WEBP", quality=82, method=6)
-    im.resize((1400, 1050), Image.LANCZOS).save(os.path.join(OUT, "haveli-door-small.webp"), "WEBP", quality=82, method=6)
-    # monochrome hero, stretched to the same full tonal range as the GIFT City hero
-    g = np.asarray(im.convert("L"), float)
-    lo, hi = np.percentile(g, 0.5), np.percentile(g, 99.6)
-    g = np.clip((g - lo) / (hi - lo), 0, 1) ** 1.12 * 255
-    mono = Image.fromarray(g.astype(np.uint8)).convert("RGB")
-    mono.save(os.path.join(heroes, "family-office-haveli@2x.webp"), "WEBP", quality=80, method=6)
-    mono.resize((1600, 1200), Image.LANCZOS).save(os.path.join(heroes, "family-office-haveli.webp"), "WEBP", quality=80, method=6)
-
-
-def brass_lit(rgb, mask):
-    """Lamplight on the brass: the photo's own (sharp) texture in gold, inside the band mask, lit from below."""
-    h, w = mask.shape
-    ys = np.mgrid[0:h, 0:w][0] / h
-    fall = np.clip((ys - 0.43) / 0.57, 0, 1) ** 2.2 * 0.9 + 0.1            # much stronger towards the step
-    lum = (0.2126 * rgb[..., 0] + 0.7152 * rgb[..., 1] + 0.0722 * rgb[..., 2]) / 255.0
-    lit = np.clip((lum ** 0.9)[..., None] * np.array([1.0, 0.7, 0.34]) * 2.1, 0, 1)    # lamplight gold, the metal's own texture
-    out = np.dstack([lit * 255, np.clip(mask * fall * 1.8, 0, 1) * 255]).astype(np.uint8)
-    return Image.fromarray(out)
-
-
-def brass_mask(rgb):
-    """Brass is saturated yellow-gold; the stone is pale and the wood is dark and dull."""
+def banyan_classes(rgb):
+    """Per-pixel leaf, sky and bark weights from colour: leaves are green, sky gaps are bright and grey."""
     a = rgb / 255.0
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
     mx, mn = a.max(-1), a.min(-1)
     sat = (mx - mn) / np.maximum(mx, 1e-6)
-    r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    yellow = np.clip((g - b) / np.maximum(mx - mn, 1e-6), 0, 1) * (r >= g * 0.92)
-    m = np.clip((sat - 0.24) / 0.18, 0, 1) * np.clip((mx - 0.34) / 0.18, 0, 1) * yellow
-    h, w = m.shape
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    leaf = np.clip((g - np.maximum(r, b)) / np.maximum(mx, 1e-6) * 5 - 0.15, 0, 1)
+    sky = np.clip((lum - 0.7) / 0.14, 0, 1) * np.clip((0.32 - sat) / 0.16, 0, 1)
+    bark = np.clip(1 - leaf, 0, 1) * (1 - sky)
+    return leaf, sky, bark, lum
+
+
+def soft(x, radius):
+    return np.asarray(Image.fromarray((np.clip(x, 0, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(radius)), float) / 255
+
+
+def banyan_plates(src):
+    im = Image.open(src).convert("RGB").crop(BANYAN_CROP)
+    heroes = os.path.join(ROOT, "images", "heroes")
+    # monochrome hero at full range; the brightest sky gaps held back a little so the trunk leads
+    big = im.resize((2800, 2100), Image.LANCZOS)
+    g = np.asarray(big.convert("L"), float)
+    lo, hi = np.percentile(g, 0.5), np.percentile(g, 99.6)
+    g = np.clip((g - lo) / (hi - lo), 0, 1)
+    g = np.where(g > 0.8, 0.8 + (g - 0.8) * 0.45, g) ** 1.08 * 255
+    mono = Image.fromarray(g.astype(np.uint8)).convert("RGB")
+    mono.save(os.path.join(heroes, "family-office-banyan@2x.webp"), "WEBP", quality=80, method=6)
+    mono.resize((1600, 1200), Image.LANCZOS).save(os.path.join(heroes, "family-office-banyan.webp"), "WEBP", quality=80, method=6)
+    bark_lit(np.asarray(im.resize((1400, 1050), Image.LANCZOS), float)).save(
+        os.path.join(OUT, "banyan-bark-lit.webp"), "WEBP", quality=78, method=6)
+
+
+def bark_lit(rgb):
+    """Lamplight from diyas at the foot of the trunk, on the bark only (leaves and sky stay dark)."""
+    h, w = rgb.shape[:2]
+    _, _, bark, lum = banyan_classes(rgb)
+    bark = soft(bark, 0.8)
     ys, xs = np.mgrid[0:h, 0:w]
-    door = ((xs > 0.262 * w) & (xs < 0.787 * w) & (ys > 0.43 * h)).astype(float)   # the two door leaves only
-    m *= np.asarray(Image.fromarray((door * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(4)), float) / 255
-    m = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MedianFilter(3)), float) / 255
-    # tarnish breaks the bands into patches; light runs along polished metal, so smooth along each band
-    k = np.ones(11) / 11
-    m = np.maximum(m, np.apply_along_axis(lambda r: np.convolve(r, k, "same"), 1, m) * 1.5)
-    m = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.9)), float)
-    a = np.zeros(rgb.shape[:2] + (4,), np.uint8)
-    a[..., :3] = 255
-    a[..., 3] = np.clip(m * 1.3, 0, 255).astype(np.uint8)
-    return Image.fromarray(a)
+    d2 = ((xs / w - LAMP[0]) * 1.33 / 0.34) ** 2 + ((ys / h - LAMP[1]) / 0.3) ** 2
+    alpha = np.clip(bark * np.exp(-d2 * 1.8) * 0.85, 0, 1)            # light from the ground reaches the lower roots only
+    lit = np.clip((lum ** 0.9)[..., None] * np.array([1.0, 0.66, 0.3]) * 1.5, 0, 1)
+    lit[alpha < 0.01] = 0                    # nothing to show there: keeps the file small
+    return Image.fromarray(np.dstack([lit * 255, alpha * 255]).astype(np.uint8))
 
 
 def main():
@@ -140,13 +137,8 @@ def main():
     gift = np.asarray(Image.open(os.path.join(ROOT, "images/heroes/gift-city-skyline.webp")).convert("L"), float)
     lights(gift, 0.5, (0.5, 0.95)).save(os.path.join(OUT, "gift-lights-a.webp"), "WEBP", quality=80, method=6)
     lights(gift, 0.22, (0.6, 1.0)).save(os.path.join(OUT, "gift-lights-b.webp"), "WEBP", quality=80, method=6)
-    if "--haveli" in sys.argv:
-        haveli_plates(sys.argv[sys.argv.index("--haveli") + 1])
-    door = Image.open(os.path.join(OUT, "haveli-door.webp")).convert("RGB").resize((1600, 1200), Image.LANCZOS)
-    rgb = np.asarray(door, float)
-    mask = brass_mask(rgb)
-    mask.save(os.path.join(OUT, "haveli-brass-mask.webp"), "WEBP", quality=80, method=6)
-    brass_lit(rgb, np.asarray(mask, float)[..., 3] / 255).save(os.path.join(OUT, "haveli-brass-lit.webp"), "WEBP", quality=84, method=6)
+    if "--banyan" in sys.argv:
+        banyan_plates(sys.argv[sys.argv.index("--banyan") + 1])
     for f in sorted(os.listdir(OUT)):
         print(f, os.path.getsize(os.path.join(OUT, f)) // 1024, "KB")
 

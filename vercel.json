@@ -8,6 +8,7 @@
       "destination": "https://seleqtwealth.in/:path*",
       "permanent": true
     },
-    { "source": "/calculators", "destination": "/", "permanent": false }
+    { "source": "/calculators", "destination": "/", "permanent": false },
+    { "source": "/diwali", "destination": "/", "permanent": true }
   ]
 }
