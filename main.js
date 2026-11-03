@@ -20,7 +20,7 @@ window.seleqtTrack = function (name, params) {
 // booking buttons stay hidden.
 window.SELEQT_BOOKING_URL = 'https://calendly.com/seleqt/private-conversation';
 
-// ── Diwali night (6 to 11 Nov 2026) ─────────────────────────────────
+// ── Diwali night (3 to 11 Nov 2026) ─────────────────────────────────
 // The head script on each page marks the festival (html.diwali-season);
 // the decorations live in diwali.js so they cost nothing the rest of the year.
 if (document.documentElement.classList.contains('diwali-season')) {

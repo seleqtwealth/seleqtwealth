@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Diwali fireworks (6 to 11 November 2026): a tap anywhere on the site sets
+   Diwali fireworks (3 to 11 November 2026): a tap anywhere on the site sets
    off a firework, and the first page of a visit opens on a short show.
    Loaded by main.js only during the festival (html.diwali-season). Taps do
    nothing while the lights are switched off; reduced motion gets none of it.

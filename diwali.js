@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Diwali night decorations (6 to 11 November 2026)
+   Diwali night decorations (3 to 11 November 2026)
    Loaded by main.js only when the head script has marked the festival
    (html.diwali-season). html.diwali means the lights are on; the visitor can
    switch them off with the "Shubh Deepavali" button, remembered on this device.
