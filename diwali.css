@@ -88,14 +88,14 @@ html.diwali .lg-dialog-close { background: rgba(11, 21, 38, 0.9); }
   top: 0;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 64px;
   z-index: 3;
   pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='40' viewBox='0 0 200 40'%3E%3Cpath d='M0 3H200' stroke='%23b8924e' stroke-width='.7' opacity='.55'/%3E%3Cpath d='M0 3Q100 30 200 3' fill='none' stroke='%23b8924e' stroke-width='1.1' opacity='.85'/%3E%3Cg fill='%23d98c2b'%3E%3Ccircle cx='20' cy='7.9' r='3'/%3E%3Ccircle cx='40' cy='11.6' r='3.2'/%3E%3Ccircle cx='60' cy='14.3' r='3.3'/%3E%3Ccircle cx='80' cy='16' r='3.4'/%3E%3Ccircle cx='100' cy='16.5' r='3.6'/%3E%3Ccircle cx='120' cy='16' r='3.4'/%3E%3Ccircle cx='140' cy='14.3' r='3.3'/%3E%3Ccircle cx='160' cy='11.6' r='3.2'/%3E%3Ccircle cx='180' cy='7.9' r='3'/%3E%3C/g%3E%3Cg fill='%23f2c25c'%3E%3Ccircle cx='20' cy='7.9' r='1.2'/%3E%3Ccircle cx='40' cy='11.6' r='1.3'/%3E%3Ccircle cx='60' cy='14.3' r='1.3'/%3E%3Ccircle cx='80' cy='16' r='1.4'/%3E%3Ccircle cx='100' cy='16.5' r='1.5'/%3E%3Ccircle cx='120' cy='16' r='1.4'/%3E%3Ccircle cx='140' cy='14.3' r='1.3'/%3E%3Ccircle cx='160' cy='11.6' r='1.3'/%3E%3Ccircle cx='180' cy='7.9' r='1.2'/%3E%3C/g%3E%3Cg fill='%23d4b06a'%3E%3Ccircle cx='30' cy='9.9' r='1.1'/%3E%3Ccircle cx='50' cy='13.1' r='1.1'/%3E%3Ccircle cx='70' cy='15.3' r='1.1'/%3E%3Ccircle cx='90' cy='16.4' r='1.1'/%3E%3Ccircle cx='110' cy='16.4' r='1.1'/%3E%3Ccircle cx='130' cy='15.3' r='1.1'/%3E%3Ccircle cx='150' cy='13.1' r='1.1'/%3E%3Ccircle cx='170' cy='9.9' r='1.1'/%3E%3C/g%3E%3Cpath d='M100 20.5V23' stroke='%23b8924e' stroke-width='.8'/%3E%3Cpath d='M100 23C103.6 27 103.6 32 100 36.5C96.4 32 96.4 27 100 23Z' fill='%23b8924e' fill-opacity='.28' stroke='%23d4b06a' stroke-width='.8'/%3E%3Cpath d='M100 24.5V35' stroke='%23d4b06a' stroke-width='.5' opacity='.7'/%3E%3C/svg%3E") repeat-x center top / 200px 40px;
+  background: url("/images/diwali/marigold-toran.webp") repeat-x center top / 300px 64px;   /* real marigold strands, strung along swags */
   opacity: 0;
   animation: dw-fade 1.4s 0.2s var(--ease-out) forwards;
 }
-@keyframes dw-fade { to { opacity: 0.9; } }
+@keyframes dw-fade { to { opacity: 1; } }
 
 /* ── Lanterns and embers share one canvas, above content, below the nav ── */
 #dw-sky {
@@ -224,7 +224,7 @@ html.diwali .hero-photo--banyan .hero-photo-base { filter: brightness(0.26) cont
   .dw-toggle { left: 14px; bottom: 22px; font-size: 0.62rem; }
   .dw-toggle-link { padding: 8px 10px 8px 9px; }
   .dw-toggle-state { padding: 8px 12px 8px 10px; }
-  .dw-toran { height: 32px; background-size: 160px 32px; }
+  .dw-toran { height: 47px; background-size: 220px 47px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -410,3 +410,93 @@ html.dw-opening.dw-reveal::before { opacity: 0; }
   transition: opacity 1s var(--ease-out) 0.6s, transform 1.2s var(--ease-out) 0.6s;
 }
 .dw-open.is-lit .dw-open-sub { opacity: 0.92; transform: none; }
+
+/* ── Gilded words: the gold italic words in headings, in real gold leaf (images/diwali/gold-leaf.webp),
+   catching a slow glint of lamplight now and then. diwali.js staggers the glints. ── */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  html.diwali :is(.section-title em, .hero .hero-title em.italic, .hero-title-center em.italic, .principle h3 em, .sub-hero h1 em,
+    .faq-heading em, .about-principle h3 em, .team-title em, .sub-cta-section h3 em, .insight-title em, .article-title em,
+    .xp-title em, .xp-panel h3 em, .gc-hook-head h2 em, .gf-head h2 em, .dw-nl-title em) {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image:
+      linear-gradient(100deg, rgba(255, 250, 232, 0) 42%, rgba(255, 250, 232, 0.92) 50%, rgba(255, 250, 232, 0) 58%),
+      url("/images/diwali/gold-leaf.webp");
+    background-size: 320% 100%, 560px auto;
+    background-repeat: no-repeat, repeat;
+    background-position: 100% 0, var(--gl-x, 30%) 40%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding: 0.1em 0.14em;            /* room for the italic overhang, so no letter is clipped */
+    margin: -0.1em -0.14em;
+    filter: drop-shadow(0 0 10px rgba(226, 172, 84, 0.2));
+    animation: dw-gilt 11s ease-in-out infinite;
+    animation-delay: var(--gl-d, 0s);
+  }
+}
+/* titles that main.js splits into word pieces for their reveal: each piece paints on its own layer,
+   so each one carries the gold itself (the parent's clip cannot reach them) */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  html.diwali .contact-section .section-title em .split-word-inner {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image:
+      linear-gradient(100deg, rgba(255, 250, 232, 0) 42%, rgba(255, 250, 232, 0.92) 50%, rgba(255, 250, 232, 0) 58%),
+      url("/images/diwali/gold-leaf.webp");
+    background-size: 320% 100%, 560px auto;
+    background-repeat: no-repeat, repeat;
+    background-position: 100% 0, var(--gl-x, 30%) 40%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: dw-gilt 11s ease-in-out infinite;
+    animation-delay: var(--gl-d, 0s);
+  }
+}
+@keyframes dw-gilt {
+  0%, 76% { background-position: 100% 0, var(--gl-x, 30%) 40%; }
+  90%, 100% { background-position: 0% 0, var(--gl-x, 30%) 40%; }
+}
+
+/* ── Rangoli: a real flower rangoli ringed with lit diyas, at a few section breaks ── */
+.dw-rangoli-band {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  pointer-events: none;
+}
+.dw-rangoli {
+  position: relative;
+  width: 240px;
+  max-width: 64vw;
+  aspect-ratio: 600 / 429;
+  background: url("/images/diwali/rangoli.webp") center / contain no-repeat;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity 1.6s var(--ease-out), transform 1.8s var(--ease-out);
+}
+.dw-rangoli::before {                 /* the diyas' warm light on the floor around it */
+  content: '';
+  position: absolute;
+  inset: -34% -26%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(255, 168, 82, 0.24), rgba(255, 140, 60, 0.08) 55%, rgba(255, 140, 60, 0) 100%);
+  animation: dw-lamp-flicker 3.7s ease-in-out infinite;
+}
+.dw-rangoli-band.is-in .dw-rangoli { opacity: 1; transform: none; }
+@media (max-width: 720px) {
+  .dw-rangoli-band { height: 190px; }
+  .dw-rangoli { width: 180px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.diwali :is(.section-title em, .hero .hero-title em.italic, .hero-title-center em.italic, .principle h3 em, .sub-hero h1 em,
+    .faq-heading em, .about-principle h3 em, .team-title em, .sub-cta-section h3 em, .insight-title em, .article-title em,
+    .xp-title em, .xp-panel h3 em, .gc-hook-head h2 em, .gf-head h2 em, .dw-nl-title em) { animation: none; }
+  html.diwali .contact-section .section-title em .split-word-inner { animation: none; }
+  .dw-rangoli { transition: none; opacity: 1; transform: none; }
+  .dw-rangoli::before { animation: none; }
+}
