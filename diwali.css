@@ -365,7 +365,7 @@ html.dw-opening::before {
   z-index: 2147483000;
   background: radial-gradient(ellipse 90% 70% at 50% 36%, #0c1628 0%, #060b16 52%, #02050b 100%);
   transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: dw-cover-safety 0.6s 9s forwards;      /* if the script never runs, the page is never trapped */
+  animation: dw-cover-safety 0.6s 7s forwards;      /* if the script never runs, the page is never trapped */
 }
 html.dw-opening.dw-live::before { animation: none; }
 html.dw-opening.dw-reveal::before { opacity: 0; }

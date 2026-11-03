@@ -327,7 +327,7 @@
   function opening() {
     if (!root.classList.contains('dw-opening')) return;
     keep(() => sessionStorage.setItem('seleqt_dw_open', '1'));
-    if (performance.now() > 6000) {                                // a very slow load: don't keep anyone in the dark
+    if (performance.now() > 3500) {                                // a slow load: don't keep anyone in the dark
       root.classList.add('dw-reveal');
       setTimeout(() => root.classList.remove('dw-opening', 'dw-reveal'), 1100);
       return;
@@ -358,7 +358,7 @@
     if (!ok) { lit(); timeline = [{ t: clock + 2.2, fn: reveal }]; }   // no WebGL: the name alone, then the page
     const skip = () => { if (!done) { timeline = timeline.filter(e => e.fn !== reveal); reveal(); } };
     ['pointerdown', 'keydown', 'wheel', 'touchmove'].forEach(ev => window.addEventListener(ev, skip, { once: true, passive: true }));
-    setTimeout(skip, 5000);                                        // however slow the device, the page is never held back
+    setTimeout(skip, 4500);                                        // however slow the device, the page is never held back
     wake();
   }
 
