@@ -199,7 +199,7 @@
     "date_display": "4 November 2026",
     "read": 6,
     "excerpt": "Most family portfolios are built one decision at a time. A fund here because a relative recommended it, a property there because the opportunity felt right, a PMS because a banker called. Each choice made...",
-    "published": false,
+    "published": true,
     "listing_card": "        <article class=\"insight-card insight-card--featured reveal\">\n          <div class=\"insight-card-meta\">\n            <span class=\"insight-category\">Family Office</span>\n            <span class=\"insight-meta-dot\">·</span>\n            <time datetime=\"2026-11-04\">4 November 2026</time>\n            <span class=\"insight-meta-dot\">·</span>\n            <span class=\"insight-read-time\">6 min read</span>\n          </div>\n          <h2 class=\"insight-title\">\n            <a href=\"/blogs/family-investment-policy-statement\">The Family Investment Policy Statement: <em>The Document That Decides Before the Market Does</em></a>\n          </h2>\n          <p class=\"insight-excerpt\">Most family portfolios are built one decision at a time. A fund here because a relative recommended it, a property there because the opportunity felt right, a PMS because a banker called. Each choice made...</p>\n          <a href=\"/blogs/family-investment-policy-statement\" class=\"insight-cta\">Read the piece <span class=\"insight-cta-arrow\">&rarr;</span></a>\n        </article>\n",
     "sitemap_url": "  <url>\n    <loc>https://seleqtwealth.in/blogs/family-investment-policy-statement</loc>\n    <lastmod>2026-11-04</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n"
   },
