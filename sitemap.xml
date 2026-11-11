@@ -56,7 +56,7 @@
   </url>
   <url>
     <loc>https://seleqtwealth.in/blogs</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -323,6 +323,12 @@
   <url>
     <loc>https://seleqtwealth.in/blogs/family-investment-policy-statement</loc>
     <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://seleqtwealth.in/blogs/specialised-investment-funds-sif</loc>
+    <lastmod>2026-11-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
