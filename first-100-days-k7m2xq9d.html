@@ -2,23 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>The First 100 Days · Draft</title>
   <link rel="icon" href="data:," />
-  <meta name="description" content="Draft template: what a family needs to do after someone dies, in the order it needs doing." />
+  <meta name="description" content="Draft template: what to do after someone in your family dies, one step at a time." />
   <style>
     /* Neutral draft template: no brand kit on purpose (a new identity is in progress).
-       One reading column, a quiet serif for the story and headings, system sans for the steps. */
+       One part of the journey per screen; quiet serif for headings and briefs, system sans for the steps. */
     :root {
-      --bg: #fbfaf7;
-      --panel: #f3f1ec;
-      --ink: #1f2124;
-      --muted: #62666b;
-      --rule: #e2ded6;
-      --accent: #3d5a66;
-      --accent-soft: #e6ecee;
-      --story: #4a4740;
+      --bg: #fbfaf7; --panel: #f3f1ec; --ink: #1f2124; --muted: #62666b; --rule: #e2ded6;
+      --accent: #3d5a66; --accent-ink: #ffffff; --accent-soft: #e6ecee; --brief: #4a4740; --mark: #f4e7c5;
       --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       color-scheme: light;
@@ -26,462 +20,478 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #16181b; --panel: #1e2125; --ink: #e9e7e2; --muted: #a3a6aa; --rule: #30343a;
-        --accent: #9cc0cc; --accent-soft: #233036; --story: #cfc9bd; color-scheme: dark;
+        --accent: #9cc0cc; --accent-ink: #10181b; --accent-soft: #233036; --brief: #cfc9bd; --mark: #4a4126; color-scheme: dark;
       }
     }
+    html:lang(gu) { --sans: "Noto Sans Gujarati", "Gujarati Sangam MN", "Shruti", -apple-system, "Segoe UI", sans-serif; --serif: "Noto Serif Gujarati", "Gujarati MT", "Gujarati Sangam MN", "Shruti", Georgia, serif; }
+    html:lang(hi) { --sans: "Noto Sans Devanagari", "Kohinoor Devanagari", "Devanagari Sangam MN", "Mangal", -apple-system, "Segoe UI", sans-serif; --serif: "Noto Serif Devanagari", "ITF Devanagari", "Devanagari MT", "Kohinoor Devanagari", "Mangal", Georgia, serif; }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
     a { color: var(--accent); text-underline-offset: 3px; }
-    a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-    .draft { position: sticky; top: 0; z-index: 10; padding: 7px max(16px, env(safe-area-inset-left)); background: var(--ink); color: var(--bg); font-size: 12px; letter-spacing: .04em; text-align: center; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.22; text-wrap: balance; margin: 0; }
+    h1 { font-size: clamp(2.6rem, 7vw, 4.2rem); letter-spacing: -0.01em; }
+    h2 { font-size: clamp(1.9rem, 4.6vw, 2.6rem); }
+    h3 { font-size: 1.25rem; }
+    p { margin: 0 0 1em; }
+    [hidden] { display: none !important; }
+
+    .topbar { position: sticky; top: 0; z-index: 20; background: var(--ink); color: var(--bg); font-size: 12px; letter-spacing: .03em; }
+    .topbar .in { max-width: 1040px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; padding: 7px max(16px, env(safe-area-inset-left)); }
+    .langs { display: flex; gap: 2px; }
+    .langs button { padding: 3px 9px; border: 0; border-radius: 999px; background: transparent; color: inherit; opacity: .75; cursor: pointer; font-size: 12.5px; }
+    .langs button[aria-pressed="true"] { background: var(--bg); color: var(--ink); opacity: 1; }
+    .tnote { padding: 6px max(16px, env(safe-area-inset-left)); background: var(--mark); color: var(--ink); font-size: 13px; text-align: center; }
+
     .wrap { max-width: 720px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)); }
     .wide { max-width: 1040px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)); }
-    h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.2; text-wrap: balance; margin: 0; }
-    h1 { font-size: clamp(2.6rem, 7vw, 4.2rem); letter-spacing: -0.01em; }
-    h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
-    h3 { font-size: 1.3rem; }
-    p { margin: 0 0 1em; }
+    main { padding: 40px 0 80px; }
     .kicker { margin: 0 0 14px; color: var(--muted); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; }
+    html:lang(gu) .kicker, html:lang(hi) .kicker { letter-spacing: .02em; text-transform: none; font-size: 14px; }
 
-    /* opening */
-    .hero { padding: 72px 0 40px; }
-    .hero .lede { margin-top: 18px; font: 1.25rem/1.55 var(--serif); color: var(--story); max-width: 34em; }
-    .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 34px; }
-    .door { display: block; padding: 18px 20px; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); color: var(--ink); text-decoration: none; transition: border-color .2s; }
-    .door:hover { border-color: var(--accent); }
-    .door b { display: block; font-weight: 600; }
-    .door span { color: var(--muted); font-size: 15px; }
-    .care { margin: 8px 0 0; padding: 22px 24px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0; font: 1.08rem/1.65 var(--serif); }
+    /* intro */
+    .intro { padding-top: 32px; }
+    .lede { margin-top: 18px; font: 1.28rem/1.55 var(--serif); color: var(--brief); max-width: 34em; }
+    .care { margin: 30px 0 0; padding: 22px 24px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 12px 12px 0; font: 1.1rem/1.7 var(--serif); }
     .care p:last-child { margin: 0; }
+    .how { margin: 24px 0 30px; color: var(--muted); }
+    .welcome { margin: 0 0 26px; padding: 20px 22px; border: 1px solid var(--rule); border-radius: 12px; background: var(--panel); }
+    .welcome p { margin: 0 0 14px; }
 
-    /* sections */
-    section { padding: 56px 0; border-top: 1px solid var(--rule); }
-    .when { display: inline-block; margin-bottom: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: .02em; }
-    .story { margin: 22px 0 26px; padding-left: 20px; border-left: 2px solid var(--rule); font: italic 1.12rem/1.7 var(--serif); color: var(--story); }
-    .story p:last-child { margin: 0; }
-    ol.steps { margin: 0 0 8px; padding: 0; list-style: none; counter-reset: s; }
-    ol.steps > li { position: relative; padding: 0 0 18px 44px; counter-increment: s; }
-    ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 600; display: grid; place-items: center; }
-    ol.steps b { font-weight: 600; }
-    .note { color: var(--muted); font-size: 15px; }
+    /* buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 22px; border-radius: 999px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: 15.5px; cursor: pointer; text-decoration: none; }
+    .btn:hover { filter: brightness(1.06); }
+    .btn.ghost { background: transparent; color: var(--accent); }
+    .btn.ghost:hover { background: var(--accent-soft); filter: none; }
+    .btn.quiet { border-color: transparent; background: transparent; color: var(--muted); font-weight: 500; }
+    .btn.quiet:hover { color: var(--ink); filter: none; }
+    .btn.small { padding: 7px 13px; font-size: 13.5px; }
+    .btnrow { display: flex; flex-wrap: wrap; gap: 10px; }
 
-    /* questions families ask */
-    .qs { margin-top: 26px; }
-    .qs h3 { margin-bottom: 8px; font-size: 1.05rem; font-family: var(--sans); font-weight: 600; letter-spacing: .01em; }
+    /* the path */
+    .path { position: relative; margin: 6px 0 34px; }
+    .path::before { content: ''; position: absolute; left: calc(100% / 12); right: calc(100% / 12); top: 9px; height: 2px; background: var(--rule); }
+    .path ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); }
+    .pathnow { display: none; margin: 12px 0 0; text-align: center; font-size: 13.5px; font-weight: 600; }
+    .path li { position: relative; text-align: center; }
+    .path button { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; color: var(--muted); font-size: 12.5px; line-height: 1.25; }
+    .path .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--rule); background: var(--bg); position: relative; z-index: 1; transition: border-color .3s, background .3s; }
+    .path .passed .dot { border-color: var(--accent); background: var(--accent); }
+    .path .here .dot { border-color: var(--accent); background: var(--bg); box-shadow: 0 0 0 5px var(--accent-soft); }
+    .path .here button { color: var(--ink); font-weight: 600; }
+    .path .bar { position: absolute; left: calc(100% / 12); top: 9px; height: 2px; background: var(--accent); z-index: 0; transition: width .5s ease; }
+
+    /* a stage */
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; color: var(--muted); font-size: 14px; }
+    .when { display: inline-block; padding: 3px 11px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; }
+    .brief { margin: 18px 0 30px; max-width: 38em; font: 1.22rem/1.65 var(--serif); color: var(--brief); }
+    .introp { margin-bottom: 24px; }
+    .sect { margin-top: 36px; }
+    .sect > h3 { margin-bottom: 6px; }
+    .sect > .sub { color: var(--muted); margin: 0 0 16px; font-size: 15.5px; }
+
+    .steps { list-style: none; margin: 18px 0 0; padding: 0; }
+    .step { display: grid; grid-template-columns: 34px 1fr; gap: 4px 12px; padding: 16px 0; border-top: 1px solid var(--rule); }
+    .step:last-child { border-bottom: 1px solid var(--rule); }
+    .tick { width: 26px; height: 26px; margin-top: 2px; border-radius: 50%; border: 1.5px solid var(--accent); background: transparent; cursor: pointer; display: grid; place-items: center; color: var(--accent-ink); }
+    .tick svg { width: 14px; height: 14px; opacity: 0; }
+    .step.is-done .tick { background: var(--accent); }
+    .step.is-done .tick svg { opacity: 1; }
+    .step b { display: block; font-weight: 600; }
+    .step.is-done b { color: var(--muted); }
+    .step p { margin: 4px 0 0; color: var(--ink); }
+    .step .acts { grid-column: 2; margin-top: 8px; }
+    .linkbtn { padding: 0; border: 0; background: none; color: var(--accent); cursor: pointer; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; margin-top: 18px; }
+    .card { padding: 20px 20px 16px; border: 1px solid var(--rule); border-radius: 12px; background: var(--panel); min-width: 0; }
+    .card h3 { margin-bottom: 8px; font-size: 1.18rem; }
+    .card dl { margin: 0; }
+    .card dt { margin-top: 12px; color: var(--muted); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; }
+    html:lang(gu) .card dt, html:lang(hi) .card dt { letter-spacing: 0; text-transform: none; font-size: 13.5px; font-weight: 600; }
+    .card dd { margin: 3px 0 0; font-size: 15.5px; }
+
     details { border-top: 1px solid var(--rule); }
     details:last-of-type { border-bottom: 1px solid var(--rule); }
     summary { list-style: none; cursor: pointer; padding: 14px 32px 14px 0; position: relative; font-weight: 500; }
     summary::-webkit-details-marker { display: none; }
     summary::after { content: '+'; position: absolute; right: 4px; top: 12px; color: var(--accent); font-size: 20px; line-height: 1; }
     details[open] summary::after { content: '\2212'; }
-    details > div { padding: 0 0 16px; color: var(--ink); }
+    details > div { padding: 0 0 16px; }
     details > div p:last-child { margin: 0; }
 
-    /* asset by asset */
-    .assets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 26px; }
-    .card { padding: 22px 22px 18px; border: 1px solid var(--rule); border-radius: 12px; background: var(--panel); min-width: 0; }
-    .card h3 { margin-bottom: 10px; }
-    .card dl { margin: 0; }
-    .card dt { margin-top: 12px; color: var(--muted); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; }
-    .card dd { margin: 4px 0 0; font-size: 15.5px; }
-    .card ul { margin: 4px 0 0; padding-left: 18px; font-size: 15.5px; }
+    .closing { margin: 34px 0 0; padding: 22px 24px; border-radius: 12px; background: var(--accent-soft); font: italic 1.12rem/1.6 var(--serif); }
 
-    /* three endings */
-    .endings { overflow-x: auto; margin-top: 26px; border: 1px solid var(--rule); border-radius: 12px; }
+    /* letters and phone */
+    .panel { margin-top: 18px; padding: 22px; border: 1px solid var(--rule); border-radius: 14px; background: var(--panel); }
+    .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .fields label { display: grid; gap: 4px; font-size: 13.5px; color: var(--muted); }
+    .fields input { width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); font: 15.5px var(--sans); }
+    .letter { margin-top: 12px; border-top: 1px solid var(--rule); }
+    .letter summary { font-weight: 600; }
+    .letter .text { white-space: pre-wrap; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); font: 15px/1.6 var(--serif); }
+    .ph { background: var(--mark); border-radius: 4px; padding: 0 3px; }
+    .letter .btnrow { margin-top: 10px; }
+    .script { margin: 14px 0 0; padding: 0 0 0 18px; }
+    .script li { margin: 6px 0; font: 1.05rem/1.55 var(--serif); }
+    .script-h { margin-top: 18px; font-weight: 600; }
+
+    /* papers builder */
+    .assets { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px 14px; margin: 10px 0 18px; }
+    .chk { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; cursor: pointer; }
+    .chk input { margin-top: 4px; width: 17px; height: 17px; accent-color: var(--accent); flex: none; }
+    .seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
+    .seg button { padding: 7px 14px; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); cursor: pointer; font-size: 14.5px; }
+    .seg button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+    .q-label { font-weight: 600; margin-top: 6px; }
+    .out { margin-top: 10px; padding: 18px 20px; border-radius: 10px; background: var(--bg); border: 1px solid var(--rule); }
+    .out h4 { margin: 14px 0 6px; font-size: 14px; color: var(--muted); font-weight: 600; }
+    .out h4:first-child { margin-top: 0; }
+    .out ul { margin: 0; padding-left: 20px; }
+    .out li { margin: 3px 0; }
+
+    /* ending */
+    .endings { overflow-x: auto; margin-top: 18px; border: 1px solid var(--rule); border-radius: 12px; }
     .endings table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 15.5px; }
     .endings th, .endings td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
-    .endings thead th { font: 500 1.15rem/1.2 var(--serif); background: var(--panel); }
+    .endings thead th { font: 500 1.12rem/1.2 var(--serif); background: var(--panel); }
     .endings thead th small { display: block; margin-top: 4px; font: 400 13px/1.3 var(--sans); color: var(--muted); }
-    .endings tbody th { width: 150px; color: var(--muted); font-weight: 500; font-size: 14px; }
-    /* the row labels stay put while the three columns scroll on a phone */
+    .endings tbody th { width: 140px; color: var(--muted); font-weight: 500; font-size: 14px; }
     .endings th[scope="row"], .endings thead th:first-child { position: sticky; left: 0; z-index: 1; background: var(--bg); }
     .endings thead th:first-child { background: var(--panel); }
-    @media (max-width: 640px) {
-      .endings table { min-width: 600px; font-size: 14.5px; }
-      .endings tbody th { width: 96px; padding-right: 10px; }
-      .endings th, .endings td { padding: 12px; }
-    }
     .endings tr:last-child th, .endings tr:last-child td { border-bottom: 0; }
-    .endings .lived { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+    .endings .first { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+    .note { color: var(--muted); font-size: 14.5px; }
+    .folder { list-style: none; margin: 16px 0 0; padding: 0; counter-reset: f; }
+    .folder li { position: relative; padding: 12px 0 12px 42px; border-top: 1px solid var(--rule); counter-increment: f; }
+    .folder li::before { content: counter(f); position: absolute; left: 0; top: 11px; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 14px; display: grid; place-items: center; }
+    .help { margin-top: 36px; padding: 26px; border-radius: 14px; background: var(--panel); border: 1px solid var(--rule); }
+    .sources { margin-top: 30px; }
+    .sources ul { margin: 0; padding-left: 20px; font-size: 14.5px; color: var(--muted); }
+    .foot { margin-top: 24px; color: var(--muted); font-size: 14px; }
 
-    /* checklist */
-    .check { margin-top: 22px; }
-    .check h3 { margin: 26px 0 8px; font-size: 1.1rem; }
-    .check label { display: flex; gap: 12px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--rule); cursor: pointer; }
-    .check input { margin-top: 5px; width: 17px; height: 17px; accent-color: var(--accent); flex: none; }
-    .check input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule); }
-    .tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-    .btn { padding: 10px 16px; border: 1px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); font: 600 14px var(--sans); cursor: pointer; }
-    .btn:hover { background: var(--accent-soft); }
+    /* journey navigation */
+    .nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--rule); }
+    .nav .left { display: flex; gap: 6px; flex-wrap: wrap; }
+    .paused { padding-top: 70px; text-align: center; }
+    .paused p { max-width: 30em; margin: 18px auto 30px; font: 1.2rem/1.6 var(--serif); color: var(--brief); }
 
-    .help { padding: 30px; border-radius: 14px; background: var(--panel); border: 1px solid var(--rule); }
-    footer { padding: 40px 0 70px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--rule); }
-    .toc { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 26px; font-size: 14.5px; }
-    .toc a { color: var(--muted); text-decoration: none; }
-    .toc a:hover { color: var(--accent); }
+    .toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px); padding: 9px 16px; border-radius: 999px; background: var(--ink); color: var(--bg); font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 30; }
+    .toast.on { opacity: 1; transform: translateX(-50%); }
+    .fade { animation: fadein .45s ease; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
+    #print { display: none; }
     @media (max-width: 640px) {
       body { font-size: 16.5px; }
-      .hero { padding: 48px 0 28px; }
-      section { padding: 44px 0; }
-      .help { padding: 22px; }
+      main { padding-top: 26px; }
+      .path button span.lbl { display: none; }
+      .pathnow { display: block; }
+      .nav { flex-direction: column-reverse; align-items: stretch; }
+      .nav .btn { width: 100%; }
+      .nav .left { justify-content: space-between; }
+      .nav .left .btn { width: auto; }
+      .panel { padding: 18px; }
+      .endings table { min-width: 600px; font-size: 14.5px; }
+      .endings tbody th { width: 96px; }
     }
+    @media (prefers-reduced-motion: reduce) { .fade { animation: none; } .path .bar, .toast { transition: none; } }
     @media print {
-      .draft, .doors, .tools, .toc, .help { display: none; }
-      body { background: #fff; color: #000; }
-      details { break-inside: avoid; }
-      details > div { display: block; }
+      .topbar, .tnote, #app, .toast { display: none !important; }
+      #print { display: block; }
+      body { background: #fff; color: #000; font-size: 12pt; }
+      #print section { break-before: page; }
+      #print section:first-child { break-before: auto; }
+      body.print-papers #print > :not(.papers-only) { display: none; }
     }
   </style>
 </head>
 <body>
-
-<div class="draft">Draft for review · neutral template, not the final design · private page</div>
-
-<header class="hero">
-  <div class="wrap">
-    <p class="kicker">A guide for families</p>
-    <h1>The First 100 Days</h1>
-    <p class="lede">What a family needs to do after someone dies, in the order it needs doing. Told through one family, written for every family.</p>
-    <div class="doors">
-      <a class="door" href="#first-week"><b>This has just happened to us</b><span>Start with the first seven days. Nothing else is urgent.</span></a>
-      <a class="door" href="#the-shahs"><b>We are reading ahead</b><span>Follow one family through the hundred days, and how it could have gone.</span></a>
-    </div>
-    <nav class="toc" aria-label="Contents">
-      <a href="#first-week">The first week</a><a href="#finding">Finding what he owned</a><a href="#heirs">Who inherits</a><a href="#claiming">Claiming, one by one</a><a href="#day-100">Day 100</a><a href="#endings">Three endings</a><a href="#checklist">The checklist</a>
-    </nav>
-  </div>
-</header>
-
-<div class="wrap">
-  <div class="care">
-    <p>If you are here because someone in your family has just died, we are sorry.</p>
-    <p>Very little on this page is urgent today. The few things that are, we have put first. The rest can wait until you are ready, and most of it can be done by one person, slowly, with the right papers in one folder.</p>
-  </div>
-</div>
-
-<!-- ───────────────────────── 1 ───────────────────────── -->
-<section id="first-week">
-  <div class="wrap">
-    <span class="when">Days 1 to 7</span>
-    <h2>The first week</h2>
-    <div class="story" id="the-shahs">
-      <p>Rajesh Shah was sixty-one. He had retired from a central government office the year before, and he died on a Tuesday morning in March, of a heart attack nobody saw coming.</p>
-      <p>He left his wife Meena, their son Aarav, who is twenty-two, their daughter Isha, who is twenty, and his mother, Kamla, who is eighty-four and lives with them. By the weekend the house was full of relatives, and the drawer in his desk was full of papers nobody had looked at before.</p>
-    </div>
-    <p>This week is for the family. Only a handful of things need doing now:</p>
-    <ol class="steps">
-      <li><b>Register the death and ask for copies.</b> If he died in hospital, the hospital usually registers it; otherwise the family reports it to the local registrar (in cities, the municipal corporation) within 21 days. Ask for ten or more certified copies of the death certificate. Almost every bank, insurer and office will want one.</li>
-      <li><b>Do not use his cards, UPI or cheques,</b> even to pay the hospital. From the day he died, the money in his accounts belongs to his estate, and spending it now can make claims harder later. Pay from a family member's account and keep the receipts.</li>
-      <li><b>Keep his phone number working.</b> Bank alerts, OTPs and insurer messages still arrive there, and they are often how a family discovers an account it did not know about.</li>
-      <li><b>Start one folder.</b> Passbooks, policy papers, statements, his pension papers, property documents, the death certificate copies. Everything that turns up goes in it.</li>
-      <li><b>Choose one person to lead.</b> Everyone else can help and sign when needed. In the Shah family it was Meena, with Aarav handling the online forms.</li>
-    </ol>
-    <div class="qs">
-      <h3>Questions families ask</h3>
-      <details><summary>How many copies of the death certificate do we need?</summary><div><p>Ten to fifteen is a safe number. Banks, insurers, fund houses, the pension office and the land records office each usually keep one. Some accept a copy you attest yourself, but ask for originals to be safe.</p></div></details>
-      <details><summary>Can we keep using his account for household costs?</summary><div><p>No. Once a bank is told about the death, it freezes the account, and it should be told. Money withdrawn after a death with his card or PIN can be questioned later by the bank or by another heir. If the family needs cash in the meantime, the legal heirs can ask the bank to release funds through its claim process.</p></div></details>
-      <details><summary>Should we tell the banks straight away?</summary><div><p>Yes, within the first few weeks. Telling a bank freezes the account, which protects the money until the rightful claim is made. It also stops standing instructions and EMIs from running on.</p></div></details>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── 2 ───────────────────────── -->
-<section id="finding">
-  <div class="wrap">
-    <span class="when">Weeks 2 to 4</span>
-    <h2>Finding what he owned</h2>
-    <div class="story">
-      <p>Meena knew of two bank accounts. There turned out to be five, including a fixed deposit Rajesh had opened in 1998 and, it seems, forgotten. There was an old life insurance policy she had never seen, and a mutual fund he had started for Isha's wedding.</p>
-    </div>
-    <p>Most families find their way through the same places:</p>
-    <ol class="steps">
-      <li><b>His papers and his phone.</b> Passbooks, cheque books, policy bonds, emails from banks and fund houses, SMS alerts.</li>
-      <li><b>His bank statements.</b> Regular debits give away what the papers hide: insurance premiums, SIPs, recurring deposits, loan EMIs, and the small yearly debits for the government's bank-linked insurance schemes.</li>
-      <li><b>His income tax records.</b> His Annual Information Statement on the income tax portal lists interest, dividends and fund transactions from every institution that reported them. Once a family member is registered as his legal representative, it can be opened.</li>
-      <li><b>One statement for all his investments.</b> A Consolidated Account Statement, from CAMS, KFintech or the depositories NSDL and CDSL, lists his mutual funds and shares together.</li>
-      <li><b>The official searches for forgotten money.</b> The RBI's <b>UDGAM</b> searches deposits that went quiet for ten years or more. Insurers list unclaimed amounts, and the regulator's <b>Bima Bharosa</b> portal handles insurance complaints. SEBI's <b>MITRA</b> traces mutual fund folios left untouched for years, and the <b>IEPF</b> holds shares and dividends unclaimed for seven years. Since May 2026, the government's <b>Unclaimed Assets Portal</b> links all four in one place. These only search; the claim itself still goes to the bank, insurer or fund.</li>
-      <li><b>His employer and pension papers.</b> For a government pensioner, the Pension Payment Order (PPO) names the family pensioner. For a private employee, his provident fund account (UAN) is the place to start. Post office savings, PPF and senior citizen deposits are held at the post office, under their own rules.</li>
-    </ol>
-    <div class="qs">
-      <h3>Questions families ask</h3>
-      <details><summary>We don't know which banks he used. How do we find out?</summary><div><p>Start with his statements, his phone and his tax records, which show interest paid by every bank. Then search UDGAM, through the Unclaimed Assets Portal, for deposits that have gone quiet for years. Branches near his old home and office are worth a visit with a death certificate.</p></div></details>
-      <details><summary>What exactly is a nominee?</summary><div><p>The person he named to receive an account or policy when he died. For bank accounts, fund units and shares, a nominee collects the money but holds it for the legal heirs. The Supreme Court said so in 2023 for shares, and the RBI's and SEBI's rules now say it in so many words. Life insurance is different: when the nominee is his wife, children or parents, the money is theirs outright.</p></div></details>
-      <details><summary>There's no nominee on his account. Are we stuck?</summary><div><p>No. Without a nominee, the legal heirs claim together. For a bank account up to ₹15 lakh (₹5 lakh at a cooperative bank), the RBI's rules set out a simpler route: the claim form, the death certificate, ID, an indemnity, no-objection letters from the other heirs, and either a legal heir certificate or a declaration from an independent person. Above that, the bank can ask for a succession certificate. It takes more paperwork and more time, but the money is not lost.</p></div></details>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── 3 ───────────────────────── -->
-<section id="heirs">
-  <div class="wrap">
-    <span class="when">Month 2</span>
-    <h2>Who inherits, when there is no will</h2>
-    <div class="story">
-      <p>At the bank, the officer asked a question nobody in the family had thought about. "Is his mother alive?" She was. Under the law, that made Kamla one of Rajesh's four heirs, alongside Meena, Aarav and Isha, and her signature was needed on every claim.</p>
-    </div>
-    <p>When a Hindu man dies without a will, the Hindu Succession Act decides who inherits. His first heirs are his widow, his children and his mother, and they share equally. In the Shah family, that is four equal shares, whatever the family might have assumed. Families of other religions follow their own personal laws, with different shares.</p>
-    <p>Two papers do most of the work:</p>
-    <ol class="steps">
-      <li><b>An heirship certificate.</b> It names the heirs. In Gujarat, families usually start with a <i>pedhinamu</i>, a family tree certified by the Talati with affidavits, and use it to get an heirship (<i>varsai</i>) certificate from the Mamlatdar. Banks, fund houses and offices accept it for most claims.</li>
-      <li><b>A succession certificate.</b> Issued by a civil court, when an institution insists on one, usually for larger holdings of deposits, funds or shares. It takes some months and a court fee that rises with the value.</li>
-    </ol>
-    <p class="note">If the heirs agree that everything should go to one person, usually the mother, the others can give up their share in writing: a no-objection and consent for bank and fund claims, and a registered release deed for property.</p>
-    <div class="qs">
-      <h3>Questions families ask</h3>
-      <details><summary>Doesn't everything go to his wife?</summary><div><p>Not without a will. She is one heir among several. Many families want the surviving parent to have everything, and they can arrange it, but it takes signatures from each of the other heirs.</p></div></details>
-      <details><summary>Legal heir certificate or succession certificate: which do we need?</summary><div><p>Ask each institution, because the limits differ. Banks settle up to ₹15 lakh without a court certificate. Fund houses settle up to ₹10 lakh per fund house, and demat accounts up to ₹30 lakh, on an indemnity and an affidavit with every heir's no-objection. Above those amounts, an heirship certificate or a succession certificate is needed, and any dispute usually sends the family to court.</p></div></details>
-      <details><summary>Can the children give their share to their mother?</summary><div><p>Yes. For accounts and investments, the other heirs sign consent letters. For property, they sign a release deed, which is registered and carries stamp duty, usually lower when the release is within the family.</p></div></details>
-      <details><summary>What if the family does not agree?</summary><div><p>Then the court decides, and that can take years. Most institutions will not release anything while heirs dispute a claim. A neutral person, or a lawyer, sitting the family down early often saves a great deal.</p></div></details>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── 4 ───────────────────────── -->
-<section id="claiming">
-  <div class="wide">
-    <div class="wrap" style="padding:0">
-      <span class="when">Months 2 and 3</span>
-      <h2>Claiming, one by one</h2>
-      <div class="story">
-        <p>Meena kept a list on the fridge. Each line was an account or a policy, and each got a tick when the money arrived. Some took two weeks. The fixed deposit without a nominee took four months.</p>
-      </div>
-    </div>
-    <div class="assets">
-      <article class="card">
-        <h3>Bank accounts and fixed deposits</h3>
-        <dl>
-          <dt>What to do</dt><dd>Give the bank a claim form and the death certificate. Joint accounts held "either or survivor" pass to the survivor.</dd>
-          <dt>With a nominee</dt><dd>The nominee claims with their KYC. The bank pays the nominee, who holds it for the heirs.</dd>
-          <dt>Without a nominee</dt><dd>Up to ₹15 lakh: an indemnity, the other heirs' no-objection, and an heirship certificate or an independent person's declaration. Above it, a succession certificate may be asked for.</dd>
-          <dt>How long</dt><dd>Under the RBI's 2025 rules, within 15 days of complete papers; if the bank is late, it pays compensation.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Bank locker</h3>
-        <dl>
-          <dt>What to do</dt><dd>The nominee, or the heirs together, apply to the bank. Within 15 days the bank fixes a date to open it, and lists the contents in front of them and two independent witnesses.</dd>
-          <dt>Worth knowing</dt><dd>Nothing is handed over until the list is signed. Bring the key and the death certificate.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Life insurance</h3>
-        <dl>
-          <dt>What to do</dt><dd>Tell the insurer, then send the claim form, death certificate, the policy (or an indemnity if it is lost), the nominee's KYC and bank details.</dd>
-          <dt>How long</dt><dd>Within 15 days of the papers when no investigation is needed; within 45 days of the claim when it is.</dd>
-          <dt>Worth knowing</dt><dd>A policy more than three years old cannot be disputed on grounds of what was declared when it was taken out.</dd>
-          <dt>Also check</dt><dd>Group cover from his employer, loan-linked cover, insurance bundled with his debit card, and the government schemes debited yearly from his account.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Mutual funds</h3>
-        <dl>
-          <dt>What to do</dt><dd>Ask the fund house or its registrar (CAMS or KFintech) to "transmit" the units to the claimant, with the death certificate, KYC and bank proof.</dd>
-          <dt>Worth knowing</dt><dd>Units move as they are; nothing has to be sold. There is no tax on inheriting them.</dd>
-          <dt>Without a nominee</dt><dd>Up to ₹10 lakh per fund house: a notarised indemnity and an affidavit with every heir's no-objection. Above that, an heirship or succession certificate. Fund houses have 21 days.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Shares and demat</h3>
-        <dl>
-          <dt>What to do</dt><dd>The claimant opens a demat account, then gives his broker or depository participant a transmission form with the death certificate.</dd>
-          <dt>Old paper shares</dt><dd>Go to the company's registrar. Dividends or shares unclaimed for seven years sit with the IEPF and can be claimed back.</dd>
-          <dt>Without a nominee</dt><dd>Up to ₹30 lakh per demat account, the same simpler papers as funds; above that, an heirship or succession certificate.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>His pension</h3>
-        <dl>
-          <dt>What to do</dt><dd>Tell the bank that pays his pension; any pension credited after his death has to be returned.</dd>
-          <dt>For his wife</dt><dd>If his Pension Payment Order names her, as it usually does, a letter to the same bank with the death certificate, a copy of the PPO and proof of age is enough. No separate form.</dd>
-          <dt>Worth knowing</dt><dd>His CGHS card moves to her. If he died while still in service, the family applies through his office instead. State government pensions, and anyone who joined central service from 2004 under NPS, follow different rules.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Provident fund and gratuity</h3>
-        <dl>
-          <dt>Private employer</dt><dd>Through EPFO: the provident fund, the pension for his widow and children, and the linked insurance of ₹2.5 lakh to ₹7 lakh. One combined claim form covers all three.</dd>
-          <dt>Government</dt><dd>If he died in service, his office settles the provident fund, group insurance and death gratuity.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>The house</h3>
-        <dl>
-          <dt>What to do</dt><dd>Change the name in the land records (in Gujarat, through the Talati or an e-Dhara centre, with a 30-day window for objections) or at the City Survey Office for a property card; with the society for a flat; and for property tax, electricity and gas.</dd>
-          <dt>Worth knowing</dt><dd>Without a will, the house belongs to all the heirs together until some of them release their share by a registered deed.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Post office, PPF and senior citizen deposits</h3>
-        <dl>
-          <dt>What to do</dt><dd>Claim at the post office where the account is held, with the death certificate and the claim form.</dd>
-          <dt>Without a nominee</dt><dd>Up to ₹5 lakh on simpler papers; above that, a succession certificate or similar.</dd>
-        </dl>
-      </article>
-      <article class="card">
-        <h3>Loans, cards and the car</h3>
-        <dl>
-          <dt>Loans and cards</dt><dd>His debts are paid from what he left, not from the family's own pockets. Ask each lender whether the loan was insured before paying any EMI. A co-borrower, guarantor or add-on card holder stays liable.</dd>
-          <dt>The car</dt><dd>Tell the RTO within 30 days, and transfer it to the heir who keeps it within three months (Form 31, online through Parivahan).</dd>
-        </dl>
-      </article>
-    </div>
-    <div class="wrap" style="padding:0">
-      <div class="qs">
-        <h3>Questions families ask</h3>
-        <details><summary>We found an insurance policy four years later. Can we still claim?</summary><div><p>Yes. There is no deadline for making a death claim, and the regulator's rules say a claim cannot be rejected only because it was made late. Explain the delay in a short letter with the claim. Money unclaimed for ten years moves to the Senior Citizens' Welfare Fund, and can still be claimed for another twenty-five. If an insurer is slow or refuses, complain on Bima Bharosa, and then to the Insurance Ombudsman.</p></div></details>
-        <details><summary>Will his pension stop?</summary><div><p>His pension stops and a family pension for his wife takes its place, for her lifetime. For a retired central government employee it is 30% of his last pay, paid at a higher 50% for the first seven years or until he would have turned 67, whichever comes first. For Meena, that meant six years at the higher rate. After her, a son can receive it until 25, or an unmarried daughter who depends on it. His mother does not receive it while his wife is eligible.</p></div></details>
-        <details><summary>Do we have to pay tax on what we inherit?</summary><div><p>India has no inheritance tax. Interest, rent or gains earned after the inheritance are taxed in the heir's hands as usual, and when inherited funds or shares are later sold, his original cost and holding period count.</p></div></details>
-        <details><summary>Do we have to pay off his credit card?</summary><div><p>It is paid from what he left, before the heirs take their shares. The family is not personally liable beyond what it inherits, unless someone co-signed, guaranteed the loan or held an add-on card.</p></div></details>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── 5 ───────────────────────── -->
-<section id="day-100">
-  <div class="wrap">
-    <span class="when">Day 100 and after</span>
-    <h2>Closing the file</h2>
-    <div class="story">
-      <p>On the hundredth day there was one form left, the last fixed deposit. Meena signed it, and then she did something nobody had expected. She took out a fresh folder, wrote her own name on the front, and asked Aarav to help her fill it.</p>
-    </div>
-    <ol class="steps">
-      <li><b>File his last income tax return.</b> One heir registers as his legal heir on the income tax portal and files the return for his income up to the date he died, by the usual due date (31 July for most families).</li>
-      <li><b>Close what is no longer needed.</b> Old accounts, subscriptions, his email and social media accounts (most can be closed or memorialised with a death certificate).</li>
-      <li><b>Keep the folder.</b> Claims, deeds and tax papers can be asked for years later. Keep them for at least eight years.</li>
-      <li><b>Look at your own papers.</b> Nominees on every account (banks now allow up to four on a deposit), a will, and a list of where things are. It is the gift Rajesh did not get to give.</li>
-    </ol>
-    <div class="qs">
-      <h3>Questions families ask</h3>
-      <details><summary>Do we really have to file his tax return?</summary><div><p>Yes, if his income for the year needed a return. The legal heir files it in his name, as his representative, and any refund due comes to the estate.</p></div></details>
-      <details><summary>Is it too late to do any of this?</summary><div><p>Almost never. Unclaimed bank deposits can be claimed at any time, insurance money for twenty-five years after it moves to the welfare fund, and old shares and dividends from the IEPF. It only takes more letters.</p></div></details>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── endings ───────────────────────── -->
-<section id="endings">
-  <div class="wide">
-    <div class="wrap" style="padding:0">
-      <span class="when">The same family, three ways</span>
-      <h2>Three endings</h2>
-      <p style="margin-top:14px">Rajesh did what most people do. He meant to sort his papers out, and there was always time. Here is how the same hundred days, and the months after them, could have gone.</p>
-    </div>
-    <div class="endings" role="region" aria-label="How the same estate settles with no will, a will, or a trust" tabindex="0">
-      <table>
-        <thead>
-          <tr><th scope="col"></th><th scope="col" class="lived">No will, no trust<small>What happened</small></th><th scope="col">A registered will<small>If he had written one</small></th><th scope="col">A family trust<small>If he had set one up</small></th></tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row">Who decides</th><td class="lived">The law: four equal shares, including his mother.</td><td>Rajesh: for example, everything to Meena, with care set aside for his mother.</td><td>Rajesh, years earlier: the trust deed says who benefits, and when.</td></tr>
-          <tr><th scope="row">Who signs</th><td class="lived">All four heirs, on every claim.</td><td>The executor he named.</td><td>The trustee, who simply carries on.</td></tr>
-          <tr><th scope="row">Papers and courts</th><td class="lived">Legal heir certificate, indemnities, and for the larger holdings a succession certificate from the court.</td><td>The will itself. Since 2025, probate is not compulsory anywhere in India.</td><td>None for what the trust already owns. Only what was outside it needs a claim.</td></tr>
-          <tr><th scope="row">How long</th><td class="lived">Three to nine months is common; longer with a court certificate or any disagreement.</td><td>One to four months.</td><td>Days to weeks for what the trust holds.</td></tr>
-          <tr><th scope="row">The house</th><td class="lived">Owned by four people until three sign release deeds.</td><td>Passes to whoever the will names.</td><td>Already in the trust; nothing changes hands.</td></tr>
-          <tr><th scope="row">How it felt</th><td class="lived">Everyone agreed, and it still took nine months of queues and signatures.</td><td>Clearer, though a will can still be challenged.</td><td>Private and quiet, at the cost of setting it up while he was alive.</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="wrap" style="padding:0">
-      <p class="note" style="margin-top:14px">Illustrative, not a promise. There is no official data on how long estates take; these ranges come from practitioners, and real timelines depend on the family, the amounts and the institutions. A trust suits some families and not others, and some things, such as pensions and provident fund, cannot be placed in one.</p>
-      <p style="margin-top:20px">None of this is about what Rajesh did wrong. The difference between the three columns is a few hours of thought, years earlier.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ───────────────────────── checklist ───────────────────────── -->
-<section id="checklist">
-  <div class="wrap">
-    <span class="when">Keep this one</span>
-    <h2>The checklist</h2>
-    <p style="margin-top:14px">Tick as you go. Your ticks stay on this device only.</p>
-    <div class="check" id="check">
-      <h3>The first week</h3>
-      <label><input type="checkbox" /><span>Death registered; ten or more certified copies</span></label>
-      <label><input type="checkbox" /><span>His cards, UPI and cheques set aside, unused</span></label>
-      <label><input type="checkbox" /><span>His phone number kept active</span></label>
-      <label><input type="checkbox" /><span>One folder started; one person chosen to lead</span></label>
-      <h3>Weeks 2 to 4</h3>
-      <label><input type="checkbox" /><span>Every bank told in writing</span></label>
-      <label><input type="checkbox" /><span>Statements, phone and email searched for accounts and policies</span></label>
-      <label><input type="checkbox" /><span>Income tax records and the consolidated statement checked</span></label>
-      <label><input type="checkbox" /><span>Unclaimed Assets Portal searched (UDGAM, insurance, MITRA, IEPF)</span></label>
-      <label><input type="checkbox" /><span>Pension office or employer informed</span></label>
-      <h3>Month 2</h3>
-      <label><input type="checkbox" /><span>Legal heirs listed, including a surviving parent</span></label>
-      <label><input type="checkbox" /><span>Pedhinamu and heirship (varsai) certificate applied for</span></label>
-      <label><input type="checkbox" /><span>Succession certificate, if any institution needs one</span></label>
-      <label><input type="checkbox" /><span>The family agrees who receives what; consents signed</span></label>
-      <h3>Months 2 and 3</h3>
-      <label><input type="checkbox" /><span>Bank accounts and fixed deposits claimed</span></label>
-      <label><input type="checkbox" /><span>Locker opened and listed</span></label>
-      <label><input type="checkbox" /><span>Every life insurance policy claimed</span></label>
-      <label><input type="checkbox" /><span>Mutual funds and shares transmitted</span></label>
-      <label><input type="checkbox" /><span>Family pension started</span></label>
-      <label><input type="checkbox" /><span>Provident fund, gratuity and group insurance settled</span></label>
-      <label><input type="checkbox" /><span>House records, society and utilities changed</span></label>
-      <label><input type="checkbox" /><span>Post office, PPF and senior citizen deposits claimed</span></label>
-      <label><input type="checkbox" /><span>Loans and cards settled; car transferred at the RTO</span></label>
-      <h3>Day 100 and after</h3>
-      <label><input type="checkbox" /><span>His last income tax return filed</span></label>
-      <label><input type="checkbox" /><span>Unused accounts and subscriptions closed</span></label>
-      <label><input type="checkbox" /><span>The folder kept safe</span></label>
-      <label><input type="checkbox" /><span>Your own nominations and will looked at</span></label>
-    </div>
-    <div class="tools">
-      <button class="btn" type="button" onclick="window.print()">Print the checklist</button>
-      <button class="btn" type="button" id="clear">Clear my ticks</button>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="help">
-      <h3>If you would like someone beside you</h3>
-      <p style="margin:12px 0 0">Some families want help with the paperwork now; others want to make sure their own family never needs this page. Either way, we are glad to talk, without obligation.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <details class="sources"><summary>Rules this guide follows</summary><div>
-      <ul>
-        <li>RBI (Settlement of Claims in respect of Deceased Customers of Banks) Directions, 26 September 2025: the ₹15 lakh simpler route, 15-day settlement, lockers.</li>
-        <li>Banking Laws (Amendment) Act, 2025: up to four nominees on deposits, from 1 November 2025.</li>
-        <li>IRDAI Master Circular on protection of policyholders' interests, 5 September 2024: 15 and 45 day timelines, no rejection only for delay; unclaimed amounts and the Senior Citizens' Welfare Fund.</li>
-        <li>SEBI circular on transmission of securities, 23 July 2026: ₹10 lakh per fund house, ₹30 lakh per demat account, 21 days. SEBI circular on MITRA, 12 February 2025.</li>
-        <li>Hindu Succession Act, 1956 (sections 8 and 10, Class I heirs). Repealing and Amending Act, 2025 (probate no longer compulsory). Shakti Yezdani v Jayanand Jayant Salgaonkar, Supreme Court, 14 December 2023.</li>
-        <li>CCS (Pension) Rules, 2021, and the DoPPW office memorandum of 27 October 2025 on the enhanced family pension.</li>
-        <li>Gujarat Revenue Department (mutation and e-Dhara); Gujarat Cooperative Societies Act, section 31; Central Motor Vehicles Rules (Form 31); Income tax e-filing portal, legal heir registration.</li>
-      </ul>
-    </div></details>
-    <p style="margin-top:22px">This guide describes general practice in India as of November 2026. Rules differ between institutions and states, and they change. It is not legal or tax advice; for large estates or disagreements, please speak to a lawyer. The Shah family is a composite, drawn from cases like the ones that inspired this guide.</p>
-  </div>
-</footer>
+  <div class="topbar"><div class="in"><span id="draft"></span><div class="langs" id="langs" role="group" aria-label="Language"></div></div></div>
+  <div class="tnote" id="tnote" hidden></div>
+  <main id="app" aria-live="polite"></main>
+  <div id="print"></div>
+  <div class="toast" id="toast" role="status"></div>
 
 <script>
-  // Checklist ticks stay on this device only.
-  (function () {
-    const boxes = Array.from(document.querySelectorAll('#check input'));
-    const KEY = 'first100-checklist';
-    let saved = [];
-    try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
-    boxes.forEach((b, i) => {
-      b.checked = !!saved[i];
-      b.addEventListener('change', () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} });
+/* The First 100 Days: one part of the journey per screen.
+   Content for each language is inlined below by build.py (content-<lang>.json). */
+const DATA = {"en":{"lang":"en","langName":"English","ui":{"draft":"Draft for review · neutral template, not the final design · private page","translationNote":"","kicker":"A guide for families","title":"The First 100 Days","lede":"What to do after someone in your family dies, one step at a time, in the order it needs doing.","care":["If someone you love has just died, we are so sorry. Please be gentle with yourself.","Very little here is urgent. We will show you the few things that are, and the rest can wait until you feel ready. You do not have to do this alone, and you do not have to do it all at once."],"how":"Five short parts, from the first week to the hundredth day. Each begins with what it is about. Tick things off as you go, share a step with someone who can help, and stop whenever you need to. We will keep your place.","begin":"Begin with the first week","welcomeBack":"Welcome back. Take all the time you need.","welcomeWhere":"You stopped at: {stage}.","carryOn":"Carry on from there","startOver":"Start from the beginning","partOf":"Part {n} of 5","next":"When you're ready, the next part","nextLast":"When you're ready, one last thing","back":"Back","notToday":"Not today","pausedTitle":"That is enough for today.","pausedBody":"We have kept your place on this device. Come back whenever you are ready; nothing here will expire, and the next step will be waiting.","pausedReturn":"Return to the guide","stepsTitle":"What to do","questions":"Questions families ask","done":"Done","share":"Share","shareText":"Could you help with this? {step}. The details are here: {url}","copy":"Copy","copied":"Copied","print":"Print everything","lettersTitle":"Letters you can copy","lettersBrief":"Writing these is often the hardest part, so we have started them for you. Fill in the names once and every letter updates. What you type stays on this screen; it is not saved or sent anywhere.","fields":{"name":"Their full name","date":"The date they died","you":"Your name","rel":"You are their (wife, son, daughter...)","inst":"Bank, insurer or branch","ref":"Account, policy or PPO number","phone":"Your phone number"},"phoneTitle":"What to say on the phone","phoneBrief":"When it is hard to find the words, these few lines are enough. Keep a pen nearby: note the date, the name of the person you spoke to, and any reference number.","papersTitle":"Your papers list","papersBrief":"Tick what they had and we will put together one list of every paper to gather. Print it, copy it, or send it to whoever is helping.","papersHad":"What did they have?","papersNominee":"Did they name nominees?","papersWill":"Did they leave a will?","yes":"Yes","no":"No","notSure":"Not sure","papersOut":"Papers to gather","papersEmpty":"Tick what they had, and the list will appear here.","papersForAll":"For every claim","papersHeirs":"Because there may be no nominee","papersWillDocs":"Because there is a will","papersShareText":"The papers we need to gather: {url}","path":["This week","Finding","Who inherits","Claims","Day 100","Ahead"],"footer":"This guide describes general practice in India as of November 2026. Rules differ between institutions and states, and they change. It is not legal or tax advice; for large estates or disagreements, please speak to a lawyer.","sourcesTitle":"Rules this guide follows"},"stages":[{"id":"week","when":"Days 1 to 7","title":"The first week","brief":"This week belongs to your family. Grieve, gather, and lean on each other. Only a handful of things cannot wait, and none of them is difficult.","steps":[{"t":"Register the death, and ask for ten copies","d":"If they died in hospital, the hospital usually registers the death for you. If not, a family member reports it to the local registrar (in cities, the municipal corporation) within 21 days. Ask for ten or more certified copies of the death certificate; almost every office will want to keep one."},{"t":"Set their cards, UPI and cheque book aside","d":"It is natural to want to pay the hospital from their account, but please don't. From the day they died, that money belongs to their estate, and using it now can make claims harder later. Pay from your own account and keep the receipts."},{"t":"Keep their phone number working","d":"Bank messages, OTPs and insurance alerts will keep arriving there. They are often how a family finds an account nobody knew about."},{"t":"Start one folder","d":"A simple file or box for every paper that turns up: passbooks, policies, statements, pension papers, property documents, and the copies of the death certificate."},{"t":"Let one person lead","d":"Choose one person to hold the folder and the list. Everyone else can help, sign when needed, and take a task off their shoulders."}],"qs":[{"q":"How many copies of the death certificate do we need?","a":"Ten to fifteen is a comfortable number. Banks, insurers, fund houses, the pension office and the land records office will each usually keep one. Some accept a copy you attest yourself, but originals make everything easier."},{"q":"Can we keep using their account for household costs?","a":"Please don't, even though it feels practical. Once the bank knows, it freezes the account, and it should know. If the family needs money in the meantime, the heirs can ask the bank to release it through its claim process."},{"q":"Do we have to tell the banks this week?","a":"It can wait a little, but do it within the first few weeks. Telling a bank freezes the account, which keeps the money safe until the rightful claim, and stops EMIs and standing instructions running on. There is a letter you can copy in the next part."}],"extras":[]},{"id":"finding","when":"Weeks 2 to 4","title":"Finding what they had","brief":"Almost every family discovers something it did not know about: an old deposit, a forgotten policy, a fund started quietly for a child. This part is about finding it all, gently and without rushing.","steps":[{"t":"Look through their papers and their phone","d":"Passbooks, cheque books, policy bonds, emails from banks and fund houses, and the SMS alerts on their phone."},{"t":"Read their bank statements","d":"Regular payments tell the story the papers leave out: insurance premiums, SIPs, recurring deposits, loan EMIs, and the small yearly debits for the government's bank-linked insurance schemes."},{"t":"Check their income tax records","d":"Their Annual Information Statement on the income tax portal lists interest, dividends and fund transactions from every institution. Once a family member registers as their legal heir on the portal, it can be opened."},{"t":"Ask for one statement of all their investments","d":"A Consolidated Account Statement from CAMS, KFintech or the depositories NSDL and CDSL lists their mutual funds and shares together."},{"t":"Search for forgotten money","d":"The government's Unclaimed Assets Portal brings the official searches together: the RBI's UDGAM for old bank deposits, insurers' unclaimed amounts, SEBI's MITRA for old mutual fund folios, and the IEPF for old shares and dividends. These only search; the claim itself goes to the bank, insurer or fund."},{"t":"Look at their work and pension papers","d":"For a government pensioner, the Pension Payment Order (PPO) names who receives the family pension. For someone in a private job, the provident fund account (UAN) is the place to start. Post office savings, PPF and senior citizen deposits are held at the post office."},{"t":"Tell each bank in writing","d":"A short letter with a copy of the death certificate is enough. It keeps the money safe until it is claimed. The letter is below, ready to copy."}],"qs":[{"q":"We don't know which banks they used. How do we find out?","a":"Start with their statements, their phone and their tax records, which show interest from every bank. Then search UDGAM through the Unclaimed Assets Portal. Branches near their old home and workplace are worth a visit with a death certificate."},{"q":"What exactly is a nominee?","a":"The person they named to receive an account or policy. For bank accounts, funds and shares, the nominee collects the money but holds it for all the legal heirs; the Supreme Court said so in 2023, and the RBI's and SEBI's rules now say it plainly. Life insurance is different: when the nominee is a husband or wife, a child or a parent, the money is theirs outright."},{"q":"There is no nominee. Are we stuck?","a":"Not at all. The legal heirs claim together. For a bank account up to ₹15 lakh (₹5 lakh at a cooperative bank), the RBI's rules set out a simpler route: the claim form, the death certificate, ID, an indemnity, no-objection letters from the other heirs, and either an heirship certificate or a declaration from an independent person. It is more paperwork, but the money is safe, and it will come."}],"extras":["letter:bank","phone:bank","papers"]},{"id":"heirs","when":"Month 2","title":"Who inherits","brief":"This part can feel the most formal, and sometimes the most tender, because it asks who the family is in the eyes of the law. Take it slowly, and talk it through together.","intro":["When someone dies without a will, the law decides who inherits. For a Hindu man, the first heirs are his widow, his children and his mother, in equal shares. For a Hindu woman, they are her husband and her children. Families of other faiths follow their own personal laws, with different shares.","A surviving mother is an heir too, and her signature will be needed. Many families only learn this at the bank counter."],"steps":[{"t":"List every heir","d":"Write down each one, with their contact details. Most claims will need every heir's signature or consent."},{"t":"Get an heirship certificate","d":"In Gujarat, families usually begin with a pedhinamu, a family tree certified by the Talati with affidavits, and use it to get an heirship (varsai) certificate from the Mamlatdar. Banks, fund houses and offices accept it for most claims."},{"t":"A succession certificate, only if asked","d":"A civil court issues it, usually when an institution insists on one for larger holdings. It takes some months, and a court fee that rises with the value."},{"t":"Agree, together, who receives what","d":"Many families want everything to go to the surviving husband or wife. The other heirs can make that happen: consent letters for accounts and investments, and a registered release deed for property."}],"qs":[{"q":"Doesn't everything go to the husband or wife?","a":"Not without a will. They are one heir among several. It can still be arranged, with each of the other heirs' consent."},{"q":"Heirship certificate or succession certificate: which do we need?","a":"Ask each institution, because the limits differ. Banks settle up to ₹15 lakh without a court certificate. Fund houses settle up to ₹10 lakh per fund house, and demat accounts up to ₹30 lakh, on an indemnity and an affidavit with every heir's no-objection. Above those amounts, an heirship or succession certificate is needed."},{"q":"Can the children give their share to their mother?","a":"Yes, and many do. For accounts and investments, they sign consent letters. For property, they sign a release deed, which is registered and carries stamp duty, usually lower when it stays within the family."},{"q":"What if the family does not agree?","a":"Then a court decides, and that can take years, while most institutions hold everything back. If voices are rising, a calm third person, or a lawyer, sitting with the family early can save a great deal of pain."}],"extras":[]},{"id":"claims","when":"Months 2 and 3","title":"Claiming, one by one","brief":"Now the paperwork turns into progress. Take one account or policy at a time, tick it off, and let each one be a small thing finished. Some take two weeks and some take a few months; both are normal.","cards":[{"h":"Bank accounts and fixed deposits","rows":[["What to do","Give the bank a claim form and the death certificate. Joint accounts held \"either or survivor\" pass straight to the survivor."],["With a nominee","The nominee claims with their ID. The bank pays the nominee, who holds it for the heirs."],["Without a nominee","Up to ₹15 lakh: an indemnity, the other heirs' no-objection, and an heirship certificate or an independent person's declaration. Above it, a succession certificate may be asked for."],["How long","Under the RBI's 2025 rules, within 15 days of complete papers. If the bank is late, it pays compensation."]]},{"h":"Bank locker","rows":[["What to do","The nominee, or the heirs together, apply to the bank. Within 15 days the bank fixes a date to open it, and lists the contents in front of them and two independent witnesses."],["Worth knowing","Nothing is handed over until the list is signed. Bring the key and the death certificate."]]},{"h":"Life insurance","rows":[["What to do","Tell the insurer, then send the claim form, the death certificate, the policy (or an indemnity if it is lost), the nominee's ID and bank details."],["How long","Within 15 days of the papers when no investigation is needed; within 45 days of the claim when it is."],["Worth knowing","A policy more than three years old cannot be disputed on grounds of what was declared when it was taken out."],["Also check","Group cover from their employer, loan-linked cover, insurance that came with their debit card, and the government schemes debited yearly from their account."]]},{"h":"Mutual funds","rows":[["What to do","Ask the fund house or its registrar (CAMS or KFintech) to transmit the units to the claimant, with the death certificate, ID and bank proof."],["Worth knowing","The units move as they are; nothing has to be sold, and there is no tax on inheriting them."],["Without a nominee","Up to ₹10 lakh per fund house: a notarised indemnity and an affidavit with every heir's no-objection. Above that, an heirship or succession certificate. Fund houses have 21 days."]]},{"h":"Shares and demat","rows":[["What to do","The claimant opens a demat account, then gives the broker or depository participant a transmission form with the death certificate."],["Old paper shares","Go to the company's registrar. Dividends or shares unclaimed for seven years sit with the IEPF and can be claimed back."],["Without a nominee","Up to ₹30 lakh per demat account, the same simpler papers as funds; above that, an heirship or succession certificate."]]},{"h":"Their pension","rows":[["What to do","Tell the bank that pays the pension. Any pension credited after the death has to be returned."],["For the husband or wife","If the Pension Payment Order names them, as it usually does, a letter to the same bank with the death certificate, a copy of the PPO and proof of age is enough. No separate form."],["Worth knowing","The CGHS card moves to the family pensioner. If they died while still in service, the family applies through their office instead. State government pensions, and anyone who joined central service from 2004 under NPS, follow different rules."]]},{"h":"Provident fund and gratuity","rows":[["Private job","Through EPFO: the provident fund, the pension for the widow or widower and children, and the linked insurance of ₹2.5 lakh to ₹7 lakh. One combined claim form covers all three."],["Government job","If they died in service, their office settles the provident fund, group insurance and death gratuity."]]},{"h":"The home","rows":[["What to do","Change the name in the land records (in Gujarat, through the Talati or an e-Dhara centre, with a 30-day window for objections) or at the City Survey Office for a property card; with the society for a flat; and for property tax, electricity and gas."],["Worth knowing","Without a will, the home belongs to all the heirs together until some of them release their share by a registered deed."]]},{"h":"Post office, PPF and senior citizen deposits","rows":[["What to do","Claim at the post office where the account is held, with the death certificate and the claim form."],["Without a nominee","Up to ₹5 lakh on simpler papers; above that, a succession certificate or similar."]]},{"h":"Loans, cards and the car","rows":[["Loans and cards","Debts are paid from what they left, not from the family's own pockets. Ask each lender whether the loan was insured before paying any EMI. A co-borrower, guarantor or add-on card holder stays liable."],["The car","Tell the RTO within 30 days, and transfer it to the heir who keeps it within three months (Form 31, online through Parivahan)."]]}],"steps":[],"qs":[{"q":"We found an insurance policy years later. Can we still claim?","a":"Yes. There is no deadline for making a death claim, and the regulator's rules say a claim cannot be rejected only because it was made late. Explain the delay in a short letter with the claim; there is one below. Money unclaimed for ten years moves to the Senior Citizens' Welfare Fund, and can still be claimed for another twenty-five. If an insurer is slow or refuses, complain on Bima Bharosa, and then to the Insurance Ombudsman."},{"q":"Will the pension stop?","a":"Their pension stops, and a family pension takes its place for the surviving husband or wife, for life. For a retired central government employee it is 30% of the last pay, paid at a higher 50% for the first seven years or until the pensioner would have turned 67, whichever comes first. After that, a son can receive it until 25, or an unmarried daughter who depends on it. A parent does not receive it while the husband or wife is eligible."},{"q":"Do we have to pay tax on what we inherit?","a":"No. India has no inheritance tax. Interest, rent or gains earned after the inheritance are taxed in the heir's hands as usual, and when inherited funds or shares are later sold, the original cost and holding period count."},{"q":"Do we have to pay off their credit card?","a":"It is paid from what they left, before the heirs take their shares. The family is not personally liable beyond what it inherits, unless someone co-signed, guaranteed the loan or held an add-on card."}],"extras":["letter:insurance","letter:late","letter:pension","phone:insurer","phone:pension"]},{"id":"day100","when":"Day 100 and after","title":"Closing the file","brief":"By now the hardest weeks are behind you. What is left is quieter: a tax return, a few accounts to close, and a folder to keep safe.","steps":[{"t":"File their last income tax return","d":"One heir registers as their legal heir on the income tax portal and files the return for their income up to the date they died, by the usual due date (31 July for most families)."},{"t":"Close what is no longer needed","d":"Old accounts, subscriptions, their email and social media (most can be closed or memorialised with a death certificate)."},{"t":"Keep the folder","d":"Claims, deeds and tax papers can be asked for years later. Keep them for at least eight years."}],"qs":[{"q":"Do we really have to file their tax return?","a":"Yes, if their income for the year needed a return. The legal heir files it in their name, as their representative, and any refund due comes to the estate."},{"q":"Is it too late to do any of this?","a":"Almost never. Unclaimed bank deposits can be claimed at any time, insurance money for twenty-five years after it moves to the welfare fund, and old shares and dividends from the IEPF. It only takes more letters."}],"closing":"Be kind to yourselves. Grief keeps its own calendar, and it does not end on the hundredth day.","extras":[]}],"ahead":{"when":"When you feel ready","title":"Looking ahead","brief":"When you feel ready, and only then: a few minutes on how these same months can go for the next generation.","endingsTitle":"Three endings","endingsBrief":"The same family, the same loss, three ways it can unfold.","cols":["No will","A will","A family trust"],"colNotes":["What most families face","If one had been written","If one had been set up"],"rows":[["Who decides","The law: equal shares among the heirs, including a surviving parent.","The person who wrote it: for example, everything to the husband or wife, with care for a parent.","The person who set it up, years earlier: the trust deed says who benefits, and when."],["Who signs","Every heir, on every claim.","The executor named in the will.","The trustee, who simply carries on."],["Papers and courts","An heirship certificate, indemnities, and for larger holdings a succession certificate.","The will itself. Since 2025, probate is not compulsory anywhere in India.","None for what the trust already owns."],["How long","Three to nine months is common; longer with a court certificate or a disagreement.","One to four months.","Days to weeks for what the trust holds."],["The home","Owned jointly by the heirs until some release their share by registered deed.","Passes to whoever the will names.","Already in the trust; nothing changes hands."],["How it feels","Even when everyone agrees, it is months of queues and signatures.","Clearer, though a will can still be challenged.","Private and quiet, at the cost of setting it up in good time."]],"endingsNote":"Illustrative, not a promise. There is no official data on how long estates take; these ranges come from practitioners, and real timelines depend on the family, the amounts and the institutions. A trust suits some families and not others, and some things, such as pensions and provident fund, cannot be placed in one.","folderTitle":"Your own folder","folderBrief":"The kindest thing many families do after a loss is make sure the next one is easier. It takes an afternoon.","folder":["Nominees on every account and policy. Banks now allow up to four on a deposit.","A will, even a simple one, registered if you can.","One list of where everything is: accounts, policies, investments, property, and how to reach the people who know.","Tell one person where the folder lives."],"helpTitle":"If you would like someone beside you","help":"Some families want help with the paperwork now; others want to make sure their own family never needs this page. Either way, we would be glad to talk, gently and without obligation.","closing":"None of this is about what anyone did wrong. Most people mean to sort their papers out, and there always seems to be time."},"letters":[{"id":"bank","title":"Telling a bank about the death","body":"To the Branch Manager,\n{inst}\n\nSubject: Intimation of the death of {name}, account number {ref}\n\nDear Sir or Madam,\n\nI am writing to let you know that {name}, who held the account above with your branch, passed away on {date}. A copy of the death certificate is enclosed.\n\nI would be grateful if you could note this in your records, stop all transactions, standing instructions and auto-debits on the account, and let me know the procedure and documents needed to claim the balance, any fixed deposits, and the contents of any locker.\n\nI am {name}'s {rel}, and I can be reached on {phone}.\n\nThank you for your help at this difficult time.\n\nYours sincerely,\n{you}\nDate: {today}\n\nEnclosed: copy of the death certificate"},{"id":"insurance","title":"Making a life insurance claim","body":"To the Claims Department,\n{inst}\n\nSubject: Death claim under policy number {ref}, life assured {name}\n\nDear Sir or Madam,\n\nI am writing to make a claim under the policy above. The life assured, {name}, passed away on {date}.\n\nI am {name}'s {rel}. I enclose the claim form, the death certificate, the policy document, my ID and address proof, and a cancelled cheque for payment.\n\nPlease let me know if anything else is needed. I can be reached on {phone}.\n\nThank you for your help.\n\nYours sincerely,\n{you}\nDate: {today}"},{"id":"late","title":"Explaining a late insurance claim","body":"To the Claims Department,\n{inst}\n\nSubject: Death claim under policy number {ref}, life assured {name}, and the reason for the delay\n\nDear Sir or Madam,\n\n{name} passed away on {date}. I am sorry that this claim reaches you later than usual: the policy came to light only recently, while our family was going through their papers.\n\nI understand from the IRDAI's guidelines that a genuine claim should not be rejected only because it was made late. I would be grateful if you could process the enclosed claim.\n\nI am {name}'s {rel}, and I can be reached on {phone}.\n\nYours sincerely,\n{you}\nDate: {today}\n\nEnclosed: claim form, death certificate, policy document, ID and address proof, cancelled cheque"},{"id":"pension","title":"Starting the family pension","body":"To the Manager,\n{inst}\n\nSubject: Request to start family pension under PPO number {ref}\n\nDear Sir or Madam,\n\n{name}, a pensioner drawing pension from your branch under the PPO above, passed away on {date}. I am {name}'s {rel}, and I am named in the PPO as the family pensioner.\n\nI request you to stop the pension and start the family pension in my name.\n\nI enclose the death certificate, a copy of the PPO, proof of my age, and my bank account details. I can be reached on {phone}.\n\nYours sincerely,\n{you}\nDate: {today}"}],"phone":[{"id":"bank","title":"Calling a bank","lines":["Hello. I am calling because {name}, who has an account with you, passed away recently.","Could you please note the death and freeze the account, so nothing more is debited?","Is there a nominee on the account?","What is the claim process, and which documents do you need from the family?","Could you send that to me in writing, or tell me which branch to visit?"]},{"id":"insurer","title":"Calling an insurer","lines":["Hello. I would like to make a death claim. The policyholder, {name}, passed away on {date}.","The policy number is {ref}.","Which documents do you need, and can I submit them online or at a branch?","Could you give me a claim reference number?"]},{"id":"pension","title":"Calling the pension bank","lines":["Hello. {name} drew a pension from your branch, and passed away on {date}.","Please stop the pension, and tell me how to start the family pension in my name.","I am named in the PPO. Which documents should I bring?"]}],"papers":{"assets":[{"id":"bank","label":"Bank accounts","items":["The bank's claim form","Passbook or latest statement","Cheque book and debit cards, to return"]},{"id":"fd","label":"Fixed deposits","items":["Fixed deposit receipts or advices"]},{"id":"locker","label":"A bank locker","items":["The locker key","The locker agreement, if you have it"]},{"id":"insurance","label":"Life insurance","items":["The insurer's claim form","The original policy, or an indemnity if it is lost","Medical certificate of the cause of death; hospital records if the policy is under three years old","FIR and post-mortem report, if the death was accidental"]},{"id":"mf","label":"Mutual funds","items":["Transmission request form","Consolidated Account Statement"]},{"id":"shares","label":"Shares or a demat account","items":["A demat account in the claimant's name","Transmission request form for the broker or depository participant","Client master list of their demat account"]},{"id":"pension","label":"A government pension","items":["Copy of the Pension Payment Order (PPO)","Proof of age of the family pensioner","A short application letter to the pension bank"]},{"id":"pf","label":"Provident fund (private job)","items":["Their UAN","EPFO composite claim form (provident fund, pension, insurance)"]},{"id":"home","label":"A house or land","items":["Sale deed or title documents","7/12 and 8A extracts, or the property card","Latest property tax bill"]},{"id":"society","label":"A flat in a housing society","items":["Share certificate","The society's nomination record and transfer form"]},{"id":"vehicle","label":"A car or two-wheeler","items":["Registration certificate (RC) and insurance","Form 31, for the RTO"]},{"id":"post","label":"Post office, PPF or senior citizen deposits","items":["Passbook or certificates","The post office claim form"]},{"id":"loans","label":"Loans or credit cards","items":["Loan statements and any loan insurance papers","Latest credit card statements"]}],"forAll":["Death certificate: 10 to 15 certified copies","Their PAN card and Aadhaar, copies","ID and address proof of each person claiming","A cancelled cheque or bank details of each person claiming"],"heirs":["Pedhinamu, and the heirship (varsai) certificate","No-objection letters from every other heir","An indemnity bond","For larger amounts, a succession certificate, only if asked"],"will":["The original will","Probate, only if an institution asks for it"]},"sources":["RBI (Settlement of Claims in respect of Deceased Customers of Banks) Directions, 26 September 2025: the ₹15 lakh simpler route, 15-day settlement, lockers.","Banking Laws (Amendment) Act, 2025: up to four nominees on deposits, from 1 November 2025.","IRDAI Master Circular on protection of policyholders' interests, 5 September 2024: 15 and 45 day timelines, no rejection only for delay; unclaimed amounts and the Senior Citizens' Welfare Fund.","SEBI circular on transmission of securities, 23 July 2026: ₹10 lakh per fund house, ₹30 lakh per demat account, 21 days. SEBI circular on MITRA, 12 February 2025. Unclaimed Assets Portal, launched 29 May 2026.","Hindu Succession Act, 1956 (Class I heirs; sections 8, 10 and 15). Repealing and Amending Act, 2025 (probate no longer compulsory). Shakti Yezdani v Jayanand Jayant Salgaonkar, Supreme Court, 14 December 2023.","CCS (Pension) Rules, 2021, and the DoPPW office memorandum of 27 October 2025 on the enhanced family pension.","Gujarat Revenue Department (mutation and e-Dhara); Gujarat Cooperative Societies Act, section 31; Central Motor Vehicles Rules (Form 31); income tax e-filing portal, legal heir registration."]},"gu":{"lang":"gu","langName":"ગુજરાતી","ui":{"draft":"સમીક્ષા માટેનો ડ્રાફ્ટ · તટસ્થ નમૂનો, અંતિમ ડિઝાઇન નથી · ખાનગી પાનું","translationNote":"આ ડ્રાફ્ટ અનુવાદ છે; પ્રકાશિત કરતાં પહેલાં કૃપા કરીને ગુજરાતી જેમની માતૃભાષા હોય તેવી વ્યક્તિ પાસે તેની સમીક્ષા કરાવો.","kicker":"પરિવારો માટે એક માર્ગદર્શિકા","title":"પહેલા 100 દિવસ","lede":"પરિવારમાં કોઈ સ્વજનના અવસાન પછી શું કરવું, એક સમયે એક પગલું, અને જે ક્રમમાં કરવાનું હોય તે જ ક્રમમાં.","care":["જો તમારા કોઈ પ્રિયજનનું હમણાં જ અવસાન થયું હોય, તો અમને ખૂબ દુઃખ છે. કૃપા કરીને પોતાની જાતને પ્રેમથી સાચવજો.","અહીં બહુ ઓછી બાબતો તાકીદની છે. જે થોડી બાબતો તાકીદની છે તે અમે તમને બતાવીશું, અને બાકીનું તમે તૈયાર અનુભવો ત્યાં સુધી રાહ જોઈ શકે છે. આ બધું તમારે એકલા હાથે કરવાનું નથી, અને બધું એકસાથે કરવાની પણ જરૂર નથી."],"how":"પાંચ ટૂંકા ભાગ, પહેલા અઠવાડિયાથી સોમા દિવસ સુધી. દરેક ભાગની શરૂઆતમાં લખ્યું છે કે તે શેના વિશે છે. જેમ જેમ કામ પૂરું થાય તેમ ટિક કરતા જાઓ, મદદ કરી શકે તેવી વ્યક્તિ સાથે કોઈ પગલું શેર કરો, અને જ્યારે જરૂર લાગે ત્યારે અટકી જાઓ. તમે ક્યાં સુધી પહોંચ્યા હતા તે અમે યાદ રાખીશું.","begin":"પહેલા અઠવાડિયાથી શરૂઆત કરો","welcomeBack":"ફરી સ્વાગત છે. જેટલો સમય જોઈએ તેટલો લેજો.","welcomeWhere":"તમે અહીં અટક્યા હતા: {stage}.","carryOn":"ત્યાંથી આગળ વધો","startOver":"શરૂઆતથી શરૂ કરો","partOf":"5 માંથી ભાગ {n}","next":"જ્યારે તમે તૈયાર હો, ત્યારે આગળનો ભાગ","nextLast":"જ્યારે તમે તૈયાર હો, ત્યારે છેલ્લી એક વાત","back":"પાછળ","notToday":"આજે નહીં","pausedTitle":"આજ માટે આટલું પૂરતું છે.","pausedBody":"તમે ક્યાં સુધી પહોંચ્યા હતા તે અમે આ ડિવાઇસ પર સાચવી રાખ્યું છે. જ્યારે તૈયાર હો ત્યારે પાછા આવજો; અહીં કશાની મુદત પૂરી નહીં થાય, અને આગળનું પગલું તમારી રાહ જોતું હશે.","pausedReturn":"માર્ગદર્શિકા પર પાછા જાઓ","stepsTitle":"શું કરવું","questions":"પરિવારો પૂછે છે તેવા પ્રશ્નો","done":"થઈ ગયું","share":"શેર કરો","shareText":"શું તમે આમાં મદદ કરી શકશો? {step}. વિગતો અહીં છે: {url}","copy":"કૉપિ કરો","copied":"કૉપિ થઈ ગયું","print":"બધું પ્રિન્ટ કરો","lettersTitle":"કૉપિ કરી શકાય તેવા પત્રો","lettersBrief":"આ પત્રો લખવા ઘણી વાર સૌથી અઘરું લાગે છે, એટલે અમે તમારા માટે તેની શરૂઆત કરી રાખી છે. નામ એક જ વાર ભરો, અને દરેક પત્ર આપોઆપ બદલાઈ જશે. તમે જે લખો છો તે આ સ્ક્રીન પર જ રહે છે; તે ક્યાંય સાચવવામાં કે મોકલવામાં આવતું નથી.","fields":{"name":"તેમનું પૂરું નામ","date":"તેમના અવસાનની તારીખ","you":"તમારું નામ","rel":"તેમની સાથે તમારો સંબંધ (પત્ની, પુત્ર, પુત્રી...)","inst":"બેંક, વીમા કંપની કે શાખા","ref":"ખાતા, પોલિસી કે PPO નંબર","phone":"તમારો ફોન નંબર"},"phoneTitle":"ફોન પર શું કહેવું","phoneBrief":"જ્યારે શબ્દો ન સૂઝે, ત્યારે આ થોડી લીટીઓ પૂરતી છે. પાસે એક પેન રાખજો: તારીખ, જેમની સાથે વાત થઈ તેમનું નામ, અને કોઈ રેફરન્સ નંબર મળે તો તે નોંધી લેજો.","papersTitle":"તમારી કાગળોની યાદી","papersBrief":"તેમની પાસે જે જે હતું તેના પર ટિક કરો, અને ભેગા કરવાના બધા કાગળોની એક જ યાદી અમે તૈયાર કરી આપીશું. તેને પ્રિન્ટ કરો, કૉપિ કરો, અથવા જે કોઈ મદદ કરી રહ્યું હોય તેમને મોકલો.","papersHad":"તેમની પાસે શું શું હતું?","papersNominee":"શું તેમણે નોમિની નીમ્યા હતા?","papersWill":"શું તેમણે વસિયત કરી હતી?","yes":"હા","no":"ના","notSure":"ખાતરી નથી","papersOut":"ભેગા કરવાના કાગળો","papersEmpty":"તેમની પાસે જે હતું તેના પર ટિક કરો, એટલે યાદી અહીં દેખાશે.","papersForAll":"દરેક દાવા માટે","papersHeirs":"કારણ કે કદાચ નોમિની ન હોય","papersWillDocs":"કારણ કે વસિયત છે","papersShareText":"આપણે ભેગા કરવાના કાગળો: {url}","path":["આ અઠવાડિયું","શોધ","વારસો કોને","દાવા","દિવસ 100","આગળ"],"footer":"આ માર્ગદર્શિકા નવેમ્બર 2026 સુધીની ભારતની સામાન્ય પ્રથા વર્ણવે છે. નિયમો દરેક સંસ્થા અને રાજ્યમાં જુદા હોય છે, અને બદલાતા રહે છે. આ કાનૂની કે કર સંબંધી સલાહ નથી; મોટી વારસાગત મિલકત હોય કે મતભેદ હોય, તો કૃપા કરીને કોઈ વકીલ સાથે વાત કરો.","sourcesTitle":"આ માર્ગદર્શિકા જે નિયમોને અનુસરે છે"},"stages":[{"id":"week","when":"દિવસ 1 થી 7","title":"પહેલું અઠવાડિયું","brief":"આ અઠવાડિયું તમારા પરિવારનું છે. શોકને સમય આપો, એકઠા થાઓ, અને એકબીજાનો સહારો બનો. ગણતરીની થોડી બાબતો જ એવી છે જે રાહ જોઈ શકે તેમ નથી, અને તેમાંની એક પણ અઘરી નથી.","steps":[{"t":"અવસાનની નોંધણી કરાવો, અને દસ નકલો માંગો","d":"જો તેમનું અવસાન હોસ્પિટલમાં થયું હોય, તો સામાન્ય રીતે હોસ્પિટલ જ તમારા વતી નોંધણી કરાવી દે છે. જો એમ ન હોય, તો પરિવારના કોઈ સભ્ય 21 દિવસની અંદર સ્થાનિક રજિસ્ટ્રારને (શહેરોમાં, મહાનગરપાલિકાને) જાણ કરે છે. મરણ પ્રમાણપત્ર (death certificate) ની દસ કે તેથી વધુ પ્રમાણિત નકલો માંગજો; લગભગ દરેક કચેરી એક નકલ પોતાની પાસે રાખશે."},{"t":"તેમનાં કાર્ડ, UPI અને ચેકબુક બાજુ પર મૂકી દો","d":"હોસ્પિટલનું બિલ તેમના ખાતામાંથી ચૂકવવાનું મન થવું સ્વાભાવિક છે, પણ કૃપા કરીને એમ ન કરશો. અવસાનના દિવસથી એ પૈસા તેમની વારસાગત મિલકત (estate) ગણાય છે, અને અત્યારે તેનો ઉપયોગ કરવાથી પછી દાવો (claim) કરવામાં મુશ્કેલી પડી શકે છે. તમારા પોતાના ખાતામાંથી ચૂકવણી કરો અને તેની રસીદો સાચવી રાખો."},{"t":"તેમનો ફોન નંબર ચાલુ રાખો","d":"બેંકના મેસેજ, OTP અને વીમાની સૂચનાઓ ત્યાં આવતી રહેશે. ઘણી વાર આના પરથી જ પરિવારને એવા ખાતાની જાણ થાય છે, જેના વિશે કોઈને ખબર ન હતી."},{"t":"એક ફોલ્ડર શરૂ કરો","d":"જે પણ કાગળ મળે તે બધા માટે એક સાદી ફાઇલ કે ડબ્બો: પાસબુક, પોલિસીઓ, સ્ટેટમેન્ટ, પેન્શનના કાગળો, મિલકતના દસ્તાવેજો, અને મરણ પ્રમાણપત્રની નકલો."},{"t":"એક વ્યક્તિને આગેવાની લેવા દો","d":"ફોલ્ડર અને યાદી સંભાળવા માટે એક વ્યક્તિને પસંદ કરો. બાકીના બધા મદદ કરી શકે, જરૂર પડે ત્યારે સહી કરી શકે, અને કોઈ કામ પોતાના માથે લઈને તેમનો ભાર હળવો કરી શકે."}],"qs":[{"q":"મરણ પ્રમાણપત્રની કેટલી નકલો જોઈશે?","a":"દસથી પંદર નકલો રાખવી અનુકૂળ રહે છે. બેંકો, વીમા કંપનીઓ, ફંડ હાઉસ, પેન્શન કચેરી અને જમીન રેકોર્ડની કચેરી, દરેક સામાન્ય રીતે એક નકલ રાખે છે. કેટલીક જગ્યાએ તમે જાતે પ્રમાણિત (self-attest) કરેલી નકલ ચાલે છે, પણ અસલ પ્રમાણપત્રો હોય તો બધું સરળ બને છે."},{"q":"ઘરખર્ચ માટે શું અમે તેમનું ખાતું વાપરવાનું ચાલુ રાખી શકીએ?","a":"ભલે તે વ્યવહારુ લાગે, કૃપા કરીને એમ ન કરશો. બેંકને જાણ થતાં જ તે ખાતું ફ્રીઝ (સ્થગિત) કરે છે, અને બેંકને જાણ કરવી જ જોઈએ. આ દરમિયાન પરિવારને પૈસાની જરૂર હોય, તો વારસદારો બેંકની દાવા પ્રક્રિયા દ્વારા પૈસા છૂટા કરવા વિનંતી કરી શકે છે."},{"q":"શું આ અઠવાડિયે જ બેંકોને જાણ કરવી પડે?","a":"થોડી રાહ જોઈ શકાય, પણ પહેલાં થોડાં અઠવાડિયાંમાં જાણ કરી દેજો. બેંકને જાણ કરવાથી ખાતું ફ્રીઝ થાય છે, જેથી યોગ્ય દાવો થાય ત્યાં સુધી પૈસા સુરક્ષિત રહે છે, અને EMI તથા સ્ટેન્ડિંગ ઇન્સ્ટ્રક્શન (નિયમિત આપોઆપ થતી ચુકવણી) ચાલુ રહેતાં અટકે છે. આગળના ભાગમાં કૉપિ કરી શકાય તેવો પત્ર આપેલો છે."}],"extras":[]},{"id":"finding","when":"અઠવાડિયું 2 થી 4","title":"તેમની પાસે શું શું હતું, તે શોધવું","brief":"લગભગ દરેક પરિવારને કંઈક એવું મળે છે જેની તેમને જાણ ન હતી: કોઈ જૂની ડિપોઝિટ, ભુલાઈ ગયેલી પોલિસી, કે કોઈ બાળક માટે ચૂપચાપ શરૂ કરેલું ફંડ. આ ભાગ એ બધું શોધવા વિશે છે, શાંતિથી અને ઉતાવળ વગર.","steps":[{"t":"તેમના કાગળો અને ફોન તપાસો","d":"પાસબુક, ચેકબુક, પોલિસી બોન્ડ, બેંકો અને ફંડ હાઉસના ઇમેઇલ, અને તેમના ફોન પરના SMS સંદેશા."},{"t":"તેમનાં બેંક સ્ટેટમેન્ટ વાંચો","d":"નિયમિત ચુકવણીઓ એવી વાત કહે છે જે કાગળોમાં નથી હોતી: વીમાના પ્રીમિયમ, SIP, રિકરિંગ ડિપોઝિટ, લોનના EMI, અને બેંક સાથે જોડાયેલી સરકારી વીમા યોજનાઓ માટે દર વર્ષે કપાતી નાની રકમ."},{"t":"તેમના આવકવેરાના રેકોર્ડ તપાસો","d":"આવકવેરા પોર્ટલ પરના તેમના Annual Information Statement (વાર્ષિક માહિતી પત્રક) માં દરેક સંસ્થા તરફથી મળેલું વ્યાજ, ડિવિડન્ડ અને ફંડના વ્યવહારો નોંધાયેલા હોય છે. પરિવારના કોઈ સભ્ય પોર્ટલ પર તેમના કાયદેસર વારસદાર (legal heir) તરીકે નોંધણી કરાવે, પછી તે ખોલી શકાય છે."},{"t":"તેમના બધા રોકાણોનું એક જ સ્ટેટમેન્ટ મંગાવો","d":"CAMS, KFintech અથવા ડિપોઝિટરી NSDL અને CDSL તરફથી મળતા Consolidated Account Statement (સંયુક્ત ખાતા પત્રક) માં તેમના મ્યુચ્યુઅલ ફંડ અને શેર એકસાથે દેખાય છે."},{"t":"ભુલાઈ ગયેલા પૈસા શોધો","d":"સરકારનું Unclaimed Assets Portal બધી સત્તાવાર શોધને એક જગ્યાએ લાવે છે: જૂની બેંક ડિપોઝિટ માટે RBI નું UDGAM, વીમા કંપનીઓ પાસે પડેલી દાવો ન થયેલી રકમ, જૂના મ્યુચ્યુઅલ ફંડ ફોલિયો માટે SEBI નું MITRA, અને જૂના શેર તથા ડિવિડન્ડ માટે IEPF. આ ફક્ત શોધવા માટે છે; દાવો તો બેંક, વીમા કંપની કે ફંડ પાસે જ કરવાનો હોય છે."},{"t":"તેમની નોકરી અને પેન્શનના કાગળો જુઓ","d":"સરકારી પેન્શનરના કિસ્સામાં, Pension Payment Order (PPO) માં લખેલું હોય છે કે કુટુંબ પેન્શન કોને મળશે. ખાનગી નોકરીમાં હોય તેવી વ્યક્તિ માટે, પ્રોવિડન્ટ ફંડ ખાતું (UAN) શરૂઆત કરવાની જગ્યા છે. પોસ્ટ ઓફિસ બચત, PPF અને વરિષ્ઠ નાગરિક ડિપોઝિટ પોસ્ટ ઓફિસમાં જ હોય છે."},{"t":"દરેક બેંકને લેખિતમાં જાણ કરો","d":"મરણ પ્રમાણપત્રની નકલ સાથે એક ટૂંકો પત્ર પૂરતો છે. તેનાથી દાવો થાય ત્યાં સુધી પૈસા સુરક્ષિત રહે છે. પત્ર નીચે આપેલો છે, કૉપિ કરવા માટે તૈયાર."}],"qs":[{"q":"તેમનાં ખાતાં કઈ કઈ બેંકોમાં હતાં તે અમને ખબર નથી. કેવી રીતે જાણવું?","a":"તેમનાં સ્ટેટમેન્ટ, ફોન અને આવકવેરાના રેકોર્ડથી શરૂઆત કરો, જેમાં દરેક બેંકમાંથી મળેલું વ્યાજ દેખાય છે. પછી Unclaimed Assets Portal દ્વારા UDGAM પર શોધ કરો. તેમના જૂના ઘર અને કામના સ્થળની નજીકની શાખાઓમાં મરણ પ્રમાણપત્ર સાથે એક વાર જઈ આવવું યોગ્ય છે."},{"q":"નોમિની એટલે બરાબર શું?","a":"કોઈ ખાતા કે પોલિસીની રકમ મેળવવા માટે તેમણે જે વ્યક્તિનું નામ આપ્યું હોય (નામાંકિત વ્યક્તિ), તે. બેંક ખાતાં, ફંડ અને શેરમાં, નોમિની પૈસા મેળવે છે, પણ તે બધા કાયદેસર વારસદારો વતી સાચવે છે; સુપ્રીમ કોર્ટે 2023 માં આમ કહ્યું હતું, અને હવે RBI અને SEBI ના નિયમો પણ સ્પષ્ટ રીતે આ જ કહે છે. જીવન વીમામાં વાત જુદી છે: જ્યારે નોમિની પતિ કે પત્ની, સંતાન, અથવા માતા કે પિતા હોય, ત્યારે એ પૈસા સંપૂર્ણપણે તેમના જ થાય છે."},{"q":"નોમિની નથી. તો શું અમે અટવાઈ ગયા?","a":"જરા પણ નહીં. કાયદેસર વારસદારો સાથે મળીને દાવો કરે છે. ₹15 લાખ સુધીના બેંક ખાતા માટે (સહકારી બેંકમાં ₹5 લાખ સુધી), RBI ના નિયમોમાં એક સરળ માર્ગ આપેલો છે: દાવા ફોર્મ, મરણ પ્રમાણપત્ર, ઓળખપત્ર, ઇન્ડેમ્નિટી બોન્ડ (ક્ષતિપૂર્તિની બાંહેધરી), બાકીના વારસદારોના ના-વાંધા પત્રો, અને વારસાઈ પ્રમાણપત્ર (heirship certificate) અથવા કોઈ સ્વતંત્ર વ્યક્તિનું ઘોષણાપત્ર. કાગળકામ થોડું વધારે છે, પણ પૈસા સુરક્ષિત છે, અને તે મળશે જ."}],"extras":["letter:bank","phone:bank","papers"]},{"id":"heirs","when":"મહિનો 2","title":"વારસો કોને મળે","brief":"આ ભાગ સૌથી ઔપચારિક લાગી શકે, અને ક્યારેક સૌથી નાજુક પણ, કારણ કે તે પૂછે છે કે કાયદાની નજરે પરિવાર કોણ છે. ધીમે ધીમે આગળ વધજો, અને સાથે બેસીને વાત કરજો.","intro":["કોઈ વ્યક્તિ વસિયત વગર અવસાન પામે, ત્યારે વારસો કોને મળે તે કાયદો નક્કી કરે છે. હિંદુ પુરુષના કિસ્સામાં, પ્રથમ વારસદારો તેમનાં પત્ની, તેમનાં સંતાનો અને તેમનાં માતા છે, સરખા ભાગે. હિંદુ સ્ત્રીના કિસ્સામાં, તેમના પતિ અને તેમનાં સંતાનો. અન્ય ધર્મના પરિવારો પોતાના પર્સનલ લૉ (વ્યક્તિગત કાયદા) અનુસરે છે, જેમાં ભાગ જુદા હોય છે.","હયાત માતા પણ વારસદાર છે, અને તેમની સહી જરૂરી બનશે. ઘણા પરિવારોને આ વાતની જાણ બેંકના કાઉન્ટર પર જ થાય છે."],"steps":[{"t":"દરેક વારસદારની યાદી બનાવો","d":"દરેકનું નામ, તેમની સંપર્ક વિગતો સાથે લખી લો. મોટા ભાગના દાવાઓમાં દરેક વારસદારની સહી કે સંમતિ જરૂરી બનશે."},{"t":"વારસાઈ પ્રમાણપત્ર મેળવો","d":"ગુજરાતમાં, પરિવારો સામાન્ય રીતે પેઢીનામાથી શરૂઆત કરે છે, એટલે કે સોગંદનામાં સાથે તલાટી દ્વારા પ્રમાણિત કરેલું કુટુંબનું વંશવૃક્ષ, અને તેના આધારે મામલતદાર પાસેથી વારસાઈ પ્રમાણપત્ર (heirship certificate) મેળવે છે. મોટા ભાગના દાવાઓ માટે બેંકો, ફંડ હાઉસ અને કચેરીઓ તે સ્વીકારે છે."},{"t":"ઉત્તરાધિકાર પ્રમાણપત્ર, ફક્ત માંગવામાં આવે તો જ","d":"ઉત્તરાધિકાર પ્રમાણપત્ર (succession certificate) સિવિલ કોર્ટ આપે છે, સામાન્ય રીતે ત્યારે જ્યારે મોટી રકમના રોકાણ કે મિલકત માટે કોઈ સંસ્થા તેનો આગ્રહ રાખે. તેમાં થોડા મહિના લાગે છે, અને કોર્ટ ફી ભરવી પડે છે, જે મિલકતના મૂલ્ય સાથે વધે છે."},{"t":"સાથે મળીને નક્કી કરો કે કોને શું મળે","d":"ઘણા પરિવારો ઇચ્છે છે કે બધું હયાત પતિ કે પત્નીને મળે. બાકીના વારસદારો આ શક્ય બનાવી શકે છે: ખાતાં અને રોકાણો માટે સંમતિ પત્રો, અને મિલકત માટે નોંધાયેલી (રજિસ્ટર્ડ) રિલીઝ ડીડ (હક્ક જતો કરવાનો દસ્તાવેજ)."}],"qs":[{"q":"શું બધું પતિ કે પત્નીને નથી મળતું?","a":"વસિયત ન હોય તો નહીં. તેઓ ઘણા વારસદારોમાંથી એક છે. તેમ છતાં, બાકીના દરેક વારસદારની સંમતિથી આવી ગોઠવણ કરી શકાય છે."},{"q":"વારસાઈ પ્રમાણપત્ર કે ઉત્તરાધિકાર પ્રમાણપત્ર: અમારે કયું જોઈએ?","a":"દરેક સંસ્થાને પૂછજો, કારણ કે મર્યાદાઓ જુદી જુદી છે. બેંકો કોર્ટના પ્રમાણપત્ર વગર ₹15 લાખ સુધીના દાવાનો નિકાલ કરે છે. ઇન્ડેમ્નિટી બોન્ડ અને દરેક વારસદારના ના-વાંધા સાથેના સોગંદનામાના આધારે, ફંડ હાઉસ, ફંડ હાઉસ દીઠ ₹10 લાખ સુધીના, અને ડીમેટ ખાતાં ₹30 લાખ સુધીના દાવાનો નિકાલ કરે છે. આ રકમથી વધુ હોય, તો વારસાઈ કે ઉત્તરાધિકાર પ્રમાણપત્ર જરૂરી છે."},{"q":"શું સંતાનો પોતાનો ભાગ માતાને આપી શકે?","a":"હા, અને ઘણા એવું કરે છે. ખાતાં અને રોકાણો માટે, તેઓ સંમતિ પત્રો પર સહી કરે છે. મિલકત માટે, તેઓ રિલીઝ ડીડ પર સહી કરે છે, જેની નોંધણી થાય છે અને તેના પર સ્ટેમ્પ ડ્યુટી લાગે છે, જે મિલકત પરિવારની અંદર જ રહે ત્યારે સામાન્ય રીતે ઓછી હોય છે."},{"q":"જો પરિવારમાં સહમતિ ન થાય તો?","a":"તો કોર્ટ નક્કી કરે છે, અને તેમાં વર્ષો લાગી શકે છે, અને તે દરમિયાન મોટા ભાગની સંસ્થાઓ બધું રોકી રાખે છે. જો અવાજ ઊંચા થવા લાગે, તો શરૂઆતમાં જ કોઈ શાંત ત્રીજી વ્યક્તિ, કે કોઈ વકીલ, પરિવાર સાથે બેસે તો ઘણી પીડામાંથી બચી શકાય છે."}],"extras":[]},{"id":"claims","when":"મહિનો 2 અને 3","title":"એક પછી એક દાવો","brief":"હવે કાગળકામનું ફળ દેખાવા લાગે છે. એક સમયે એક ખાતું કે પોલિસી લો, તેને ટિક કરો, અને દરેકને એક નાનું પૂરું થયેલું કામ ગણો. કેટલાકમાં બે અઠવાડિયાં લાગે છે અને કેટલાકમાં થોડા મહિના; બંને સામાન્ય છે.","cards":[{"h":"બેંક ખાતાં અને ફિક્સ્ડ ડિપોઝિટ","rows":[["શું કરવું","બેંકને દાવા ફોર્મ અને મરણ પ્રમાણપત્ર આપો. \"either or survivor\" (બેમાંથી કોઈ એક અથવા હયાત ખાતાધારક) પ્રકારનાં સંયુક્ત ખાતાં સીધાં હયાત ખાતાધારકને મળે છે."],["નોમિની હોય તો","નોમિની પોતાના ઓળખપત્ર સાથે દાવો કરે છે. બેંક નોમિનીને ચૂકવણી કરે છે, અને નોમિની તે રકમ વારસદારો વતી સાચવે છે."],["નોમિની ન હોય તો","₹15 લાખ સુધી: ઇન્ડેમ્નિટી બોન્ડ, બાકીના વારસદારોનો ના-વાંધો, અને વારસાઈ પ્રમાણપત્ર અથવા કોઈ સ્વતંત્ર વ્યક્તિનું ઘોષણાપત્ર. તેનાથી વધુ રકમ હોય, તો ઉત્તરાધિકાર પ્રમાણપત્ર માંગવામાં આવી શકે."],["કેટલો સમય","RBI ના 2025 ના નિયમો મુજબ, પૂરા કાગળો મળ્યાના 15 દિવસની અંદર. જો બેંક મોડું કરે, તો તેણે વળતર ચૂકવવું પડે છે."]]},{"h":"બેંક લોકર","rows":[["શું કરવું","નોમિની, અથવા બધા વારસદારો સાથે મળીને, બેંકને અરજી કરે છે. 15 દિવસની અંદર બેંક લોકર ખોલવાની તારીખ નક્કી કરે છે, અને તેમની તથા બે સ્વતંત્ર સાક્ષીઓની હાજરીમાં અંદરની વસ્તુઓની યાદી બનાવે છે."],["જાણવા જેવું","યાદી પર સહી થાય ત્યાં સુધી કશું સોંપવામાં આવતું નથી. ચાવી અને મરણ પ્રમાણપત્ર સાથે લઈ જજો."]]},{"h":"જીવન વીમો","rows":[["શું કરવું","વીમા કંપનીને જાણ કરો, પછી દાવા ફોર્મ, મરણ પ્રમાણપત્ર, પોલિસી (ખોવાઈ ગઈ હોય તો ઇન્ડેમ્નિટી બોન્ડ), નોમિનીનું ઓળખપત્ર અને બેંક વિગતો મોકલો."],["કેટલો સમય","તપાસની જરૂર ન હોય તો કાગળો મળ્યાના 15 દિવસમાં; તપાસની જરૂર હોય તો દાવો કર્યાના 45 દિવસમાં."],["જાણવા જેવું","ત્રણ વર્ષથી જૂની પોલિસીને, તે લેતી વખતે જાહેર કરેલી માહિતીના આધારે પડકારી શકાતી નથી."],["આ પણ તપાસો","તેમના નોકરીદાતા તરફથી મળતો ગ્રુપ વીમો, લોન સાથે જોડાયેલો વીમો, તેમના ડેબિટ કાર્ડ સાથે મળેલો વીમો, અને તેમના ખાતામાંથી દર વર્ષે રકમ કપાતી હોય તેવી સરકારી યોજનાઓ."]]},{"h":"મ્યુચ્યુઅલ ફંડ","rows":[["શું કરવું","મરણ પ્રમાણપત્ર, ઓળખપત્ર અને બેંકના પુરાવા સાથે, ફંડ હાઉસ અથવા તેના રજિસ્ટ્રાર (CAMS કે KFintech) ને યુનિટ દાવેદારના નામે તબદીલ (transmission) કરવા વિનંતી કરો."],["જાણવા જેવું","યુનિટ જેમ છે તેમ જ તબદીલ થાય છે; કશું વેચવું પડતું નથી, અને વારસામાં મળવા પર કોઈ કર લાગતો નથી."],["નોમિની ન હોય તો","દરેક ફંડ હાઉસ દીઠ ₹10 લાખ સુધી: નોટરી કરાવેલો ઇન્ડેમ્નિટી બોન્ડ અને દરેક વારસદારના ના-વાંધા સાથેનું સોગંદનામું. તેનાથી વધુ હોય, તો વારસાઈ કે ઉત્તરાધિકાર પ્રમાણપત્ર. ફંડ હાઉસ પાસે 21 દિવસનો સમય હોય છે."]]},{"h":"શેર અને ડીમેટ","rows":[["શું કરવું","દાવેદાર ડીમેટ ખાતું ખોલાવે છે, પછી બ્રોકર કે ડિપોઝિટરી પાર્ટિસિપન્ટને મરણ પ્રમાણપત્ર સાથે ટ્રાન્સમિશન ફોર્મ આપે છે."],["જૂના કાગળના શેર","કંપનીના રજિસ્ટ્રાર પાસે જાઓ. સાત વર્ષ સુધી દાવો ન થયેલા ડિવિડન્ડ કે શેર IEPF પાસે જમા થાય છે, અને તેનો ફરી દાવો કરી શકાય છે."],["નોમિની ન હોય તો","દરેક ડીમેટ ખાતા દીઠ ₹30 લાખ સુધી, ફંડ જેવા જ સરળ કાગળો; તેનાથી વધુ હોય, તો વારસાઈ કે ઉત્તરાધિકાર પ્રમાણપત્ર."]]},{"h":"તેમનું પેન્શન","rows":[["શું કરવું","પેન્શન ચૂકવતી બેંકને જાણ કરો. અવસાન પછી જમા થયેલું કોઈ પણ પેન્શન પાછું આપવું પડે છે."],["પતિ કે પત્ની માટે","જો Pension Payment Order માં તેમનું નામ હોય, જે સામાન્ય રીતે હોય જ છે, તો એ જ બેંકને મરણ પ્રમાણપત્ર, PPO ની નકલ અને ઉંમરના પુરાવા સાથે એક પત્ર પૂરતો છે. અલગ ફોર્મની જરૂર નથી."],["જાણવા જેવું","CGHS કાર્ડ કુટુંબ પેન્શનરના નામે તબદીલ થાય છે. જો નોકરી ચાલુ હતી ત્યારે જ તેમનું અવસાન થયું હોય, તો પરિવાર તેના બદલે તેમની કચેરી મારફતે અરજી કરે છે. રાજ્ય સરકારનાં પેન્શન, અને 2004 થી NPS હેઠળ કેન્દ્ર સરકારની સેવામાં જોડાયેલી કોઈ પણ વ્યક્તિ માટે, નિયમો જુદા છે."]]},{"h":"પ્રોવિડન્ટ ફંડ અને ગ્રેચ્યુઇટી","rows":[["ખાનગી નોકરી","EPFO મારફતે: પ્રોવિડન્ટ ફંડ, પતિ કે પત્ની અને સંતાનો માટેનું પેન્શન, અને ₹2.5 લાખથી ₹7 લાખ સુધીનો જોડાયેલો વીમો. ત્રણેય માટે એક જ સંયુક્ત દાવા ફોર્મ ચાલે છે."],["સરકારી નોકરી","જો નોકરી દરમિયાન તેમનું અવસાન થયું હોય, તો તેમની કચેરી પ્રોવિડન્ટ ફંડ, ગ્રુપ વીમો અને ડેથ ગ્રેચ્યુઇટી (death gratuity) નો નિકાલ કરે છે."]]},{"h":"ઘર","rows":[["શું કરવું","જમીન રેકોર્ડમાં નામ બદલાવો (ગુજરાતમાં, તલાટી અથવા e-Dhara કેન્દ્ર મારફતે, જેમાં વાંધા માટે 30 દિવસનો સમય હોય છે), અથવા પ્રોપર્ટી કાર્ડ માટે સિટી સર્વે કચેરીમાં; ફ્લેટ માટે સોસાયટીમાં; અને મિલકત વેરો, વીજળી અને ગેસ માટે પણ."],["જાણવા જેવું","વસિયત ન હોય, તો કેટલાક વારસદારો નોંધાયેલા દસ્તાવેજથી પોતાનો ભાગ જતો ન કરે ત્યાં સુધી ઘર બધા વારસદારોની સંયુક્ત માલિકીનું રહે છે."]]},{"h":"પોસ્ટ ઓફિસ, PPF અને વરિષ્ઠ નાગરિક ડિપોઝિટ","rows":[["શું કરવું","જે પોસ્ટ ઓફિસમાં ખાતું છે, ત્યાં મરણ પ્રમાણપત્ર અને દાવા ફોર્મ સાથે દાવો કરો."],["નોમિની ન હોય તો","₹5 લાખ સુધી સરળ કાગળો પર; તેનાથી વધુ હોય, તો ઉત્તરાધિકાર પ્રમાણપત્ર કે તેના જેવો દસ્તાવેજ."]]},{"h":"લોન, કાર્ડ અને ગાડી","rows":[["લોન અને કાર્ડ","દેવું તેમણે છોડેલી મિલકતમાંથી ચૂકવાય છે, પરિવારના પોતાના ખિસ્સામાંથી નહીં. કોઈ પણ EMI ભરતાં પહેલાં, દરેક લોન આપનારને પૂછો કે લોનનો વીમો હતો કે નહીં. સહ-ઋણધારક (co-borrower), જામીનદાર (guarantor) કે એડ-ઓન કાર્ડ ધારકની જવાબદારી ચાલુ રહે છે."],["ગાડી","30 દિવસની અંદર RTO ને જાણ કરો, અને ત્રણ મહિનાની અંદર ગાડી જે વારસદાર રાખે તેમના નામે ટ્રાન્સફર કરો (Form 31, Parivahan પર ઓનલાઇન)."]]}],"steps":[],"qs":[{"q":"વર્ષો પછી અમને એક વીમા પોલિસી મળી. શું હજુ દાવો કરી શકાય?","a":"હા. અવસાન પછીનો વીમા દાવો (death claim) કરવાની કોઈ અંતિમ તારીખ નથી, અને નિયમનકાર (regulator) ના નિયમો કહે છે કે ફક્ત મોડો થયો હોવાના કારણે દાવો નકારી શકાય નહીં. દાવા સાથે એક ટૂંકા પત્રમાં વિલંબનું કારણ સમજાવો; એવો પત્ર નીચે આપેલો છે. દસ વર્ષ સુધી દાવો ન થયેલી રકમ Senior Citizens' Welfare Fund (વરિષ્ઠ નાગરિક કલ્યાણ ભંડોળ) માં જાય છે, અને તે પછી પણ બીજાં પચીસ વર્ષ સુધી તેનો દાવો કરી શકાય છે. જો વીમા કંપની ઢીલ કરે કે ના પાડે, તો Bima Bharosa પર ફરિયાદ કરો, અને પછી Insurance Ombudsman (વીમા લોકપાલ) ને."},{"q":"શું પેન્શન બંધ થઈ જશે?","a":"તેમનું પેન્શન બંધ થાય છે, અને તેના સ્થાને હયાત પતિ કે પત્નીને આજીવન કુટુંબ પેન્શન મળે છે. કેન્દ્ર સરકારના નિવૃત્ત કર્મચારીના કિસ્સામાં, તે છેલ્લા પગારના 30% હોય છે, પણ પહેલાં સાત વર્ષ સુધી, અથવા પેન્શનરની ઉંમર 67 વર્ષ થઈ હોત ત્યાં સુધી (બેમાંથી જે વહેલું આવે), તે વધારે દરે, એટલે કે 50% લેખે ચૂકવાય છે. ત્યાર બાદ, પુત્રને 25 વર્ષની ઉંમર સુધી, અથવા તેના પર નિર્ભર અપરિણીત પુત્રીને તે મળી શકે છે. પતિ કે પત્ની પાત્ર હોય ત્યાં સુધી માતા કે પિતાને તે મળતું નથી."},{"q":"વારસામાં મળેલી મિલકત પર શું અમારે કર ભરવો પડે?","a":"ના. ભારતમાં વારસા કર (inheritance tax) નથી. વારસો મળ્યા પછી થતી વ્યાજ, ભાડા કે નફાની આવક પર, હંમેશની જેમ વારસદારની આવક તરીકે કર લાગે છે, અને વારસામાં મળેલાં ફંડ કે શેર પછીથી વેચાય ત્યારે, મૂળ ખરીદ કિંમત અને મૂળ ધારણ સમયગાળો (holding period) ગણાય છે."},{"q":"શું અમારે તેમના ક્રેડિટ કાર્ડનું બાકી ચૂકવવું પડે?","a":"તે તેમણે છોડેલી મિલકતમાંથી ચૂકવાય છે, વારસદારો પોતાનો ભાગ લે તે પહેલાં. વારસામાં મળેલી રકમથી વધુ માટે પરિવાર વ્યક્તિગત રીતે જવાબદાર નથી, સિવાય કે કોઈએ સાથે સહી કરી હોય, લોન માટે જામીન આપ્યા હોય, કે એડ-ઓન કાર્ડ ધરાવ્યું હોય."}],"extras":["letter:insurance","letter:late","letter:pension","phone:insurer","phone:pension"]},{"id":"day100","when":"દિવસ 100 અને ત્યાર પછી","title":"ફાઇલ પૂરી કરવી","brief":"અત્યાર સુધીમાં સૌથી કઠિન અઠવાડિયાં પાછળ રહી ગયાં છે. જે બાકી છે તે વધુ શાંત કામ છે: એક આવકવેરા રિટર્ન, બંધ કરવાનાં થોડાં ખાતાં, અને સાચવીને રાખવાનું એક ફોલ્ડર.","steps":[{"t":"તેમનું છેલ્લું આવકવેરા રિટર્ન ભરો","d":"એક વારસદાર આવકવેરા પોર્ટલ પર તેમના કાયદેસર વારસદાર તરીકે નોંધણી કરાવે છે, અને અવસાનની તારીખ સુધીની તેમની આવકનું રિટર્ન સામાન્ય નિયત તારીખ સુધીમાં ભરે છે (મોટા ભાગના પરિવારો માટે 31 જુલાઈ)."},{"t":"જેની હવે જરૂર નથી તે બંધ કરો","d":"જૂનાં ખાતાં, સબ્સ્ક્રિપ્શન, તેમનું ઇમેઇલ અને સોશિયલ મીડિયા (મોટા ભાગનાં મરણ પ્રમાણપત્ર આપીને બંધ કરી શકાય છે, અથવા સ્મૃતિ ખાતા (memorialised) તરીકે રાખી શકાય છે)."},{"t":"ફોલ્ડર સાચવી રાખો","d":"દાવા, દસ્તાવેજો અને કરના કાગળો વર્ષો પછી પણ માંગવામાં આવી શકે છે. તેને ઓછામાં ઓછાં આઠ વર્ષ સાચવી રાખો."}],"qs":[{"q":"શું ખરેખર તેમનું ટેક્સ રિટર્ન ભરવું પડે?","a":"હા, જો તે વર્ષની તેમની આવક માટે રિટર્ન ભરવું જરૂરી હોય. કાયદેસર વારસદાર તેમના પ્રતિનિધિ તરીકે, તેમના નામે રિટર્ન ભરે છે, અને જો કોઈ રિફંડ મળવાપાત્ર હોય તો તે તેમની વારસાગત મિલકત (estate) માં જમા થાય છે."},{"q":"શું હવે આમાંનું કંઈ કરવામાં બહુ મોડું થઈ ગયું છે?","a":"લગભગ ક્યારેય નહીં. દાવો ન થયેલી બેંક ડિપોઝિટનો ગમે ત્યારે દાવો કરી શકાય છે, વીમાની રકમનો કલ્યાણ ભંડોળમાં ગયા પછી પચીસ વર્ષ સુધી, અને જૂના શેર તથા ડિવિડન્ડનો IEPF પાસેથી. બસ થોડા વધુ પત્રો લખવા પડે છે."}],"closing":"પોતાની સાથે પ્રેમથી વર્તજો. શોકનો પોતાનો સમય હોય છે, અને તે સોમા દિવસે પૂરો નથી થતો.","extras":[]}],"ahead":{"when":"જ્યારે તમે તૈયાર અનુભવો","title":"આગળનો વિચાર","brief":"જ્યારે તમે તૈયાર અનુભવો, અને ત્યારે જ: થોડી મિનિટો, આવનારી પેઢી માટે આ જ મહિનાઓ કેવી રીતે પસાર થઈ શકે તેના વિશે.","endingsTitle":"ત્રણ રસ્તા","endingsBrief":"એ જ પરિવાર, એ જ ખોટ, અને આગળ શું થાય તેના ત્રણ રસ્તા.","cols":["વસિયત વગર","વસિયત સાથે","ફેમિલી ટ્રસ્ટ સાથે"],"colNotes":["મોટા ભાગના પરિવારો જે અનુભવે છે","જો વસિયત લખાઈ હોત","જો ટ્રસ્ટ બનાવાયું હોત"],"rows":[["કોણ નક્કી કરે","કાયદો: વારસદારો વચ્ચે સરખા ભાગ, જેમાં હયાત માતા કે પિતાનો પણ સમાવેશ થાય છે.","વસિયત લખનાર વ્યક્તિ: ઉદાહરણ તરીકે, બધું પતિ કે પત્નીને, અને માતા કે પિતાની સંભાળની જોગવાઈ સાથે.","વર્ષો પહેલાં ટ્રસ્ટ બનાવનાર વ્યક્તિ: ટ્રસ્ટ ડીડમાં લખેલું હોય છે કે લાભ કોને મળશે, અને ક્યારે."],["સહી કોણ કરે","દરેક વારસદાર, દરેક દાવા પર.","વસિયતમાં નીમેલા વહીવટકર્તા (executor).","ટ્રસ્ટી, જે બસ કામ ચાલુ રાખે છે."],["કાગળો અને કોર્ટ","વારસાઈ પ્રમાણપત્ર, ઇન્ડેમ્નિટી બોન્ડ, અને મોટી રકમ માટે ઉત્તરાધિકાર પ્રમાણપત્ર.","વસિયત પોતે. 2025 થી, ભારતમાં ક્યાંય પ્રોબેટ (probate) ફરજિયાત નથી.","ટ્રસ્ટની માલિકીની વસ્તુઓ માટે કંઈ જ નહીં."],["કેટલો સમય","ત્રણથી નવ મહિના સામાન્ય છે; કોર્ટના પ્રમાણપત્ર કે મતભેદ હોય તો વધુ.","એકથી ચાર મહિના.","ટ્રસ્ટ પાસે જે છે તેના માટે થોડા દિવસથી થોડાં અઠવાડિયાં."],["ઘર","કેટલાક વારસદારો નોંધાયેલા દસ્તાવેજથી પોતાનો ભાગ જતો ન કરે ત્યાં સુધી, બધા વારસદારોની સંયુક્ત માલિકીનું.","વસિયતમાં જેમનું નામ હોય તેમને મળે છે.","પહેલેથી જ ટ્રસ્ટમાં છે; માલિકી બદલાતી નથી."],["કેવું લાગે","બધા સહમત હોય ત્યારે પણ, મહિનાઓ સુધી લાઇનો અને સહીઓ.","વધુ સ્પષ્ટ, જોકે વસિયતને હજુ પણ પડકારી શકાય છે.","ખાનગી અને શાંત, પણ તે માટે સમયસર ટ્રસ્ટ બનાવવું પડે."]],"endingsNote":"આ ફક્ત ઉદાહરણ છે, વચન નથી. વારસાની પ્રક્રિયામાં કેટલો સમય લાગે તેનો કોઈ સત્તાવાર આંકડો નથી; આ સમયગાળા આ ક્ષેત્રમાં કામ કરતા વ્યાવસાયિકોના અનુભવ પરથી છે, અને ખરો સમય પરિવાર, રકમ અને સંસ્થાઓ પર આધાર રાખે છે. ટ્રસ્ટ કેટલાક પરિવારો માટે યોગ્ય હોય છે અને કેટલાક માટે નહીં, અને પેન્શન તથા પ્રોવિડન્ટ ફંડ જેવી કેટલીક વસ્તુઓ ટ્રસ્ટમાં મૂકી શકાતી નથી.","folderTitle":"તમારું પોતાનું ફોલ્ડર","folderBrief":"ખોટ પછી ઘણા પરિવારો જે સૌથી પ્રેમાળ કામ કરે છે, તે એ ખાતરી કરવાનું કે હવે પછીની વખતે બધું વધુ સરળ બને. એમાં ફક્ત એક બપોર લાગે છે.","folder":["દરેક ખાતા અને પોલિસીમાં નોમિની. બેંકો હવે એક ડિપોઝિટ પર ચાર સુધી નોમિની રાખવા દે છે.","એક વસિયત, ભલે સાદી હોય, અને શક્ય હોય તો નોંધાયેલી.","બધું ક્યાં છે તેની એક યાદી: ખાતાં, પોલિસીઓ, રોકાણો, મિલકત, અને જાણકાર લોકોનો સંપર્ક કેવી રીતે કરવો.","ફોલ્ડર ક્યાં રાખ્યું છે, તે એક વ્યક્તિને જણાવી રાખો."],"helpTitle":"જો તમે ઇચ્છો કે કોઈ તમારી સાથે રહે","help":"કેટલાક પરિવારોને અત્યારે કાગળકામમાં મદદ જોઈએ છે; તો કેટલાક ઇચ્છે છે કે તેમના પોતાના પરિવારને ક્યારેય આ પાનાની જરૂર ન પડે. બંને સંજોગોમાં, અમને વાત કરવામાં આનંદ થશે, શાંતિથી અને કોઈ બંધન વગર.","closing":"આમાંનું કશું કોઈની ભૂલ વિશે નથી. મોટા ભાગના લોકો પોતાના કાગળો વ્યવસ્થિત કરવાનું વિચારે જ છે, અને હંમેશાં એવું લાગે છે કે હજુ સમય છે."},"letters":[{"id":"bank","title":"બેંકને અવસાનની જાણ કરવી","body":"પ્રતિ શ્રી શાખા મેનેજર,\n{inst}\n\nવિષય: {name} ના અવસાનની જાણ, ખાતા નંબર {ref}\n\nમાનનીય સાહેબશ્રી/મેડમશ્રી,\n\nઆ પત્ર દ્વારા આપને જાણ કરું છું કે આપની શાખામાં જેમના નામે ઉપરોક્ત ખાતું છે, તે {name} નું {date} ના રોજ અવસાન થયું છે. મરણ પ્રમાણપત્રની નકલ આ સાથે સામેલ છે.\n\nઆપને નમ્ર વિનંતી છે કે આપના રેકોર્ડમાં આ બાબતની નોંધ કરશો, ખાતા પરના તમામ વ્યવહારો, સ્ટેન્ડિંગ ઇન્સ્ટ્રક્શન અને ઓટો ડેબિટ બંધ કરશો, અને ખાતાની બાકી રકમ, કોઈ ફિક્સ્ડ ડિપોઝિટ, તથા કોઈ લોકર હોય તો તેની અંદરની વસ્તુઓ માટે દાવો કરવાની પ્રક્રિયા અને જરૂરી દસ્તાવેજો વિશે મને જાણ કરશો.\n\n{name} સાથે મારો સંબંધ {rel} તરીકેનો છે, અને મારો સંપર્ક {phone} પર થઈ શકે છે.\n\nઆ કઠિન સમયમાં આપની મદદ બદલ આભાર.\n\nઆપનો/આપની વિશ્વાસુ,\n{you}\nતારીખ: {today}\n\nબિડાણ: મરણ પ્રમાણપત્રની નકલ"},{"id":"insurance","title":"જીવન વીમાનો દાવો કરવો","body":"પ્રતિ દાવા વિભાગ (Claims Department),\n{inst}\n\nવિષય: પોલિસી નંબર {ref} હેઠળ અવસાન દાવો (death claim), વીમાધારક {name}\n\nમાનનીય સાહેબશ્રી/મેડમશ્રી,\n\nઆ પત્ર દ્વારા હું ઉપરોક્ત પોલિસી હેઠળ દાવો રજૂ કરું છું. વીમાધારક {name} નું {date} ના રોજ અવસાન થયું છે.\n\n{name} સાથે મારો સંબંધ {rel} તરીકેનો છે. આ સાથે દાવા ફોર્મ, મરણ પ્રમાણપત્ર, પોલિસી દસ્તાવેજ, મારું ઓળખપત્ર અને સરનામાનો પુરાવો, તથા ચુકવણી માટે રદ કરેલો ચેક સામેલ છે.\n\nબીજું કંઈ પણ જરૂરી હોય, તો કૃપા કરીને મને જણાવશો. મારો સંપર્ક {phone} પર થઈ શકે છે.\n\nઆપની મદદ બદલ આભાર.\n\nઆપનો/આપની વિશ્વાસુ,\n{you}\nતારીખ: {today}"},{"id":"late","title":"વીમા દાવામાં વિલંબનું કારણ સમજાવવું","body":"પ્રતિ દાવા વિભાગ (Claims Department),\n{inst}\n\nવિષય: પોલિસી નંબર {ref} હેઠળ અવસાન દાવો (death claim), વીમાધારક {name}, અને વિલંબનું કારણ\n\nમાનનીય સાહેબશ્રી/મેડમશ્રી,\n\n{name} નું {date} ના રોજ અવસાન થયું છે. આ દાવો સામાન્ય કરતાં મોડો આપના સુધી પહોંચે છે, તે બદલ હું દિલગીર છું: અમારો પરિવાર તેમના કાગળો તપાસી રહ્યો હતો ત્યારે, હમણાં જ આ પોલિસી ધ્યાનમાં આવી.\n\nIRDAI ની માર્ગદર્શિકા મુજબ મારી સમજ છે કે સાચો દાવો ફક્ત મોડો કરવામાં આવ્યો હોવાના કારણે નકારવો જોઈએ નહીં. આ સાથે સામેલ દાવા પર કાર્યવાહી કરવા આપને નમ્ર વિનંતી છે.\n\n{name} સાથે મારો સંબંધ {rel} તરીકેનો છે, અને મારો સંપર્ક {phone} પર થઈ શકે છે.\n\nઆપનો/આપની વિશ્વાસુ,\n{you}\nતારીખ: {today}\n\nબિડાણ: દાવા ફોર્મ, મરણ પ્રમાણપત્ર, પોલિસી દસ્તાવેજ, ઓળખપત્ર અને સરનામાનો પુરાવો, રદ કરેલો ચેક"},{"id":"pension","title":"કુટુંબ પેન્શન શરૂ કરાવવું","body":"પ્રતિ શ્રી મેનેજર,\n{inst}\n\nવિષય: PPO નંબર {ref} હેઠળ કુટુંબ પેન્શન શરૂ કરવા બાબત વિનંતી\n\nમાનનીય સાહેબશ્રી/મેડમશ્રી,\n\nઉપરોક્ત PPO હેઠળ આપની શાખામાંથી જેમનું પેન્શન ચૂકવાતું હતું, તે પેન્શનર {name} નું {date} ના રોજ અવસાન થયું છે. {name} સાથે મારો સંબંધ {rel} તરીકેનો છે, અને PPO માં કુટુંબ પેન્શનર તરીકે મારું નામ નોંધાયેલું છે.\n\nઆપને વિનંતી છે કે પેન્શન બંધ કરી, મારા નામે કુટુંબ પેન્શન શરૂ કરશો.\n\nઆ સાથે મરણ પ્રમાણપત્ર, PPO ની નકલ, મારી ઉંમરનો પુરાવો, અને મારા બેંક ખાતાની વિગતો સામેલ છે. મારો સંપર્ક {phone} પર થઈ શકે છે.\n\nઆપનો/આપની વિશ્વાસુ,\n{you}\nતારીખ: {today}"}],"phone":[{"id":"bank","title":"બેંકને ફોન કરતી વખતે","lines":["નમસ્તે. હું એટલા માટે ફોન કરું છું કે આપની બેંકમાં જેમનું ખાતું છે, તે {name} નું તાજેતરમાં અવસાન થયું છે.","કૃપા કરીને અવસાનની નોંધ કરીને ખાતું ફ્રીઝ કરશો, જેથી હવે તેમાંથી કોઈ રકમ ન કપાય?","શું ખાતામાં કોઈ નોમિની છે?","દાવાની પ્રક્રિયા શું છે, અને પરિવાર પાસેથી આપને કયા દસ્તાવેજો જોઈશે?","શું આપ મને આ લેખિતમાં મોકલી શકશો, અથવા કઈ શાખામાં જવું તે જણાવી શકશો?"]},{"id":"insurer","title":"વીમા કંપનીને ફોન કરતી વખતે","lines":["નમસ્તે. મારે અવસાન દાવો (death claim) કરવો છે. પોલિસીધારક {name} નું {date} ના રોજ અવસાન થયું છે.","પોલિસી નંબર {ref} છે.","આપને કયા દસ્તાવેજો જોઈશે, અને શું હું તે ઓનલાઇન અથવા શાખામાં જમા કરાવી શકું?","શું આપ મને દાવાનો રેફરન્સ નંબર આપી શકશો?"]},{"id":"pension","title":"પેન્શન બેંકને ફોન કરતી વખતે","lines":["નમસ્તે. આપની શાખામાંથી {name} નું પેન્શન ચૂકવાતું હતું, અને {date} ના રોજ તેમનું અવસાન થયું છે.","કૃપા કરીને પેન્શન બંધ કરશો, અને મારા નામે કુટુંબ પેન્શન કેવી રીતે શરૂ કરાવવું તે જણાવશો.","PPO માં મારું નામ છે. મારે કયા દસ્તાવેજો લાવવાના રહેશે?"]}],"papers":{"assets":[{"id":"bank","label":"બેંક ખાતાં","items":["બેંકનું દાવા ફોર્મ","પાસબુક અથવા છેલ્લું સ્ટેટમેન્ટ","ચેકબુક અને ડેબિટ કાર્ડ, પરત કરવા માટે"]},{"id":"fd","label":"ફિક્સ્ડ ડિપોઝિટ","items":["ફિક્સ્ડ ડિપોઝિટની રસીદો અથવા એડવાઇસ"]},{"id":"locker","label":"બેંક લોકર","items":["લોકરની ચાવી","લોકરનો કરાર, જો તમારી પાસે હોય તો"]},{"id":"insurance","label":"જીવન વીમો","items":["વીમા કંપનીનું દાવા ફોર્મ","અસલ પોલિસી, અથવા ખોવાઈ ગઈ હોય તો ઇન્ડેમ્નિટી બોન્ડ","અવસાનના કારણનું તબીબી પ્રમાણપત્ર; પોલિસી ત્રણ વર્ષથી ઓછી જૂની હોય તો હોસ્પિટલના રેકોર્ડ","અવસાન અકસ્માતમાં થયું હોય, તો FIR અને પોસ્ટમોર્ટમ રિપોર્ટ"]},{"id":"mf","label":"મ્યુચ્યુઅલ ફંડ","items":["ટ્રાન્સમિશન વિનંતી ફોર્મ","Consolidated Account Statement (સંયુક્ત ખાતા પત્રક)"]},{"id":"shares","label":"શેર અથવા ડીમેટ ખાતું","items":["દાવેદારના નામે ડીમેટ ખાતું","બ્રોકર અથવા ડિપોઝિટરી પાર્ટિસિપન્ટ માટે ટ્રાન્સમિશન વિનંતી ફોર્મ","તેમના ડીમેટ ખાતાનું ક્લાયન્ટ માસ્ટર લિસ્ટ (client master list)"]},{"id":"pension","label":"સરકારી પેન્શન","items":["Pension Payment Order (PPO) ની નકલ","કુટુંબ પેન્શનરની ઉંમરનો પુરાવો","પેન્શન બેંકને એક ટૂંકો અરજી પત્ર"]},{"id":"pf","label":"પ્રોવિડન્ટ ફંડ (ખાનગી નોકરી)","items":["તેમનો UAN","EPFO નું સંયુક્ત (composite) દાવા ફોર્મ (પ્રોવિડન્ટ ફંડ, પેન્શન, વીમો)"]},{"id":"home","label":"મકાન અથવા જમીન","items":["વેચાણ દસ્તાવેજ અથવા માલિકીના દસ્તાવેજો","7/12 અને 8A ના ઉતારા, અથવા પ્રોપર્ટી કાર્ડ","મિલકત વેરાનું છેલ્લું બિલ"]},{"id":"society","label":"હાઉસિંગ સોસાયટીમાં ફ્લેટ","items":["શેર સર્ટિફિકેટ","સોસાયટીનો નોમિનેશન રેકોર્ડ અને ટ્રાન્સફર ફોર્મ"]},{"id":"vehicle","label":"કાર અથવા ટુ-વ્હીલર","items":["રજિસ્ટ્રેશન સર્ટિફિકેટ (RC) અને વીમો","RTO માટે Form 31"]},{"id":"post","label":"પોસ્ટ ઓફિસ, PPF અથવા વરિષ્ઠ નાગરિક ડિપોઝિટ","items":["પાસબુક અથવા પ્રમાણપત્રો","પોસ્ટ ઓફિસનું દાવા ફોર્મ"]},{"id":"loans","label":"લોન અથવા ક્રેડિટ કાર્ડ","items":["લોન સ્ટેટમેન્ટ અને લોન વીમાના કોઈ કાગળો હોય તો તે","ક્રેડિટ કાર્ડનાં છેલ્લાં સ્ટેટમેન્ટ"]}],"forAll":["મરણ પ્રમાણપત્ર: 10 થી 15 પ્રમાણિત નકલો","તેમના PAN કાર્ડ અને Aadhaar ની નકલો","દાવો કરનાર દરેક વ્યક્તિનું ઓળખપત્ર અને સરનામાનો પુરાવો","દાવો કરનાર દરેક વ્યક્તિનો રદ કરેલો ચેક અથવા બેંક વિગતો"],"heirs":["પેઢીનામું, અને વારસાઈ પ્રમાણપત્ર","બાકીના દરેક વારસદારના ના-વાંધા પત્રો","ઇન્ડેમ્નિટી બોન્ડ","મોટી રકમ માટે, ઉત્તરાધિકાર પ્રમાણપત્ર, ફક્ત માંગવામાં આવે તો જ"],"will":["અસલ વસિયત","પ્રોબેટ, ફક્ત કોઈ સંસ્થા માંગે તો જ"]},"sources":["RBI (Settlement of Claims in respect of Deceased Customers of Banks) Directions, 26 સપ્ટેમ્બર 2025: ₹15 લાખ સુધીનો સરળ માર્ગ, 15 દિવસમાં નિકાલ, લોકર.","Banking Laws (Amendment) Act, 2025: 1 નવેમ્બર 2025 થી, ડિપોઝિટ પર ચાર સુધી નોમિની.","પોલિસીધારકોના હિતોના રક્ષણ અંગે IRDAI Master Circular, 5 સપ્ટેમ્બર 2024: 15 અને 45 દિવસની સમયમર્યાદા, ફક્ત વિલંબના કારણે દાવો નકારી શકાય નહીં; દાવો ન થયેલી રકમ અને Senior Citizens' Welfare Fund.","સિક્યુરિટીઝના ટ્રાન્સમિશન અંગે SEBI નો પરિપત્ર, 23 જુલાઈ 2026: ફંડ હાઉસ દીઠ ₹10 લાખ, ડીમેટ ખાતા દીઠ ₹30 લાખ, 21 દિવસ. MITRA અંગે SEBI નો પરિપત્ર, 12 ફેબ્રુઆરી 2025. Unclaimed Assets Portal, 29 મે 2026 ના રોજ શરૂ.","Hindu Succession Act (હિંદુ વારસા અધિનિયમ), 1956 (Class I વારસદારો; કલમ 8, 10 અને 15). Repealing and Amending Act, 2025 (પ્રોબેટ હવે ફરજિયાત નથી). Shakti Yezdani v Jayanand Jayant Salgaonkar, સુપ્રીમ કોર્ટ, 14 ડિસેમ્બર 2023.","CCS (Pension) Rules, 2021, અને વધારેલા કુટુંબ પેન્શન અંગે DoPPW નું 27 ઑક્ટોબર 2025 નું ઓફિસ મેમોરેન્ડમ.","ગુજરાત મહેસૂલ વિભાગ (નામ ફેરફારની નોંધ અને e-Dhara); Gujarat Cooperative Societies Act (ગુજરાત સહકારી મંડળી અધિનિયમ), કલમ 31; Central Motor Vehicles Rules (Form 31); આવકવેરા e-filing પોર્ટલ, કાયદેસર વારસદાર તરીકે નોંધણી."]},"hi":{"lang":"hi","langName":"हिन्दी","ui":{"draft":"समीक्षा के लिए ड्राफ़्ट · सामान्य टेम्पलेट, अंतिम डिज़ाइन नहीं · निजी पेज","translationNote":"यह अनुवाद का ड्राफ़्ट है; प्रकाशित करने से पहले कृपया किसी ऐसे व्यक्ति से इसकी समीक्षा करवाएँ जिसकी मातृभाषा हिन्दी हो।","kicker":"परिवारों के लिए एक गाइड","title":"पहले 100 दिन","lede":"परिवार में किसी के निधन के बाद क्या करना है, एक-एक कदम करके, उसी क्रम में जिसमें इसे करना होता है।","care":["अगर आपके किसी प्रियजन का अभी-अभी निधन हुआ है, तो हमें बहुत दुख है। कृपया अपने साथ नरमी बरतें।","यहाँ बहुत कम चीज़ें ऐसी हैं जो तुरंत करनी ज़रूरी हैं। जो हैं, उन्हें हम आपको दिखाएँगे, और बाकी सब तब तक रुक सकता है जब तक आप तैयार महसूस न करें। आपको यह अकेले नहीं करना है, और सब कुछ एक साथ भी नहीं करना है।"],"how":"पाँच छोटे भाग, पहले हफ़्ते से सौवें दिन तक। हर भाग की शुरुआत में बताया गया है कि वह किस बारे में है। जो काम होता जाए, उस पर टिक करते जाएँ, कोई कदम किसी ऐसे व्यक्ति के साथ शेयर करें जो मदद कर सके, और जब भी ज़रूरत हो, रुक जाएँ। आपने जहाँ तक पढ़ा, हम वह याद रखेंगे।","begin":"पहले हफ़्ते से शुरू करें","welcomeBack":"फिर से स्वागत है। जितना समय चाहिए, उतना लें।","welcomeWhere":"पिछली बार आपने यहाँ तक पढ़ा था: {stage}।","carryOn":"वहीं से आगे पढ़ें","startOver":"शुरुआत से पढ़ें","partOf":"भाग {n} (5 में से)","next":"जब आप तैयार हों, अगला भाग","nextLast":"जब आप तैयार हों, एक आख़िरी बात","back":"पीछे","notToday":"आज नहीं","pausedTitle":"आज के लिए इतना काफ़ी है।","pausedBody":"आपने जहाँ तक पढ़ा था, वह हमने इस डिवाइस पर सँभाल कर रखा है। जब भी आप तैयार हों, लौट आएँ; यहाँ किसी चीज़ की समय सीमा नहीं है, और अगला कदम आपका इंतज़ार करेगा।","pausedReturn":"गाइड पर लौटें","stepsTitle":"क्या करना है","questions":"परिवारों के आम सवाल","done":"हो गया","share":"शेयर करें","shareText":"क्या इसमें आपकी मदद मिल सकती है? {step}। पूरी जानकारी यहाँ है: {url}","copy":"कॉपी करें","copied":"कॉपी हो गया","print":"सब कुछ प्रिंट करें","lettersTitle":"कॉपी करने के लिए तैयार पत्र","lettersBrief":"ये पत्र लिखना अक्सर सबसे कठिन काम होता है, इसलिए हमने इन्हें आपके लिए शुरू कर दिया है। नाम एक बार भरें, और हर पत्र अपने आप अपडेट हो जाएगा। आप जो भी भरें, वह इसी स्क्रीन पर रहता है; वह न कहीं सेव होता है, न कहीं भेजा जाता है।","fields":{"name":"उनका पूरा नाम","date":"निधन की तारीख","you":"आपका नाम","rel":"उनसे आपका रिश्ता (पत्नी, बेटा, बेटी...)","inst":"बैंक, बीमा कंपनी या शाखा","ref":"खाता, पॉलिसी या PPO नंबर","phone":"आपका फ़ोन नंबर"},"phoneTitle":"फ़ोन पर क्या कहें","phoneBrief":"जब शब्द ढूँढना मुश्किल हो, तो ये कुछ पंक्तियाँ काफ़ी हैं। पास में एक पेन रखें: तारीख, जिनसे बात हुई उनका नाम, और कोई भी रेफ़रेंस नंबर लिख लें।","papersTitle":"आपके कागज़ात की सूची","papersBrief":"उनके पास जो कुछ था, उस पर टिक करें, और हम जुटाने वाले सभी कागज़ात की एक सूची बना देंगे। इसे प्रिंट करें, कॉपी करें, या जो भी मदद कर रहा हो, उसे भेज दें।","papersHad":"उनके पास क्या था?","papersNominee":"क्या उन्होंने नॉमिनी (nominee) बनाए थे?","papersWill":"क्या उन्होंने कोई वसीयत लिखी थी?","yes":"हाँ","no":"नहीं","notSure":"पक्का नहीं पता","papersOut":"जुटाने वाले कागज़ात","papersEmpty":"उनके पास जो था, उस पर टिक करें, और सूची यहाँ दिखेगी।","papersForAll":"हर क्लेम के लिए","papersHeirs":"क्योंकि शायद कोई नॉमिनी नहीं है","papersWillDocs":"क्योंकि वसीयत है","papersShareText":"हमें जो कागज़ात जुटाने हैं: {url}","path":["यह हफ़्ता","खोज","वारिस कौन","क्लेम","दिन 100","आगे"],"footer":"यह गाइड नवंबर 2026 तक भारत में आम तौर पर अपनाए जाने वाले तरीकों के बारे में है। नियम हर संस्था और हर राज्य में अलग होते हैं, और बदलते रहते हैं। यह कानूनी या टैक्स सलाह नहीं है; बड़ी संपत्ति या आपसी असहमति की स्थिति में कृपया किसी वकील से बात करें।","sourcesTitle":"वे नियम जिन पर यह गाइड आधारित है"},"stages":[{"id":"week","when":"दिन 1 से 7","title":"पहला हफ़्ता","brief":"यह हफ़्ता आपके परिवार का है। शोक मनाएँ, साथ रहें, और एक-दूसरे का सहारा बनें। बस गिनी-चुनी चीज़ें हैं जो रुक नहीं सकतीं, और उनमें से कोई भी मुश्किल नहीं है।","steps":[{"t":"निधन का पंजीकरण करवाएँ, और दस प्रतियाँ माँगें","d":"अगर निधन अस्पताल में हुआ है, तो आम तौर पर अस्पताल ही आपके लिए पंजीकरण करवा देता है। अगर नहीं, तो परिवार का कोई सदस्य 21 दिनों के भीतर स्थानीय रजिस्ट्रार (शहरों में, नगर निगम) को इसकी सूचना देता है। मृत्यु प्रमाणपत्र (death certificate) की दस या उससे ज़्यादा प्रमाणित प्रतियाँ (certified copies) माँगें; लगभग हर दफ़्तर एक प्रति अपने पास रखना चाहेगा।"},{"t":"उनके कार्ड, UPI और चेकबुक अलग रख दें","d":"अस्पताल का बिल उनके खाते से भरने का मन होना स्वाभाविक है, लेकिन कृपया ऐसा न करें। निधन के दिन से वह पैसा उनकी संपत्ति (estate) का हिस्सा है, और अभी उसका इस्तेमाल करने से बाद में क्लेम मुश्किल हो सकते हैं। अपने खाते से भुगतान करें और रसीदें सँभाल कर रखें।"},{"t":"उनका फ़ोन नंबर चालू रखें","d":"बैंक के मैसेज, OTP और बीमा के अलर्ट उसी नंबर पर आते रहेंगे। अक्सर इन्हीं से परिवार को ऐसे खाते का पता चलता है जिसके बारे में किसी को मालूम नहीं था।"},{"t":"एक फ़ोल्डर बनाएँ","d":"जो भी कागज़ मिलता जाए, उसके लिए एक साधारण फ़ाइल या डिब्बा: पासबुक, पॉलिसी, स्टेटमेंट, पेंशन के कागज़, संपत्ति के दस्तावेज़, और मृत्यु प्रमाणपत्र की प्रतियाँ।"},{"t":"किसी एक व्यक्ति को अगुवाई सौंपें","d":"फ़ोल्डर और सूची सँभालने के लिए एक व्यक्ति चुनें। बाकी सब मदद कर सकते हैं, ज़रूरत पड़ने पर हस्ताक्षर कर सकते हैं, और कोई काम अपने ज़िम्मे लेकर उस व्यक्ति का बोझ हल्का कर सकते हैं।"}],"qs":[{"q":"हमें मृत्यु प्रमाणपत्र की कितनी प्रतियाँ चाहिए?","a":"दस से पंद्रह प्रतियाँ ठीक रहती हैं। बैंक, बीमा कंपनियाँ, फ़ंड हाउस, पेंशन ऑफ़िस और भूमि रिकॉर्ड ऑफ़िस, आम तौर पर हर एक, एक प्रति अपने पास रखता है। कुछ जगहें आपकी ख़ुद सत्यापित (self-attested) प्रति भी ले लेती हैं, लेकिन मूल प्रतियों से सब कुछ आसान हो जाता है।"},{"q":"क्या हम घर के ख़र्चों के लिए उनका खाता इस्तेमाल करते रह सकते हैं?","a":"कृपया ऐसा न करें, भले ही यह व्यावहारिक लगे। बैंक को पता चलते ही वह खाता फ़्रीज़ कर देता है, और बैंक को पता होना ही चाहिए। अगर इस बीच परिवार को पैसों की ज़रूरत हो, तो वारिस बैंक से कह सकते हैं कि वह अपनी क्लेम प्रक्रिया के ज़रिए पैसा जारी करे।"},{"q":"क्या बैंकों को इसी हफ़्ते बताना ज़रूरी है?","a":"यह थोड़ा रुक सकता है, लेकिन शुरुआती कुछ हफ़्तों में बता दें। बैंक को बताने से खाता फ़्रीज़ हो जाता है, जिससे सही क्लेम होने तक पैसा सुरक्षित रहता है, और EMI व स्टैंडिंग इंस्ट्रक्शन आगे नहीं चलते। अगले भाग में एक पत्र है, जिसे आप कॉपी कर सकते हैं।"}],"extras":[]},{"id":"finding","when":"हफ़्ते 2 से 4","title":"उनके पास क्या था, यह ढूँढना","brief":"लगभग हर परिवार को कुछ ऐसा मिलता है जिसके बारे में उसे पता नहीं था: कोई पुराना डिपॉज़िट, कोई भूली हुई पॉलिसी, किसी बच्चे के लिए चुपचाप शुरू किया गया कोई फ़ंड। यह भाग यह सब ढूँढने के बारे में है, धीरे-धीरे और बिना जल्दबाज़ी के।","steps":[{"t":"उनके कागज़ात और उनका फ़ोन देखें","d":"पासबुक, चेकबुक, पॉलिसी बॉन्ड, बैंकों और फ़ंड हाउस के ईमेल, और उनके फ़ोन पर आए SMS अलर्ट।"},{"t":"उनके बैंक स्टेटमेंट पढ़ें","d":"नियमित भुगतानों से वे बातें पता चलती हैं जो कागज़ात में छूट जाती हैं: बीमा प्रीमियम, SIP, रेकरिंग डिपॉज़िट, लोन की EMI, और बैंक खाते से जुड़ी सरकारी बीमा योजनाओं के लिए हर साल कटने वाली छोटी रकम।"},{"t":"उनके इनकम टैक्स रिकॉर्ड देखें","d":"इनकम टैक्स पोर्टल पर उनके Annual Information Statement (वार्षिक सूचना विवरण) में हर संस्था से मिला ब्याज, डिविडेंड और फ़ंड के लेन-देन दर्ज होते हैं। परिवार का कोई सदस्य पोर्टल पर उनके कानूनी वारिस के रूप में रजिस्टर हो जाए, तो इसे खोला जा सकता है।"},{"t":"उनके सभी निवेशों का एक ही स्टेटमेंट मँगवाएँ","d":"CAMS, KFintech या डिपॉज़िटरी NSDL और CDSL से मिलने वाले Consolidated Account Statement में उनके म्यूचुअल फ़ंड और शेयर एक साथ दिखते हैं।"},{"t":"भूला हुआ पैसा खोजें","d":"सरकार का Unclaimed Assets Portal सभी आधिकारिक खोजों को एक जगह लाता है: पुराने बैंक डिपॉज़िट के लिए RBI का UDGAM, बीमा कंपनियों की बिना क्लेम की रकम, पुराने म्यूचुअल फ़ंड फ़ोलियो के लिए SEBI का MITRA, और पुराने शेयर व डिविडेंड के लिए IEPF। इनसे सिर्फ़ खोज होती है; क्लेम ख़ुद बैंक, बीमा कंपनी या फ़ंड के पास ही करना होता है।"},{"t":"उनकी नौकरी और पेंशन के कागज़ात देखें","d":"सरकारी पेंशनभोगी के लिए, पेंशन पेमेंट ऑर्डर (PPO) में लिखा होता है कि फ़ैमिली पेंशन किसे मिलेगी। प्राइवेट नौकरी वालों के लिए, शुरुआत प्रोविडेंट फ़ंड खाते (UAN) से करें। पोस्ट ऑफ़िस की बचत, PPF और सीनियर सिटीज़न डिपॉज़िट पोस्ट ऑफ़िस में ही होते हैं।"},{"t":"हर बैंक को लिखित में सूचना दें","d":"मृत्यु प्रमाणपत्र की एक प्रति के साथ एक छोटा पत्र काफ़ी है। इससे क्लेम होने तक पैसा सुरक्षित रहता है। पत्र नीचे दिया है, कॉपी करने के लिए तैयार।"}],"qs":[{"q":"हमें नहीं पता कि उनके खाते किन बैंकों में थे। यह कैसे पता करें?","a":"शुरुआत उनके स्टेटमेंट, उनके फ़ोन और उनके टैक्स रिकॉर्ड से करें, जिनमें हर बैंक से मिला ब्याज दिखता है। फिर Unclaimed Assets Portal के ज़रिए UDGAM पर खोजें। उनके पुराने घर और काम की जगह के पास की बैंक शाखाओं में मृत्यु प्रमाणपत्र लेकर जाना भी फ़ायदेमंद है।"},{"q":"नॉमिनी असल में कौन होता है?","a":"वह व्यक्ति जिसे उन्होंने किसी खाते या पॉलिसी की रकम पाने के लिए नामित किया था। बैंक खातों, फ़ंड और शेयरों में नॉमिनी पैसा लेता है, लेकिन उसे सभी कानूनी वारिसों के लिए रखता है; सुप्रीम कोर्ट ने 2023 में यही कहा था, और अब RBI और SEBI के नियम भी यह साफ़ कहते हैं। जीवन बीमा में बात अलग है: जब नॉमिनी पति या पत्नी, संतान, या माता या पिता हों, तो पैसा पूरी तरह उन्हीं का होता है।"},{"q":"कोई नॉमिनी नहीं है। क्या अब हम अटक गए?","a":"बिल्कुल नहीं। कानूनी वारिस मिलकर क्लेम करते हैं। ₹15 लाख तक के बैंक खाते के लिए (सहकारी बैंक में ₹5 लाख तक), RBI के नियमों में एक आसान तरीका दिया गया है: क्लेम फ़ॉर्म, मृत्यु प्रमाणपत्र, पहचान पत्र, एक इंडेम्निटी (क्षतिपूर्ति पत्र), बाकी वारिसों के अनापत्ति पत्र (no-objection letter), और या तो वारिस प्रमाणपत्र (heirship certificate) या किसी स्वतंत्र व्यक्ति की घोषणा (declaration)। कागज़ी काम थोड़ा ज़्यादा है, लेकिन पैसा सुरक्षित है, और मिलेगा ज़रूर।"}],"extras":["letter:bank","phone:bank","papers"]},{"id":"heirs","when":"महीना 2","title":"वारिस कौन हैं","brief":"यह भाग सबसे औपचारिक लग सकता है, और कभी-कभी सबसे नाज़ुक भी, क्योंकि यह पूछता है कि कानून की नज़र में परिवार कौन है। इसे धीरे-धीरे लें, और मिलकर बात करें।","intro":["जब किसी का निधन बिना वसीयत के होता है, तो कानून तय करता है कि वारिस कौन होगा। हिन्दू पुरुष के लिए पहले वारिस हैं उनकी पत्नी, उनके बच्चे और उनकी माँ, बराबर हिस्सों में। हिन्दू महिला के लिए, उनके पति और उनके बच्चे। दूसरे धर्मों के परिवार अपने-अपने पर्सनल लॉ (personal law) के अनुसार चलते हैं, जिनमें हिस्से अलग होते हैं।","अगर माँ जीवित हैं, तो वे भी वारिस हैं, और उनके हस्ताक्षर की ज़रूरत पड़ेगी। कई परिवारों को यह बात बैंक काउंटर पर जाकर ही पता चलती है।"],"steps":[{"t":"हर वारिस की सूची बनाएँ","d":"हर एक का नाम उनके संपर्क विवरण के साथ लिख लें। ज़्यादातर क्लेम में हर वारिस के हस्ताक्षर या सहमति की ज़रूरत होगी।"},{"t":"वारिस प्रमाणपत्र (heirship certificate) बनवाएँ","d":"गुजरात में परिवार आम तौर पर पेढ़ीनामा (pedhinamu) से शुरुआत करते हैं, यानी हलफ़नामों (affidavits) के साथ तलाटी द्वारा प्रमाणित वंशवृक्ष (family tree), और इसी के आधार पर मामलतदार से वारसाई (heirship) प्रमाणपत्र लेते हैं। ज़्यादातर क्लेम के लिए बैंक, फ़ंड हाउस और दफ़्तर इसे मान लेते हैं।"},{"t":"उत्तराधिकार प्रमाणपत्र (succession certificate), सिर्फ़ माँगे जाने पर","d":"यह सिविल कोर्ट जारी करता है, आम तौर पर तब, जब कोई संस्था बड़ी रकम के लिए इस पर ज़ोर देती है। इसमें कुछ महीने लगते हैं, और कोर्ट फ़ीस भी लगती है, जो रकम के साथ बढ़ती है।"},{"t":"मिलकर तय करें कि किसे क्या मिलेगा","d":"कई परिवार चाहते हैं कि सब कुछ जीवित पति या पत्नी को मिले। बाकी वारिस ऐसा करवा सकते हैं: खातों और निवेशों के लिए सहमति पत्र (consent letter), और संपत्ति के लिए रजिस्टर्ड रिलीज़ डीड (हक त्याग पत्र)।"}],"qs":[{"q":"क्या सब कुछ पति या पत्नी को नहीं मिलता?","a":"वसीयत के बिना नहीं। वे कई वारिसों में से एक हैं। फिर भी, बाकी हर वारिस की सहमति से ऐसा किया जा सकता है।"},{"q":"वारिस प्रमाणपत्र या उत्तराधिकार प्रमाणपत्र: हमें कौन सा चाहिए?","a":"हर संस्था से पूछें, क्योंकि सीमाएँ अलग-अलग हैं। बैंक ₹15 लाख तक के क्लेम कोर्ट के प्रमाणपत्र के बिना निपटा देते हैं। फ़ंड हाउस में ₹10 लाख प्रति फ़ंड हाउस तक, और डीमैट खातों में ₹30 लाख तक के क्लेम, इंडेम्निटी और हर वारिस की अनापत्ति वाले हलफ़नामे पर निपट जाते हैं। इन रकमों से ऊपर, वारिस प्रमाणपत्र या उत्तराधिकार प्रमाणपत्र चाहिए।"},{"q":"क्या बच्चे अपना हिस्सा अपनी माँ को दे सकते हैं?","a":"हाँ, और कई बच्चे ऐसा करते हैं। खातों और निवेशों के लिए वे सहमति पत्रों पर हस्ताक्षर करते हैं। संपत्ति के लिए वे रिलीज़ डीड पर हस्ताक्षर करते हैं, जो रजिस्टर होती है और जिस पर स्टांप ड्यूटी लगती है, जो संपत्ति परिवार के भीतर रहने पर आम तौर पर कम होती है।"},{"q":"अगर परिवार में सहमति न बने तो?","a":"तब फ़ैसला कोर्ट करता है, और इसमें सालों लग सकते हैं, और तब तक ज़्यादातर संस्थाएँ सब कुछ रोक कर रखती हैं। अगर बातचीत में आवाज़ें ऊँची होने लगें, तो शुरुआत में ही कोई शांत तीसरा व्यक्ति, या कोई वकील, परिवार के साथ बैठ जाए, तो बहुत सारा दुख बच सकता है।"}],"extras":[]},{"id":"claims","when":"महीने 2 और 3","title":"एक-एक करके क्लेम करना","brief":"अब कागज़ी काम आगे बढ़ने लगता है। एक बार में एक खाता या पॉलिसी लें, उसे पूरा करके टिक करें, और हर एक को एक छोटा, पूरा हुआ काम मानें। कुछ में दो हफ़्ते लगते हैं और कुछ में कुछ महीने; दोनों ही सामान्य हैं।","cards":[{"h":"बैंक खाते और फ़िक्स्ड डिपॉज़िट","rows":[["क्या करना है","बैंक को क्लेम फ़ॉर्म और मृत्यु प्रमाणपत्र दें। \"either or survivor\" वाले जॉइंट खाते सीधे जीवित खाताधारक के नाम हो जाते हैं।"],["नॉमिनी हो तो","नॉमिनी अपने पहचान पत्र के साथ क्लेम करता है। बैंक नॉमिनी को भुगतान करता है, जो उस पैसे को वारिसों के लिए रखता है।"],["नॉमिनी न हो तो","₹15 लाख तक: इंडेम्निटी, बाकी वारिसों की अनापत्ति, और वारिस प्रमाणपत्र या किसी स्वतंत्र व्यक्ति की घोषणा। इससे ऊपर, उत्तराधिकार प्रमाणपत्र माँगा जा सकता है।"],["कितना समय","RBI के 2025 के नियमों के तहत, पूरे कागज़ात मिलने के 15 दिनों के भीतर। अगर बैंक देर करता है, तो वह मुआवज़ा देता है।"]]},{"h":"बैंक लॉकर","rows":[["क्या करना है","नॉमिनी, या सभी वारिस मिलकर, बैंक में आवेदन करते हैं। 15 दिनों के भीतर बैंक लॉकर खोलने की तारीख तय करता है, और उनके और दो स्वतंत्र गवाहों के सामने अंदर रखे सामान की सूची बनाता है।"],["जानने लायक बात","सूची पर हस्ताक्षर होने तक कुछ भी सौंपा नहीं जाता। चाबी और मृत्यु प्रमाणपत्र साथ लाएँ।"]]},{"h":"जीवन बीमा","rows":[["क्या करना है","बीमा कंपनी को सूचना दें, फिर क्लेम फ़ॉर्म, मृत्यु प्रमाणपत्र, पॉलिसी (या खो जाने पर इंडेम्निटी), नॉमिनी का पहचान पत्र और बैंक विवरण भेजें।"],["कितना समय","जब जाँच की ज़रूरत न हो, तो कागज़ात मिलने के 15 दिनों के भीतर; जब जाँच ज़रूरी हो, तो क्लेम के 45 दिनों के भीतर।"],["जानने लायक बात","तीन साल से पुरानी पॉलिसी पर, पॉलिसी लेते समय दी गई जानकारी के आधार पर विवाद नहीं किया जा सकता।"],["यह भी देखें","उनके नियोक्ता (employer) का ग्रुप बीमा, लोन से जुड़ा बीमा, उनके डेबिट कार्ड के साथ मिला बीमा, और उनके खाते से हर साल कटने वाली सरकारी योजनाएँ।"]]},{"h":"म्यूचुअल फ़ंड","rows":[["क्या करना है","फ़ंड हाउस या उसके रजिस्ट्रार (CAMS या KFintech) से कहें कि यूनिट क्लेम करने वाले के नाम ट्रांसमिट (transmission) करें, और साथ में मृत्यु प्रमाणपत्र, पहचान पत्र और बैंक का प्रमाण दें।"],["जानने लायक बात","यूनिट जैसी हैं, वैसी ही ट्रांसफ़र होती हैं; कुछ भी बेचना नहीं पड़ता, और विरासत में मिलने पर कोई टैक्स नहीं लगता।"],["नॉमिनी न हो तो","₹10 लाख प्रति फ़ंड हाउस तक: नोटरी से प्रमाणित इंडेम्निटी, और हर वारिस की अनापत्ति के साथ एक हलफ़नामा। इससे ऊपर, वारिस प्रमाणपत्र या उत्तराधिकार प्रमाणपत्र। फ़ंड हाउस के पास 21 दिन होते हैं।"]]},{"h":"शेयर और डीमैट","rows":[["क्या करना है","क्लेम करने वाला एक डीमैट खाता खोलता है, फिर ब्रोकर या डिपॉज़िटरी पार्टिसिपेंट को मृत्यु प्रमाणपत्र के साथ ट्रांसमिशन फ़ॉर्म देता है।"],["पुराने कागज़ी शेयर","कंपनी के रजिस्ट्रार के पास जाएँ। सात साल तक बिना क्लेम के पड़े डिविडेंड या शेयर IEPF के पास चले जाते हैं, और उन्हें वापस क्लेम किया जा सकता है।"],["नॉमिनी न हो तो","₹30 लाख प्रति डीमैट खाते तक, फ़ंड जैसे ही आसान कागज़ात; इससे ऊपर, वारिस प्रमाणपत्र या उत्तराधिकार प्रमाणपत्र।"]]},{"h":"उनकी पेंशन","rows":[["क्या करना है","जो बैंक पेंशन देता है, उसे सूचना दें। निधन के बाद खाते में आई कोई भी पेंशन लौटानी होगी।"],["पति या पत्नी के लिए","अगर पेंशन पेमेंट ऑर्डर में उनका नाम है, जैसा कि आम तौर पर होता है, तो उसी बैंक को मृत्यु प्रमाणपत्र, PPO की प्रति और आयु के प्रमाण के साथ एक पत्र काफ़ी है। अलग फ़ॉर्म की ज़रूरत नहीं।"],["जानने लायक बात","CGHS कार्ड फ़ैमिली पेंशनभोगी के नाम हो जाता है। अगर निधन नौकरी में रहते हुए हुआ, तो परिवार उनके दफ़्तर के ज़रिए आवेदन करता है। राज्य सरकार की पेंशन, और 2004 से NPS के तहत केंद्र सरकार की सेवा में आए लोगों के नियम अलग हैं।"]]},{"h":"प्रोविडेंट फ़ंड और ग्रेच्युटी","rows":[["प्राइवेट नौकरी","EPFO के ज़रिए: प्रोविडेंट फ़ंड, जीवित पति या पत्नी और बच्चों के लिए पेंशन, और ₹2.5 लाख से ₹7 लाख तक का जुड़ा हुआ बीमा। एक ही संयुक्त क्लेम फ़ॉर्म से तीनों हो जाते हैं।"],["सरकारी नौकरी","अगर निधन नौकरी में रहते हुए हुआ, तो उनका दफ़्तर प्रोविडेंट फ़ंड, ग्रुप बीमा और डेथ ग्रेच्युटी का निपटारा करता है।"]]},{"h":"घर","rows":[["क्या करना है","भूमि रिकॉर्ड में नाम बदलवाएँ (गुजरात में, तलाटी या e-Dhara केंद्र के ज़रिए, आपत्तियों के लिए 30 दिन की अवधि के साथ) या, प्रॉपर्टी कार्ड हो तो, सिटी सर्वे ऑफ़िस में; फ़्लैट के लिए सोसाइटी में; और प्रॉपर्टी टैक्स, बिजली और गैस के लिए भी।"],["जानने लायक बात","वसीयत के बिना, घर तब तक सभी वारिसों का साझा होता है, जब तक उनमें से कुछ रजिस्टर्ड डीड से अपना हिस्सा छोड़ न दें।"]]},{"h":"पोस्ट ऑफ़िस, PPF और सीनियर सिटीज़न डिपॉज़िट","rows":[["क्या करना है","जिस पोस्ट ऑफ़िस में खाता है, वहीं मृत्यु प्रमाणपत्र और क्लेम फ़ॉर्म के साथ क्लेम करें।"],["नॉमिनी न हो तो","₹5 लाख तक आसान कागज़ात पर; इससे ऊपर, उत्तराधिकार प्रमाणपत्र या इसी तरह का कोई दस्तावेज़।"]]},{"h":"लोन, कार्ड और कार","rows":[["लोन और कार्ड","कर्ज़ उनकी छोड़ी हुई संपत्ति से चुकाए जाते हैं, परिवार की अपनी जेब से नहीं। कोई भी EMI भरने से पहले, लोन देने वाली हर संस्था से पूछें कि क्या लोन का बीमा था। सह-उधारकर्ता (co-borrower), गारंटर या ऐड-ऑन कार्ड रखने वाले की ज़िम्मेदारी बनी रहती है।"],["कार","30 दिनों के भीतर RTO को सूचना दें, और तीन महीने के भीतर कार उस वारिस के नाम ट्रांसफ़र करें जो उसे रखेगा (Form 31, Parivahan पर ऑनलाइन)।"]]}],"steps":[],"qs":[{"q":"हमें सालों बाद एक बीमा पॉलिसी मिली। क्या अब भी क्लेम कर सकते हैं?","a":"हाँ। डेथ क्लेम करने की कोई आख़िरी तारीख नहीं है, और नियामक के नियम कहते हैं कि सिर्फ़ देर से किए जाने के कारण कोई क्लेम अस्वीकार नहीं किया जा सकता। क्लेम के साथ एक छोटे पत्र में देरी का कारण बताएँ; ऐसा एक पत्र नीचे दिया है। दस साल तक बिना क्लेम के पड़ा पैसा Senior Citizens' Welfare Fund (वरिष्ठ नागरिक कल्याण कोष) में चला जाता है, और उसके बाद भी पच्चीस साल तक क्लेम किया जा सकता है। अगर बीमा कंपनी देर करे या मना कर दे, तो Bima Bharosa पर शिकायत करें, और फिर बीमा लोकपाल (Insurance Ombudsman) से।"},{"q":"क्या पेंशन बंद हो जाएगी?","a":"उनकी पेंशन बंद हो जाती है, और उसकी जगह जीवित पति या पत्नी को जीवन भर के लिए फ़ैमिली पेंशन मिलती है। केंद्र सरकार के रिटायर्ड कर्मचारी के मामले में यह आख़िरी वेतन का 30% होती है, जो पहले सात साल तक, या उस समय तक जब पेंशनभोगी की उम्र 67 वर्ष हो जाती, इनमें से जो भी पहले हो, बढ़ी हुई दर 50% पर मिलती है। उसके बाद, यह 25 वर्ष की उम्र तक बेटे को, या उस पर निर्भर अविवाहित बेटी को मिल सकती है। जब तक पति या पत्नी इसके हकदार हैं, तब तक माता या पिता को यह नहीं मिलती।"},{"q":"क्या विरासत में मिली चीज़ों पर हमें टैक्स देना होगा?","a":"नहीं। भारत में विरासत कर (inheritance tax) नहीं है। विरासत मिलने के बाद होने वाले ब्याज, किराए या मुनाफ़े पर वारिस को हमेशा की तरह टैक्स देना होता है, और जब विरासत में मिले फ़ंड या शेयर बाद में बेचे जाते हैं, तो मूल लागत और होल्डिंग अवधि (holding period) गिनी जाती है।"},{"q":"क्या हमें उनके क्रेडिट कार्ड का बकाया चुकाना होगा?","a":"यह उनकी छोड़ी हुई संपत्ति से चुकाया जाता है, वारिसों के हिस्से बँटने से पहले। विरासत में जो मिला है, उससे ज़्यादा के लिए परिवार निजी तौर पर ज़िम्मेदार नहीं है, जब तक कि किसी ने सह-हस्ताक्षर न किए हों, लोन की गारंटी न दी हो, या ऐड-ऑन कार्ड न रखा हो।"}],"extras":["letter:insurance","letter:late","letter:pension","phone:insurer","phone:pension"]},{"id":"day100","when":"दिन 100 और उसके बाद","title":"फ़ाइल बंद करना","brief":"अब तक सबसे कठिन हफ़्ते बीत चुके हैं। जो बचा है, वह शांत काम है: एक टैक्स रिटर्न, कुछ खाते बंद करना, और एक फ़ोल्डर सुरक्षित रखना।","steps":[{"t":"उनका आख़िरी इनकम टैक्स रिटर्न भरें","d":"एक वारिस इनकम टैक्स पोर्टल पर उनके कानूनी वारिस के रूप में रजिस्टर करता है, और निधन की तारीख तक की उनकी आय का रिटर्न सामान्य नियत तारीख तक भरता है (ज़्यादातर परिवारों के लिए 31 जुलाई)।"},{"t":"जिसकी अब ज़रूरत नहीं, उसे बंद करें","d":"पुराने खाते, सब्सक्रिप्शन, उनका ईमेल और सोशल मीडिया (ज़्यादातर को मृत्यु प्रमाणपत्र के साथ बंद किया जा सकता है, या स्मृति खाते में बदला जा सकता है)।"},{"t":"फ़ोल्डर सँभाल कर रखें","d":"क्लेम, डीड और टैक्स के कागज़ात सालों बाद भी माँगे जा सकते हैं। इन्हें कम से कम आठ साल तक रखें।"}],"qs":[{"q":"क्या उनका टैक्स रिटर्न भरना सच में ज़रूरी है?","a":"हाँ, अगर उस साल की उनकी आय पर रिटर्न भरना ज़रूरी था। कानूनी वारिस उनके प्रतिनिधि के रूप में उनके नाम से रिटर्न भरता है, और जो भी रिफ़ंड बनता है, वह उनकी संपत्ति (estate) में आता है।"},{"q":"क्या अब यह सब करने में बहुत देर हो गई है?","a":"लगभग कभी नहीं। बिना क्लेम के पड़े बैंक डिपॉज़िट कभी भी क्लेम किए जा सकते हैं, बीमा का पैसा कल्याण कोष में जाने के बाद पच्चीस साल तक, और पुराने शेयर व डिविडेंड IEPF से। बस थोड़े ज़्यादा पत्र लिखने पड़ते हैं।"}],"closing":"अपने साथ नरमी बरतें। दुख का अपना कैलेंडर होता है, और वह सौवें दिन ख़त्म नहीं होता।","extras":[]}],"ahead":{"when":"जब आप तैयार हों","title":"आगे की ओर","brief":"जब आप तैयार महसूस करें, और सिर्फ़ तभी: कुछ मिनट इस पर कि अगली पीढ़ी के लिए यही महीने कैसे बीत सकते हैं।","endingsTitle":"तीन रास्ते","endingsBrief":"वही परिवार, वही दुख, और बात तीन अलग तरह से आगे बढ़ सकती है।","cols":["कोई वसीयत नहीं","वसीयत","पारिवारिक ट्रस्ट"],"colNotes":["ज़्यादातर परिवारों के साथ यही होता है","अगर वसीयत लिखी गई होती","अगर ट्रस्ट बनाया गया होता"],"rows":[["कौन तय करता है","कानून: सभी वारिसों में बराबर हिस्से, जीवित माता या पिता समेत।","वसीयत लिखने वाला व्यक्ति: जैसे, सब कुछ पति या पत्नी को, और माता या पिता की देखभाल का इंतज़ाम।","ट्रस्ट बनाने वाला व्यक्ति, सालों पहले: ट्रस्ट डीड में लिखा होता है कि लाभ किसे मिलेगा, और कब।"],["हस्ताक्षर कौन करता है","हर वारिस, हर क्लेम पर।","वसीयत में नामित एग्ज़ीक्यूटर (निष्पादक)।","ट्रस्टी, जो बस काम जारी रखता है।"],["कागज़ात और कोर्ट","वारिस प्रमाणपत्र, इंडेम्निटी, और बड़ी रकम के लिए उत्तराधिकार प्रमाणपत्र।","बस वसीयत। 2025 से, भारत में कहीं भी प्रोबेट (probate) अनिवार्य नहीं है।","ट्रस्ट के पास पहले से जो है, उसके लिए कुछ नहीं।"],["कितना समय","आम तौर पर तीन से नौ महीने; कोर्ट के प्रमाणपत्र या असहमति होने पर इससे ज़्यादा।","एक से चार महीने।","ट्रस्ट के पास जो है, उसके लिए कुछ दिन से कुछ हफ़्ते।"],["घर","जब तक कुछ वारिस रजिस्टर्ड डीड से अपना हिस्सा न छोड़ दें, तब तक सभी वारिसों का साझा।","वसीयत में जिसका नाम हो, उसे मिलता है।","पहले से ट्रस्ट में है; मालिकाना हक में कोई बदलाव नहीं होता।"],["कैसा लगता है","सब सहमत हों तब भी, महीनों तक कतारें और हस्ताक्षर।","ज़्यादा साफ़, हालाँकि वसीयत को अब भी चुनौती दी जा सकती है।","निजी और शांत, बस इसके लिए ट्रस्ट को समय रहते बनाना पड़ता है।"]],"endingsNote":"यह सिर्फ़ उदाहरण है, कोई वादा नहीं। विरासत के निपटारे में कितना समय लगता है, इसका कोई आधिकारिक आँकड़ा नहीं है; ये अनुमान इस क्षेत्र में काम करने वाले पेशेवरों से लिए गए हैं, और असली समय परिवार, रकम और संस्थाओं पर निर्भर करता है। ट्रस्ट कुछ परिवारों के लिए सही होता है, सबके लिए नहीं, और कुछ चीज़ें, जैसे पेंशन और प्रोविडेंट फ़ंड, ट्रस्ट में नहीं रखी जा सकतीं।","folderTitle":"आपका अपना फ़ोल्डर","folderBrief":"किसी अपने को खोने के बाद कई परिवार जो सबसे अच्छा काम करते हैं, वह है यह पक्का करना कि अगली बार सब कुछ आसान हो। इसमें बस एक दोपहर लगती है।","folder":["हर खाते और पॉलिसी पर नॉमिनी। बैंक अब एक डिपॉज़िट पर चार तक नॉमिनी की अनुमति देते हैं।","एक वसीयत, भले ही साधारण हो, और हो सके तो रजिस्टर्ड।","एक सूची कि सब कुछ कहाँ है: खाते, पॉलिसी, निवेश, संपत्ति, और जिन लोगों को जानकारी है, उनसे संपर्क कैसे करें।","किसी एक व्यक्ति को बताएँ कि फ़ोल्डर कहाँ रखा है।"],"helpTitle":"अगर आपको किसी के साथ की ज़रूरत हो","help":"कुछ परिवार अभी कागज़ी काम में मदद चाहते हैं; दूसरे यह पक्का करना चाहते हैं कि उनके अपने परिवार को कभी इस पेज की ज़रूरत न पड़े। दोनों ही स्थितियों में, हमें आपसे बात करके ख़ुशी होगी, आराम से और बिना किसी बाध्यता के।","closing":"यह सब किसी की ग़लती के बारे में नहीं है। ज़्यादातर लोग अपने कागज़ात ठीक करने का इरादा रखते हैं, और हमेशा लगता है कि अभी समय है।"},"letters":[{"id":"bank","title":"बैंक को निधन की सूचना देना","body":"सेवा में, शाखा प्रबंधक,\n{inst}\n\nविषय: {name} के निधन की सूचना, खाता संख्या {ref}\n\nमहोदय/महोदया,\n\nसविनय सूचित करना है कि आपकी शाखा के उपरोक्त खाते के धारक {name} का {date} को निधन हो गया है। मृत्यु प्रमाणपत्र की एक प्रति संलग्न है।\n\nआपसे विनम्र अनुरोध है कि कृपया इसे अपने रिकॉर्ड में दर्ज करें, खाते पर सभी लेन-देन, स्टैंडिंग इंस्ट्रक्शन और ऑटो डेबिट रोक दें, और मुझे बताएँ कि खाते की शेष राशि, किसी भी फ़िक्स्ड डिपॉज़िट, और किसी भी लॉकर में रखे सामान का क्लेम करने की प्रक्रिया क्या है और कौन से दस्तावेज़ चाहिए।\n\n{name} से मेरा संबंध: {rel}। मुझसे {phone} पर संपर्क किया जा सकता है।\n\nइस कठिन समय में आपकी सहायता के लिए धन्यवाद।\n\nसादर,\n{you}\nदिनांक: {today}\n\nसंलग्न: मृत्यु प्रमाणपत्र की प्रति"},{"id":"insurance","title":"जीवन बीमा का क्लेम करना","body":"सेवा में, क्लेम विभाग,\n{inst}\n\nविषय: पॉलिसी संख्या {ref} के अंतर्गत डेथ क्लेम, बीमित व्यक्ति {name}\n\nमहोदय/महोदया,\n\nयह पत्र उपरोक्त पॉलिसी के अंतर्गत क्लेम करने के लिए है। बीमित व्यक्ति {name} का {date} को निधन हो गया है।\n\n{name} से मेरा संबंध: {rel}। क्लेम फ़ॉर्म, मृत्यु प्रमाणपत्र, पॉलिसी दस्तावेज़, मेरा पहचान और पते का प्रमाण, और भुगतान के लिए एक कैंसल किया हुआ चेक संलग्न है।\n\nअगर कुछ और चाहिए, तो कृपया मुझे बताएँ। मुझसे {phone} पर संपर्क किया जा सकता है।\n\nआपकी सहायता के लिए धन्यवाद।\n\nसादर,\n{you}\nदिनांक: {today}"},{"id":"late","title":"बीमा क्लेम में देरी का कारण बताना","body":"सेवा में, क्लेम विभाग,\n{inst}\n\nविषय: पॉलिसी संख्या {ref} के अंतर्गत डेथ क्लेम, बीमित व्यक्ति {name}, और देरी का कारण\n\nमहोदय/महोदया,\n\n{name} का {date} को निधन हो गया। खेद है कि यह क्लेम आप तक सामान्य से देर से पहुँच रहा है: यह पॉलिसी हाल ही में तब सामने आई, जब हमारा परिवार उनके कागज़ात देख रहा था।\n\nमेरी जानकारी के अनुसार, IRDAI के दिशानिर्देश कहते हैं कि किसी वास्तविक क्लेम को केवल देर से किए जाने के कारण अस्वीकार नहीं किया जाना चाहिए। आपसे विनम्र अनुरोध है कि संलग्न क्लेम पर कार्रवाई करें।\n\n{name} से मेरा संबंध: {rel}। मुझसे {phone} पर संपर्क किया जा सकता है।\n\nसादर,\n{you}\nदिनांक: {today}\n\nसंलग्न: क्लेम फ़ॉर्म, मृत्यु प्रमाणपत्र, पॉलिसी दस्तावेज़, पहचान और पते का प्रमाण, कैंसल किया हुआ चेक"},{"id":"pension","title":"फ़ैमिली पेंशन शुरू करवाना","body":"सेवा में, प्रबंधक,\n{inst}\n\nविषय: PPO संख्या {ref} के अंतर्गत फ़ैमिली पेंशन शुरू करने का अनुरोध\n\nमहोदय/महोदया,\n\nउपरोक्त PPO के अंतर्गत {name} की पेंशन आपकी शाखा से आती थी, और {date} को उनका निधन हो गया है। {name} से मेरा संबंध: {rel}। PPO में फ़ैमिली पेंशनभोगी के रूप में मेरा नाम दर्ज है।\n\nआपसे अनुरोध है कि उनकी पेंशन बंद करें और फ़ैमिली पेंशन मेरे नाम पर शुरू करें।\n\nमृत्यु प्रमाणपत्र, PPO की प्रति, मेरी आयु का प्रमाण, और मेरे बैंक खाते का विवरण संलग्न है। मुझसे {phone} पर संपर्क किया जा सकता है।\n\nसादर,\n{you}\nदिनांक: {today}"}],"phone":[{"id":"bank","title":"बैंक को फ़ोन करना","lines":["नमस्ते। {name} का आपके बैंक में खाता है, और हाल ही में उनका निधन हो गया। मैंने इसी बारे में फ़ोन किया है।","कृपया निधन की जानकारी दर्ज कर लीजिए और खाता फ़्रीज़ कर दीजिए, ताकि आगे कोई पैसा न कटे।","क्या इस खाते में कोई नॉमिनी है?","क्लेम की प्रक्रिया क्या है, और परिवार से कौन से दस्तावेज़ चाहिए?","क्या यह जानकारी मुझे लिखित में भेजी जा सकती है, या आप बता सकते हैं कि मुझे किस शाखा में आना होगा?"]},{"id":"insurer","title":"बीमा कंपनी को फ़ोन करना","lines":["नमस्ते। मुझे डेथ क्लेम करना है। पॉलिसीधारक {name} का {date} को निधन हो गया।","पॉलिसी नंबर {ref} है।","कौन से दस्तावेज़ चाहिए, और क्या इन्हें ऑनलाइन या किसी शाखा में जमा किया जा सकता है?","क्या मुझे क्लेम का रेफ़रेंस नंबर मिल सकता है?"]},{"id":"pension","title":"पेंशन वाले बैंक को फ़ोन करना","lines":["नमस्ते। {name} की पेंशन आपकी शाखा से आती थी, और {date} को उनका निधन हो गया।","कृपया उनकी पेंशन बंद कर दीजिए, और बताइए कि फ़ैमिली पेंशन मेरे नाम पर कैसे शुरू होगी।","PPO में मेरा नाम दर्ज है। मुझे कौन से दस्तावेज़ लाने होंगे?"]}],"papers":{"assets":[{"id":"bank","label":"बैंक खाते","items":["बैंक का क्लेम फ़ॉर्म","पासबुक या ताज़ा स्टेटमेंट","चेकबुक और डेबिट कार्ड, लौटाने के लिए"]},{"id":"fd","label":"फ़िक्स्ड डिपॉज़िट","items":["फ़िक्स्ड डिपॉज़िट की रसीदें या एडवाइस"]},{"id":"locker","label":"बैंक लॉकर","items":["लॉकर की चाबी","लॉकर एग्रीमेंट, अगर आपके पास हो"]},{"id":"insurance","label":"जीवन बीमा","items":["बीमा कंपनी का क्लेम फ़ॉर्म","मूल पॉलिसी, या खो जाने पर इंडेम्निटी","मृत्यु के कारण का मेडिकल प्रमाणपत्र; अगर पॉलिसी तीन साल से कम पुरानी हो, तो अस्पताल के रिकॉर्ड","FIR और पोस्टमॉर्टम रिपोर्ट, अगर निधन किसी दुर्घटना में हुआ हो"]},{"id":"mf","label":"म्यूचुअल फ़ंड","items":["ट्रांसमिशन अनुरोध फ़ॉर्म (transmission request form)","Consolidated Account Statement"]},{"id":"shares","label":"शेयर या डीमैट खाता","items":["क्लेम करने वाले के नाम पर डीमैट खाता","ब्रोकर या डिपॉज़िटरी पार्टिसिपेंट के लिए ट्रांसमिशन अनुरोध फ़ॉर्म","उनके डीमैट खाते की क्लाइंट मास्टर लिस्ट (client master list)"]},{"id":"pension","label":"सरकारी पेंशन","items":["पेंशन पेमेंट ऑर्डर (PPO) की प्रति","फ़ैमिली पेंशनभोगी की आयु का प्रमाण","पेंशन बैंक के लिए एक छोटा आवेदन पत्र"]},{"id":"pf","label":"प्रोविडेंट फ़ंड (प्राइवेट नौकरी)","items":["उनका UAN","EPFO का संयुक्त (composite) क्लेम फ़ॉर्म, जिसमें प्रोविडेंट फ़ंड, पेंशन और बीमा तीनों हैं"]},{"id":"home","label":"मकान या ज़मीन","items":["सेल डीड या मालिकाना हक के दस्तावेज़","7/12 और 8A के उतारे (extracts), या प्रॉपर्टी कार्ड","ताज़ा प्रॉपर्टी टैक्स बिल"]},{"id":"society","label":"हाउसिंग सोसाइटी में फ़्लैट","items":["शेयर सर्टिफ़िकेट","सोसाइटी का नॉमिनेशन रिकॉर्ड और ट्रांसफ़र फ़ॉर्म"]},{"id":"vehicle","label":"कार या दोपहिया वाहन","items":["रजिस्ट्रेशन सर्टिफ़िकेट (RC) और बीमा","RTO के लिए Form 31"]},{"id":"post","label":"पोस्ट ऑफ़िस, PPF या सीनियर सिटीज़न डिपॉज़िट","items":["पासबुक या सर्टिफ़िकेट","पोस्ट ऑफ़िस का क्लेम फ़ॉर्म"]},{"id":"loans","label":"लोन या क्रेडिट कार्ड","items":["लोन स्टेटमेंट और लोन बीमा के कोई भी कागज़","ताज़ा क्रेडिट कार्ड स्टेटमेंट"]}],"forAll":["मृत्यु प्रमाणपत्र: 10 से 15 प्रमाणित प्रतियाँ","उनके PAN कार्ड और Aadhaar की प्रतियाँ","क्लेम करने वाले हर व्यक्ति का पहचान और पते का प्रमाण","क्लेम करने वाले हर व्यक्ति का कैंसल किया हुआ चेक या बैंक विवरण"],"heirs":["पेढ़ीनामा (pedhinamu), और वारसाई (heirship) प्रमाणपत्र","बाकी सभी वारिसों से अनापत्ति पत्र","इंडेम्निटी बॉन्ड (indemnity bond)","बड़ी रकम के लिए उत्तराधिकार प्रमाणपत्र, सिर्फ़ माँगे जाने पर"],"will":["मूल वसीयत","प्रोबेट, सिर्फ़ तब जब कोई संस्था इसे माँगे"]},"sources":["RBI (Settlement of Claims in respect of Deceased Customers of Banks) Directions, 26 सितंबर 2025: ₹15 लाख तक का आसान तरीका, 15 दिनों में निपटारा, लॉकर।","Banking Laws (Amendment) Act, 2025: 1 नवंबर 2025 से डिपॉज़िट पर चार तक नॉमिनी।","IRDAI Master Circular on protection of policyholders' interests, 5 सितंबर 2024: 15 और 45 दिन की समय सीमा, सिर्फ़ देरी के कारण अस्वीकृति नहीं; बिना क्लेम की रकम और Senior Citizens' Welfare Fund।","transmission of securities पर SEBI का सर्कुलर, 23 जुलाई 2026: ₹10 लाख प्रति फ़ंड हाउस, ₹30 लाख प्रति डीमैट खाता, 21 दिन। MITRA पर SEBI का सर्कुलर, 12 फ़रवरी 2025। Unclaimed Assets Portal, 29 मई 2026 को शुरू।","Hindu Succession Act, 1956 (Class I वारिस; धारा 8, 10 और 15)। Repealing and Amending Act, 2025 (प्रोबेट अब अनिवार्य नहीं)। Shakti Yezdani v Jayanand Jayant Salgaonkar, सुप्रीम कोर्ट, 14 दिसंबर 2023।","CCS (Pension) Rules, 2021, और बढ़ी हुई फ़ैमिली पेंशन पर DoPPW का 27 अक्टूबर 2025 का कार्यालय ज्ञापन (office memorandum)।","गुजरात राजस्व विभाग (नामांतरण यानी mutation, और e-Dhara); Gujarat Cooperative Societies Act, धारा 31; Central Motor Vehicles Rules (Form 31); इनकम टैक्स e-filing पोर्टल, कानूनी वारिस पंजीकरण।"]}};
+
+(function () {
+  const $ = (s, el) => (el || document).querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('f100:' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem('f100:' + k, JSON.stringify(v)); } catch (e) {} }
+  };
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const app = $('#app');
+
+  let lang = new URLSearchParams(location.search).get('lang') || store.get('lang', 'en');
+  if (!DATA[lang]) lang = 'en';
+  let C = DATA[lang];
+  const ORDER = Object.keys(DATA);
+  const IDS = DATA.en.stages.map(s => s.id).concat('ahead');      // six stops on the path
+  const done = store.get('done', {});                              // ticked steps, per stage
+  const papers = Object.assign({ assets: [], nominee: '', will: '' }, store.get('papers', {}));
+  const F = {};                                                    // letter fields: on screen only, never saved
+  let view = 'intro';                                              // 'intro' | 0..5 | 'paused'
+
+  const fmt = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in o ? o[k] : m));
+  const today = () => new Date().toLocaleDateString(lang === 'en' ? 'en-IN' : lang + '-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(text) {
+    const ok = () => toast(C.ui.copied);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+    function fallback() { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} ta.remove(); }
+  }
+  function share(text) {
+    if (navigator.share) navigator.share({ text }).catch(() => {});
+    else window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+  const link = id => location.origin + location.pathname + (lang !== 'en' ? '?lang=' + lang : '') + '#' + id;
+
+  // ── chrome: draft bar, languages, translation note ──
+  function chrome() {
+    document.documentElement.lang = lang;
+    document.title = C.ui.title + ' · Draft';
+    $('#draft').textContent = C.ui.draft;
+    $('#langs').innerHTML = ORDER.map(l => `<button type="button" data-lang="${l}" aria-pressed="${l === lang}">${esc(DATA[l].langName)}</button>`).join('');
+    const n = $('#tnote'); n.hidden = !C.ui.translationNote; n.textContent = C.ui.translationNote || '';
+  }
+
+  // ── the path of six stops ──
+  function path(i) {
+    const pct = (i / 5) * (100 - 100 / 6);
+    return `<nav class="path" aria-label="${esc(C.ui.title)}"><span class="bar" style="width:${pct}%" aria-hidden="true"></span><ol>` +
+      C.ui.path.map((lbl, k) => `<li class="${k < i ? 'passed' : ''} ${k === i ? 'here' : ''}"><button type="button" data-go="${k}" ${k === i ? 'aria-current="step"' : ''} aria-label="${esc(lbl)}"><span class="dot"></span><span class="lbl">${esc(lbl)}</span></button></li>`).join('') +
+      `</ol><p class="pathnow" aria-hidden="true">${esc(C.ui.path[i])}</p></nav>`;
+  }
+
+  // ── fill letters and scripts: blanks show as gentle highlighted hints ──
+  function filled(tpl, html) {
+    const f = C.ui.fields;
+    const vals = { name: F.name, date: F.date, you: F.you, rel: F.rel, inst: F.inst, ref: F.ref, phone: F.phone, today: today() };
+    return String(tpl).replace(/\{(\w+)\}/g, (m, k) => {
+      const v = vals[k];
+      if (v) return html ? esc(v) : v;
+      const hint = '[' + (f[k] || k) + ']';
+      return html ? `<span class="ph">${esc(hint)}</span>` : hint;
     });
-    document.getElementById('clear').addEventListener('click', () => {
-      boxes.forEach(b => { b.checked = false; });
-      try { localStorage.removeItem(KEY); } catch (e) {}
-    });
-    // print: open every answer so nothing is hidden on paper
-    window.addEventListener('beforeprint', () => document.querySelectorAll('details').forEach(d => { d.dataset.wasOpen = d.open ? '1' : ''; d.open = true; }));
-    window.addEventListener('afterprint', () => document.querySelectorAll('details').forEach(d => { d.open = d.dataset.wasOpen === '1'; }));
-  })();
+  }
+  function lettersPanel(ids) {
+    const f = C.ui.fields;
+    const fields = ['name', 'date', 'rel', 'you', 'inst', 'ref', 'phone'].map(k =>
+      `<label>${esc(f[k])}<input type="${k === 'phone' ? 'tel' : 'text'}" id="f-${k}" data-f="${k}" value="${esc(F[k] || '')}" autocomplete="off" /></label>`).join('');
+    const letters = C.letters.filter(l => ids.includes(l.id)).map(l => `
+      <details class="letter" data-letter="${l.id}"><summary>${esc(l.title)}</summary><div>
+        <div class="text" data-tpl="${l.id}">${filled(esc(l.body), true)}</div>
+        <div class="btnrow"><button class="btn small ghost" type="button" data-copy-letter="${l.id}">${esc(C.ui.copy)}</button></div>
+      </div></details>`).join('');
+    return `<div class="sect"><h3>${esc(C.ui.lettersTitle)}</h3><p class="sub">${esc(C.ui.lettersBrief)}</p><div class="panel"><div class="fields">${fields}</div>${letters}</div></div>`;
+  }
+  function phonePanel(ids) {
+    const items = C.phone.filter(p => ids.includes(p.id)).map(p =>
+      `<div class="script-h">${esc(p.title)}</div><ol class="script" data-script="${p.id}">${p.lines.map(l => `<li>${filled(esc(l), true)}</li>`).join('')}</ol>`).join('');
+    return `<div class="sect"><h3>${esc(C.ui.phoneTitle)}</h3><p class="sub">${esc(C.ui.phoneBrief)}</p><div class="panel">${items}</div></div>`;
+  }
+  function refreshFilled() {
+    document.querySelectorAll('[data-tpl]').forEach(el => { const l = C.letters.find(x => x.id === el.dataset.tpl); el.innerHTML = filled(esc(l.body), true); });
+    document.querySelectorAll('[data-script]').forEach(el => { const p = C.phone.find(x => x.id === el.dataset.script); el.innerHTML = p.lines.map(l => `<li>${filled(esc(l), true)}</li>`).join(''); });
+  }
+
+  // ── papers list builder ──
+  function papersList() {
+    const P = C.papers, out = [];
+    if (!papers.assets.length) return null;
+    out.push([C.ui.papersForAll, P.forAll]);
+    if (papers.nominee !== 'yes') out.push([C.ui.papersHeirs, P.heirs]);
+    if (papers.will === 'yes') out.push([C.ui.papersWillDocs, P.will]);
+    P.assets.filter(a => papers.assets.includes(a.id)).forEach(a => out.push([a.label, a.items]));
+    return out;
+  }
+  function papersOut() {
+    const L = papersList();
+    if (!L) return `<p class="note" style="margin:0">${esc(C.ui.papersEmpty)}</p>`;
+    return L.map(([h, items]) => `<h4>${esc(h)}</h4><ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>`).join('');
+  }
+  function papersText() {
+    const L = papersList(); if (!L) return '';
+    return C.ui.papersOut + '\n\n' + L.map(([h, items]) => h + '\n' + items.map(i => '  - ' + i).join('\n')).join('\n\n');
+  }
+  function papersPanel() {
+    const P = C.papers, u = C.ui;
+    const seg = (key, label) => `<div class="q-label">${esc(label)}</div><div class="seg" data-seg="${key}">` +
+      [['yes', u.yes], ['no', u.no], ['unsure', u.notSure]].map(([v, t]) => `<button type="button" data-v="${v}" aria-pressed="${papers[key] === v}">${esc(t)}</button>`).join('') + `</div>`;
+    return `<div class="sect" id="papers"><h3>${esc(u.papersTitle)}</h3><p class="sub">${esc(u.papersBrief)}</p><div class="panel">
+      <div class="q-label">${esc(u.papersHad)}</div>
+      <div class="assets">${P.assets.map(a => `<label class="chk"><input type="checkbox" data-asset="${a.id}" ${papers.assets.includes(a.id) ? 'checked' : ''}/><span>${esc(a.label)}</span></label>`).join('')}</div>
+      ${seg('nominee', u.papersNominee)}${seg('will', u.papersWill)}
+      <div class="q-label">${esc(u.papersOut)}</div>
+      <div class="out" id="papers-out">${papersOut()}</div>
+      <div class="btnrow" style="margin-top:12px">
+        <button class="btn small ghost" type="button" data-papers="print">${esc(u.print)}</button>
+        <button class="btn small ghost" type="button" data-papers="copy">${esc(u.copy)}</button>
+        <button class="btn small ghost" type="button" data-papers="share">${esc(u.share)}</button>
+      </div></div></div>`;
+  }
+
+  // ── views ──
+  function intro() {
+    const u = C.ui, at = store.get('at', null);
+    const back = (at !== null && at > 0) ? `<div class="welcome"><p><b>${esc(u.welcomeBack)}</b><br>${esc(fmt(u.welcomeWhere, { stage: u.path[at] }))}</p>
+      <div class="btnrow"><button class="btn" type="button" data-go="${at}">${esc(u.carryOn)}</button><button class="btn ghost" type="button" data-go="0" data-reset="1">${esc(u.startOver)}</button></div></div>` : '';
+    return `<div class="wrap intro fade">
+      <p class="kicker">${esc(u.kicker)}</p><h1>${esc(u.title)}</h1><p class="lede">${esc(u.lede)}</p>
+      <div class="care">${u.care.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+      <p class="how">${esc(u.how)}</p>${back}
+      ${back ? '' : `<button class="btn" type="button" data-go="0">${esc(u.begin)} <span aria-hidden="true">&rarr;</span></button>`}
+    </div>`;
+  }
+  function stageView(i) {
+    const u = C.ui, s = C.stages[i], d = done[s.id] || {};
+    const steps = s.steps.length ? `<ol class="steps">${s.steps.map((st, k) => `
+      <li class="step ${d[k] ? 'is-done' : ''}" data-step="${k}">
+        <button class="tick" type="button" aria-pressed="${!!d[k]}" aria-label="${esc(u.done)}: ${esc(st.t)}" data-tick="${k}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div><b>${esc(st.t)}</b><p>${esc(st.d)}</p></div>
+        <div class="acts"><button class="linkbtn" type="button" data-share="${k}">${esc(u.share)}</button></div>
+      </li>`).join('')}</ol>` : '';
+    const cards = s.cards ? `<div class="cards">${s.cards.map(c => `<article class="card"><h3>${esc(c.h)}</h3><dl>${c.rows.map(([t, v]) => `<dt>${esc(t)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></article>`).join('')}</div>` : '';
+    const ex = s.extras || [];
+    const lt = ex.filter(e => e.startsWith('letter:')).map(e => e.slice(7));
+    const ph = ex.filter(e => e.startsWith('phone:')).map(e => e.slice(6));
+    const qs = `<div class="sect"><h3>${esc(u.questions)}</h3><div style="margin-top:10px">${s.qs.map(q => `<details><summary>${esc(q.q)}</summary><div><p>${esc(q.a)}</p></div></details>`).join('')}</div></div>`;
+    const isLast = i === C.stages.length - 1;
+    return `<div class="wide fade">${path(i)}</div><div class="${s.cards ? 'wide' : 'wrap'} fade"><div>
+      <div class="meta"><span class="when">${esc(s.when)}</span><span>${esc(fmt(u.partOf, { n: i + 1 }))}</span></div>
+      <h2 tabindex="-1">${esc(s.title)}</h2>
+      <p class="brief">${esc(s.brief)}</p>
+      ${(s.intro || []).map(p => `<p class="introp">${esc(p)}</p>`).join('')}
+      ${steps ? `<h3 style="margin-top:8px">${esc(u.stepsTitle)}</h3>${steps}` : ''}
+      ${cards}
+      ${ex.includes('papers') ? papersPanel() : ''}
+      ${lt.length ? lettersPanel(lt) : ''}
+      ${ph.length ? phonePanel(ph) : ''}
+      ${qs}
+      ${s.closing ? `<p class="closing">${esc(s.closing)}</p>` : ''}
+      <div class="nav">
+        <div class="left"><button class="btn ghost" type="button" data-go="${i === 0 ? 'intro' : i - 1}"><span aria-hidden="true">&larr;</span> ${esc(u.back)}</button><button class="btn quiet" type="button" data-pause="${i}">${esc(u.notToday)}</button></div>
+        <button class="btn" type="button" data-go="${i + 1}">${esc(isLast ? u.nextLast : u.next)} <span aria-hidden="true">&rarr;</span></button>
+      </div></div></div>`;
+  }
+  function aheadView() {
+    const u = C.ui, A = C.ahead;
+    return `<div class="wide fade">${path(5)}</div><div class="wide fade">
+      <div class="meta"><span class="when">${esc(A.when)}</span></div>
+      <h2 tabindex="-1">${esc(A.title)}</h2><p class="brief" style="max-width:40em">${esc(A.brief)}</p>
+      <div class="sect"><h3>${esc(A.endingsTitle)}</h3><p class="sub">${esc(A.endingsBrief)}</p>
+        <div class="endings" role="region" tabindex="0" aria-label="${esc(A.endingsTitle)}"><table>
+          <thead><tr><th scope="col"></th>${A.cols.map((c, k) => `<th scope="col" class="${k === 0 ? 'first' : ''}">${esc(c)}<small>${esc(A.colNotes[k])}</small></th>`).join('')}</tr></thead>
+          <tbody>${A.rows.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((c, k) => `<td class="${k === 0 ? 'first' : ''}">${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table></div>
+        <p class="note" style="margin-top:12px">${esc(A.endingsNote)}</p>
+      </div>
+      <div class="wrap" style="padding:0;margin:0">
+        <div class="sect"><h3>${esc(A.folderTitle)}</h3><p class="sub">${esc(A.folderBrief)}</p><ol class="folder">${A.folder.map(f => `<li>${esc(f)}</li>`).join('')}</ol></div>
+        <p class="closing">${esc(A.closing)}</p>
+        <div class="help"><h3>${esc(A.helpTitle)}</h3><p style="margin:10px 0 0">${esc(A.help)}</p></div>
+        <details class="sources"><summary>${esc(u.sourcesTitle)}</summary><div><ul>${C.sources.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div></details>
+        <p class="foot">${esc(u.footer)}</p>
+        <div class="nav"><div class="left"><button class="btn ghost" type="button" data-go="4"><span aria-hidden="true">&larr;</span> ${esc(u.back)}</button></div>
+          <button class="btn ghost" type="button" data-print="all">${esc(u.print)}</button></div>
+      </div></div>`;
+  }
+  function pausedView() {
+    const u = C.ui;
+    return `<div class="wrap paused fade"><h2 tabindex="-1">${esc(u.pausedTitle)}</h2><p>${esc(u.pausedBody)}</p>
+      <button class="btn ghost" type="button" data-go="${store.get('at', 0)}">${esc(u.pausedReturn)}</button></div>`;
+  }
+
+  function render(focus) {
+    chrome();
+    if (view === 'intro') app.innerHTML = intro();
+    else if (view === 'paused') app.innerHTML = pausedView();
+    else if (view === 5) app.innerHTML = aheadView();
+    else app.innerHTML = stageView(view);
+    if (focus) {
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      const h = $('h2', app); if (h) h.focus({ preventScroll: true });
+    }
+  }
+  function go(to, focus) {
+    if (to === 'intro') { view = 'intro'; history.replaceState(null, '', location.pathname + location.search); }
+    else { view = +to; store.set('at', view); history.replaceState(null, '', location.pathname + location.search + '#' + IDS[view]); }
+    render(focus !== false);
+  }
+
+  // ── print: everything, or just the papers list ──
+  function printAll() {
+    const u = C.ui;
+    const parts = C.stages.map((s, i) => `<section><p>${esc(s.when)} · ${esc(fmt(u.partOf, { n: i + 1 }))}</p><h2>${esc(s.title)}</h2><p><i>${esc(s.brief)}</i></p>
+      ${(s.intro || []).map(p => `<p>${esc(p)}</p>`).join('')}
+      ${s.steps.length ? `<ol>${s.steps.map(st => `<li><b>${esc(st.t)}.</b> ${esc(st.d)}</li>`).join('')}</ol>` : ''}
+      ${s.cards ? s.cards.map(c => `<h3>${esc(c.h)}</h3><ul>${c.rows.map(([t, v]) => `<li><b>${esc(t)}:</b> ${esc(v)}</li>`).join('')}</ul>`).join('') : ''}
+      <h3>${esc(u.questions)}</h3>${s.qs.map(q => `<p><b>${esc(q.q)}</b><br>${esc(q.a)}</p>`).join('')}</section>`).join('');
+    const A = C.ahead;
+    $('#print').innerHTML = `<h1>${esc(u.title)}</h1>` + parts + `<section><h2>${esc(A.title)}</h2><h3>${esc(A.endingsTitle)}</h3><table border="1" cellpadding="6" style="border-collapse:collapse"><tr><th></th>${A.cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${A.rows.map(r => `<tr>${r.map((c, k) => k ? `<td>${esc(c)}</td>` : `<th>${esc(c)}</th>`).join('')}</tr>`).join('')}</table>
+      <h3>${esc(A.folderTitle)}</h3><ol>${A.folder.map(f => `<li>${esc(f)}</li>`).join('')}</ol><p>${esc(u.footer)}</p></section>`;
+    document.body.classList.remove('print-papers');
+    window.print();
+  }
+  function printPapers() {
+    $('#print').innerHTML = `<div class="papers-only"><h1>${esc(C.ui.papersTitle)}</h1>${papersOut()}</div>`;
+    document.body.classList.add('print-papers');
+    window.print();
+  }
+
+  // ── events ──
+  document.addEventListener('click', e => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.dataset.lang) { lang = t.dataset.lang; C = DATA[lang]; store.set('lang', lang); render(false); return; }
+    if (t.dataset.go !== undefined) {
+      if (t.dataset.reset) { store.set('at', 0); }
+      return go(t.dataset.go === 'intro' ? 'intro' : +t.dataset.go);
+    }
+    if (t.dataset.pause !== undefined) { store.set('at', +t.dataset.pause); view = 'paused'; render(true); return; }
+    if (t.dataset.tick !== undefined) {
+      const id = C.stages[view].id, k = t.dataset.tick;
+      done[id] = done[id] || {}; done[id][k] = !done[id][k]; store.set('done', done);
+      const li = t.closest('.step'); li.classList.toggle('is-done', !!done[id][k]); t.setAttribute('aria-pressed', !!done[id][k]);
+      return;
+    }
+    if (t.dataset.share !== undefined) {
+      const s = C.stages[view], st = s.steps[+t.dataset.share];
+      return share(fmt(C.ui.shareText, { step: st.t, url: link(s.id) }));
+    }
+    if (t.dataset.copyLetter) { const l = C.letters.find(x => x.id === t.dataset.copyLetter); return copy(filled(l.body, false)); }
+    if (t.dataset.papers === 'copy') return copy(papersText());
+    if (t.dataset.papers === 'share') return share(papersText() + '\n\n' + link('finding'));
+    if (t.dataset.papers === 'print') return printPapers();
+    if (t.dataset.print === 'all') return printAll();
+    const seg = t.closest('[data-seg]');
+    if (seg) {
+      papers[seg.dataset.seg] = t.dataset.v; store.set('papers', papers);
+      seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === t));
+      $('#papers-out').innerHTML = papersOut();
+    }
+  });
+  document.addEventListener('change', e => {
+    const a = e.target.dataset && e.target.dataset.asset;
+    if (a) {
+      papers.assets = papers.assets.filter(x => x !== a); if (e.target.checked) papers.assets.push(a);
+      store.set('papers', papers); $('#papers-out').innerHTML = papersOut();
+    }
+  });
+  document.addEventListener('input', e => { const k = e.target.dataset && e.target.dataset.f; if (k) { F[k] = e.target.value; refreshFilled(); } });
+  window.addEventListener('afterprint', () => document.body.classList.remove('print-papers'));
+
+  // ── start: a shared link opens its part; otherwise the opening page ──
+  const fromHash = IDS.indexOf(location.hash.slice(1));
+  if (fromHash >= 0) { view = fromHash; store.set('at', view); }
+  render(false);
+})();
 </script>
 </body>
 </html>
