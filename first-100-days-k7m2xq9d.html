@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>The First 100 Days · Draft</title>
+  <link rel="icon" href="data:," />
+  <meta name="description" content="Draft template: what a family needs to do after someone dies, in the order it needs doing." />
+  <style>
+    /* Neutral draft template: no brand kit on purpose (a new identity is in progress).
+       One reading column, a quiet serif for the story and headings, system sans for the steps. */
+    :root {
+      --bg: #fbfaf7;
+      --panel: #f3f1ec;
+      --ink: #1f2124;
+      --muted: #62666b;
+      --rule: #e2ded6;
+      --accent: #3d5a66;
+      --accent-soft: #e6ecee;
+      --story: #4a4740;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16181b; --panel: #1e2125; --ink: #e9e7e2; --muted: #a3a6aa; --rule: #30343a;
+        --accent: #9cc0cc; --accent-soft: #233036; --story: #cfc9bd; color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .draft { position: sticky; top: 0; z-index: 10; padding: 7px max(16px, env(safe-area-inset-left)); background: var(--ink); color: var(--bg); font-size: 12px; letter-spacing: .04em; text-align: center; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)); }
+    .wide { max-width: 1040px; margin: 0 auto; padding: 0 max(20px, env(safe-area-inset-left)); }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.2; text-wrap: balance; margin: 0; }
+    h1 { font-size: clamp(2.6rem, 7vw, 4.2rem); letter-spacing: -0.01em; }
+    h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+    h3 { font-size: 1.3rem; }
+    p { margin: 0 0 1em; }
+    .kicker { margin: 0 0 14px; color: var(--muted); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; }
+
+    /* opening */
+    .hero { padding: 72px 0 40px; }
+    .hero .lede { margin-top: 18px; font: 1.25rem/1.55 var(--serif); color: var(--story); max-width: 34em; }
+    .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 34px; }
+    .door { display: block; padding: 18px 20px; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); color: var(--ink); text-decoration: none; transition: border-color .2s; }
+    .door:hover { border-color: var(--accent); }
+    .door b { display: block; font-weight: 600; }
+    .door span { color: var(--muted); font-size: 15px; }
+    .care { margin: 8px 0 0; padding: 22px 24px; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 10px 10px 0; font: 1.08rem/1.65 var(--serif); }
+    .care p:last-child { margin: 0; }
+
+    /* sections */
+    section { padding: 56px 0; border-top: 1px solid var(--rule); }
+    .when { display: inline-block; margin-bottom: 12px; padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+    .story { margin: 22px 0 26px; padding-left: 20px; border-left: 2px solid var(--rule); font: italic 1.12rem/1.7 var(--serif); color: var(--story); }
+    .story p:last-child { margin: 0; }
+    ol.steps { margin: 0 0 8px; padding: 0; list-style: none; counter-reset: s; }
+    ol.steps > li { position: relative; padding: 0 0 18px 44px; counter-increment: s; }
+    ol.steps > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--accent); color: var(--accent); font-size: 14px; font-weight: 600; display: grid; place-items: center; }
+    ol.steps b { font-weight: 600; }
+    .note { color: var(--muted); font-size: 15px; }
+
+    /* questions families ask */
+    .qs { margin-top: 26px; }
+    .qs h3 { margin-bottom: 8px; font-size: 1.05rem; font-family: var(--sans); font-weight: 600; letter-spacing: .01em; }
+    details { border-top: 1px solid var(--rule); }
+    details:last-of-type { border-bottom: 1px solid var(--rule); }
+    summary { list-style: none; cursor: pointer; padding: 14px 32px 14px 0; position: relative; font-weight: 500; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '+'; position: absolute; right: 4px; top: 12px; color: var(--accent); font-size: 20px; line-height: 1; }
+    details[open] summary::after { content: '\2212'; }
+    details > div { padding: 0 0 16px; color: var(--ink); }
+    details > div p:last-child { margin: 0; }
+
+    /* asset by asset */
+    .assets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 26px; }
+    .card { padding: 22px 22px 18px; border: 1px solid var(--rule); border-radius: 12px; background: var(--panel); min-width: 0; }
+    .card h3 { margin-bottom: 10px; }
+    .card dl { margin: 0; }
+    .card dt { margin-top: 12px; color: var(--muted); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; }
+    .card dd { margin: 4px 0 0; font-size: 15.5px; }
+    .card ul { margin: 4px 0 0; padding-left: 18px; font-size: 15.5px; }
+
+    /* three endings */
+    .endings { overflow-x: auto; margin-top: 26px; border: 1px solid var(--rule); border-radius: 12px; }
+    .endings table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 15.5px; }
+    .endings th, .endings td { padding: 14px 16px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+    .endings thead th { font: 500 1.15rem/1.2 var(--serif); background: var(--panel); }
+    .endings thead th small { display: block; margin-top: 4px; font: 400 13px/1.3 var(--sans); color: var(--muted); }
+    .endings tbody th { width: 150px; color: var(--muted); font-weight: 500; font-size: 14px; }
+    /* the row labels stay put while the three columns scroll on a phone */
+    .endings th[scope="row"], .endings thead th:first-child { position: sticky; left: 0; z-index: 1; background: var(--bg); }
+    .endings thead th:first-child { background: var(--panel); }
+    @media (max-width: 640px) {
+      .endings table { min-width: 600px; font-size: 14.5px; }
+      .endings tbody th { width: 96px; padding-right: 10px; }
+      .endings th, .endings td { padding: 12px; }
+    }
+    .endings tr:last-child th, .endings tr:last-child td { border-bottom: 0; }
+    .endings .lived { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+
+    /* checklist */
+    .check { margin-top: 22px; }
+    .check h3 { margin: 26px 0 8px; font-size: 1.1rem; }
+    .check label { display: flex; gap: 12px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--rule); cursor: pointer; }
+    .check input { margin-top: 5px; width: 17px; height: 17px; accent-color: var(--accent); flex: none; }
+    .check input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule); }
+    .tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .btn { padding: 10px 16px; border: 1px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); font: 600 14px var(--sans); cursor: pointer; }
+    .btn:hover { background: var(--accent-soft); }
+
+    .help { padding: 30px; border-radius: 14px; background: var(--panel); border: 1px solid var(--rule); }
+    footer { padding: 40px 0 70px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--rule); }
+    .toc { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 26px; font-size: 14.5px; }
+    .toc a { color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      body { font-size: 16.5px; }
+      .hero { padding: 48px 0 28px; }
+      section { padding: 44px 0; }
+      .help { padding: 22px; }
+    }
+    @media print {
+      .draft, .doors, .tools, .toc, .help { display: none; }
+      body { background: #fff; color: #000; }
+      details { break-inside: avoid; }
+      details > div { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="draft">Draft for review · neutral template, not the final design · private page</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">A guide for families</p>
+    <h1>The First 100 Days</h1>
+    <p class="lede">What a family needs to do after someone dies, in the order it needs doing. Told through one family, written for every family.</p>
+    <div class="doors">
+      <a class="door" href="#first-week"><b>This has just happened to us</b><span>Start with the first seven days. Nothing else is urgent.</span></a>
+      <a class="door" href="#the-shahs"><b>We are reading ahead</b><span>Follow one family through the hundred days, and how it could have gone.</span></a>
+    </div>
+    <nav class="toc" aria-label="Contents">
+      <a href="#first-week">The first week</a><a href="#finding">Finding what he owned</a><a href="#heirs">Who inherits</a><a href="#claiming">Claiming, one by one</a><a href="#day-100">Day 100</a><a href="#endings">Three endings</a><a href="#checklist">The checklist</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="care">
+    <p>If you are here because someone in your family has just died, we are sorry.</p>
+    <p>Very little on this page is urgent today. The few things that are, we have put first. The rest can wait until you are ready, and most of it can be done by one person, slowly, with the right papers in one folder.</p>
+  </div>
+</div>
+
+<!-- ───────────────────────── 1 ───────────────────────── -->
+<section id="first-week">
+  <div class="wrap">
+    <span class="when">Days 1 to 7</span>
+    <h2>The first week</h2>
+    <div class="story" id="the-shahs">
+      <p>Rajesh Shah was sixty-one. He had retired from a central government office the year before, and he died on a Tuesday morning in March, of a heart attack nobody saw coming.</p>
+      <p>He left his wife Meena, their son Aarav, who is twenty-two, their daughter Isha, who is twenty, and his mother, Kamla, who is eighty-four and lives with them. By the weekend the house was full of relatives, and the drawer in his desk was full of papers nobody had looked at before.</p>
+    </div>
+    <p>This week is for the family. Only a handful of things need doing now:</p>
+    <ol class="steps">
+      <li><b>Register the death and ask for copies.</b> If he died in hospital, the hospital usually registers it; otherwise the family reports it to the local registrar (in cities, the municipal corporation) within 21 days. Ask for ten or more certified copies of the death certificate. Almost every bank, insurer and office will want one.</li>
+      <li><b>Do not use his cards, UPI or cheques,</b> even to pay the hospital. From the day he died, the money in his accounts belongs to his estate, and spending it now can make claims harder later. Pay from a family member's account and keep the receipts.</li>
+      <li><b>Keep his phone number working.</b> Bank alerts, OTPs and insurer messages still arrive there, and they are often how a family discovers an account it did not know about.</li>
+      <li><b>Start one folder.</b> Passbooks, policy papers, statements, his pension papers, property documents, the death certificate copies. Everything that turns up goes in it.</li>
+      <li><b>Choose one person to lead.</b> Everyone else can help and sign when needed. In the Shah family it was Meena, with Aarav handling the online forms.</li>
+    </ol>
+    <div class="qs">
+      <h3>Questions families ask</h3>
+      <details><summary>How many copies of the death certificate do we need?</summary><div><p>Ten to fifteen is a safe number. Banks, insurers, fund houses, the pension office and the land records office each usually keep one. Some accept a copy you attest yourself, but ask for originals to be safe.</p></div></details>
+      <details><summary>Can we keep using his account for household costs?</summary><div><p>No. Once a bank is told about the death, it freezes the account, and it should be told. Money withdrawn after a death with his card or PIN can be questioned later by the bank or by another heir. If the family needs cash in the meantime, the legal heirs can ask the bank to release funds through its claim process.</p></div></details>
+      <details><summary>Should we tell the banks straight away?</summary><div><p>Yes, within the first few weeks. Telling a bank freezes the account, which protects the money until the rightful claim is made. It also stops standing instructions and EMIs from running on.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 2 ───────────────────────── -->
+<section id="finding">
+  <div class="wrap">
+    <span class="when">Weeks 2 to 4</span>
+    <h2>Finding what he owned</h2>
+    <div class="story">
+      <p>Meena knew of two bank accounts. There turned out to be five, including a fixed deposit Rajesh had opened in 1998 and, it seems, forgotten. There was an old life insurance policy she had never seen, and a mutual fund he had started for Isha's wedding.</p>
+    </div>
+    <p>Most families find their way through the same places:</p>
+    <ol class="steps">
+      <li><b>His papers and his phone.</b> Passbooks, cheque books, policy bonds, emails from banks and fund houses, SMS alerts.</li>
+      <li><b>His bank statements.</b> Regular debits give away what the papers hide: insurance premiums, SIPs, recurring deposits, loan EMIs, and the small yearly debits for the government's bank-linked insurance schemes.</li>
+      <li><b>His income tax records.</b> His Annual Information Statement on the income tax portal lists interest, dividends and fund transactions from every institution that reported them. Once a family member is registered as his legal representative, it can be opened.</li>
+      <li><b>One statement for all his investments.</b> A Consolidated Account Statement, from CAMS, KFintech or the depositories NSDL and CDSL, lists his mutual funds and shares together.</li>
+      <li><b>The official searches for forgotten money.</b> The RBI's <b>UDGAM</b> searches deposits that went quiet for ten years or more. Insurers list unclaimed amounts, and the regulator's <b>Bima Bharosa</b> portal handles insurance complaints. SEBI's <b>MITRA</b> traces mutual fund folios left untouched for years, and the <b>IEPF</b> holds shares and dividends unclaimed for seven years. Since May 2026, the government's <b>Unclaimed Assets Portal</b> links all four in one place. These only search; the claim itself still goes to the bank, insurer or fund.</li>
+      <li><b>His employer and pension papers.</b> For a government pensioner, the Pension Payment Order (PPO) names the family pensioner. For a private employee, his provident fund account (UAN) is the place to start. Post office savings, PPF and senior citizen deposits are held at the post office, under their own rules.</li>
+    </ol>
+    <div class="qs">
+      <h3>Questions families ask</h3>
+      <details><summary>We don't know which banks he used. How do we find out?</summary><div><p>Start with his statements, his phone and his tax records, which show interest paid by every bank. Then search UDGAM, through the Unclaimed Assets Portal, for deposits that have gone quiet for years. Branches near his old home and office are worth a visit with a death certificate.</p></div></details>
+      <details><summary>What exactly is a nominee?</summary><div><p>The person he named to receive an account or policy when he died. For bank accounts, fund units and shares, a nominee collects the money but holds it for the legal heirs. The Supreme Court said so in 2023 for shares, and the RBI's and SEBI's rules now say it in so many words. Life insurance is different: when the nominee is his wife, children or parents, the money is theirs outright.</p></div></details>
+      <details><summary>There's no nominee on his account. Are we stuck?</summary><div><p>No. Without a nominee, the legal heirs claim together. For a bank account up to ₹15 lakh (₹5 lakh at a cooperative bank), the RBI's rules set out a simpler route: the claim form, the death certificate, ID, an indemnity, no-objection letters from the other heirs, and either a legal heir certificate or a declaration from an independent person. Above that, the bank can ask for a succession certificate. It takes more paperwork and more time, but the money is not lost.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 3 ───────────────────────── -->
+<section id="heirs">
+  <div class="wrap">
+    <span class="when">Month 2</span>
+    <h2>Who inherits, when there is no will</h2>
+    <div class="story">
+      <p>At the bank, the officer asked a question nobody in the family had thought about. "Is his mother alive?" She was. Under the law, that made Kamla one of Rajesh's four heirs, alongside Meena, Aarav and Isha, and her signature was needed on every claim.</p>
+    </div>
+    <p>When a Hindu man dies without a will, the Hindu Succession Act decides who inherits. His first heirs are his widow, his children and his mother, and they share equally. In the Shah family, that is four equal shares, whatever the family might have assumed. Families of other religions follow their own personal laws, with different shares.</p>
+    <p>Two papers do most of the work:</p>
+    <ol class="steps">
+      <li><b>An heirship certificate.</b> It names the heirs. In Gujarat, families usually start with a <i>pedhinamu</i>, a family tree certified by the Talati with affidavits, and use it to get an heirship (<i>varsai</i>) certificate from the Mamlatdar. Banks, fund houses and offices accept it for most claims.</li>
+      <li><b>A succession certificate.</b> Issued by a civil court, when an institution insists on one, usually for larger holdings of deposits, funds or shares. It takes some months and a court fee that rises with the value.</li>
+    </ol>
+    <p class="note">If the heirs agree that everything should go to one person, usually the mother, the others can give up their share in writing: a no-objection and consent for bank and fund claims, and a registered release deed for property.</p>
+    <div class="qs">
+      <h3>Questions families ask</h3>
+      <details><summary>Doesn't everything go to his wife?</summary><div><p>Not without a will. She is one heir among several. Many families want the surviving parent to have everything, and they can arrange it, but it takes signatures from each of the other heirs.</p></div></details>
+      <details><summary>Legal heir certificate or succession certificate: which do we need?</summary><div><p>Ask each institution, because the limits differ. Banks settle up to ₹15 lakh without a court certificate. Fund houses settle up to ₹10 lakh per fund house, and demat accounts up to ₹30 lakh, on an indemnity and an affidavit with every heir's no-objection. Above those amounts, an heirship certificate or a succession certificate is needed, and any dispute usually sends the family to court.</p></div></details>
+      <details><summary>Can the children give their share to their mother?</summary><div><p>Yes. For accounts and investments, the other heirs sign consent letters. For property, they sign a release deed, which is registered and carries stamp duty, usually lower when the release is within the family.</p></div></details>
+      <details><summary>What if the family does not agree?</summary><div><p>Then the court decides, and that can take years. Most institutions will not release anything while heirs dispute a claim. A neutral person, or a lawyer, sitting the family down early often saves a great deal.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 4 ───────────────────────── -->
+<section id="claiming">
+  <div class="wide">
+    <div class="wrap" style="padding:0">
+      <span class="when">Months 2 and 3</span>
+      <h2>Claiming, one by one</h2>
+      <div class="story">
+        <p>Meena kept a list on the fridge. Each line was an account or a policy, and each got a tick when the money arrived. Some took two weeks. The fixed deposit without a nominee took four months.</p>
+      </div>
+    </div>
+    <div class="assets">
+      <article class="card">
+        <h3>Bank accounts and fixed deposits</h3>
+        <dl>
+          <dt>What to do</dt><dd>Give the bank a claim form and the death certificate. Joint accounts held "either or survivor" pass to the survivor.</dd>
+          <dt>With a nominee</dt><dd>The nominee claims with their KYC. The bank pays the nominee, who holds it for the heirs.</dd>
+          <dt>Without a nominee</dt><dd>Up to ₹15 lakh: an indemnity, the other heirs' no-objection, and an heirship certificate or an independent person's declaration. Above it, a succession certificate may be asked for.</dd>
+          <dt>How long</dt><dd>Under the RBI's 2025 rules, within 15 days of complete papers; if the bank is late, it pays compensation.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Bank locker</h3>
+        <dl>
+          <dt>What to do</dt><dd>The nominee, or the heirs together, apply to the bank. Within 15 days the bank fixes a date to open it, and lists the contents in front of them and two independent witnesses.</dd>
+          <dt>Worth knowing</dt><dd>Nothing is handed over until the list is signed. Bring the key and the death certificate.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Life insurance</h3>
+        <dl>
+          <dt>What to do</dt><dd>Tell the insurer, then send the claim form, death certificate, the policy (or an indemnity if it is lost), the nominee's KYC and bank details.</dd>
+          <dt>How long</dt><dd>Within 15 days of the papers when no investigation is needed; within 45 days of the claim when it is.</dd>
+          <dt>Worth knowing</dt><dd>A policy more than three years old cannot be disputed on grounds of what was declared when it was taken out.</dd>
+          <dt>Also check</dt><dd>Group cover from his employer, loan-linked cover, insurance bundled with his debit card, and the government schemes debited yearly from his account.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Mutual funds</h3>
+        <dl>
+          <dt>What to do</dt><dd>Ask the fund house or its registrar (CAMS or KFintech) to "transmit" the units to the claimant, with the death certificate, KYC and bank proof.</dd>
+          <dt>Worth knowing</dt><dd>Units move as they are; nothing has to be sold. There is no tax on inheriting them.</dd>
+          <dt>Without a nominee</dt><dd>Up to ₹10 lakh per fund house: a notarised indemnity and an affidavit with every heir's no-objection. Above that, an heirship or succession certificate. Fund houses have 21 days.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Shares and demat</h3>
+        <dl>
+          <dt>What to do</dt><dd>The claimant opens a demat account, then gives his broker or depository participant a transmission form with the death certificate.</dd>
+          <dt>Old paper shares</dt><dd>Go to the company's registrar. Dividends or shares unclaimed for seven years sit with the IEPF and can be claimed back.</dd>
+          <dt>Without a nominee</dt><dd>Up to ₹30 lakh per demat account, the same simpler papers as funds; above that, an heirship or succession certificate.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>His pension</h3>
+        <dl>
+          <dt>What to do</dt><dd>Tell the bank that pays his pension; any pension credited after his death has to be returned.</dd>
+          <dt>For his wife</dt><dd>If his Pension Payment Order names her, as it usually does, a letter to the same bank with the death certificate, a copy of the PPO and proof of age is enough. No separate form.</dd>
+          <dt>Worth knowing</dt><dd>His CGHS card moves to her. If he died while still in service, the family applies through his office instead. State government pensions, and anyone who joined central service from 2004 under NPS, follow different rules.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Provident fund and gratuity</h3>
+        <dl>
+          <dt>Private employer</dt><dd>Through EPFO: the provident fund, the pension for his widow and children, and the linked insurance of ₹2.5 lakh to ₹7 lakh. One combined claim form covers all three.</dd>
+          <dt>Government</dt><dd>If he died in service, his office settles the provident fund, group insurance and death gratuity.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>The house</h3>
+        <dl>
+          <dt>What to do</dt><dd>Change the name in the land records (in Gujarat, through the Talati or an e-Dhara centre, with a 30-day window for objections) or at the City Survey Office for a property card; with the society for a flat; and for property tax, electricity and gas.</dd>
+          <dt>Worth knowing</dt><dd>Without a will, the house belongs to all the heirs together until some of them release their share by a registered deed.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Post office, PPF and senior citizen deposits</h3>
+        <dl>
+          <dt>What to do</dt><dd>Claim at the post office where the account is held, with the death certificate and the claim form.</dd>
+          <dt>Without a nominee</dt><dd>Up to ₹5 lakh on simpler papers; above that, a succession certificate or similar.</dd>
+        </dl>
+      </article>
+      <article class="card">
+        <h3>Loans, cards and the car</h3>
+        <dl>
+          <dt>Loans and cards</dt><dd>His debts are paid from what he left, not from the family's own pockets. Ask each lender whether the loan was insured before paying any EMI. A co-borrower, guarantor or add-on card holder stays liable.</dd>
+          <dt>The car</dt><dd>Tell the RTO within 30 days, and transfer it to the heir who keeps it within three months (Form 31, online through Parivahan).</dd>
+        </dl>
+      </article>
+    </div>
+    <div class="wrap" style="padding:0">
+      <div class="qs">
+        <h3>Questions families ask</h3>
+        <details><summary>We found an insurance policy four years later. Can we still claim?</summary><div><p>Yes. There is no deadline for making a death claim, and the regulator's rules say a claim cannot be rejected only because it was made late. Explain the delay in a short letter with the claim. Money unclaimed for ten years moves to the Senior Citizens' Welfare Fund, and can still be claimed for another twenty-five. If an insurer is slow or refuses, complain on Bima Bharosa, and then to the Insurance Ombudsman.</p></div></details>
+        <details><summary>Will his pension stop?</summary><div><p>His pension stops and a family pension for his wife takes its place, for her lifetime. For a retired central government employee it is 30% of his last pay, paid at a higher 50% for the first seven years or until he would have turned 67, whichever comes first. For Meena, that meant six years at the higher rate. After her, a son can receive it until 25, or an unmarried daughter who depends on it. His mother does not receive it while his wife is eligible.</p></div></details>
+        <details><summary>Do we have to pay tax on what we inherit?</summary><div><p>India has no inheritance tax. Interest, rent or gains earned after the inheritance are taxed in the heir's hands as usual, and when inherited funds or shares are later sold, his original cost and holding period count.</p></div></details>
+        <details><summary>Do we have to pay off his credit card?</summary><div><p>It is paid from what he left, before the heirs take their shares. The family is not personally liable beyond what it inherits, unless someone co-signed, guaranteed the loan or held an add-on card.</p></div></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 5 ───────────────────────── -->
+<section id="day-100">
+  <div class="wrap">
+    <span class="when">Day 100 and after</span>
+    <h2>Closing the file</h2>
+    <div class="story">
+      <p>On the hundredth day there was one form left, the last fixed deposit. Meena signed it, and then she did something nobody had expected. She took out a fresh folder, wrote her own name on the front, and asked Aarav to help her fill it.</p>
+    </div>
+    <ol class="steps">
+      <li><b>File his last income tax return.</b> One heir registers as his legal heir on the income tax portal and files the return for his income up to the date he died, by the usual due date (31 July for most families).</li>
+      <li><b>Close what is no longer needed.</b> Old accounts, subscriptions, his email and social media accounts (most can be closed or memorialised with a death certificate).</li>
+      <li><b>Keep the folder.</b> Claims, deeds and tax papers can be asked for years later. Keep them for at least eight years.</li>
+      <li><b>Look at your own papers.</b> Nominees on every account (banks now allow up to four on a deposit), a will, and a list of where things are. It is the gift Rajesh did not get to give.</li>
+    </ol>
+    <div class="qs">
+      <h3>Questions families ask</h3>
+      <details><summary>Do we really have to file his tax return?</summary><div><p>Yes, if his income for the year needed a return. The legal heir files it in his name, as his representative, and any refund due comes to the estate.</p></div></details>
+      <details><summary>Is it too late to do any of this?</summary><div><p>Almost never. Unclaimed bank deposits can be claimed at any time, insurance money for twenty-five years after it moves to the welfare fund, and old shares and dividends from the IEPF. It only takes more letters.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── endings ───────────────────────── -->
+<section id="endings">
+  <div class="wide">
+    <div class="wrap" style="padding:0">
+      <span class="when">The same family, three ways</span>
+      <h2>Three endings</h2>
+      <p style="margin-top:14px">Rajesh did what most people do. He meant to sort his papers out, and there was always time. Here is how the same hundred days, and the months after them, could have gone.</p>
+    </div>
+    <div class="endings" role="region" aria-label="How the same estate settles with no will, a will, or a trust" tabindex="0">
+      <table>
+        <thead>
+          <tr><th scope="col"></th><th scope="col" class="lived">No will, no trust<small>What happened</small></th><th scope="col">A registered will<small>If he had written one</small></th><th scope="col">A family trust<small>If he had set one up</small></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Who decides</th><td class="lived">The law: four equal shares, including his mother.</td><td>Rajesh: for example, everything to Meena, with care set aside for his mother.</td><td>Rajesh, years earlier: the trust deed says who benefits, and when.</td></tr>
+          <tr><th scope="row">Who signs</th><td class="lived">All four heirs, on every claim.</td><td>The executor he named.</td><td>The trustee, who simply carries on.</td></tr>
+          <tr><th scope="row">Papers and courts</th><td class="lived">Legal heir certificate, indemnities, and for the larger holdings a succession certificate from the court.</td><td>The will itself. Since 2025, probate is not compulsory anywhere in India.</td><td>None for what the trust already owns. Only what was outside it needs a claim.</td></tr>
+          <tr><th scope="row">How long</th><td class="lived">Three to nine months is common; longer with a court certificate or any disagreement.</td><td>One to four months.</td><td>Days to weeks for what the trust holds.</td></tr>
+          <tr><th scope="row">The house</th><td class="lived">Owned by four people until three sign release deeds.</td><td>Passes to whoever the will names.</td><td>Already in the trust; nothing changes hands.</td></tr>
+          <tr><th scope="row">How it felt</th><td class="lived">Everyone agreed, and it still took nine months of queues and signatures.</td><td>Clearer, though a will can still be challenged.</td><td>Private and quiet, at the cost of setting it up while he was alive.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="wrap" style="padding:0">
+      <p class="note" style="margin-top:14px">Illustrative, not a promise. There is no official data on how long estates take; these ranges come from practitioners, and real timelines depend on the family, the amounts and the institutions. A trust suits some families and not others, and some things, such as pensions and provident fund, cannot be placed in one.</p>
+      <p style="margin-top:20px">None of this is about what Rajesh did wrong. The difference between the three columns is a few hours of thought, years earlier.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── checklist ───────────────────────── -->
+<section id="checklist">
+  <div class="wrap">
+    <span class="when">Keep this one</span>
+    <h2>The checklist</h2>
+    <p style="margin-top:14px">Tick as you go. Your ticks stay on this device only.</p>
+    <div class="check" id="check">
+      <h3>The first week</h3>
+      <label><input type="checkbox" /><span>Death registered; ten or more certified copies</span></label>
+      <label><input type="checkbox" /><span>His cards, UPI and cheques set aside, unused</span></label>
+      <label><input type="checkbox" /><span>His phone number kept active</span></label>
+      <label><input type="checkbox" /><span>One folder started; one person chosen to lead</span></label>
+      <h3>Weeks 2 to 4</h3>
+      <label><input type="checkbox" /><span>Every bank told in writing</span></label>
+      <label><input type="checkbox" /><span>Statements, phone and email searched for accounts and policies</span></label>
+      <label><input type="checkbox" /><span>Income tax records and the consolidated statement checked</span></label>
+      <label><input type="checkbox" /><span>Unclaimed Assets Portal searched (UDGAM, insurance, MITRA, IEPF)</span></label>
+      <label><input type="checkbox" /><span>Pension office or employer informed</span></label>
+      <h3>Month 2</h3>
+      <label><input type="checkbox" /><span>Legal heirs listed, including a surviving parent</span></label>
+      <label><input type="checkbox" /><span>Pedhinamu and heirship (varsai) certificate applied for</span></label>
+      <label><input type="checkbox" /><span>Succession certificate, if any institution needs one</span></label>
+      <label><input type="checkbox" /><span>The family agrees who receives what; consents signed</span></label>
+      <h3>Months 2 and 3</h3>
+      <label><input type="checkbox" /><span>Bank accounts and fixed deposits claimed</span></label>
+      <label><input type="checkbox" /><span>Locker opened and listed</span></label>
+      <label><input type="checkbox" /><span>Every life insurance policy claimed</span></label>
+      <label><input type="checkbox" /><span>Mutual funds and shares transmitted</span></label>
+      <label><input type="checkbox" /><span>Family pension started</span></label>
+      <label><input type="checkbox" /><span>Provident fund, gratuity and group insurance settled</span></label>
+      <label><input type="checkbox" /><span>House records, society and utilities changed</span></label>
+      <label><input type="checkbox" /><span>Post office, PPF and senior citizen deposits claimed</span></label>
+      <label><input type="checkbox" /><span>Loans and cards settled; car transferred at the RTO</span></label>
+      <h3>Day 100 and after</h3>
+      <label><input type="checkbox" /><span>His last income tax return filed</span></label>
+      <label><input type="checkbox" /><span>Unused accounts and subscriptions closed</span></label>
+      <label><input type="checkbox" /><span>The folder kept safe</span></label>
+      <label><input type="checkbox" /><span>Your own nominations and will looked at</span></label>
+    </div>
+    <div class="tools">
+      <button class="btn" type="button" onclick="window.print()">Print the checklist</button>
+      <button class="btn" type="button" id="clear">Clear my ticks</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="help">
+      <h3>If you would like someone beside you</h3>
+      <p style="margin:12px 0 0">Some families want help with the paperwork now; others want to make sure their own family never needs this page. Either way, we are glad to talk, without obligation.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <details class="sources"><summary>Rules this guide follows</summary><div>
+      <ul>
+        <li>RBI (Settlement of Claims in respect of Deceased Customers of Banks) Directions, 26 September 2025: the ₹15 lakh simpler route, 15-day settlement, lockers.</li>
+        <li>Banking Laws (Amendment) Act, 2025: up to four nominees on deposits, from 1 November 2025.</li>
+        <li>IRDAI Master Circular on protection of policyholders' interests, 5 September 2024: 15 and 45 day timelines, no rejection only for delay; unclaimed amounts and the Senior Citizens' Welfare Fund.</li>
+        <li>SEBI circular on transmission of securities, 23 July 2026: ₹10 lakh per fund house, ₹30 lakh per demat account, 21 days. SEBI circular on MITRA, 12 February 2025.</li>
+        <li>Hindu Succession Act, 1956 (sections 8 and 10, Class I heirs). Repealing and Amending Act, 2025 (probate no longer compulsory). Shakti Yezdani v Jayanand Jayant Salgaonkar, Supreme Court, 14 December 2023.</li>
+        <li>CCS (Pension) Rules, 2021, and the DoPPW office memorandum of 27 October 2025 on the enhanced family pension.</li>
+        <li>Gujarat Revenue Department (mutation and e-Dhara); Gujarat Cooperative Societies Act, section 31; Central Motor Vehicles Rules (Form 31); Income tax e-filing portal, legal heir registration.</li>
+      </ul>
+    </div></details>
+    <p style="margin-top:22px">This guide describes general practice in India as of November 2026. Rules differ between institutions and states, and they change. It is not legal or tax advice; for large estates or disagreements, please speak to a lawyer. The Shah family is a composite, drawn from cases like the ones that inspired this guide.</p>
+  </div>
+</footer>
+
+<script>
+  // Checklist ticks stay on this device only.
+  (function () {
+    const boxes = Array.from(document.querySelectorAll('#check input'));
+    const KEY = 'first100-checklist';
+    let saved = [];
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+    boxes.forEach((b, i) => {
+      b.checked = !!saved[i];
+      b.addEventListener('change', () => { try { localStorage.setItem(KEY, JSON.stringify(boxes.map(x => x.checked))); } catch (e) {} });
+    });
+    document.getElementById('clear').addEventListener('click', () => {
+      boxes.forEach(b => { b.checked = false; });
+      try { localStorage.removeItem(KEY); } catch (e) {}
+    });
+    // print: open every answer so nothing is hidden on paper
+    window.addEventListener('beforeprint', () => document.querySelectorAll('details').forEach(d => { d.dataset.wasOpen = d.open ? '1' : ''; d.open = true; }));
+    window.addEventListener('afterprint', () => document.querySelectorAll('details').forEach(d => { d.open = d.dataset.wasOpen === '1'; }));
+  })();
+</script>
+</body>
+</html>
