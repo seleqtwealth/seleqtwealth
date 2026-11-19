@@ -87,20 +87,53 @@
     .sect-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 56px 0 6px; }
     .sect-h h2 { font-size: 1.9rem; }
     .sect-p { margin: 0 0 18px; color: var(--muted); }
-    .parts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-    .partrow { display: grid; grid-template-columns: 96px 1fr auto; gap: 16px; align-items: center; width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); cursor: pointer; text-align: left; transition: border-color .2s, transform .2s, box-shadow .2s; }
-    .partrow:hover { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); box-shadow: var(--shadow); }
-    .partrow img { width: 96px; height: 72px; border-radius: 11px; object-fit: cover; }
-    .partrow .when { color: var(--muted); font-size: 13.5px; font-weight: 600; }
-    .partrow .t { display: block; font: 500 1.28rem/1.25 var(--serif); margin-top: 2px; }
-    .partrow .pg { display: block; margin-top: 4px; color: var(--muted); font-size: 14px; }
-    .partrow.now { border-color: var(--accent); }
-    .partrow .done-badge { display: inline-flex; align-items: center; gap: 5px; color: var(--accent); font-size: 14px; font-weight: 600; }
+    /* the journey: each part is its own photograph, with its name laid over it */
+    .parts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pcard { position: relative; display: block; width: 100%; height: 184px; padding: 0; border: 0; border-radius: var(--r); overflow: hidden; background: #3a4a44; color: #fffaf1; cursor: pointer; text-align: left; isolation: isolate; box-shadow: 0 1px 2px rgba(38,36,31,.06); transition: box-shadow .3s, transform .3s; }
+    .pcard img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transform: scale(1.01); transition: opacity .8s ease, transform 1.2s cubic-bezier(.2,.7,.2,1); }
+    .pcard::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to bottom, rgba(14,17,15,.3) 0%, rgba(14,17,15,0) 30%), linear-gradient(to top, rgba(14,17,15,.78) 0%, rgba(14,17,15,.36) 48%, rgba(14,17,15,0) 100%); transition: opacity .3s; }
+    .pcard:hover { box-shadow: var(--shadow); }
+    .pcard:hover img { transform: scale(1.06); }
+    .pcard:active { transform: scale(.99); }
+    .pcard .in { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 18px 18px; text-shadow: 0 1px 16px rgba(0,0,0,.35); }
+    .pcard .when { display: block; font-size: 13px; font-weight: 600; letter-spacing: .03em; opacity: .88; }
+    .pcard .t { display: block; margin-top: 3px; font: 500 1.42rem/1.2 var(--serif); }
+    .pcard .num { position: absolute; top: 14px; left: 14px; display: grid; place-items: center; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 999px; background: rgba(255,250,241,.18); border: 1px solid rgba(255,250,241,.4); font: 600 13.5px/1 var(--sans); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .pcard .pg { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 11px; border-radius: 999px; background: rgba(14,17,15,.34); font-size: 13px; font-weight: 600; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .pcard .pg svg { width: 15px; height: 15px; stroke-width: 2.2; }
+    .pcard.full .pg { background: rgba(255,250,241,.92); color: #2b3f37; }
+    .pcard .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255,250,241,.18); }
+    .pcard .bar i { display: block; height: 100%; background: #fffaf1; border-radius: 0 3px 3px 0; transition: width .6s ease; }
+    .pcard.now { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .pcard.now .num { background: #fffaf1; color: #2b3f37; border-color: #fffaf1; }
+    .parts > li:first-child, .parts .coda-li { grid-column: 1 / -1; }
+    .parts > li:first-child .pcard { height: 236px; }
+    .parts > li:first-child .pcard .t { font-size: 1.75rem; }
+    .pcard.coda { height: 150px; }
+
+    /* the toolkit: no photograph, a card of its own, so it never reads as another part */
+    .kitcard { --kit: #33503f; --kit-ink: #fffaf1; position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; width: 100%; margin-top: 40px; padding: 26px 26px 26px 28px; border: 0; border-radius: var(--r); overflow: hidden; isolation: isolate; cursor: pointer; text-align: left; color: var(--kit-ink); background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--kit) 70%, #6f8f7c) 0%, var(--kit) 60%); box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s; }
+    .kitcard::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255,250,241,.12); }
+    .kitcard:active { transform: scale(.99); }
+    .kitcard .t { display: block; font: 500 1.7rem/1.15 var(--serif); }
+    .kitcard .pg { display: block; margin-top: 6px; max-width: 34em; font-size: 15.5px; line-height: 1.5; opacity: .86; }
+    .kitcard .side { display: flex; align-items: center; gap: 18px; }
+    .kitcard .stack { display: flex; }
+    .kitcard .stack span { display: grid; place-items: center; width: 42px; height: 42px; margin-left: -9px; border-radius: 50%; background: color-mix(in srgb, var(--kit) 78%, #fffaf1); box-shadow: 0 0 0 2px var(--kit); transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+    .kitcard .stack span:first-child { margin-left: 0; }
+    .kitcard .stack svg { width: 19px; height: 19px; }
+    .kitcard:hover .stack span { transform: translateY(-3px); }
+    .kitcard:hover .stack span:nth-child(2) { transition-delay: .04s; }
+    .kitcard:hover .stack span:nth-child(3) { transition-delay: .08s; }
+    .kitcard:hover .stack span:nth-child(4) { transition-delay: .12s; }
+    .kitcard .go { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--kit-ink); color: var(--kit); transition: transform .3s; }
+    .kitcard:hover .go { transform: translateX(3px); }
+    @media (prefers-color-scheme: dark) { .kitcard { --kit: #263a31; --kit-ink: #ebe8e1; } .pcard.now { outline-color: #9fc3b4; } }
     .chev { color: var(--muted); }
-    .kitrow { margin-top: 28px; }
     /* photographs fade in once they have loaded, instead of popping in */
-    .hero img, .partrow img { opacity: 0; transition: opacity .8s ease; }
-    .hero img.ld, .partrow img.ld { opacity: 1; }
+    .hero img, .pcard img { opacity: 0; }
+    .hero img { transition: opacity .8s ease; }
+    .hero img.ld, .pcard img.ld { opacity: 1; }
     .item { scroll-margin: 90px 0 96px; }
 
     /* ── buttons ── */
@@ -248,8 +281,17 @@
       .hero { height: min(56vh, 520px); min-height: 360px; }
       .hero.part { height: 36vh; min-height: 250px; }
       .care { margin-top: -20px; padding: 22px; font-size: 1.08rem; }
-      .partrow { grid-template-columns: 72px 1fr 18px; gap: 12px; padding: 9px; }
-      .partrow img { width: 72px; height: 60px; }
+      .parts { grid-template-columns: 1fr; gap: 12px; }
+      .pcard { height: 140px; }
+      .pcard.coda { height: 120px; }
+      .parts > li:first-child .pcard { height: 176px; }
+      .parts > li:first-child .pcard .t { font-size: 1.5rem; }
+      .pcard .in { padding: 14px 16px 15px; }
+      .pcard .t { font-size: 1.3rem; }
+      .kitcard { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; padding: 22px; }
+      .kitcard .t { font-size: 1.5rem; }
+      .kitcard .side { justify-content: space-between; }
+      .kitcard .stack span { width: 38px; height: 38px; }
       .next .btn { flex: 1 1 100%; }
       .next .btn.quiet { flex: 0 1 auto; }
       .item-b { padding-left: 16px; }
@@ -258,7 +300,7 @@
     }
     .vt .view { animation: none; }
     ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .38s; }
-    @media (prefers-reduced-motion: reduce) { .hero img, .view, .item.open .item-b, dialog.sheet[open] { animation: none; } .hero img { transform: none; } .hero img, .partrow img { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .hero img, .view, .item.open .item-b, dialog.sheet[open] { animation: none; } .hero img { transform: none; } .hero img, .pcard img, .kitcard .stack span, .kitcard .go { transition: none; } .pcard:hover img { transform: scale(1.01); } }
     #print { display: none; }
     @media print {
       .top, .tabbar, .tnote, #app, .toast, dialog { display: none !important; }
@@ -381,11 +423,14 @@ const DATA = {"en":{"lang":"en","langName":"English","ui":{"draft":"Draft for re
     const u = C.ui, at = store.get('at', null);
     const started = at !== null;
     const rows = C.stages.map((s, i) => {
-      const p = progress(i), full = p.n && p.d === p.n;
-      const pg = s.cards && !p.n ? '' : (full ? `<span class="done-badge">${ic('check')}${esc(fmt(u.progress, p))}</span>` : (p.d ? esc(fmt(u.progress, p)) : ''));
-      return `<li><button class="partrow ${started && at === i ? 'now' : ''}" type="button" data-go="${i}">${thumb(PHOTO[i])}
-        <span><span class="when">${esc(s.when)}</span><span class="t">${esc(s.title)}</span>${pg ? `<span class="pg">${pg}</span>` : ''}</span>${ic('chev', 'chev')}</button></li>`;
-    }).join('') + `<li><button class="partrow" type="button" data-go="5">${thumb('ahead')}<span><span class="when">${esc(C.ahead.when)}</span><span class="t">${esc(C.ahead.title)}</span></span>${ic('chev', 'chev')}</button></li>`;
+      const p = progress(i), full = !!p.n && p.d === p.n;
+      const label = fmt(u.progress, p);
+      const pg = full ? `<span class="pg">${ic('check')}${esc(label)}</span>` : (p.d ? `<span class="pg">${esc(label)}</span>` : '');
+      const bar = p.d && !full ? `<span class="bar"><i style="width:${Math.round(100 * p.d / p.n)}%"></i></span>` : '';
+      const cls = ['pcard', started && at === i ? 'now' : '', full ? 'full' : ''].filter(Boolean).join(' ');
+      return `<li><button class="${cls}" type="button" data-go="${i}" aria-label="${esc(fmt(u.partOf, { n: i + 1 }) + ': ' + s.title + (p.d ? ', ' + label : ''))}">${thumb(PHOTO[i])}
+        <span class="num" aria-hidden="true">${i + 1}</span>${pg}<span class="in"><span class="when">${esc(s.when)}</span><span class="t">${esc(s.title)}</span></span>${bar}</button></li>`;
+    }).join('') + `<li class="coda-li"><button class="pcard coda" type="button" data-go="5">${thumb('ahead')}<span class="in"><span class="when">${esc(C.ahead.when)}</span><span class="t">${esc(C.ahead.title)}</span></span></button></li>`;
     const resume = started && at > 0 && at < 5;
     return `<div class="view">
       <section class="hero">${img('home')}<div class="over"><div class="col"><h1>${esc(u.title)}</h1><p class="sub">${esc(u.kicker)}</p></div></div></section>
@@ -398,7 +443,10 @@ const DATA = {"en":{"lang":"en","langName":"English","ui":{"draft":"Draft for re
         <div class="sect-h"><h2>${esc(u.journeyTitle)}</h2></div>
         <p class="sect-p">${esc(u.journeyBrief)}</p>
         <ol class="parts">${rows}</ol>
-        <button class="partrow kitrow" type="button" data-nav="toolkit">${thumb('toolkit')}<span><span class="t">${esc(u.toolkitTitle)}</span><span class="pg">${esc(u.toolkitBrief)}</span></span>${ic('chev', 'chev')}</button>
+        <button class="kitcard" type="button" data-nav="toolkit">
+          <span><span class="t">${esc(u.toolkitTitle)}</span><span class="pg">${esc(u.toolkitBrief)}</span></span>
+          <span class="side" aria-hidden="true"><span class="stack"><span>${ic('letter')}</span><span>${ic('phone')}</span><span>${ic('papers')}</span><span>${ic('q')}</span></span><span class="go">${ic('arrow')}</span></span>
+        </button>
         <p class="foot">${esc(u.footer)} ${esc(u.photos)}</p>
       </div></div>`;
   }
